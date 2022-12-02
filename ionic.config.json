@@ -1,0 +1,7 @@
+{
+  "name": "NusaExchange",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
