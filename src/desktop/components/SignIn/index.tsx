@@ -103,9 +103,10 @@ const SignIn: React.FC<SignInProps> = ({
         [handleChangeFocusField]
     );
 
-    const isButtonDisabled = React.useMemo(() =>
-        !!(captchaLogin() && captchaType !== 'none' && !(reCaptchaSuccess || geetestCaptchaSuccess)),
-    [reCaptchaSuccess, geetestCaptchaSuccess]);
+    const isButtonDisabled = React.useMemo(
+        () => !!(captchaLogin() && captchaType !== 'none' && !(reCaptchaSuccess || geetestCaptchaSuccess)),
+        [reCaptchaSuccess, geetestCaptchaSuccess]
+    );
 
     const handleSubmitForm = React.useCallback(() => {
         refreshError();
@@ -142,11 +143,7 @@ const SignIn: React.FC<SignInProps> = ({
     );
 
     const renderForgotButton = React.useMemo(
-        () => (
-            <div onClick={() => onForgotPassword(email)}>
-                {forgotPasswordLabel || 'Forgot your password?'}
-            </div>
-        ),
+        () => <div onClick={() => onForgotPassword(email)}>{forgotPasswordLabel || 'Forgot your password?'}</div>,
         [forgotPasswordLabel, onForgotPassword, email]
     );
 
@@ -163,7 +160,7 @@ const SignIn: React.FC<SignInProps> = ({
     );
 
     return (
-        <div className='card p-4'>
+        <div className="card p-4">
             <div>
                 <CustomInput
                     type="email"
@@ -175,6 +172,7 @@ const SignIn: React.FC<SignInProps> = ({
                     handleFocusInput={() => handleFieldFocus('email')}
                     classNameLabel="form-label"
                     autoFocus={!isMobileDevice}
+                    labelVisible
                 />
                 {emailError && <div className={'invalid-feedback'}>{emailError}</div>}
             </div>
@@ -190,15 +188,16 @@ const SignIn: React.FC<SignInProps> = ({
                     handleFocusInput={() => handleFieldFocus('password')}
                     classNameLabel="form-label"
                     autoFocus={false}
+                    labelVisible
                 />
                 {passwordError && <div className={'invalid-feedback'}>{passwordError}</div>}
             </div>
 
-            <div className='mt-2 mb-2'>{captchaLogin() && renderCaptcha}</div>
+            <div className="mt-2 mb-2">{captchaLogin() && renderCaptcha}</div>
 
             <div>{renderForgotButton}</div>
 
-            <div className='mt-4'>
+            <div className="mt-4">
                 <Button
                     block={true}
                     type="button"
@@ -209,7 +208,7 @@ const SignIn: React.FC<SignInProps> = ({
                     {isLoading ? 'Loading...' : labelSignIn ? labelSignIn : 'Sign in'}
                 </Button>
             </div>
-            <div className='mt-4'>{renderRegister}</div>
+            <div className="mt-4">{renderRegister}</div>
         </div>
     );
 };
