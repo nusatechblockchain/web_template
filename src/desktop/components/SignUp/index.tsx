@@ -121,7 +121,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
     renderCaptcha,
 }) => {
     const isMobileDevice = useSelector(selectMobileDeviceState);
-    const [expand, setExpand] = useState(false);
+    const [expand, setExpand] = React.useState(false);
     const disableButton = React.useMemo((): boolean => {
         const captchaTypeValue = captchaType();
 
@@ -288,6 +288,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
             <div onClick={() => setExpand(!expand)} className="label-referral cursor-pointer">
                 Referral ID (Optional) <ArrowDownIcon strokeColor={'#6f6f6f'} />
             </div>
+
             {expand && (
                 <CustomInput
                     type="text"
