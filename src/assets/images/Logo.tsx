@@ -1,8 +1,18 @@
 import * as React from 'react';
 
-export const Logo = () => {
+interface LogoProps {
+    className?: string;
+}
+
+export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
     return (
-        <svg width="126" height="30" viewBox="0 0 126 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width="126"
+            height="30"
+            viewBox="0 0 126 30"
+            className={props.className}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M20.4619 14.1707C20.4619 13.0661 21.3573 12.1707 22.4619 12.1707H34.8091C35.9136 12.1707 36.8091 13.0661 36.8091 14.1707V15.7835C36.8091 16.8881 35.9136 17.7835 34.8091 17.7835H22.4619C21.3573 17.7835 20.4619 16.8881 20.4619 15.7835V14.1707Z"
                 fill="url(#paint0_linear_1841_9760)"

@@ -1,0 +1,45 @@
+footer {
+    .name {
+        width: 25%;
+
+        img {
+            max-width: 200px;
+            width: 100%;
+        }
+    }
+
+    .newsletter {
+        .form-control {
+            position: relative;
+        }
+
+        .newsletter-input {
+            width: 340px;
+            height: 62px;
+            background: var(--text-primary-color);
+            border-radius: 100px !important;
+            padding-left: 20px;
+            color: var(--text-grey-color);
+            z-index: 1;
+            padding-right: 130px;
+
+            &:focus,
+            &:focus-visible {
+                z-index: 1;
+            }
+        }
+
+        .newsletter-input-label {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: var(--button-primary-color);
+            padding: 12px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary-color);
+            z-index: 2;
+        }
+    }
+}
