@@ -174,17 +174,15 @@ class SignUp extends React.Component<Props> {
                         <div className="bg-auth" style={{ backgroundImage: `url(${bgAuth})` }}></div>
                     </div>
                     <div className="col-md-7 dark-bg-main min-h-full position-relative">
-                        <div className="text-to-signin">
-                            <div className="mt-4">
-                                <span>
-                                    <p className="white-text font-bold">
-                                        Already have an account?
-                                        <Link to="/signin">
-                                            <span className="contrast-text ml-1 cursor-pointer">Sign In</span>{' '}
-                                        </Link>
-                                    </p>
-                                </span>
-                            </div>
+                        <div className="text-to-signin mb-24">
+                            <span>
+                                <p className="white-text font-bold">
+                                    Already have an account?
+                                    <Link to="/signin">
+                                        <span className="contrast-text ml-1 cursor-pointer">Sign In</span>{' '}
+                                    </Link>
+                                </p>
+                            </span>
                         </div>
                         <div className="main-wrapper d-flex align-items-center">
                             <div className="main-form position-relative">

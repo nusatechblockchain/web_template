@@ -1,6 +1,6 @@
 import cr from 'classnames';
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { CustomInput, PasswordStrengthMeter } from '../';
 import { isUsernameEnabled } from '../../../api';
@@ -122,6 +122,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 }) => {
     const isMobileDevice = useSelector(selectMobileDeviceState);
     const [expand, setExpand] = React.useState(false);
+    const [show, setShow] = React.useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     const disableButton = React.useMemo((): boolean => {
         const captchaTypeValue = captchaType();
 
@@ -227,6 +231,11 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
         [handleSubmitForm, isValidForm, validateForm]
     );
 
+    const handleCheck = async () => {
+        await clickCheckBox;
+        setShow(false);
+    };
+
     const renderUsernameError = (nick: string) => {
         return nick.length < 4 ? translate(ERROR_SHORT_USERNAME) : translate(ERROR_LONG_USERNAME);
     };
@@ -306,7 +315,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 
             <div className="mt-4 mb-4">{renderCaptcha}</div>
 
-            <label className="checkbox" onClick={clickCheckBox}>
+            <label className="checkbox" onClick={handleShow}>
                 <input
                     className="checkbox__input"
                     type="checkbox"
@@ -314,19 +323,19 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     checked={hasConfirmed}
                     onChange={clickCheckBox}
                 />
-                <span className="checkbox__inner">
+                <span className="checkbox__inner ml-1">
                     <span className="checkbox__tick" />
-                    <span className="checkbox__text">
+                    <span className="checkbox__text grey-text-accent text-sm">
                         By signing up I agree that I’m 18 years of age or older, to the{' '}
-                        <a className="checkbox__link" href="#">
+                        <a className="checkbox__link contrast-text" href="#">
                             User Agreements
                         </a>{' '}
                         ,{' '}
-                        <a className="checkbox__link" href="#">
+                        <a className="checkbox__link contrast-text" href="#">
                             Privacy Policy
                         </a>{' '}
                         ,{' '}
-                        <a className="checkbox__link" href="#">
+                        <a className="checkbox__link contrast-text" href="#">
                             Cookie Policy
                         </a>
                     </span>
@@ -343,6 +352,54 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 variant="primary">
                 {isLoading ? 'Loading...' : labelSignUp ? labelSignUp : 'Sign up'}
             </Button>
+
+            <Modal show={show} onHide={handleClose} className="w-100">
+                <Modal.Header className="rounded-top-10 border-none">
+                    <h6 className="text-lg grey-text-accent font-normal mb-24">Term of service</h6>
+                </Modal.Header>
+                <Modal.Body className="tos-content">
+                    <p className="grey-text-accent">SYARAT – SYARAT DAN KETENTUAN UMUM</p>
+                    <p className="grey-text-accent">
+                        Syarat – Syarat dan Ketentuan Umum (selanjutnya disebut sebagai “SKU”) INDODAX adalah ketentuan
+                        yang berisikan syarat dan ketentuan mengenai penggunaan produk, jasa, teknologi, fitur layanan
+                        yang diberikan oleh INDODAX termasuk, namun tidak terbatas pada penggunaan Website, Dompet
+                        Bitcoin Indonesia dan INDODAX Trading Platform (Trading App) (untuk selanjutnya disebut sebagai
+                        “Platform INDODAX”) sepanjang tidak diatur secara khusus sebagaimana tercantum pada bagian
+                        registrasi Akun INDODAX yang dibuat pada hari dan tanggal yang tercantum dalam bagian registrasi
+                        Akun https://indodax.com, merupakan satu kesatuan tidak terpisahkan dan persetujuan atas SKU
+                        ini. Dengan mendaftar menjadi Member/Verified Member, Anda menyatakan telah MEMBACA, MEMAHAMI,
+                        MENYETUJUI dan MEMATUHI Persyaratan dan Ketentuan di bawah. Anda disarankan membaca semua
+                        persyaratan dan ketentuan secara seksama sebelum menggunakan layanan platform INDODAX atau
+                        segala layanan yang diberikan, dan bersama dengan ini Anda setuju dan mengikatkan diri terhadap
+                        seluruh kegiatan dalam SKU ini dengan persyaratan dan ketentuan sebagai berikut : DEFINISI
+                        sepanjang konteks kalimatnya tidak menentukan lain, istilah atau definisi dalam SKU memiliki
+                        arti sebagai berikut :
+                    </p>
+                    <p className="grey-text-accent">
+                        Website mengacu pada situs online dengan alamat https://indodax.com. Website ini dikelola oleh
+                        INDODAX, dengan tidak terbatas pada para pemilik, investor, karyawan dan pihak-pihak yang
+                        terkait dengan INDODAX. Tergantung pada konteks, “Website” dapat juga mengacu pada jasa, produk,
+                        situs, konten atau layanan lain yang disediakan oleh INDODAX. Aset Kripto adalah komoditas
+                        digital yang menggunakan prinsip teknologi desentralisasi berbasiskan jaringan peer-to-peer
+                        (antar muka)atau disebut dengan Jaringan Blockchain yang diperdagangkan di dalam platform
+                        Blockchain adalah sebuah buku besar terdistribusi (distributed ledger) terbuka yang dapat
+                        mencatat transaksi antara dua pihak secara efisien dan dengan cara yang dapat diverifikasi
+                        secara permanen. Registrasi adalah proses pendaftaran menjadi Member dalam platform INDODAX yang
+                        merupakan proses verifikasi awal untuk memperoleh keterangan, pernyataan dalam penggunaan
+                        layanan platform Member adalah orang (perseorangan), badan usaha, maupun badan hukum yang telah
+                        melakukan registrasi pada platform INDODAX, sehingga memperoleh otorisasi dari platform INDODAX
+                        untuk melakukan{' '}
+                    </p>
+                </Modal.Body>
+                <Modal.Footer className="d-flex justify-content-between border-none rounded-bottom-10">
+                    <Button type="button" className="btn-danger" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button className="btn-success" onClick={handleCheck}>
+                        Accept
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </React.Fragment>
     );
 };
