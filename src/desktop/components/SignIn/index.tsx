@@ -160,7 +160,7 @@ const SignIn: React.FC<SignInProps> = ({
     );
 
     return (
-        <div className="card p-4">
+        <div className="card dark-bg-main mt-3">
             <div>
                 <CustomInput
                     type="email"
@@ -170,7 +170,7 @@ const SignIn: React.FC<SignInProps> = ({
                     handleChangeInput={handleChangeEmail}
                     inputValue={email}
                     handleFocusInput={() => handleFieldFocus('email')}
-                    classNameLabel="form-label"
+                    classNameLabel="form-label white-text text-sm"
                     autoFocus={!isMobileDevice}
                     labelVisible
                 />
@@ -186,7 +186,7 @@ const SignIn: React.FC<SignInProps> = ({
                     handleChangeInput={handleChangePassword}
                     inputValue={password}
                     handleFocusInput={() => handleFieldFocus('password')}
-                    classNameLabel="form-label"
+                    classNameLabel="form-label white-text text-sm"
                     autoFocus={false}
                     labelVisible
                 />
@@ -194,9 +194,6 @@ const SignIn: React.FC<SignInProps> = ({
             </div>
 
             <div className="mt-2 mb-2">{captchaLogin() && renderCaptcha}</div>
-
-            <div>{renderForgotButton}</div>
-
             <div className="mt-4">
                 <Button
                     block={true}
@@ -208,7 +205,11 @@ const SignIn: React.FC<SignInProps> = ({
                     {isLoading ? 'Loading...' : labelSignIn ? labelSignIn : 'Sign in'}
                 </Button>
             </div>
-            <div className="mt-4">{renderRegister}</div>
+            <div className="position-relative mt-2">
+                <div className="text-xs grey-text position-absolute right-position cursor-pointer">
+                    {renderForgotButton}
+                </div>
+            </div>
         </div>
     );
 };
