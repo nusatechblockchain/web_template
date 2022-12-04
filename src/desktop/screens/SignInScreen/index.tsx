@@ -190,140 +190,53 @@ export const SignInScreen: React.FC = () => {
                     <div className="main-wrapper d-flex align-items-center">
                         <div className="main-form position-relative">
                             <h2 className="title-2 white-text mb-36 font-semibold">Sign In</h2>
-                            <ul className="nav nav-tabs mb-24" id="myTab" role="tablist">
-                                <li className="nav-item">
-                                    <a
-                                        className="nav-link active"
-                                        id="home-tab"
-                                        data-toggle="tab"
-                                        href="#home"
-                                        role="tab"
-                                        aria-controls="home"
-                                        aria-selected="true">
-                                        Email
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a
-                                        className="nav-link"
-                                        id="profile-tab"
-                                        data-toggle="tab"
-                                        href="#profile"
-                                        role="tab"
-                                        aria-controls="profile"
-                                        aria-selected="false">
-                                        Phone Number
-                                    </a>
-                                </li>
-                            </ul>
-                            <div className="tab-content mb-8" id="myTabContent">
-                                <div
-                                    className="tab-pane fade show active"
-                                    id="home"
-                                    role="tabpanel"
-                                    aria-labelledby="home-tab">
-                                    {require2FA ? (
-                                        <TwoFactorAuth
-                                            isMobile={isMobileDevice}
-                                            isLoading={loading}
-                                            onSubmit={handle2FASignIn}
-                                            title={formatMessage({ id: 'page.password2fa' })}
-                                            buttonLabel={formatMessage({ id: 'page.header.signIn' })}
-                                            message={formatMessage({ id: 'page.password2fa.message' })}
-                                            otpCode={otpCode}
-                                            handleOtpCodeChange={handleChangeOtpCode}
-                                            handleClose2fa={handleClose}
-                                        />
-                                    ) : (
-                                        <SignInComponent
-                                            email={email}
-                                            emailError={emailError}
-                                            emailFocused={emailFocused}
-                                            emailPlaceholder={formatMessage({ id: 'page.header.signIn.email' })}
-                                            password={password}
-                                            passwordError={passwordError}
-                                            passwordFocused={passwordFocused}
-                                            passwordPlaceholder={formatMessage({ id: 'page.header.signIn.password' })}
-                                            labelSignIn={formatMessage({ id: 'page.header.signIn' })}
-                                            labelSignUp={formatMessage({ id: 'page.header.signUp' })}
-                                            emailLabel={formatMessage({ id: 'page.header.signIn.email' })}
-                                            passwordLabel={formatMessage({ id: 'page.header.signIn.password' })}
-                                            receiveConfirmationLabel={formatMessage({
-                                                id: 'page.header.signIn.receiveConfirmation',
-                                            })}
-                                            forgotPasswordLabel={formatMessage({
-                                                id: 'page.header.signIn.forgotPassword',
-                                            })}
-                                            isLoading={loading}
-                                            onForgotPassword={forgotPassword}
-                                            onSignUp={handleSignUp}
-                                            onSignIn={handleSignIn}
-                                            handleChangeFocusField={handleFieldFocus}
-                                            isFormValid={validateForm}
-                                            refreshError={refreshError}
-                                            changeEmail={handleChangeEmailValue}
-                                            changePassword={handleChangePasswordValue}
-                                            renderCaptcha={renderCaptcha}
-                                            reCaptchaSuccess={reCaptchaSuccess}
-                                            geetestCaptchaSuccess={geetestCaptchaSuccess}
-                                            captcha_response={captcha_response}
-                                        />
-                                    )}
-                                </div>
-                                <div
-                                    className="tab-pane fade "
-                                    id="profile"
-                                    role="tabpanel"
-                                    aria-labelledby="profile-tab">
-                                    {require2FA ? (
-                                        <TwoFactorAuth
-                                            isMobile={isMobileDevice}
-                                            isLoading={loading}
-                                            onSubmit={handle2FASignIn}
-                                            title={formatMessage({ id: 'page.password2fa' })}
-                                            buttonLabel={formatMessage({ id: 'page.header.signIn' })}
-                                            message={formatMessage({ id: 'page.password2fa.message' })}
-                                            otpCode={otpCode}
-                                            handleOtpCodeChange={handleChangeOtpCode}
-                                            handleClose2fa={handleClose}
-                                        />
-                                    ) : (
-                                        <SignInComponent
-                                            email={email}
-                                            emailError={emailError}
-                                            emailFocused={emailFocused}
-                                            emailPlaceholder={formatMessage({ id: 'page.header.signIn.email' })}
-                                            password={password}
-                                            passwordError={passwordError}
-                                            passwordFocused={passwordFocused}
-                                            passwordPlaceholder={formatMessage({ id: 'page.header.signIn.password' })}
-                                            labelSignIn={formatMessage({ id: 'page.header.signIn' })}
-                                            labelSignUp={formatMessage({ id: 'page.header.signUp' })}
-                                            emailLabel={formatMessage({ id: 'page.header.signIn.email' })}
-                                            passwordLabel={formatMessage({ id: 'page.header.signIn.password' })}
-                                            receiveConfirmationLabel={formatMessage({
-                                                id: 'page.header.signIn.receiveConfirmation',
-                                            })}
-                                            forgotPasswordLabel={formatMessage({
-                                                id: 'page.header.signIn.forgotPassword',
-                                            })}
-                                            isLoading={loading}
-                                            onForgotPassword={forgotPassword}
-                                            onSignUp={handleSignUp}
-                                            onSignIn={handleSignIn}
-                                            handleChangeFocusField={handleFieldFocus}
-                                            isFormValid={validateForm}
-                                            refreshError={refreshError}
-                                            changeEmail={handleChangeEmailValue}
-                                            changePassword={handleChangePasswordValue}
-                                            renderCaptcha={renderCaptcha}
-                                            reCaptchaSuccess={reCaptchaSuccess}
-                                            geetestCaptchaSuccess={geetestCaptchaSuccess}
-                                            captcha_response={captcha_response}
-                                        />
-                                    )}
-                                </div>
-                            </div>
+                            {require2FA ? (
+                                <TwoFactorAuth
+                                    isMobile={isMobileDevice}
+                                    isLoading={loading}
+                                    onSubmit={handle2FASignIn}
+                                    title={formatMessage({ id: 'page.password2fa' })}
+                                    buttonLabel={formatMessage({ id: 'page.header.signIn' })}
+                                    message={formatMessage({ id: 'page.password2fa.message' })}
+                                    otpCode={otpCode}
+                                    handleOtpCodeChange={handleChangeOtpCode}
+                                    handleClose2fa={handleClose}
+                                />
+                            ) : (
+                                <SignInComponent
+                                    email={email}
+                                    emailError={emailError}
+                                    emailFocused={emailFocused}
+                                    emailPlaceholder={formatMessage({ id: 'page.header.signIn.email' })}
+                                    password={password}
+                                    passwordError={passwordError}
+                                    passwordFocused={passwordFocused}
+                                    passwordPlaceholder={formatMessage({ id: 'page.header.signIn.password' })}
+                                    labelSignIn={formatMessage({ id: 'page.header.signIn' })}
+                                    labelSignUp={formatMessage({ id: 'page.header.signUp' })}
+                                    emailLabel={formatMessage({ id: 'page.header.signIn.email' })}
+                                    passwordLabel={formatMessage({ id: 'page.header.signIn.password' })}
+                                    receiveConfirmationLabel={formatMessage({
+                                        id: 'page.header.signIn.receiveConfirmation',
+                                    })}
+                                    forgotPasswordLabel={formatMessage({
+                                        id: 'page.header.signIn.forgotPassword',
+                                    })}
+                                    isLoading={loading}
+                                    onForgotPassword={forgotPassword}
+                                    onSignUp={handleSignUp}
+                                    onSignIn={handleSignIn}
+                                    handleChangeFocusField={handleFieldFocus}
+                                    isFormValid={validateForm}
+                                    refreshError={refreshError}
+                                    changeEmail={handleChangeEmailValue}
+                                    changePassword={handleChangePasswordValue}
+                                    renderCaptcha={renderCaptcha}
+                                    reCaptchaSuccess={reCaptchaSuccess}
+                                    geetestCaptchaSuccess={geetestCaptchaSuccess}
+                                    captcha_response={captcha_response}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
