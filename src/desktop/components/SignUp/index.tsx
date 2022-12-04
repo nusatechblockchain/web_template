@@ -1,5 +1,5 @@
 import cr from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { CustomInput, PasswordStrengthMeter } from '../';
@@ -14,6 +14,8 @@ import {
 } from '../../../helpers';
 import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
+import { ArrowDownIcon } from 'src/assets/images/ArrowDownIcon';
+import './SignUp.pcss';
 
 export interface SignUpFormProps {
     isLoading?: boolean;
@@ -119,12 +121,18 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
     renderCaptcha,
 }) => {
     const isMobileDevice = useSelector(selectMobileDeviceState);
+    const [expand, setExpand] = React.useState(false);
     const disableButton = React.useMemo((): boolean => {
         const captchaTypeValue = captchaType();
 
-        if (!hasConfirmed || isLoading || !email.match(EMAIL_REGEX) || !password || !confirmPassword ||
-            (isUsernameEnabled() && !username.match(USERNAME_REGEX))) {
-
+        if (
+            !hasConfirmed ||
+            isLoading ||
+            !email.match(EMAIL_REGEX) ||
+            !password ||
+            !confirmPassword ||
+            (isUsernameEnabled() && !username.match(USERNAME_REGEX))
+        ) {
             return true;
         }
 
@@ -219,14 +227,12 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
         [handleSubmitForm, isValidForm, validateForm]
     );
 
-
     const renderUsernameError = (nick: string) => {
         return nick.length < 4 ? translate(ERROR_SHORT_USERNAME) : translate(ERROR_LONG_USERNAME);
     };
 
     return (
         <React.Fragment>
-            <h3>Register</h3>
             <div className="field">
                 <CustomInput
                     type="text"
@@ -241,10 +247,8 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={!isMobileDevice}
                 />
                 {!username.match(USERNAME_REGEX) && !usernameFocused && username.length ? (
-                    <div className="invalid-feedback">
-                        {renderUsernameError(username)}
-                    </div>
-                ) : null}        
+                    <div className="invalid-feedback">{renderUsernameError(username)}</div>
+                ) : null}
             </div>
 
             <div className="field">
@@ -260,10 +264,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     classNameInput=""
                     autoFocus={!isUsernameEnabled() && !isMobileDevice}
                 />
-                {emailError && <div className="invalid-feedback">{emailError}</div>}      
+                {emailError && <div className="invalid-feedback">{emailError}</div>}
             </div>
 
-            {renderPasswordInput()} 
+            {renderPasswordInput()}
 
             <div className="field">
                 <CustomInput
@@ -278,40 +282,54 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     classNameInput=""
                     autoFocus={false}
                 />
-            </div> 
-
-            <CustomInput
-                type="text"
-                label={referalCodeLabel || 'Referral code'}
-                placeholder={referalCodeLabel || 'Referral code'}
-                defaultLabel="Referral code"
-                handleChangeInput={handleChangeRefId}
-                inputValue={refId}
-                handleFocusInput={handleFocusRefId}
-                classNameLabel=""
-                classNameInput=""
-                autoFocus={false}
-            />   
-
-            <div className='mt-4 mb-4'>
-                {renderCaptcha}
             </div>
 
+            <div onClick={() => setExpand(!expand)} className="label-referral cursor-pointer grey-text text-sm">
+                Referral ID (Optional) <ArrowDownIcon strokeColor={'#6f6f6f'} />
+            </div>
+
+            {expand && (
+                <CustomInput
+                    type="text"
+                    label={''}
+                    labelVisible={false}
+                    placeholder={referalCodeLabel || 'Referral code'}
+                    defaultLabel="Referral code"
+                    handleChangeInput={handleChangeRefId}
+                    inputValue={refId}
+                    handleFocusInput={handleFocusRefId}
+                    classNameLabel=""
+                    classNameInput=""
+                    autoFocus={false}
+                />
+            )}
+
+            <div className="mt-4 mb-4">{renderCaptcha}</div>
 
             <label className="checkbox" onClick={clickCheckBox}>
-                <input className="checkbox__input" type="checkbox" id="agreeWithTerms" checked={hasConfirmed} onChange={clickCheckBox}/>
+                <input
+                    className="checkbox__input"
+                    type="checkbox"
+                    id="agreeWithTerms"
+                    checked={hasConfirmed}
+                    onChange={clickCheckBox}
+                />
                 <span className="checkbox__inner">
-                <span className="checkbox__tick" />
-                <span className="checkbox__text">
-                    By signing up I agree that I’m 18 years of age or older, to the{" "}
-                    <a className="checkbox__link" href="#">
-                        User Agreements 
-                    </a> , <a className="checkbox__link" href="#">
-                        Privacy Policy
-                    </a> , <a className="checkbox__link" href="#">
-                        Cookie Policy
-                    </a>
-                </span>
+                    <span className="checkbox__tick" />
+                    <span className="checkbox__text">
+                        By signing up I agree that I’m 18 years of age or older, to the{' '}
+                        <a className="checkbox__link" href="#">
+                            User Agreements
+                        </a>{' '}
+                        ,{' '}
+                        <a className="checkbox__link" href="#">
+                            Privacy Policy
+                        </a>{' '}
+                        ,{' '}
+                        <a className="checkbox__link" href="#">
+                            Cookie Policy
+                        </a>
+                    </span>
                 </span>
             </label>
 
@@ -321,7 +339,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 disabled={disableButton}
                 onClick={(e) => handleClick(e as any)}
                 size="lg"
-                className='button registration__button'
+                className="button registration__button"
                 variant="primary">
                 {isLoading ? 'Loading...' : labelSignUp ? labelSignUp : 'Sign up'}
             </Button>
