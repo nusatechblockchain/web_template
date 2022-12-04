@@ -263,6 +263,7 @@ class SignUp extends React.Component<Props> {
                                                 username={username}
                                                 handleChangeUsername={this.handleChangeUsername}
                                                 email={email}
+                                                type={this.state.selectedTabs}
                                                 handleChangeEmail={this.handleChangeEmail}
                                                 password={password}
                                                 handleChangePassword={this.handleChangePassword}
@@ -329,6 +330,7 @@ class SignUp extends React.Component<Props> {
                                                 onSignUp={this.handleSignUp}
                                                 username={username}
                                                 handleChangeUsername={this.handleChangeUsername}
+                                                type={this.state.selectedTabs}
                                                 email={email}
                                                 handleChangeEmail={this.handleChangeEmail}
                                                 password={password}

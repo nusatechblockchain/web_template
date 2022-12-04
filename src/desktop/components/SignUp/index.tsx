@@ -16,10 +16,13 @@ import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
 import { ArrowDownIcon } from 'src/assets/images/ArrowDownIcon';
 import './SignUp.pcss';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 export interface SignUpFormProps {
     isLoading?: boolean;
     title?: string;
+    type?: string;
     onSignUp: () => void;
     onSignIn?: () => void;
     className?: string;
@@ -75,6 +78,7 @@ export interface SignUpFormProps {
 const SignUpFormComponent: React.FC<SignUpFormProps> = ({
     username,
     email,
+    type,
     confirmPassword,
     refId,
     onSignIn,
@@ -172,9 +176,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangePassword}
                     inputValue={password}
                     handleFocusInput={handleFocusPassword}
-                    classNameLabel=""
+                    classNameLabel="white-text text-sm"
                     classNameInput=""
                     autoFocus={false}
+                    labelVisible
                 />
                 {password ? (
                     <PasswordStrengthMeter
@@ -251,30 +256,46 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangeUsername}
                     inputValue={username}
                     handleFocusInput={handleFocusUsername}
-                    classNameLabel=""
+                    classNameLabel="white-text text-sm"
                     classNameInput=""
                     autoFocus={!isMobileDevice}
+                    labelVisible
                 />
                 {!username.match(USERNAME_REGEX) && !usernameFocused && username.length ? (
                     <div className="invalid-feedback">{renderUsernameError(username)}</div>
                 ) : null}
             </div>
 
-            <div className="field">
-                <CustomInput
-                    type="email"
-                    label={emailLabel || 'Email'}
-                    placeholder={emailLabel || 'Email'}
-                    defaultLabel="Email"
-                    handleChangeInput={handleChangeEmail}
-                    inputValue={email}
-                    handleFocusInput={handleFocusEmail}
-                    classNameLabel=""
-                    classNameInput=""
-                    autoFocus={!isUsernameEnabled() && !isMobileDevice}
-                />
-                {emailError && <div className="invalid-feedback">{emailError}</div>}
-            </div>
+            {type === 'Email' ? (
+                <div className="field">
+                    <CustomInput
+                        type="email"
+                        label={emailLabel || 'Email'}
+                        placeholder={emailLabel || 'Email'}
+                        defaultLabel="Email"
+                        handleChangeInput={handleChangeEmail}
+                        inputValue={email}
+                        handleFocusInput={handleFocusEmail}
+                        classNameLabel="white-text text-sm"
+                        classNameInput=""
+                        autoFocus={!isUsernameEnabled() && !isMobileDevice}
+                        labelVisible
+                    />
+                    {emailError && <div className="invalid-feedback">{emailError}</div>}
+                </div>
+            ) : (
+                <div className="mb-3">
+                    <label className="white-text text-sm">Phone</label>
+                    <PhoneInput
+                        country={'id'}
+                        value={''}
+                        onChange={(e) => console.log(e)}
+                        containerClass="container-phone"
+                        inputClass="input-phone"
+                        buttonClass="button-phone"
+                    />
+                </div>
+            )}
 
             {renderPasswordInput()}
 
@@ -287,9 +308,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangeConfirmPassword}
                     inputValue={confirmPassword}
                     handleFocusInput={handleFocusConfirmPassword}
-                    classNameLabel=""
+                    classNameLabel="white-text text-sm"
                     classNameInput=""
                     autoFocus={false}
+                    labelVisible
                 />
             </div>
 
@@ -303,7 +325,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     label={''}
                     labelVisible={false}
                     placeholder={referalCodeLabel || 'Referral code'}
-                    defaultLabel="Referral code"
+                    defaultLabel=""
                     handleChangeInput={handleChangeRefId}
                     inputValue={refId}
                     handleFocusInput={handleFocusRefId}
