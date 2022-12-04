@@ -188,7 +188,10 @@ class SignUp extends React.Component<Props> {
                         </div>
                         <div className="main-wrapper d-flex align-items-center">
                             <div className="main-form position-relative">
-                                <h2 className="title-2 white-text mb-36 font-semibold">Sign In</h2>
+                                <h2 className="title-2 white-text font-semibold">Sign Up</h2>
+                                <p className="mb-36 text-xs font-bold grey-text">
+                                    Use Your {this.state.selectedTabs} to Sign up
+                                </p>
                                 <ul className="nav nav-tabs mb-24" id="myTab" role="tablist">
                                     <li
                                         onClick={() => {

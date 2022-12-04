@@ -233,7 +233,6 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 
     return (
         <React.Fragment>
-            <h3>Register</h3>
             <div className="field">
                 <CustomInput
                     type="text"
@@ -285,7 +284,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 />
             </div>
 
-            <div onClick={() => setExpand(!expand)} className="label-referral cursor-pointer">
+            <div onClick={() => setExpand(!expand)} className="label-referral cursor-pointer grey-text text-sm">
                 Referral ID (Optional) <ArrowDownIcon strokeColor={'#6f6f6f'} />
             </div>
 
