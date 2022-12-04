@@ -169,12 +169,12 @@ class SignUp extends React.Component<Props> {
 
         return (
             <React.Fragment>
-                <div className="row sign-in-screen">
+                <div className="row sign-up-screen">
                     <div className="col-md-5 dark-bg-accent min-h-full px-0">
                         <div className="bg-auth" style={{ backgroundImage: `url(${bgAuth})` }}></div>
                     </div>
                     <div className="col-md-7 dark-bg-main min-h-full position-relative">
-                        <div className="text-to-signin mb-24">
+                        <div className="text-to-signup mb-24">
                             <span>
                                 <p className="white-text font-bold">
                                     Already have an account?
