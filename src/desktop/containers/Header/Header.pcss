@@ -1,0 +1,82 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 99999;
+    .dropdown-menu {
+        display: block;
+        left: unset;
+        right: 0;
+
+        .dropdown-item {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            min-width: 140px;
+
+            img {
+                width: 30px;
+                margin-right: 8px;
+            }
+
+            &:hover {
+                background: var(--main-background-color);
+                color: var(--text-primary-color) !important;
+                transition: 0.3s ease-in all;
+            }
+
+            .dots {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--text-primary-color);
+                display: inline-block;
+                margin-right: 12px;
+            }
+        }
+
+        .active {
+            color: var(--text-primary-color) !important;
+            background: var(--main-background-color);
+            font-weight: 600;
+        }
+
+        .dropdown-wallets-item {
+            width: 256px;
+            padding-bottom: 12px;
+            margin-top: 16px;
+            border-bottom: 1px solid var(--border-grey-color);
+
+            img {
+                width: 20px;
+            }
+        }
+    }
+
+    .line {
+        width: 1px;
+        background: var(--grey-background-color);
+        height: auto;
+        margin: 0 24px;
+    }
+
+    .avatar-image {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+    }
+
+    .dropdown-avatar-item {
+        width: 256px;
+        padding-bottom: 12px;
+        margin-top: 16px;
+        border-bottom: 1px solid var(--border-grey-color);
+
+        img {
+            width: 20px;
+        }
+    }
+
+    .avatar .dropdown-toggle::after {
+        display: none;
+    }
+}
