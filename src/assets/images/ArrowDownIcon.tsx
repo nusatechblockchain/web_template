@@ -14,3 +14,23 @@ export const ArrowDownIcon = ({ strokeColor }) => {
         </svg>
     );
 };
+
+export const ArrowDownLarge = ({ className }) => {
+    return (
+        <svg
+            className={className}
+            width={18}
+            height={17}
+            viewBox="0 0 18 17"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M6.875 12.4999L11.125 8.49988L6.875 4.49988"
+                stroke="#B5B3BC"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+};

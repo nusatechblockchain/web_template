@@ -9,7 +9,14 @@ import { IntlProps } from '../../../';
 import { MarketsTable } from '../../containers';
 import { toggleColorTheme } from '../../../helpers';
 import { RootState, selectCurrentColorTheme, selectUserLoggedIn } from '../../../modules';
-import { BtcIcon, EthIcon, LitecoinIcon, MoneroIcon } from '../../../assets/images/LandingPatternIcon';
+import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';
+import { ArrowDownLarge } from '../../../assets/images/ArrowDownIcon';
+import AnouncementIcon from '../../../assets/png/landing-announcement.png';
+import SliderBgImage from '../../../assets/png/bg-slider-item.png';
+import BitcoinIcon from '../../../assets/png/Bitcoin.png';
+import EtherumIcon from '../../../assets/png/Etherium.png';
+import LiteIcon from '../../../assets/png/LiteCoin.png';
+import MoneroIcon from '../../../assets/png/Monero.png';
 
 interface ReduxProps {
     isLoggedIn: boolean;
@@ -43,10 +50,10 @@ class Landing extends React.Component<Props> {
                 <div className="content-wrapper no-sidebar ">
                     {/* hero */}
                     <section className="hero position-relative">
-                        <BtcIcon className="image-coin btc" />
-                        <EthIcon className="image-coin eth" />
-                        <LitecoinIcon className="image-coin lite" />
-                        <MoneroIcon className="image-coin monero" />
+                        <img src={BitcoinIcon} className="image-coin btc" alt="" />
+                        <img src={EtherumIcon} className="image-coin eth" alt="" />
+                        <img src={LiteIcon} className="image-coin lite" alt="" />
+                        <img src={MoneroIcon} className="image-coin monero" alt="" />
                         <div className="wrapper d-flex justify-content-around align-items-center flex-column index-2">
                             <div className="my-5">
                                 <h1 className="text-main-title white-text text-center mb-24">
@@ -59,9 +66,9 @@ class Landing extends React.Component<Props> {
                                     Heaven Exchange and Enjoy
                                 </p>
                                 <div className="d-flex justify-content-center">
-                                    <a href="" className="btn btn-rounded btn-primary mx-3">
+                                    <Link to={'/market'} className="btn btn-rounded btn-primary mx-3">
                                         Trade Now
-                                    </a>
+                                    </Link>
                                     <a href="" className="btn btn-rounded btn-outline white-text font-bold mx-3">
                                         Download App
                                     </a>
@@ -75,19 +82,19 @@ class Landing extends React.Component<Props> {
                                         </p>
                                         <div className="d-flex">
                                             <p className="mb-0 font-semibold white-text mr-4">
-                                                <img src="./Assets/Icon/Coin/bnb.svg" className="mr-2" alt="" />
-                                                BNB
+                                                <BtcIcon className="mr-2 small-coin-icon" />
+                                                BTC
                                             </p>
                                             <p className="mb-0 font-semibold white-text mr-4">
-                                                <img src="./Assets/Icon/Coin/btc.svg" className="mr-2" alt="" />
+                                                <BnbIcon className="mr-2 small-coin-icon" />
                                                 BINANCE
                                             </p>
                                             <p className="mb-0 font-semibold white-text mr-4">
-                                                <img src="./Assets/Icon/Coin/eth.svg" className="mr-2" alt="" />
-                                                Etherum
+                                                <DogeIcon className="mr-2 small-coin-icon" />
+                                                DOGE
                                             </p>
                                             <p className="mb-0 font-semibold white-text mr-4">
-                                                <img src="./Assets/Icon/Coin/bnb.svg" className="mr-2" alt="" />
+                                                <TronIcon className="mr-2 small-coin-icon" />
                                                 BNB
                                             </p>
                                         </div>
@@ -98,31 +105,39 @@ class Landing extends React.Component<Props> {
                                 <div className="d-flex justify-content-center">
                                     <div className="market-item py-24 mx-4">
                                         <p className="mb-0 text-lg white-text font-bold mb-8">
-                                            DOGE/USD <span className="contrast-text text-ms">+0.83%</span>
+                                            DOGE/USD <span className="contrast-text font-bold text-ms">+0.83%</span>
                                         </p>
                                         <p className="mb-0 text-lg white-text font-bold">875.33</p>
-                                        <p className="mb-0 text-ms grey-text-accent">$ 571,333.265</p>
+                                        <p className="mb-0 text-xs grey-text-accent">
+                                            <span>Volume: </span> 6,407,080,688.47 USD
+                                        </p>
                                     </div>
                                     <div className="market-item py-24 mx-4">
                                         <p className="mb-0 text-lg white-text font-bold mb-8">
-                                            CDN/USD <span className="contrast-text text-ms">+0.90%</span>
+                                            CDN/USD <span className="contrast-text font-bold text-ms">+0.90%</span>
                                         </p>
                                         <p className="mb-0 text-lg white-text font-bold">998.22</p>
-                                        <p className="mb-0 text-ms grey-text-accent">$324.221</p>
+                                        <p className="mb-0 text-xs grey-text-accent">
+                                            <span>Volume: </span> 6,407,080,688.47 USD
+                                        </p>
                                     </div>
                                     <div className="market-item py-24 mx-4">
                                         <p className="mb-0 text-lg white-text font-bold mb-8">
-                                            DOGE/USD <span className="contrast-text text-ms">+0.83%</span>
+                                            DOGE/USD <span className="contrast-text font-bold text-ms">+0.83%</span>
                                         </p>
                                         <p className="mb-0 text-lg white-text font-bold">875.33</p>
-                                        <p className="mb-0 text-ms grey-text-accent">$ 571,333.265</p>
+                                        <p className="mb-0 text-xs grey-text-accent">
+                                            <span>Volume: </span>6,407,080,688.47 USD
+                                        </p>
                                     </div>
                                     <div className="market-item py-24 mx-4">
                                         <p className="mb-0 text-lg white-text font-bold mb-8">
-                                            CDN/USD <span className="contrast-text text-ms">+0.90%</span>
+                                            CDN/USD <span className="contrast-text font-bold text-ms">+0.90%</span>
                                         </p>
                                         <p className="mb-0 text-lg white-text font-bold">998.22</p>
-                                        <p className="mb-0 text-ms grey-text-accent">$324.221</p>
+                                        <p className="mb-0 text-xs grey-text-accent">
+                                            <span>Volume: </span> 6,407,080,688.47 USD
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -130,9 +145,192 @@ class Landing extends React.Component<Props> {
                     </section>
                     {/* end hero */}
 
-                    <div>
-                        <MarketsTable />
-                    </div>
+                    {/* popular crypto */}
+                    <section className="popular-crypto position-relative pb-5">
+                        <img src={MoneroIcon} className="image-coin popular monero" alt="" />
+                        <div className="container index-2">
+                            <div className="overflow-auto py-5">
+                                <div className="slider-announcement mb-12">
+                                    <div className="dark-bg-main mr-4 radius-md">
+                                        <div
+                                            className="slider-item"
+                                            style={{
+                                                backgroundImage: `url(${SliderBgImage})`,
+                                            }}>
+                                            <div className="content">
+                                                <div className="d-flex justify-content-end">
+                                                    <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div className="mr-2">
+                                                        <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
+                                                        <p className="text-sm font-bold white-text mb-1">
+                                                            Menu card image
+                                                        </p>
+                                                        <p className="text-xs grey-text-accent">Body menu card</p>
+                                                    </div>
+                                                    <a href="">
+                                                        <ArrowDownLarge className={'mx-1'} />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="dark-bg-main mr-4 radius-md">
+                                        <div
+                                            className="slider-item"
+                                            style={{
+                                                backgroundImage: `url(${SliderBgImage})`,
+                                            }}>
+                                            <div className="content">
+                                                <div className="d-flex justify-content-end">
+                                                    <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div className="mr-2">
+                                                        <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
+                                                        <p className="text-sm font-bold white-text mb-1">
+                                                            Menu card image
+                                                        </p>
+                                                        <p className="text-xs grey-text-accent">Body menu card</p>
+                                                    </div>
+                                                    <a href="">
+                                                        <ArrowDownLarge className={'mx-1'} />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="dark-bg-main mr-4 radius-md">
+                                        <div
+                                            className="slider-item"
+                                            style={{
+                                                backgroundImage: `url(${SliderBgImage})`,
+                                            }}>
+                                            <div className="content">
+                                                <div className="d-flex justify-content-end">
+                                                    <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div className="mr-2">
+                                                        <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
+                                                        <p className="text-sm font-bold white-text mb-1">
+                                                            Menu card image
+                                                        </p>
+                                                        <p className="text-xs grey-text-accent">Body menu card</p>
+                                                    </div>
+                                                    <a href="">
+                                                        <ArrowDownLarge className={'mx-1'} />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="dark-bg-main mr-4 radius-md">
+                                        <div
+                                            className="slider-item"
+                                            style={{
+                                                backgroundImage: `url(${SliderBgImage})`,
+                                            }}>
+                                            <div className="content">
+                                                <div className="d-flex justify-content-end">
+                                                    <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div className="mr-2">
+                                                        <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
+                                                        <p className="text-sm font-bold white-text mb-1">
+                                                            Menu card image
+                                                        </p>
+                                                        <p className="text-xs grey-text-accent">Body menu card</p>
+                                                    </div>
+                                                    <a href="">
+                                                        <ArrowDownLarge className={'mx-1'} />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="dark-bg-main mr-4 radius-md">
+                                        <div
+                                            className="slider-item"
+                                            style={{
+                                                backgroundImage: `url(${SliderBgImage})`,
+                                            }}>
+                                            <div className="content">
+                                                <div className="d-flex justify-content-end">
+                                                    <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div className="mr-2">
+                                                        <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
+                                                        <p className="text-sm font-bold white-text mb-1">
+                                                            Menu card image
+                                                        </p>
+                                                        <p className="text-xs grey-text-accent">Body menu card</p>
+                                                    </div>
+                                                    <a href="">
+                                                        <ArrowDownLarge className={'mx-1'} />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 className="text-main-title white-text text-center font-extrabold ">
+                                Popular Crypto Coins
+                            </h2>
+                            <p className=" mb-24 text-md font-normal grey-text-accent text-center">
+                                Most popular coins to trade
+                            </p>
+                            <div className="market-list">
+                                <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <li className="nav-item">
+                                        <a
+                                            className="nav-link active"
+                                            id="pills-deposit-tab"
+                                            data-toggle="pill"
+                                            href="#pills-deposit"
+                                            role="tab"
+                                            aria-controls="pills-deposit"
+                                            aria-selected="true">
+                                            Hot List
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a
+                                            className="nav-link"
+                                            id="pills-withdrawl-tab"
+                                            data-toggle="pill"
+                                            href="#pills-withdrawl"
+                                            role="tab"
+                                            aria-controls="pills-withdrawl"
+                                            aria-selected="false">
+                                            New Coins
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a
+                                            className="nav-link"
+                                            id="pills-transfer-tab"
+                                            data-toggle="pill"
+                                            href="#pills-transfer"
+                                            role="tab"
+                                            aria-controls="pills-transfer"
+                                            aria-selected="false">
+                                            Top Gainers
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div>
+                                    <MarketsTable />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {/* end popular crypto */}
                 </div>
             </div>
         );
