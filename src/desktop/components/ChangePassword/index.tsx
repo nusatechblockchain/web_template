@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { passwordMinEntropy } from '../../../api/config';
 import {
@@ -23,6 +23,10 @@ export const ChangePasswordComponent = (props) => {
     const [passwordErrorThirdSolved, setPasswordErrorThirdSolved] = React.useState(false);
     const [passwordPopUp, setPasswordPopUp] = React.useState(false);
     const [code, setCode] = React.useState('');
+    const [show, setShow] = React.useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const intl = useIntl();
 
@@ -172,18 +176,32 @@ export const ChangePasswordComponent = (props) => {
 
                 <div className="form-button-group mt-4">
                     <div className="footer-section">
-                        <Button
-                            block={true}
-                            disabled={!isValidForm()}
-                            onClick={handleChangePassword}
-                            size="lg"
-                            variant="primary">
+                        <Button block={true} disabled={!isValidForm()} onClick={handleShow} size="lg" variant="primary">
                             {intl.formatMessage({
                                 id: 'page.body.profile.header.account.content.password.button.change',
                             })}
                         </Button>
                     </div>
                 </div>
+
+                <Modal centered show={show} onHide={handleClose} className="w-100">
+                    <Modal.Header className="rounded-top-10 p-0 mt-24 mb-24 justify-content-center border-none">
+                        <h6 className="text-md white-text m-0">Reset Password</h6>
+                    </Modal.Header>
+                    <Modal.Body className="tos-content mb-24 p-0">
+                        <p className="grey-text-accent text-center m-0">
+                            Are you sure you want to change your password? ,make sure you remember your new password
+                        </p>
+                    </Modal.Body>
+                    <Modal.Footer className="d-flex justify-content-center p-0 mb-24 border-none rounded-bottom-10">
+                        <Button type="button" className="btn-danger mr-24" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button className="btn-primary" onClick={handleChangePassword}>
+                            Continue
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </React.Fragment>
         );
     };
