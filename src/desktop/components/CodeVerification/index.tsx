@@ -14,18 +14,9 @@ export interface CodeVerificationProps {
 }
 
 const CodeVerification: FC<CodeVerificationProps> = (props: CodeVerificationProps): ReactElement => {
-    const {
-        code,
-        codeLength,
-        inputMode,
-        isMobile,
-        onSubmit,
-        placeholder,
-        showPaste2FA,
-        type,
-    } = props;
+    const { code, codeLength, inputMode, isMobile, onSubmit, placeholder, showPaste2FA, type } = props;
 
-    const onCodeChange = e => {
+    const onCodeChange = (e) => {
         if (e.target.value.length <= codeLength && (e.target.value.match(/^[0-9\b]+$/) || e.target.value === '')) {
             props.onChange(e.target.value);
         }
@@ -44,8 +35,9 @@ const CodeVerification: FC<CodeVerificationProps> = (props: CodeVerificationProp
     };
 
     return (
-        <div>
+        <div className="custom-input mb-3">
             <input
+                className="form-control text-center spacing-10"
                 autoFocus={true}
                 type={type}
                 value={code}
@@ -53,11 +45,13 @@ const CodeVerification: FC<CodeVerificationProps> = (props: CodeVerificationProp
                 onChange={onCodeChange}
                 onKeyPress={onSubmit}
             />
-            {showPaste2FA && <div onClick={() => paste2FA()}>Paste 2FA</div>}
+            {showPaste2FA && (
+                <div className="cursor-pointer grey-text text-sm mt-1" onClick={() => paste2FA()}>
+                    Paste 2FA
+                </div>
+            )}
         </div>
     );
 };
 
-export {
-    CodeVerification,
-}
+export { CodeVerification };

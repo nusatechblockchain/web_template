@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { CodeVerification } from '../../components';
 
 export interface TwoFactorAuthProps {
@@ -36,27 +37,29 @@ export const TwoFactorAuthComponent: React.FC<TwoFactorAuthProps> = ({
     );
 
     return (
-        <form>
-            <div>{message}</div>
-            <CodeVerification
-                code={otpCode}
-                onChange={handleOtpCodeChange}
-                onSubmit={handleEnterPress}
-                codeLength={6}
-                type="text"
-                placeholder="X"
-                inputMode="decimal"
-                showPaste2FA={true}
-                isMobile={isMobile}
-            />
-            <Button
-                disabled={isLoading || otpCode.length < 6}
-                onClick={onSubmit}
-                size="lg"
-                variant="primary">
-                {isLoading ? 'Loading...' : buttonLabel ? buttonLabel : 'Sign in'}
-            </Button>
-        </form>
+        <React.Fragment>
+            <form>
+                <CodeVerification
+                    code={otpCode}
+                    onChange={handleOtpCodeChange}
+                    onSubmit={handleEnterPress}
+                    codeLength={6}
+                    type="text"
+                    placeholder="X"
+                    inputMode="decimal"
+                    showPaste2FA={false}
+                    isMobile={isMobile}
+                />
+                <Button disabled={isLoading || otpCode.length < 6} onClick={onSubmit} size="lg" variant="primary" block>
+                    {isLoading ? 'Loading...' : buttonLabel ? buttonLabel : 'Sign in'}
+                </Button>
+            </form>
+            <div className="mt-3">
+                <Link to="/signin" className="cursor-pointer btn btn-primary btn-outline btn-block">
+                    <span className="gradient-text">+ Sign In With Another Account</span>
+                </Link>
+            </div>
+        </React.Fragment>
     );
 };
 
