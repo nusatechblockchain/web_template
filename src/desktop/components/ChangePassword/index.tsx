@@ -13,8 +13,7 @@ import { PasswordStrengthMeter } from '../index';
 import PinInput from 'react-pin-input';
 import { Link } from 'react-router-dom';
 
-
-export const ChangePasswordComponent = props => {
+export const ChangePasswordComponent = (props) => {
     const [oldPassword, setOldPassword] = React.useState('');
     const [newPassword, setNewPassword] = React.useState('');
     const [confirmationPassword, setConfirmationPassword] = React.useState('');
@@ -29,14 +28,15 @@ export const ChangePasswordComponent = props => {
 
     const handleChangePassword = () => {
         const payload = props.hideOldPassword
-        ? {
-            password: newPassword,
-            confirm_password: confirmationPassword,
-        } : {
-            old_password: oldPassword,
-            new_password: newPassword,
-            confirm_password: confirmationPassword,
-        };
+            ? {
+                  password: newPassword,
+                  confirm_password: confirmationPassword,
+              }
+            : {
+                  old_password: oldPassword,
+                  new_password: newPassword,
+                  confirm_password: confirmationPassword,
+              };
 
         props.handleChangePassword(payload);
 
@@ -47,9 +47,9 @@ export const ChangePasswordComponent = props => {
     };
 
     const handleChangeOTP = (e) => {
-        setCode(e)
-        props.handleChangePin(e)
-    }
+        setCode(e);
+        props.handleChangePin(e);
+    };
 
     const handleChangeNewPassword = (value: string) => {
         if (passwordErrorFirstSolution(value) && !passwordErrorFirstSolved) {
@@ -80,7 +80,7 @@ export const ChangePasswordComponent = props => {
         setPasswordPopUp(!passwordPopUp);
     };
 
-    const translate = (key: string) => intl.formatMessage({id: key});
+    const translate = (key: string) => intl.formatMessage({ id: key });
 
     const isValidForm = () => {
         const isNewPasswordValid = newPassword.match(PASSWORD_REGEX);
@@ -90,33 +90,54 @@ export const ChangePasswordComponent = props => {
         return isOldPasswordValid && isNewPasswordValid && isConfirmPasswordValid;
     };
 
-     const renderForm = () => {
+    const renderForm = () => {
         return (
             <React.Fragment>
-                <h5 className='mb-2'>We send an email to your address, please check your inbox and find the confirmation code we've sent you</h5>  
-                <PinInput 
-                    length={6} 
-                    secret 
+                <h3 className="mb-8 title-2 white-text font-semibold">Reset Password</h3>
+                <h5 className="mb-24 text-sm grey-text">
+                    We send an email to your address, please check your inbox and find the confirmation code we've sent
+                    you
+                </h5>
+
+                <p className="white-text text-sm mb-8">Pin Code</p>
+                <PinInput
+                    length={6}
                     onChange={(e) => handleChangeOTP(e)}
                     onComplete={(e) => handleChangeOTP(e)}
-                    type="numeric" 
+                    type="numeric"
                     inputMode="number"
-                    style={{padding: '5px'}}  
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '8px',
+                    }}
+                    inputStyle={{
+                        background: 'transparent',
+                        borderRadius: '4px',
+                        borderColor: '#23262F',
+                        fontSize: '20px',
+                        color: '#F2F0FF',
+                    }}
+                    inputFocusStyle={{ fontSize: '20px', color: '#F2F0FF' }}
                     autoSelect={true}
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
+                <p className="text-right text-sm grey-text">Send Code</p>
                 <div>
                     <CustomInput
                         type="password"
-                        label={intl.formatMessage({id: 'page.body.profile.header.account.content.password.new'})}
-                        placeholder={intl.formatMessage({id: 'page.body.profile.header.account.content.password.new'})}
+                        label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.new' })}
+                        placeholder={intl.formatMessage({
+                            id: 'page.body.profile.header.account.content.password.new',
+                        })}
                         defaultLabel="New password"
                         handleChangeInput={handleChangeNewPassword}
                         inputValue={newPassword}
                         handleFocusInput={handleFocusNewPassword}
-                        classNameLabel=""
-                        classNameInput=""
+                        classNameLabel="white-text text-sm mb-8"
+                        classNameInput="mb-24"
                         autoFocus={false}
+                        labelVisible
                     />
                 </div>
                 <div>
@@ -131,31 +152,35 @@ export const ChangePasswordComponent = props => {
                         translate={translate}
                     />
                 </div>
-                <div className='mt-3'>
+                <div className="mt-3">
                     <CustomInput
                         type="password"
-                        label={intl.formatMessage({id: 'page.body.profile.header.account.content.password.conf'})}
-                        placeholder={intl.formatMessage({id: 'page.body.profile.header.account.content.password.conf'})}
+                        label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.conf' })}
+                        placeholder={intl.formatMessage({
+                            id: 'page.body.profile.header.account.content.password.conf',
+                        })}
                         defaultLabel="Password confirmation"
                         handleChangeInput={setConfirmationPassword}
                         inputValue={confirmationPassword}
                         handleFocusInput={() => setConfirmPasswordFocus(!confirmPasswordFocus)}
-                        classNameLabel=""
-                        classNameInput=""
+                        classNameLabel="white-text text-sm mb-8"
+                        classNameInput="mb-24"
                         autoFocus={false}
+                        labelVisible
                     />
                 </div>
 
                 <div className="form-button-group mt-4">
-                    <div className='footer-section'>
+                    <div className="footer-section">
                         <Button
                             block={true}
                             disabled={!isValidForm()}
                             onClick={handleChangePassword}
                             size="lg"
-                            variant="primary"
-                        >
-                            {intl.formatMessage({id: 'page.body.profile.header.account.content.password.button.change'})}
+                            variant="primary">
+                            {intl.formatMessage({
+                                id: 'page.body.profile.header.account.content.password.button.change',
+                            })}
                         </Button>
                     </div>
                 </div>
@@ -163,12 +188,7 @@ export const ChangePasswordComponent = props => {
         );
     };
 
-
-    return (
-        <React.Fragment>
-            {renderForm()}
-        </React.Fragment>
-    );
+    return <React.Fragment>{renderForm()}</React.Fragment>;
 };
 
 export const ChangePassword = React.memo(ChangePasswordComponent);
