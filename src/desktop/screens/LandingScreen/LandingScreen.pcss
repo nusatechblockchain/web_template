@@ -1,0 +1,219 @@
+.landing-screen {
+    .content-wrapper {
+        position: relative;
+        margin-left: 223px;
+        width: calc(100% - 223px);
+        min-height: 100vh;
+        padding-top: 70px;
+        background-image: url(assets/png/background-landing.png);
+        background-size: cover;
+        background-repeat: norepeat;
+        background-position: center;
+
+        &.no-sidebar {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+}
+
+.landing-screen .landing-screen .hero {
+    min-height: calc(100vh - 70px);
+}
+
+.landing-screen .hero .wrapper {
+    min-height: calc(100vh - 70px);
+}
+
+.landing-screen .btn-rounded {
+    border-radius: 100px;
+    padding: 15px 46px;
+    display: flex;
+    align-items: center;
+}
+
+.landing-screen .btn-outline {
+    background: linear-gradient(var(--dark-600), var(--dark-600)) padding-box, var(--linear-gradient-1) border-box;
+    border-radius: 50em;
+    border: 2px solid transparent;
+}
+
+.landing-screen .new-coin {
+    margin-bottom: 200px;
+}
+
+.landing-screen .full-width {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.landing-screen .slider-announcement {
+    display: flex;
+    width: max-content;
+}
+
+.landing-screen .slider-item {
+    width: 260px;
+    background-size: cover;
+    background-repeat: no-repat;
+    background-position: center;
+    padding: 16px 24px;
+}
+
+.landing-screen .slider-item .icon-slider {
+    width: 60px;
+}
+
+.landing-screen .content-wrapper .nav-link {
+    background: transparent;
+    color: var(--grey-200);
+    font-weight: 600;
+    padding: 6px 0;
+    margin-right: 36px;
+}
+
+.landing-screen .content-wrapper .nav-link:hover,
+.landing-screen .content-wrapper .nav-link.active {
+    background: var(--linear-gradient-1) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    transition: 0.3s ease-in all;
+}
+
+.landing-screen .chart-popular-table {
+    width: 150px;
+}
+.landing-screen .feature-section {
+    background: rgba(14, 17, 20, 0.7);
+}
+
+.landing-screen .aplication-section .icon-aplication {
+    width: 44px;
+}
+
+.landing-screen .analysis-section {
+    background: rgba(14, 17, 20, 0.7);
+}
+
+.landing-screen .analysis-section .image-analysis {
+    width: 160px;
+    object-fit: cover;
+}
+
+.landing-screen footer .name {
+    width: 25%;
+}
+
+.landing-screen footer .name img {
+    max-width: 200px;
+    width: 100%;
+}
+
+.landing-screen footer .newsletter .form-control {
+    position: relative;
+}
+
+.landing-screen footer .newsletter .newsletter-input {
+    width: 340px;
+    height: 62px;
+    background: var(--white);
+    border-radius: 100px;
+    padding-left: 20px;
+    color: var(--grey-300);
+    z-index: 1;
+    padding-right: 130px;
+}
+
+.landing-screen footer .newsletter .newsletter-input-label {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: var(--linear-gradient-1);
+    padding: 12px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    z-index: 2;
+}
+
+.landing-screen .index-2 {
+    position: relative;
+    z-index: 2;
+}
+
+.landing-screen .hero .image-coin {
+    z-index: 0;
+}
+
+.landing-screen .hero .image-coin.eth {
+    position: absolute;
+    width: 160px;
+    left: 2%;
+    bottom: 200px;
+}
+
+.landing-screen .hero .image-coin.btc {
+    position: absolute;
+    width: 98px;
+    left: 13%;
+    top: 40px;
+}
+
+.landing-screen .hero .image-coin.lite {
+    position: absolute;
+    width: 160px;
+    right: 16%;
+    bottom: 250px;
+}
+
+.landing-screen .hero .image-coin.monero {
+    position: absolute;
+    width: 98px;
+    right: 10%;
+    top: 40px;
+}
+
+.landing-screen .popular-crypto .image-coin.popular.monero {
+    position: absolute;
+    width: 165px;
+    right: 3%;
+    top: 260px;
+}
+
+.landing-screen .feature-section .image-coin.feature.lite {
+    position: absolute;
+    width: 165px;
+    left: 3%;
+    top: -10%;
+}
+
+.landing-screen .feature-section .image-coin.feature.btc {
+    position: absolute;
+    width: 96px;
+    right: 3%;
+    top: 10%;
+}
+
+.landing-screen .image-coin.analysis.eth {
+    position: absolute;
+    width: 165px;
+    right: 3%;
+    top: 4%;
+}
+
+.landing-screen .image-coin.analysis.btc {
+    position: absolute;
+    width: 96px;
+    left: 3%;
+    top: 20%;
+}
+
+.landing-screen .image-coin.analysis.monero {
+    position: absolute;
+    width: 96px;
+    right: 3%;
+    bottom: 0%;
+}

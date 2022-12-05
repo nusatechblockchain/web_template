@@ -2,6 +2,21 @@
     position: sticky;
     top: 0;
     z-index: 99999;
+
+    .navbar-nav {
+        .nav-item {
+            .nav-link {
+                color: var(--text-secondary-color);
+            }
+
+            &.active {
+                .nav-link {
+                    color: var(--text-primary-color);
+                }
+            }
+        }
+    }
+
     .dropdown-menu {
         display: block;
         left: unset;
