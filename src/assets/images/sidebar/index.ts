@@ -8,3 +8,7 @@ export * from './SecurityIcon';
 export * from './SettingIcon';
 export * from './UserIcon';
 export * from './WalletIcon';
+export * from './DepositIcon';
+export * from './InternalTransferIcon';
+export * from './Withdrawlcon';
+export * from './OverviewIcon';
