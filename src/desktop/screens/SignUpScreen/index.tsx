@@ -186,188 +186,76 @@ class SignUp extends React.Component<Props> {
                         </div>
                         <div className="main-wrapper d-flex align-items-center">
                             <div className="main-form position-relative">
-                                <h2 className="title-2 white-text font-semibold">Sign Up</h2>
-                                <p className="mb-36 text-xs font-bold grey-text">
-                                    Use Your {this.state.selectedTabs} to Sign up
-                                </p>
-                                <ul className="nav nav-tabs mb-24" id="myTab" role="tablist">
-                                    <li
-                                        onClick={() => {
-                                            this.setState({
-                                                selectedTabs: 'Email',
-                                            });
-                                        }}
-                                        className="nav-item">
-                                        <a
-                                            className={`nav-link cursor-pointer ${
-                                                this.state.selectedTabs === 'Email' ? 'active' : ''
-                                            }`}
-                                            id="home-tab"
-                                            data-toggle="tab"
-                                            role="tab"
-                                            aria-controls="home"
-                                            aria-selected="true">
-                                            Email
-                                        </a>
-                                    </li>
-                                    <li
-                                        onClick={() => {
-                                            this.setState({
-                                                selectedTabs: 'Phone',
-                                            });
-                                        }}
-                                        className="nav-item">
-                                        <a
-                                            className={`nav-link cursor-pointer ${
-                                                this.state.selectedTabs === 'Phone' ? 'active' : ''
-                                            }`}
-                                            id="profile-tab"
-                                            data-toggle="tab"
-                                            role="tab"
-                                            aria-controls="profile"
-                                            aria-selected="false">
-                                            Phone Number
-                                        </a>
-                                    </li>
-                                </ul>
+                                <h2 className="title-2 mb-24 white-text font-semibold">Sign Up</h2>
+
                                 <div className="tab-content mb-8" id="myTabContent">
-                                    {this.state.selectedTabs === 'Email' ? (
-                                        <div>
-                                            <SignUpForm
-                                                labelSignIn={this.props.intl.formatMessage({
-                                                    id: 'page.header.signIn',
-                                                })}
-                                                labelSignUp={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp',
-                                                })}
-                                                emailLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.email',
-                                                })}
-                                                passwordLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.password',
-                                                })}
-                                                confirmPasswordLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.confirmPassword',
-                                                })}
-                                                referalCodeLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.referalCode',
-                                                })}
-                                                termsMessage={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.terms',
-                                                })}
-                                                refId={refId}
-                                                handleChangeRefId={this.handleChangeRefId}
-                                                isLoading={loading}
-                                                onSignIn={this.handleSignIn}
-                                                onSignUp={this.handleSignUp}
-                                                username={username}
-                                                handleChangeUsername={this.handleChangeUsername}
-                                                email={email}
-                                                type={this.state.selectedTabs}
-                                                handleChangeEmail={this.handleChangeEmail}
-                                                password={password}
-                                                handleChangePassword={this.handleChangePassword}
-                                                confirmPassword={confirmPassword}
-                                                handleChangeConfirmPassword={this.handleChangeConfirmPassword}
-                                                hasConfirmed={hasConfirmed}
-                                                clickCheckBox={this.handleCheckboxClick}
-                                                validateForm={this.handleValidateForm}
-                                                emailError={emailError}
-                                                passwordError={passwordError}
-                                                confirmationError={confirmationError}
-                                                confirmPasswordFocused={confirmPasswordFocused}
-                                                refIdFocused={refIdFocused}
-                                                usernameFocused={usernameFocused}
-                                                emailFocused={emailFocused}
-                                                passwordFocused={passwordFocused}
-                                                handleFocusUsername={this.handleFocusUsername}
-                                                handleFocusEmail={this.handleFocusEmail}
-                                                handleFocusPassword={this.handleFocusPassword}
-                                                handleFocusConfirmPassword={this.handleFocusConfirmPassword}
-                                                handleFocusRefId={this.handleFocusRefId}
-                                                renderCaptcha={this.renderCaptcha()}
-                                                reCaptchaSuccess={reCaptchaSuccess}
-                                                geetestCaptchaSuccess={geetestCaptchaSuccess}
-                                                captcha_response={captcha_response}
-                                                currentPasswordEntropy={currentPasswordEntropy}
-                                                passwordErrorFirstSolved={passwordErrorFirstSolved}
-                                                passwordErrorSecondSolved={passwordErrorSecondSolved}
-                                                passwordErrorThirdSolved={passwordErrorThirdSolved}
-                                                passwordPopUp={passwordPopUp}
-                                                myRef={this.myRef}
-                                                passwordWrapper={this.passwordWrapper}
-                                                translate={this.translate}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <SignUpForm
-                                                labelSignIn={this.props.intl.formatMessage({
-                                                    id: 'page.header.signIn',
-                                                })}
-                                                labelSignUp={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp',
-                                                })}
-                                                emailLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.email',
-                                                })}
-                                                passwordLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.password',
-                                                })}
-                                                confirmPasswordLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.confirmPassword',
-                                                })}
-                                                referalCodeLabel={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.referalCode',
-                                                })}
-                                                termsMessage={this.props.intl.formatMessage({
-                                                    id: 'page.header.signUp.terms',
-                                                })}
-                                                refId={refId}
-                                                handleChangeRefId={this.handleChangeRefId}
-                                                isLoading={loading}
-                                                onSignIn={this.handleSignIn}
-                                                onSignUp={this.handleSignUp}
-                                                username={username}
-                                                handleChangeUsername={this.handleChangeUsername}
-                                                type={this.state.selectedTabs}
-                                                email={email}
-                                                handleChangeEmail={this.handleChangeEmail}
-                                                password={password}
-                                                handleChangePassword={this.handleChangePassword}
-                                                confirmPassword={confirmPassword}
-                                                handleChangeConfirmPassword={this.handleChangeConfirmPassword}
-                                                hasConfirmed={hasConfirmed}
-                                                clickCheckBox={this.handleCheckboxClick}
-                                                validateForm={this.handleValidateForm}
-                                                emailError={emailError}
-                                                passwordError={passwordError}
-                                                confirmationError={confirmationError}
-                                                confirmPasswordFocused={confirmPasswordFocused}
-                                                refIdFocused={refIdFocused}
-                                                usernameFocused={usernameFocused}
-                                                emailFocused={emailFocused}
-                                                passwordFocused={passwordFocused}
-                                                handleFocusUsername={this.handleFocusUsername}
-                                                handleFocusEmail={this.handleFocusEmail}
-                                                handleFocusPassword={this.handleFocusPassword}
-                                                handleFocusConfirmPassword={this.handleFocusConfirmPassword}
-                                                handleFocusRefId={this.handleFocusRefId}
-                                                renderCaptcha={this.renderCaptcha()}
-                                                reCaptchaSuccess={reCaptchaSuccess}
-                                                geetestCaptchaSuccess={geetestCaptchaSuccess}
-                                                captcha_response={captcha_response}
-                                                currentPasswordEntropy={currentPasswordEntropy}
-                                                passwordErrorFirstSolved={passwordErrorFirstSolved}
-                                                passwordErrorSecondSolved={passwordErrorSecondSolved}
-                                                passwordErrorThirdSolved={passwordErrorThirdSolved}
-                                                passwordPopUp={passwordPopUp}
-                                                myRef={this.myRef}
-                                                passwordWrapper={this.passwordWrapper}
-                                                translate={this.translate}
-                                            />
-                                        </div>
-                                    )}
+                                    <div>
+                                        <SignUpForm
+                                            labelSignIn={this.props.intl.formatMessage({
+                                                id: 'page.header.signIn',
+                                            })}
+                                            labelSignUp={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp',
+                                            })}
+                                            emailLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.email',
+                                            })}
+                                            passwordLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.password',
+                                            })}
+                                            confirmPasswordLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.confirmPassword',
+                                            })}
+                                            referalCodeLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.referalCode',
+                                            })}
+                                            termsMessage={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.terms',
+                                            })}
+                                            refId={refId}
+                                            handleChangeRefId={this.handleChangeRefId}
+                                            isLoading={loading}
+                                            onSignIn={this.handleSignIn}
+                                            onSignUp={this.handleSignUp}
+                                            username={username}
+                                            handleChangeUsername={this.handleChangeUsername}
+                                            email={email}
+                                            type={this.state.selectedTabs}
+                                            handleChangeEmail={this.handleChangeEmail}
+                                            password={password}
+                                            handleChangePassword={this.handleChangePassword}
+                                            confirmPassword={confirmPassword}
+                                            handleChangeConfirmPassword={this.handleChangeConfirmPassword}
+                                            hasConfirmed={hasConfirmed}
+                                            clickCheckBox={this.handleCheckboxClick}
+                                            validateForm={this.handleValidateForm}
+                                            emailError={emailError}
+                                            passwordError={passwordError}
+                                            confirmationError={confirmationError}
+                                            confirmPasswordFocused={confirmPasswordFocused}
+                                            refIdFocused={refIdFocused}
+                                            usernameFocused={usernameFocused}
+                                            emailFocused={emailFocused}
+                                            passwordFocused={passwordFocused}
+                                            handleFocusUsername={this.handleFocusUsername}
+                                            handleFocusEmail={this.handleFocusEmail}
+                                            handleFocusPassword={this.handleFocusPassword}
+                                            handleFocusConfirmPassword={this.handleFocusConfirmPassword}
+                                            handleFocusRefId={this.handleFocusRefId}
+                                            renderCaptcha={this.renderCaptcha()}
+                                            reCaptchaSuccess={reCaptchaSuccess}
+                                            geetestCaptchaSuccess={geetestCaptchaSuccess}
+                                            captcha_response={captcha_response}
+                                            currentPasswordEntropy={currentPasswordEntropy}
+                                            passwordErrorFirstSolved={passwordErrorFirstSolved}
+                                            passwordErrorSecondSolved={passwordErrorSecondSolved}
+                                            passwordErrorThirdSolved={passwordErrorThirdSolved}
+                                            passwordPopUp={passwordPopUp}
+                                            myRef={this.myRef}
+                                            passwordWrapper={this.passwordWrapper}
+                                            translate={this.translate}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
