@@ -56,7 +56,7 @@ class Head extends React.Component<Props, HeaderState> {
             <React.Fragment>
                 {/* <div className="container-fluid dark-bg-main position-relative p-0 "> */}
                 <nav className="navbar navbar-expand-lg dark-bg-main py-2 px-24">
-                    <Link to="/signin" className="navbar-brand">
+                    <Link to="/" className="navbar-brand">
                         <Logo />
                     </Link>
                     <button
@@ -183,16 +183,14 @@ class Head extends React.Component<Props, HeaderState> {
                             ) : (
                                 <React.Fragment>
                                     <li className="nav-item dropdown avatar px-3">
-                                        <a
-                                            className="gradient-text text-sm font-bold mr-3"
-                                            href="../../Screen/SignIn/index.html">
+                                        <Link to={'/signin'} className="gradient-text text-sm font-bold mr-3">
                                             Sign In
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="nav-item dropdown avatar px-3">
-                                        <a className="btn btn-primary" href="../../Screen/SignUp/index.html">
+                                        <Link to={'/signup'} className="btn btn-primary">
                                             Sign Up
-                                        </a>
+                                        </Link>
                                     </li>
                                 </React.Fragment>
                             )}

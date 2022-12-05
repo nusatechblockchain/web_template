@@ -18,14 +18,14 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                 fill="url(#paint0_linear_1841_9760)"
             />
             <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M32.332 29.5783L48.8223 0.396973L55.1772 0.396973L38.687 29.5783H32.332Z"
                 fill="url(#paint1_linear_1841_9760)"
             />
             <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M48.8222 29.5781L32.332 0.396973H38.687L55.1771 29.5781H48.8222Z"
                 fill="url(#paint2_linear_1841_9760)"
             />
@@ -57,8 +57,8 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                     x2="23.9098"
                     y2="22.2125"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <linearGradient
                     id="paint1_linear_1841_9760"
@@ -67,8 +67,8 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                     x2="60.6604"
                     y2="22.5744"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <linearGradient
                     id="paint2_linear_1841_9760"
@@ -77,8 +77,8 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                     x2="60.6601"
                     y2="22.5743"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <linearGradient
                     id="paint3_linear_1841_9760"
@@ -87,8 +87,8 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                     x2="26.1109"
                     y2="15.5981"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <linearGradient
                     id="paint4_linear_1841_9760"
@@ -97,8 +97,8 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                     x2="25.2982"
                     y2="8.93591"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <linearGradient
                     id="paint5_linear_1841_9760"
@@ -107,8 +107,8 @@ export const Logo: React.FC<LogoProps> = (props: LogoProps) => {
                     x2="25.2982"
                     y2="32.494"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
             </defs>
         </svg>
