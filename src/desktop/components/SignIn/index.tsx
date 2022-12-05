@@ -164,78 +164,53 @@ const SignIn: React.FC<SignInProps> = ({
 
     return (
         <React.Fragment>
-            <ul className="nav nav-tabs mb-24" role="tablist">
-                <li className="nav-item cursor-pointer" onClick={() => setSelectTab('email')}>
-                    <div className={`nav-link ${selectTab == 'email' ? 'active' : ''}`}>Email</div>
-                </li>
-                <li className="nav-item cursor-pointer" onClick={() => setSelectTab('phone')}>
-                    <div className={`nav-link ${selectTab == 'phone' ? 'active' : ''}`}>Phone Number</div>
-                </li>
-            </ul>
+            <div>
+                <CustomInput
+                    type="email"
+                    label={emailLabel || 'Email'}
+                    placeholder={emailPlaceholder}
+                    defaultLabel="Email"
+                    handleChangeInput={handleChangeEmail}
+                    inputValue={email}
+                    handleFocusInput={() => handleFieldFocus('email')}
+                    classNameLabel="form-label white-text text-sm"
+                    autoFocus={!isMobileDevice}
+                    labelVisible
+                />
+                {emailError && <div className={'invalid-feedback'}>{emailError}</div>}
+            </div>
 
-            <div className="card dark-bg-main mt-3">
-                {selectTab === 'email' ? (
-                    <div>
-                        <CustomInput
-                            type="email"
-                            label={emailLabel || 'Email'}
-                            placeholder={emailPlaceholder}
-                            defaultLabel="Email"
-                            handleChangeInput={handleChangeEmail}
-                            inputValue={email}
-                            handleFocusInput={() => handleFieldFocus('email')}
-                            classNameLabel="form-label white-text text-sm"
-                            autoFocus={!isMobileDevice}
-                            labelVisible
-                        />
-                        {emailError && <div className={'invalid-feedback'}>{emailError}</div>}
-                    </div>
-                ) : (
-                    <div className="mb-3">
-                        <label className="white-text text-sm">Phone</label>
-                        <PhoneInput
-                            country={'id'}
-                            value={''}
-                            onChange={(e) => console.log(e)}
-                            containerClass="container-phone"
-                            inputClass="input-phone"
-                            buttonClass="button-phone"
-                        />
-                    </div>
-                )}
+            <div>
+                <CustomInput
+                    type="password"
+                    label={passwordLabel || 'Password'}
+                    placeholder={passwordPlaceholder}
+                    defaultLabel="Password"
+                    handleChangeInput={handleChangePassword}
+                    inputValue={password}
+                    handleFocusInput={() => handleFieldFocus('password')}
+                    classNameLabel="form-label white-text text-sm"
+                    autoFocus={false}
+                    labelVisible
+                />
+                {passwordError && <div className={'invalid-feedback'}>{passwordError}</div>}
+            </div>
 
-                <div>
-                    <CustomInput
-                        type="password"
-                        label={passwordLabel || 'Password'}
-                        placeholder={passwordPlaceholder}
-                        defaultLabel="Password"
-                        handleChangeInput={handleChangePassword}
-                        inputValue={password}
-                        handleFocusInput={() => handleFieldFocus('password')}
-                        classNameLabel="form-label white-text text-sm"
-                        autoFocus={false}
-                        labelVisible
-                    />
-                    {passwordError && <div className={'invalid-feedback'}>{passwordError}</div>}
-                </div>
-
-                <div className="mt-2 mb-2">{captchaLogin() && renderCaptcha}</div>
-                <div className="mt-4">
-                    <Button
-                        block={true}
-                        type="button"
-                        disabled={isLoading || !email.match(EMAIL_REGEX) || !password || isButtonDisabled}
-                        onClick={handleClick as any}
-                        size="lg"
-                        variant="primary">
-                        {isLoading ? 'Loading...' : labelSignIn ? labelSignIn : 'Sign in'}
-                    </Button>
-                </div>
-                <div className="position-relative mt-2">
-                    <div className="text-xs grey-text position-absolute right-position cursor-pointer">
-                        {renderForgotButton}
-                    </div>
+            <div className="mt-2 mb-2">{captchaLogin() && renderCaptcha}</div>
+            <div className="mt-4">
+                <Button
+                    block={true}
+                    type="button"
+                    disabled={isLoading || !email.match(EMAIL_REGEX) || !password || isButtonDisabled}
+                    onClick={handleClick as any}
+                    size="lg"
+                    variant="primary">
+                    {isLoading ? 'Loading...' : labelSignIn ? labelSignIn : 'Sign in'}
+                </Button>
+            </div>
+            <div className="position-relative mt-2">
+                <div className="text-xs grey-text position-absolute right-position cursor-pointer">
+                    {renderForgotButton}
                 </div>
             </div>
         </React.Fragment>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FormControl, InputGroup } from 'react-bootstrap';
+import { EyeClose, EyeOpen } from '../../../assets/images/Eye';
 
 export interface CustomInputProps {
     type: string;
@@ -27,9 +28,24 @@ interface OnChangeEvent {
         value: string;
     };
 }
+
+interface State {
+    inputType: string;
+    showPassword: boolean;
+}
+
 type Props = CustomInputProps;
 
-class CustomInput extends React.Component<Props> {
+class CustomInput extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            showPassword: true,
+            inputType: this.props.type,
+        };
+    }
+
     public render() {
         const {
             label,
@@ -56,7 +72,7 @@ class CustomInput extends React.Component<Props> {
                     <InputGroup size="lg">
                         <FormControl
                             size="lg"
-                            type={type}
+                            type={this.state.inputType}
                             value={inputValue.toString()}
                             placeholder={placeholder}
                             autoFocus={autoFocus}
@@ -71,11 +87,39 @@ class CustomInput extends React.Component<Props> {
                             autoComplete={autoComplete}
                             name={name}
                         />
+
+                        {type == 'password' ? (
+                            <div className="eye-password-icon" onClick={this.handleShowPassword}>
+                                {this.state.showPassword ? (
+                                    <EyeOpen className="password-icon" />
+                                ) : (
+                                    <EyeClose className="password-icon" />
+                                )}
+                            </div>
+                        ) : (
+                            ''
+                        )}
                     </InputGroup>
                 </div>
             </React.Fragment>
         );
     }
+
+    private handleShowPassword = () => {
+        this.setState({
+            showPassword: !this.state.showPassword,
+        });
+
+        if (this.state.showPassword) {
+            this.setState({
+                inputType: 'text',
+            });
+        } else {
+            this.setState({
+                inputType: 'password',
+            });
+        }
+    };
 
     private handleChangeValue = (e: OnChangeEvent) => {
         this.props.handleChangeInput && this.props.handleChangeInput(e.target.value);
