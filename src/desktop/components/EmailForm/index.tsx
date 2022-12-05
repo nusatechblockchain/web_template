@@ -45,7 +45,6 @@ export const EmailForm: React.FC<EmailFormProps> = (props) => {
         reCaptchaSuccess,
     } = props;
 
-
     const handleSubmitForm = () => {
         props.OnSubmit();
     };
@@ -83,10 +82,9 @@ export const EmailForm: React.FC<EmailFormProps> = (props) => {
         }
     };
 
-
     return (
         <React.Fragment>
-            <h3 className="h4 mb-3">{title || 'Forgot password'}</h3>
+            <h3 className="h4 mb-24 title-2 white-text font-semibold">{title || 'Forgot password'}</h3>
             <div className="field">
                 <CustomInput
                     type="email"
@@ -96,26 +94,25 @@ export const EmailForm: React.FC<EmailFormProps> = (props) => {
                     handleChangeInput={props.handleInputEmail}
                     inputValue={email}
                     handleFocusInput={props.handleFieldFocus}
-                    classNameLabel="form-labek"
+                    classNameLabel="form-label white-text text-sm mb-8"
                     classNameInput=""
                     autoFocus={!isMobileDevice}
+                    labelVisible
                 />
                 {emailError && <div className="invalid-feedback">{emailError}</div>}
             </div>
-            <div className='pt-4'>
-                {props.renderCaptcha}
-            </div>
+            <div className="mb-24">{props.renderCaptcha}</div>
 
             <Button
                 block={true}
                 type="button"
                 disabled={isButtonDisabled()}
-                onClick={e => handleClick(e as any)}
+                onClick={(e) => handleClick(e as any)}
                 size="lg"
-                className='button registration__button'
+                className="button registration__button"
                 variant="primary">
-                {isLoading ? 'Loading...' : buttonLabel ? buttonLabel : 'Send'}
+                {isLoading ? 'Loading...' : buttonLabel ? buttonLabel : 'Submit'}
             </Button>
         </React.Fragment>
     );
-}
+};
