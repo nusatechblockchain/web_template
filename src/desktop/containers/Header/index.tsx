@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { History } from 'history';
 import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps } from 'react-router';
@@ -12,13 +13,21 @@ import {
     selectCurrentMarket,
     setMobileWalletUi,
     toggleMarketSelector,
+    selectUserLoggedIn,
 } from '../../../modules';
 import { Logo } from '../../../assets/images/Logo';
+import ProfileAvatar from '../../../assets/png/avatar.png';
 import { IndonesianFlag, AmericanFlag, ChinaFlag, KoreaFlag } from '../../../assets/images/Flags';
+import { Api, Dashboard, Logout, Referral, Security, Setting, Wallet } from '../../../assets/images/ProfileDropdown';
 
 interface ReduxProps {
     currentMarket: Market | undefined;
     colorTheme: string;
+    isLoggedIn: boolean;
+}
+
+interface OwnProps {
+    history: History;
 }
 
 interface DispatchProps {
@@ -33,11 +42,12 @@ interface LocationProps extends RouterProps {
 
 export interface HeaderState {
     showLanguage: boolean;
+    showProfileDropdown: boolean;
 }
 
-const authHeader = ['/signin', '/signup'];
+const authHeader = ['/signin', '/signup', '/email-verification', '/forgot_password', '/password_reset', ''];
 
-type Props = ReduxProps & DispatchProps & IntlProps & LocationProps;
+type Props = ReduxProps & DispatchProps & IntlProps & LocationProps & OwnProps;
 
 class Head extends React.Component<Props, HeaderState> {
     constructor(props: Props) {
@@ -45,16 +55,61 @@ class Head extends React.Component<Props, HeaderState> {
 
         this.state = {
             showLanguage: false,
+            showProfileDropdown: false,
         };
     }
 
     public render() {
         const thisAuthHeader = authHeader.some((r) => location.pathname.includes(r)) && location.pathname !== '/';
-        const { showLanguage } = this.state;
+        const { showLanguage, showProfileDropdown } = this.state;
+        const { isLoggedIn } = this.props;
+
+        const logoutButton = async () => {
+            await localStorage.clear();
+            this.props.history.push('/');
+        };
+
+        const ProfileDropdown = [
+            {
+                name: 'Dashboard',
+                desc: 'Dashboard summary profile',
+                icon: <Dashboard />,
+                url: '/profile',
+            },
+            {
+                name: 'Wallet',
+                desc: 'deposit and withdraw wallet',
+                icon: <Wallet />,
+                url: '/wallet',
+            },
+            {
+                name: 'Profile Setting',
+                desc: 'setting your perosenal profile',
+                icon: <Setting />,
+                url: '/setting',
+            },
+            {
+                name: 'Security',
+                desc: 'secure your account',
+                icon: <Security />,
+                url: '/security',
+            },
+            {
+                name: 'Refferal',
+                desc: 'invite friend to reach bonus',
+                icon: <Referral />,
+                url: '/referral',
+            },
+            {
+                name: 'API Management',
+                desc: 'api Management for your account',
+                icon: <Api />,
+                url: '/api',
+            },
+        ];
 
         return (
             <React.Fragment>
-                {/* <div className="container-fluid dark-bg-main position-relative p-0 "> */}
                 <nav className="navbar navbar-expand-lg dark-bg-main py-2 px-24">
                     <Link to="/" className="navbar-brand">
                         <Logo />
@@ -76,35 +131,29 @@ class Head extends React.Component<Props, HeaderState> {
                             ) : (
                                 <ul className="navbar-nav main-navbar">
                                     <li className="nav-item active">
-                                        <a
-                                            className="nav-link text-sm font-bold"
-                                            href="../../Screen/ProfileScreen/index.html">
+                                        <Link to={'/'} className="nav-link text-sm font-bold">
                                             Home
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a
-                                            className="nav-link text-sm font-bold"
-                                            href="../../Screen/MarketList/index.html">
+                                        <Link to={'/market'} className="nav-link text-sm font-bold">
                                             Market
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link text-sm font-bold" href="../../Screen/Faq/index.html">
+                                        <Link to={'/faq'} className="nav-link text-sm font-bold">
                                             Support
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a
-                                            className="nav-link text-sm font-bold"
-                                            href="../../Screen/Announcement/index.html">
+                                        <Link to={'/announcement'} className="nav-link text-sm font-bold">
                                             Announcement
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link text-sm font-bold" href="#">
+                                        <Link to={'/market'} className="nav-link text-sm font-bold">
                                             Discover
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             )}
@@ -178,9 +227,48 @@ class Head extends React.Component<Props, HeaderState> {
                                 )}
                             </li>
 
-                            {thisAuthHeader ? (
-                                ''
+                            {!thisAuthHeader && isLoggedIn ? (
+                                // Profile Dropdown
+                                <li className="nav-item dropdown avatar px-3">
+                                    <div
+                                        className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
+                                        onClick={() => this.setState({ showProfileDropdown: !showProfileDropdown })}>
+                                        <img src={ProfileAvatar} className="avatar-image" alt="" />
+                                    </div>
+                                    {showProfileDropdown ? (
+                                        <div
+                                            className="dropdown-menu dark-bg-accent p-3 radius-sm"
+                                            aria-labelledby="navbarDropdownMenuLink">
+                                            {ProfileDropdown.map((item, index) => (
+                                                <div key={index} className="dropdown-wallets-item ">
+                                                    <Link to={item.url} className="d-flex">
+                                                        {item.icon}
+                                                        <div className="pl-3">
+                                                            <p className="mb-0 text-sm font-bold white-text">
+                                                                {item.name}
+                                                            </p>
+                                                            <span className="text-xs grey-text-accent font-normal">
+                                                                {item.desc}
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            ))}
+                                            <div className="dropdown-wallets-item cursor-pointer">
+                                                <div className="d-flex" onClick={logoutButton}>
+                                                    <Logout />
+                                                    <div className="pl-3">
+                                                        <p className="mb-0 text-sm font-bold white-text">Logout</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
+                                </li>
                             ) : (
+                                // Sign In and Sign Up
                                 <React.Fragment>
                                     <li className="nav-item dropdown avatar px-3">
                                         <Link to={'/signin'} className="gradient-text text-sm font-bold mr-3">
@@ -197,7 +285,6 @@ class Head extends React.Component<Props, HeaderState> {
                         </ul>
                     </div>
                 </nav>
-                {/* </div> */}
             </React.Fragment>
         );
     }
@@ -206,6 +293,7 @@ class Head extends React.Component<Props, HeaderState> {
 const mapStateToProps = (state: RootState): ReduxProps => ({
     currentMarket: selectCurrentMarket(state),
     colorTheme: selectCurrentColorTheme(state),
+    isLoggedIn: selectUserLoggedIn(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
