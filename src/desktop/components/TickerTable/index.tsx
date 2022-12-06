@@ -21,20 +21,27 @@ export const TickerTable: React.FC<Props> = ({
 }) => {
     const { formatMessage } = useIntl();
 
-    console.log(markets);
-
     const renderItem = React.useCallback(
         (market, index: number) => {
             const marketChangeColor = +(market.change || 0) < 0 ? 'negative' : 'positive';
-
             return (
                 <tr key={index} onClick={() => redirectToTrading(market.id)}>
                     <td>
-                        <div className="font-bold">{market && market.name}</div>
+                        <div className="d-flex align-items-center">
+                            <img
+                                src={market && market.currency && market.currency.icon_url}
+                                className="small-coin-icon"
+                                alt=""
+                            />
+                            <div className="font-bold ml-2 text-uppercase">{market && market.base_unit}</div>
+                            <div className="font-normal text-sm grey-text-accent ml-3">
+                                {market && market.currency && market.currency.name}
+                            </div>
+                        </div>
                     </td>
                     <td>
                         <span>
-                            <Decimal fixed={market.amount_precision} thousSep=".">
+                            <Decimal fixed={market.amount_precision} thousSep=",">
                                 {market.last}
                             </Decimal>
                         </span>
@@ -44,7 +51,7 @@ export const TickerTable: React.FC<Props> = ({
                     </td>
                     <td>
                         <span>
-                            <Decimal fixed={market.amount_precision} thousSep="." floatSep=",">
+                            <Decimal fixed={market.amount_precision} thousSep="," floatSep=",">
                                 {market.high}
                             </Decimal>
                         </span>
@@ -98,7 +105,7 @@ export const TickerTable: React.FC<Props> = ({
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.change' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.high' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.low' })}</th>
-                        <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.volume' })}</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>

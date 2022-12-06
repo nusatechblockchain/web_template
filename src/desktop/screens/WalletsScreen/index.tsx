@@ -12,6 +12,8 @@ export const WalletsScreen: FC = (): ReactElement => {
     useDocumentTitle('Wallets');
     useWalletsFetch();
 
+    console.log(wallets);
+
     return (
         <React.Fragment>
             <div className="content-wrapper dark-bg-main">
