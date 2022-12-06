@@ -2,7 +2,7 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps } from 'react-router';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
 import {
@@ -54,7 +54,7 @@ export interface SidebarState {
 }
 
 const sidebarProfile = ['/profile', '/profile/referral', '/profile/api-key', '/security/2fa'];
-const sidebarWallet = ['/wallets', '/wallets/deposit', '/wallets/withdrawl', '/wallets/internal-transfer'];
+const sidebarWallet = ['/wallets'];
 
 type Props = DispatchProps & LocationProps;
 
@@ -71,6 +71,7 @@ class Side extends React.Component<Props, SidebarState> {
     }
 
     componentDidMount() {
+        console.log(this.props);
         this.setState({
             dataProfile: [
                 {
@@ -205,8 +206,11 @@ class Side extends React.Component<Props, SidebarState> {
 
     public render() {
         const thisSidebarProfile = sidebarProfile.some((r) => location.pathname.includes(r));
-        const thisSidebarWallet = sidebarWallet.some((r) => location.pathname.includes(r));
-
+        const thisSidebarWallet = sidebarWallet.some(
+            (r) =>
+                location.pathname.includes(r) &&
+                !location.pathname.includes('deposit' || 'withdrawl' || 'internal-transfer')
+        );
         return (
             <React.Fragment>
                 {thisSidebarProfile && (
