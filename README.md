@@ -6,8 +6,8 @@
 
 # Table of Content
 
-1. [Instalation](#installation)
-2. [Note](#note)
+1. [Instalation](#-installation)
+2. [Note](#-note)
 
 ---
 
