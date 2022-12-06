@@ -2,6 +2,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { Market } from '../../../modules';
 import { Decimal } from '../../../components';
+import { Link } from 'react-router-dom';
 
 interface Props {
     currentBidUnit: string;
@@ -20,6 +21,8 @@ export const TickerTable: React.FC<Props> = ({
 }) => {
     const { formatMessage } = useIntl();
 
+    console.log(markets);
+
     const renderItem = React.useCallback(
         (market, index: number) => {
             const marketChangeColor = +(market.change || 0) < 0 ? 'negative' : 'positive';
@@ -27,11 +30,11 @@ export const TickerTable: React.FC<Props> = ({
             return (
                 <tr key={index} onClick={() => redirectToTrading(market.id)}>
                     <td>
-                        <div>{market && market.name}</div>
+                        <div className="font-bold">{market && market.name}</div>
                     </td>
                     <td>
                         <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
+                            <Decimal fixed={market.amount_precision} thousSep=".">
                                 {market.last}
                             </Decimal>
                         </span>
@@ -41,24 +44,29 @@ export const TickerTable: React.FC<Props> = ({
                     </td>
                     <td>
                         <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
+                            <Decimal fixed={market.amount_precision} thousSep="." floatSep=",">
                                 {market.high}
                             </Decimal>
                         </span>
                     </td>
                     <td>
                         <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
+                            <Decimal fixed={market.amount_precision} thousSep=".">
                                 {market.low}
                             </Decimal>
                         </span>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
-                                {market.volume}
-                            </Decimal>
-                        </span>
+                        <div className="d-flex">
+                            <Link
+                                to={`/market-detail/${market.base_unit}`}
+                                className="gradient-text font-normal mx-2 text-sm">
+                                Detail
+                            </Link>
+                            <Link to={`/trading/${market.id}`} className="gradient-text font-normal mx-2 text-sm">
+                                Trade
+                            </Link>
+                        </div>
                     </td>
                 </tr>
             );
@@ -68,13 +76,12 @@ export const TickerTable: React.FC<Props> = ({
 
     return (
         <div>
-            <h5>Selector</h5>
-            <div className="navbar">
-                <ul className="navbar-nav" role="tablist">
+            <div className="navbar__ticker-table">
+                <ul className="navbar-nav__ticker-table" role="tablist">
                     {currentBidUnitsList.map((item, i) => (
                         <li
                             key={i}
-                            className={`nav-item ${item === currentBidUnit ? 'active' : ''}`}
+                            className={`nav-item__ticker-table ${item === currentBidUnit ? 'active' : ''}`}
                             onClick={() => setCurrentBidUnit(item)}>
                             <span>
                                 {item ? item.toUpperCase() : formatMessage({ id: 'page.body.marketsTable.filter.all' })}
@@ -83,7 +90,6 @@ export const TickerTable: React.FC<Props> = ({
                     ))}
                 </ul>
             </div>
-            <h5>Market</h5>
             <table className="pg-ticker-table__table">
                 <thead>
                     <tr>
