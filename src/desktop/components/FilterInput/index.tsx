@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import * as React from 'react';
 import SearchIcon from './Search.svg';
+import './FilterInput.pcss';
 
 interface OnChangeEvent {
     target: {
@@ -52,8 +53,7 @@ export class FilterInput extends React.Component<FilterInputProps, SearchInputSt
         const value = event ? event.target.value : '';
         const { data, filter } = this.props;
 
-        const result = data
-            .filter(item => filter(item, value));
+        const result = data.filter((item) => filter(item, value));
 
         this.props.onFilter && this.props.onFilter(result);
         this.setState({ key: value });
@@ -65,18 +65,22 @@ export class FilterInput extends React.Component<FilterInputProps, SearchInputSt
         const cx = classnames('form-input', className);
 
         return (
-            <div>
-                <span>
-                    <img alt="search icon" src={SearchIcon} />
+            <div className="position-relative input-container">
+                <span className="position-absolute search-icon">
+                    <img alt="search-icon" src={SearchIcon} className="grey-text" />
                 </span>
                 <input
                     type={'text'}
                     className={cx}
                     value={key}
-                    placeholder={placeholder ? placeholder : 'Search'}
+                    placeholder={placeholder ? placeholder : 'Search Coin'}
                     onChange={this.filterList}
                 />
-                <span onClick={e => this.filterList()}>X</span>
+                <span
+                    className="position-absolute cancel-icon cursor-pointer grey-text"
+                    onClick={(e) => this.filterList()}>
+                    X
+                </span>
             </div>
         );
     }

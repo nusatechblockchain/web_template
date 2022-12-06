@@ -1375,7 +1375,7 @@ export const en = {
     'page.body.wallets.overview.action.transfer': 'Transfer',
     'page.body.wallets.overview.action.p2p': 'P2P',
     'page.body.wallets.overview.seach': 'Search',
-    'page.body.wallets.overview.nonZero': 'Non Zero Balances',
+    'page.body.wallets.overview.nonZero': 'Hide 0 Balance Wallet',
     'page.body.wallets.transfers.transferType': 'Transfer Type',
     'page.body.wallets.transfers.from': 'From',
     'page.body.wallets.transfers.to': 'To',

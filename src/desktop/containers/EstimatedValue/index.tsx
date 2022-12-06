@@ -5,12 +5,9 @@ import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch } from 'src/ho
 import { formatWithSeparators } from '../../../components';
 import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from '../../../constants';
 import { estimateUnitValue, estimateValue } from '../../../helpers/estimateValue';
-import {
-    selectCurrencies,
-    selectMarkets,
-    selectMarketTickers,
-    Wallet,
-} from '../../../modules';
+import { truncateMiddle } from '../../../helpers/truncateMiddle';
+import { selectCurrencies, selectMarkets, selectMarketTickers, Wallet } from '../../../modules';
+import { EyeClose, EyeOpen } from '../../../assets/images/Eye';
 
 interface EstimatedValueProps {
     wallets: Wallet[];
@@ -19,8 +16,12 @@ interface EstimatedValueProps {
 type Props = EstimatedValueProps;
 
 const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
+    const [showAvailable, setShowAvailable] = React.useState(true);
+    const [showLocked, setShowLocked] = React.useState(true);
     const { formatMessage } = useIntl();
-    const translate = React.useCallback((id: string, value?: any) => formatMessage({ id: id }, { ...value }), [formatMessage]);
+    const translate = React.useCallback((id: string, value?: any) => formatMessage({ id: id }, { ...value }), [
+        formatMessage,
+    ]);
 
     const { wallets } = props;
     const currencies = useSelector(selectCurrencies);
@@ -31,34 +32,64 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
     useMarketsFetch();
     useWalletsFetch();
 
-    const renderSecondaryCurrencyValuation = React.useCallback((value: string) => {
-        const estimatedValueSecondary = estimateUnitValue(VALUATION_SECONDARY_CURRENCY, VALUATION_PRIMARY_CURRENCY, +value, currencies, markets, tickers);
+    const renderSecondaryCurrencyValuation = React.useCallback(
+        (value: string) => {
+            const estimatedValueSecondary = estimateUnitValue(
+                VALUATION_SECONDARY_CURRENCY,
+                VALUATION_PRIMARY_CURRENCY,
+                +value,
+                currencies,
+                markets,
+                tickers
+            );
 
-        return (
-            <span className="value-container">
-                <span className="value">
-                    {formatWithSeparators(estimatedValueSecondary, ',')}
-                </span>
-                <span className="value-sign">{VALUATION_SECONDARY_CURRENCY.toUpperCase()}</span>
-            </span>
-        );
-    }, [currencies, markets, tickers]);
+            return (
+                <div className="pl-5">
+                    <p className="text-ms grey-text-accent font-extrabold mb-12">Locked</p>
+                    <div className="d-flex align-items-center">
+                        <span className="value-container text-md white-text">
+                            <span className="value">
+                                {showLocked
+                                    ? formatWithSeparators(estimatedValueSecondary, ',')
+                                    : formatWithSeparators(estimatedValueSecondary.replace(/./g, '*'), ',')}
+                            </span>
+                            <span className="value-sign mr-24"> {VALUATION_SECONDARY_CURRENCY.toUpperCase()}</span>
+                            <span onClick={() => setShowLocked(!showLocked)} className="cursor-pointer">
+                                {showLocked ? <EyeOpen /> : <EyeClose />}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            );
+        },
+        [currencies, markets, tickers]
+    );
 
     const estimatedValue = React.useMemo(() => {
         return estimateValue(VALUATION_PRIMARY_CURRENCY, currencies, wallets, markets, tickers);
     }, [currencies, wallets, markets, tickers]);
 
     return (
-        <div>
-            {translate('page.body.wallets.estimated_value')} : 
+        <div className="d-flex mb-24">
             <div>
-                {formatWithSeparators(estimatedValue, ',')} <span className="value-sign">{VALUATION_PRIMARY_CURRENCY.toUpperCase()}</span>
+                <p className="text-ms grey-text-accent font-extrabold mb-12">Available</p>
+                <div className="d-flex align-items-center">
+                    <span className="value-container text-md white-text">
+                        <span className="value">
+                            {showAvailable
+                                ? formatWithSeparators(estimatedValue, ',')
+                                : formatWithSeparators(estimatedValue.replace(/./g, '*'), ',')}{' '}
+                        </span>
+                        <span className="value-sign mr-24">{VALUATION_PRIMARY_CURRENCY.toUpperCase()}</span>
+                        <span onClick={() => setShowAvailable(!showAvailable)} className="cursor-pointer">
+                            {showAvailable ? <EyeOpen /> : <EyeClose />}
+                        </span>
+                    </span>
+                </div>
             </div>
-            <div>
-                {VALUATION_SECONDARY_CURRENCY && renderSecondaryCurrencyValuation(estimatedValue)}
-            </div>
+            <div>{VALUATION_SECONDARY_CURRENCY && renderSecondaryCurrencyValuation(estimatedValue)}</div>
         </div>
     );
-}
+};
 
 export { EstimatedValue };
