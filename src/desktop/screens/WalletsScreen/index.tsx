@@ -17,7 +17,18 @@ export const WalletsScreen: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="content-wrapper dark-bg-main">
-                <h3>Estimated</h3>
+                <div className="d-flex justify-content-between align-items-center mb-24">
+                    <h1 className="text-xl white-text">Wallet Overview</h1>
+
+                    <div>
+                        <button type="button" className="btn-secondary mr-24 text-sm white-text font-bold">
+                            Trade History
+                        </button>
+                        <button type="button" className="btn-secondary text-sm white-text font-bold">
+                            Transaction History
+                        </button>
+                    </div>
+                </div>
                 <EstimatedValue wallets={wallets} />
                 <WalletsOverview />
             </div>

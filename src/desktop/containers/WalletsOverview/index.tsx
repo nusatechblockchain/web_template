@@ -73,12 +73,12 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
 
     const headerTitles = useCallback(
         () => [
-            'Code',
-            translate('page.body.wallets.overview.header.wallet'),
+            'Assets',
             translate('page.body.wallets.overview.header.total'),
-            translate('page.body.wallets.overview.header.estimated'),
-            'Locked Balance',
-            '',
+            'Locked',
+            'On Trade',
+            'Available',
+            'Estimation',
         ],
         [isP2PEnabled]
     );
@@ -126,18 +126,24 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                           : Decimal.format(0, fixed);
 
                   return [
-                      <div>{currency.toUpperCase()}</div>,
-                      <div key={index}>
-                          <img alt={currency?.toUpperCase()} src={iconUrl} style={{ height: '24px' }} />
-                          {name}
+                      <div key={index} className="d-flex">
+                          <img
+                              alt={currency?.toUpperCase()}
+                              src={iconUrl}
+                              style={{ height: '24px', marginRight: '16px' }}
+                          />
+                          <p className="text-sm white-text">{currency.toUpperCase()}</p>
+                          <p className="ml-1 text-sm grey-text-accent">{name}</p>
                       </div>,
                       <Decimal key={index} fixed={fixed} thousSep=",">
                           {totalBalance ? totalBalance.toString() : '0'}
                       </Decimal>,
-                      formatWithSeparators(estimatedValue, ','),
                       <Decimal key={index} fixed={fixed} thousSep=",">
                           {spotLocked}
                       </Decimal>,
+                      <p></p>,
+                      <p></p>,
+                      formatWithSeparators(estimatedValue, ','),
                       <div key={index}>
                           <Button onClick={() => handleClickDeposit(currency)} variant="primary">
                               {translate('page.body.wallets.overview.action.deposit')}
@@ -152,7 +158,6 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
 
     return (
         <div>
-            <h3>Search</h3>
             <WalletsHeader
                 wallets={wallets}
                 nonZeroSelected={nonZeroSelected}
@@ -160,7 +165,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                 setFilteredWallets={setFilteredWallets}
                 handleClickCheckBox={setNonZeroSelected}
             />
-            <h3>Wallet Data</h3>
+            <p className="text-sm grey-text-accent mb-8">Asset balance</p>
             <Table header={headerTitles()} data={retrieveData()} />
         </div>
     );
