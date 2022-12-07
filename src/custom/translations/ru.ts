@@ -472,7 +472,8 @@ export const ru: LangType = {
     'page.body.profile.header.account.profile.identity.title': 'Личность - подтверждено',
     'page.body.profile.header.account.profile.identity.message': 'Вывод средств разрешен',
 
-    'page.body.profile.referral.invite': 'Invite Friends.',
+    'page.body.profile.referral.title': 'Referral Bonus',
+    'page.body.profile.referral.rewards': 'Invite Friends.',
     'page.body.profile.referral.earn': 'Earn Crypto Together',
     'page.body.profile.referral.commission': 'Earn up to 40% commission every time your friends make a trade',
     'page.body.profile.header.referralProgram': 'Реферальная программа',

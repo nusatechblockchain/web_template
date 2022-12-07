@@ -29,8 +29,45 @@ class ReferralProgramClass extends React.Component<Props> {
 
     public render() {
         const { user } = this.props;
+
         const referralLink = `${window.document.location.origin}/signup?refid=${user.uid}`;
-        const dataTable = [{ nama: 'nama' }, { nama: 'nama' }, { nama: 'nama' }, { nama: 'nama' }];
+        const dataTable = [
+            {
+                time: '20-01-2022',
+                email: 'test@email.com',
+                username: 'myusername',
+                step: 'document verification',
+                status: 'active',
+            },
+            {
+                time: '20-01-2022',
+                email: 'test@email.com',
+                username: 'myusername',
+                step: 'document verification',
+                status: 'active',
+            },
+            {
+                time: '20-01-2022',
+                email: 'test@email.com',
+                username: 'myusername',
+                step: 'document verification',
+                status: 'active',
+            },
+            {
+                time: '20-01-2022',
+                email: 'test@email.com',
+                username: 'myusername',
+                step: 'document verification',
+                status: 'active',
+            },
+            {
+                time: '20-01-2022',
+                email: 'test@email.com',
+                username: 'myusername',
+                step: 'document verification',
+                status: 'active',
+            },
+        ];
         return (
             <div className="content-wrapper dark-bg-accent">
                 <div className="header dark-bg-main py-4 px-24 mb-24">
@@ -82,11 +119,11 @@ class ReferralProgramClass extends React.Component<Props> {
     }
 
     private getTableHeaders = () => {
-        return ['name', 'name', 'name', 'name', 'name', 'name', 'name'];
+        return ['Registered At', 'Email', 'Username', 'Verification Steps', 'Status'];
     };
 
-    private getTableData(apiKeysData: []) {
-        return apiKeysData.map((item) => ['adasdsda', 'adasdasd', 'asdasdad', 'asadaas', 'asdasd', 'sad', 'asdad']);
+    private getTableData(data: any) {
+        return data.map((item) => [item.time, item.email, item.username, item.step, item.status]);
     }
 }
 
