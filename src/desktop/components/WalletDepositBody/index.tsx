@@ -14,7 +14,7 @@ import { CustomStylesSelect } from './CustomStyleSelect';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { TipIcon } from 'src/assets/images/TipIcon';
 
-const WalletDepositBodyComponent = (props) => {
+const WalletDepositBody = (props) => {
     const [networks, setNetworks] = useState([]);
     const { wallet } = props;
     const intl = useIntl();
@@ -31,8 +31,8 @@ const WalletDepositBodyComponent = (props) => {
         [intl]
     );
 
-    const doCopy = () => {
-        copy('address');
+    const doCopy = (text) => {
+        copy(text);
         dispatch(alertPush({ message: ['Link has been copied'], type: 'success' }));
     };
 
@@ -43,10 +43,11 @@ const WalletDepositBodyComponent = (props) => {
     };
 
     // useEffect(() => {
-    //     if (currencyItem !== undefined) {
-    //         setNetworks(currencyItem.networks);
+    //     if (currencyItem && currencyItem.networks !== undefined) {
+    //         setNetworks(currencyItem && currencyItem.networks);
     //     }
     // }, [currency, currencyItem]);
+    // console.log(networks, 'INI NETWORKS');
 
     const [blockchainNetwork, setBlockchainNetwork] = useState(null);
     if (!blockchainNetwork && currencyItem.networks && currencyItem.type !== 'fiat') {
@@ -74,6 +75,7 @@ const WalletDepositBodyComponent = (props) => {
     })} ${wallet.currency.toUpperCase()} ${intl.formatMessage({
         id: 'page.body.wallets.tabs.deposit.ccy.button.address',
     })}`;
+
     const error = intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.pending' });
     const text = intl.formatMessage(
         { id: 'page.body.wallets.tabs.deposit.ccy.message.submit' },
@@ -85,7 +87,7 @@ const WalletDepositBodyComponent = (props) => {
 
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
-            <Link to={`/wallets/${item.id}/deposit`}>
+            <Link key={item.id} to={`/wallets/${item.id}/deposit`}>
                 <div className="d-flex align-items-center">
                     <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
                     <div>
@@ -175,7 +177,7 @@ const WalletDepositBodyComponent = (props) => {
                             </div>
                             <ul className="pl-2">
                                 <li className="white-text text-sm mb-8">
-                                    Send only {currency.toUpperCase()} to this deposit address.{' '}
+                                    Send only {currency.toUpperCase()} to this deposit address.
                                 </li>
                                 <li className="white-text text-sm mb-8">
                                     Ensure the network is BNB Smart Chain (BEP20).
@@ -184,29 +186,32 @@ const WalletDepositBodyComponent = (props) => {
                             </ul>
 
                             {/* {depositAddress && (
-                            <DepositCrypto
-                                buttonLabel={buttonLabel}
-                                copiableTextFieldText={`${wallet.currency.toUpperCase()} ${label}`}
-                                copyButtonText={intl.formatMessage({
-                                    id: 'page.body.wallets.tabs.deposit.ccy.message.button',
-                                })}
-                                error={error}
-                                handleGenerateAddress={() => handleGenerateAddress}
-                                handleOnCopy={handleOnCopy}
-                                text={text}
-                                wallet={wallet}
-                                network={blockchainKey}
-                                minDepositAmount={minDepositAmount}
-                            />
-                        )} */}
+                                <DepositCrypto
+                                    buttonLabel={buttonLabel}
+                                    copiableTextFieldText={`${wallet.currency.toUpperCase()} ${label}`}
+                                    copyButtonText={intl.formatMessage({
+                                        id: 'page.body.wallets.tabs.deposit.ccy.message.button',
+                                    })}
+                                    error={error}
+                                    handleGenerateAddress={() => handleGenerateAddress}
+                                    handleOnCopy={handleOnCopy}
+                                    text={text}
+                                    wallet={wallet}
+                                    network={blockchainKey}
+                                    minDepositAmount={minDepositAmount}
+                                />
+                            )} */}
                         </div>
 
                         <div className="network-container w-50">
                             <h1 className="white-text text-ms font-extrabold mb-16">
                                 {!depositAddress?.address ? '' : 'Select Network :'}
                             </h1>
-                            {!depositAddress?.address ? (
-                                <button onClick={() => handleGenerateAddress} className="w-100 btn-primary">
+                            {!depositAddress ? (
+                                <button
+                                    onClick={() => handleGenerateAddress}
+                                    className="w-100 btn-primary"
+                                    type="button">
                                     Generate Address
                                 </button>
                             ) : (
@@ -233,19 +238,18 @@ const WalletDepositBodyComponent = (props) => {
                                 ''
                             ) : (
                                 <React.Fragment>
-                                    {' '}
                                     <h3 className="white-text text-sm font-bold">Address</h3>
                                     <input
                                         id="address"
-                                        className="text-ms blue-text font-extrabold mb-24"
-                                        value={depositAddress && depositAddress.address}
+                                        className="text-ms blue-text font-extrabold mb-24 address"
+                                        defaultValue={depositAddress && depositAddress.address}
                                     />
                                     <div className="d-flex">
                                         <button
                                             className="btn-primary mr-12"
                                             type="button"
                                             disabled={!depositAddress?.address}
-                                            onClick={doCopy}>
+                                            onClick={() => doCopy('address')}>
                                             Copy Address
                                         </button>
                                         <button
@@ -265,49 +269,52 @@ const WalletDepositBodyComponent = (props) => {
                         <h1 className="mb-24 text-lg white-text">Recent Deposit</h1>
                         <Table header={getTableHeaders()} data={getTableData(dataTable)} />
                     </div>
-                </div>
 
-                <Modal show={show} onHide={handleClose} centered>
-                    <Modal.Body>
-                        <div className="text-center">
-                            <QRCode dimensions={255} data={depositAddress && depositAddress.address} />
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer className="border-none d-flex flex-column justify-content-center align-items-center">
-                        <input
-                            id="address"
-                            className="text-ms blue-text text-center font-extrabold mb-24"
-                            value={depositAddress && depositAddress.address}
-                        />
-                        <button className="btn-primary mr-12" type="button" onClick={doCopy}>
-                            Copy Address
-                        </button>
-                    </Modal.Footer>
-                </Modal>
+                    <Modal show={show} onHide={handleClose} centered>
+                        <Modal.Body>
+                            <div className="text-center">
+                                <QRCode dimensions={255} data={depositAddress && depositAddress.address} />
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer className="border-none d-flex flex-column justify-content-center align-items-center">
+                            <input
+                                id="address-modal"
+                                className="text-ms blue-text text-center font-extrabold mb-24 address"
+                                defaultValue={depositAddress && depositAddress.address}
+                            />
+                            <button className="btn-primary mr-12" type="button" onClick={() => doCopy('address-modal')}>
+                                Copy Address
+                            </button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>
             </React.Fragment>
         );
     }, [
-        currencyItem,
+        currency,
+        currencies,
         optionCurrency,
-        depositAddress,
+        CustomStylesSelect,
         minDepositAmount,
-        setBlockchainNetwork,
+        depositAddress,
         handleGenerateAddress,
+        currencyItem,
+        blockchainNetwork,
+        blockchain,
+        blockchainKey,
+        setBlockchainNetwork,
         doCopy,
         handleClose,
         handleShow,
         getTableData,
         getTableHeaders,
-        currency,
-        CustomStylesSelect,
-        blockchain,
-        blockchainKey,
-        blockchainNetwork,
+        walletsAddressFetch,
+        wallet,
     ]);
 
     return renderDeposit;
 };
 
-const WalletDepositBody = React.memo(WalletDepositBodyComponent);
+// const WalletDepositBody = React.memo(WalletDepositBodyComponent);
 
 export { WalletDepositBody };
