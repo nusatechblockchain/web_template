@@ -8,10 +8,11 @@ import { Currency, selectCurrencies, walletsAddressFetch } from '../../../module
 import './WalletDepositBody.pcss';
 import { QRCode, Tooltip, Decimal } from '../../../components';
 import { copy } from '../../../helpers';
-import { Modal } from 'react-bootstrap';
+import { Modal, OverlayTrigger } from 'react-bootstrap';
 import Select from 'react-select';
 import { CustomStylesSelect } from './CustomStyleSelect';
 import { Link, useParams, useHistory } from 'react-router-dom';
+import { TipIcon } from 'src/assets/images/TipIcon';
 
 const WalletDepositBodyComponent = (props) => {
     const { wallet } = props;
