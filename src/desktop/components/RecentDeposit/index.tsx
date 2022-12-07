@@ -15,7 +15,6 @@ const RecentDeposit = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(selectUserInfo);
-    const [show, setShow] = useState(false);
 
     const renderDeposit = () => {
         return <React.Fragment></React.Fragment>;
