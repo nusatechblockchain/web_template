@@ -5,3 +5,4 @@ export * from './ProfileAuthDetails';
 export * from './ReferralProgram';
 export * from './ProfileApiKeys';
 export * from './ProfileTwoFactorAuth';
+export * from './HowToDeposit';
