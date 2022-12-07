@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Button, InputGroup } from 'react-bootstrap';
 import { CustomInput } from '../../desktop/components';
 import { copy } from '../../helpers';
-
+import { CopyButton } from '../../assets/images/CopyButton';
 
 export interface CopyableTextFieldProps {
     /**
@@ -44,14 +44,7 @@ class CopyableTextField extends React.Component<CopyableTextFieldProps> {
     }
 
     public render() {
-        const {
-            value,
-            className,
-            disabled,
-            fieldId,
-            copyButtonText,
-            label,
-        } = this.props;
+        const { value, className, disabled, fieldId, copyButtonText, label } = this.props;
         const doCopy = () => copy(fieldId);
         const cx = classnames('cr-copyable-text-field', className);
 
@@ -68,6 +61,7 @@ class CopyableTextField extends React.Component<CopyableTextFieldProps> {
                         label={label || ''}
                         defaultLabel={label || ''}
                         placeholder={label || ''}
+                        classNameInput="cr-copyable-text-field__input"
                     />
                     <InputGroup.Append>
                         <Button
@@ -75,9 +69,8 @@ class CopyableTextField extends React.Component<CopyableTextFieldProps> {
                             disabled={disabled}
                             size="lg"
                             variant="primary"
-                            className="cr-copyable-text-field__button"
-                        >
-                            {copyButtonText ? copyButtonText : 'Copy'}
+                            className="cr-copyable-text-field__button">
+                            <CopyButton className="copy-icon" />
                         </Button>
                     </InputGroup.Append>
                 </InputGroup>
@@ -86,7 +79,4 @@ class CopyableTextField extends React.Component<CopyableTextFieldProps> {
     }
 }
 
-export {
-    CopyableTextField,
-    copy,
-};
+export { CopyableTextField, copy };

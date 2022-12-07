@@ -45,7 +45,7 @@ export interface HeaderState {
     showProfileDropdown: boolean;
 }
 
-const authHeader = ['/signin', '/signup', '/email-verification', '/forgot_password', '/password_reset', ''];
+const authHeader = ['/signin', '/signup', '/email-verification', '/forgot_password', '/password_reset'];
 
 type Props = ReduxProps & DispatchProps & IntlProps & LocationProps & OwnProps;
 
@@ -66,7 +66,7 @@ class Head extends React.Component<Props, HeaderState> {
 
         const logoutButton = async () => {
             await localStorage.clear();
-            this.props.history.push('/');
+            this.props.history.push('/trading');
         };
 
         const ProfileDropdown = [
@@ -108,6 +108,25 @@ class Head extends React.Component<Props, HeaderState> {
             },
         ];
 
+        const LanguageDropdown = [
+            {
+                flag: <IndonesianFlag className="mr-2" />,
+                name: 'Indonesia',
+            },
+            {
+                flag: <AmericanFlag className="mr-2" />,
+                name: 'American',
+            },
+            {
+                flag: <KoreaFlag className="mr-2" />,
+                name: 'Korean',
+            },
+            {
+                flag: <ChinaFlag className="mr-2" />,
+                name: 'China',
+            },
+        ];
+
         return (
             <React.Fragment>
                 <nav className="navbar navbar-expand-lg dark-bg-main py-2 px-24">
@@ -126,9 +145,7 @@ class Head extends React.Component<Props, HeaderState> {
                     </button>
                     <div className="collapse navbar-collapse justify-content-between py-2" id="navbarNavDropdown">
                         <div>
-                            {thisAuthHeader ? (
-                                ''
-                            ) : (
+                            {!thisAuthHeader ? (
                                 <ul className="navbar-nav main-navbar">
                                     <li className="nav-item active">
                                         <Link to={'/'} className="nav-link text-sm font-bold">
@@ -156,6 +173,8 @@ class Head extends React.Component<Props, HeaderState> {
                                         </Link>
                                     </li>
                                 </ul>
+                            ) : (
+                                ''
                             )}
                         </div>
 
@@ -180,24 +199,19 @@ class Head extends React.Component<Props, HeaderState> {
                                         <div className="d-flex">
                                             <div className="language">
                                                 <p className="text-xs font-bold mb-3 grey-text-accent">Language</p>
-                                                <div className="dropdown-item grey-text-accent text-sm active cursor-pointer">
-                                                    <IndonesianFlag className="mr-2" /> Indonesia
-                                                </div>
-                                                <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
-                                                    <AmericanFlag className="mr-2" />
-                                                    Amerika
-                                                </div>
-                                                <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
-                                                    <ChinaFlag className="mr-2" />
-                                                    China
-                                                </div>
-                                                <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
-                                                    <KoreaFlag className="mr-2" />
-                                                    Korea
-                                                </div>
+                                                {LanguageDropdown.map((item, key) => (
+                                                    <div
+                                                        key={`language-${key}`}
+                                                        onClick={() => this.setState({ showLanguage: false })}
+                                                        className="dropdown-item grey-text-accent text-sm active cursor-pointer">
+                                                        {item.flag} {item.name}
+                                                    </div>
+                                                ))}
                                             </div>
                                             <div className="line"></div>
-                                            <div className="currency">
+                                            <div
+                                                className="currency"
+                                                onClick={() => this.setState({ showLanguage: false })}>
                                                 <p className="text-xs font-bold mb-3 grey-text-accent">Currency</p>
                                                 <div className="dropdown-item grey-text-accent text-sm active cursor-pointer">
                                                     <div className="dots" />
@@ -227,7 +241,7 @@ class Head extends React.Component<Props, HeaderState> {
                                 )}
                             </li>
 
-                            {!thisAuthHeader && isLoggedIn ? (
+                            {isLoggedIn ? (
                                 // Profile Dropdown
                                 <li className="nav-item dropdown avatar px-3">
                                     <div
@@ -240,7 +254,10 @@ class Head extends React.Component<Props, HeaderState> {
                                             className="dropdown-menu dark-bg-accent p-3 radius-sm"
                                             aria-labelledby="navbarDropdownMenuLink">
                                             {ProfileDropdown.map((item, index) => (
-                                                <div key={index} className="dropdown-wallets-item ">
+                                                <div
+                                                    key={index}
+                                                    className="dropdown-wallets-item"
+                                                    onClick={() => this.setState({ showProfileDropdown: false })}>
                                                     <Link to={item.url} className="d-flex">
                                                         {item.icon}
                                                         <div className="pl-3">
@@ -254,7 +271,9 @@ class Head extends React.Component<Props, HeaderState> {
                                                     </Link>
                                                 </div>
                                             ))}
-                                            <div className="dropdown-wallets-item cursor-pointer">
+                                            <div
+                                                className="dropdown-wallets-item cursor-pointer"
+                                                onClick={() => this.setState({ showProfileDropdown: false })}>
                                                 <div className="d-flex" onClick={logoutButton}>
                                                     <Logout />
                                                     <div className="pl-3">

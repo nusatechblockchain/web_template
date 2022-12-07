@@ -214,7 +214,8 @@ class Side extends React.Component<Props, SidebarState> {
         return (
             <React.Fragment>
                 {thisSidebarProfile && (
-                    <div className="sidebar dark-bg-main">
+                    <div className="sidebar dark-bg-accent">
+                        <div className="mb-36"></div>
                         <ul>
                             {this.state.dataProfile.slice(0, 4).map((el, i) => (
                                 // <Link key={i} to={`${el.path}`}>
