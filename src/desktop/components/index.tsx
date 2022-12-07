@@ -14,3 +14,4 @@ export * from './CurrencyInfo';
 export * from './DepositCrypto';
 export * from './SignUp';
 export * from './PasswordStrengthMeter';
+export * from './RecentDeposit';
