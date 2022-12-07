@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { IntlProps } from '../../../';
-import { CopyableTextField } from '../../../components';
+import { CopyableTextField, Table } from '../../../components';
 import { copy } from '../../../helpers';
 import { alertPush, RootState, selectUserInfo, User } from '../../../modules';
 import ReferralImage from '../../../assets/png/referral.png';
@@ -30,7 +30,7 @@ class ReferralProgramClass extends React.Component<Props> {
     public render() {
         const { user } = this.props;
         const referralLink = `${window.document.location.origin}/signup?refid=${user.uid}`;
-
+        const dataTable = [{ nama: 'nama' }, { nama: 'nama' }, { nama: 'nama' }, { nama: 'nama' }];
         return (
             <div className="content-wrapper dark-bg-accent">
                 <div className="header dark-bg-main py-4 px-24 mb-24">
@@ -75,40 +75,18 @@ class ReferralProgramClass extends React.Component<Props> {
                         </div>
                     </div>
                     <h6 className="text-ms white-text font-normal mb-0">Referral List</h6>
-                    <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
-                        <thead>
-                            <tr>
-                                <th>Registered At</th>
-                                <th>Email</th>
-                                <th>Username</th>
-                                <th>Level Verification</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>24-10-2022 - 13:54</td>
-                                <td>email@email.com</td>
-                                <td>adminusername</td>
-                                <td>level 3</td>
-                                <td>
-                                    <span className="contrast-text">success</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>24-10-2022 - 13:54</td>
-                                <td>email@email.com</td>
-                                <td>adminusername</td>
-                                <td>level 2</td>
-                                <td>
-                                    <span className="contrast-text">success</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <Table header={this.getTableHeaders()} data={this.getTableData(dataTable)} />
                 </div>
             </div>
         );
+    }
+
+    private getTableHeaders = () => {
+        return ['name', 'name', 'name', 'name', 'name', 'name', 'name'];
+    };
+
+    private getTableData(apiKeysData: []) {
+        return apiKeysData.map((item) => ['adasdsda', 'adasdasd', 'asdasdad', 'asadaas', 'asdasd', 'sad', 'asdad']);
     }
 }
 
