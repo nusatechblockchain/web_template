@@ -3,10 +3,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { useWalletsFetch } from '../../../hooks';
-import {
-    selectWallets,
-    Wallet,
-} from '../../../modules/user/wallets';
+import { selectWallets, Wallet } from '../../../modules/user/wallets';
 import { WalletDepositBody, WalletHeader } from '../../components';
 import { DEFAULT_WALLET } from '../../../constants';
 
@@ -18,17 +15,16 @@ const WalletDeposit: React.FC = () => {
 
     useWalletsFetch();
 
-    const wallet: Wallet = wallets.find(item => item.currency === currency) || DEFAULT_WALLET;
+    const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
     return (
         <React.Fragment>
-            <h3>Deposit</h3>
-            <WalletHeader currency={wallet.currency} name={wallet.name}/>
-            <WalletDepositBody wallet={wallet}/>
+            <div className="pg-wallet-deposit-screen dark-bg-main no-sidebar">
+                <WalletHeader currency={wallet.currency} name={wallet.name} />
+                <WalletDepositBody wallet={wallet} />
+            </div>
         </React.Fragment>
     );
 };
 
-export {
-    WalletDeposit,
-};
+export { WalletDeposit };

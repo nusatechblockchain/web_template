@@ -145,12 +145,16 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                       <p></p>,
                       formatWithSeparators(estimatedValue, ','),
                       <div key={index}>
-                          <Button onClick={() => handleClickDeposit(currency)} variant="primary">
+                          <button
+                              onClick={() => handleClickDeposit(currency)}
+                              className="bg-transparent border-none blue-text mr-24">
                               {translate('page.body.wallets.overview.action.deposit')}
-                          </Button>
-                          <Button onClick={() => handleClickWithdraw(currency)} variant="danger">
+                          </button>
+                          <button
+                              onClick={() => handleClickWithdraw(currency)}
+                              className="bg-transparent border-none danger-text">
                               {translate('page.body.wallets.overview.action.withdraw')}
-                          </Button>
+                          </button>
                       </div>,
                   ];
               });
