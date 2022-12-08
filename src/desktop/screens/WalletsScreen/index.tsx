@@ -19,10 +19,10 @@ export const WalletsScreen: FC = (): ReactElement => {
                     <h1 className="text-xl white-text">Wallet Overview</h1>
 
                     <div>
-                        <button type="button" className="btn-secondary mr-24 text-sm white-text font-bold">
+                        <button type="button" className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
                             Trade History
                         </button>
-                        <button type="button" className="btn-secondary text-sm white-text font-bold">
+                        <button type="button" className="btn-secondary radius-sm text-sm white-text font-bold">
                             Transaction History
                         </button>
                     </div>
