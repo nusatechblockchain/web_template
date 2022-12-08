@@ -36,6 +36,8 @@ export const SignInScreen: React.FC = () => {
     const [passwordError, setPasswordError] = useState('');
     const [passwordFocused, setPasswordFocused] = useState(false);
     const [otpCode, setOtpCode] = useState('');
+    const [emailClassname, setEmailClassname] = useState('');
+    const [passwordClassname, setPasswordClassname] = useState('');
 
     const isLoggedIn = useReduxSelector(selectUserLoggedIn);
     const loading = useReduxSelector(selectUserFetching);
@@ -143,7 +145,6 @@ export const SignInScreen: React.FC = () => {
         if (!password) {
             setEmailError('');
             setPasswordError(formatMessage({ id: ERROR_EMPTY_PASSWORD }));
-
             return;
         }
     }, [email, password, formatMessage]);
@@ -243,6 +244,8 @@ export const SignInScreen: React.FC = () => {
                                         reCaptchaSuccess={reCaptchaSuccess}
                                         geetestCaptchaSuccess={geetestCaptchaSuccess}
                                         captcha_response={captcha_response}
+                                        classNameEmail={emailClassname}
+                                        classNamePassword={passwordClassname}
                                     />
                                 </React.Fragment>
                             )}

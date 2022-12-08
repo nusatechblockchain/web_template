@@ -1,25 +1,19 @@
 import { History } from 'history';
 import * as React from 'react';
-import {
-    injectIntl,
-} from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { IntlProps } from '../../../';
 import { isUsernameEnabled } from '../../../api';
-import {
-    entropyPasswordFetch,
-    RootState,
-    selectCurrentPasswordEntropy,
-    selectUserInfo,
-    User,
-} from '../../../modules';
+import { entropyPasswordFetch, RootState, selectCurrentPasswordEntropy, selectUserInfo, User } from '../../../modules';
 import {
     changePasswordFetch,
     selectChangePasswordSuccess,
     toggle2faFetch,
     changePasswordReset,
 } from '../../../modules/user/profile';
+import Avatar from '../../../assets/png/avatar.png';
+import { ArrowDownIcon } from '../../../assets/images/ArrowDownIcon';
 
 interface ReduxProps {
     user: User;
@@ -79,14 +73,51 @@ class ProfileAuthDetailsComponent extends React.Component<Props, State> {
 
     public render() {
         const { user } = this.props;
+
         return (
-            <div className="">
-                {isUsernameEnabled() ? (
-                    <h2>{user.username}</h2>
-                ) : null }
-                <span>{user.email}</span>
-                <p>UID: {user.uid}</p>
-            </div>
+            <React.Fragment>
+                <div className="profile-detail px-24 py-4 dark-bg-main mb-24">
+                    <div className="d-flex align-items-center">
+                        <img src={Avatar} className="img-profile-detail mr-3" alt="profile avatar detail" />
+                        <div className="details">
+                            <div className="d-flex align-items-center mb-2">
+                                <h6 className="white-text font-bold text-ms mb-0 mr-3">
+                                    {isUsernameEnabled() ? <h2>{user.username}</h2> : null}
+                                </h6>
+                                {user.labels[0].value == 'verified' ? (
+                                    <div className="badge badge-success test-xs font-normal white-text">
+                                        {user.labels[0].value}
+                                    </div>
+                                ) : (
+                                    <div className="badge badge-warning test-xs font-normal white-text">
+                                        {user.labels[0].value}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="d-flex">
+                                <div className="mr-3">
+                                    <span className="text-xs grey-text font-normal ">User ID</span>
+                                    <p className="text-xs white-text font-bold mb-0">{user.uid}</p>
+                                </div>
+                                <div className="mr-3">
+                                    <span className="text-xs grey-text font-normal ">
+                                        Last Login
+                                        <ArrowDownIcon strokeColor={''} className={'rotate-90 arrow-profile'} />
+                                    </span>
+                                    <p className="text-xs white-text font-bold mb-0">{user.updated_at} </p>
+                                </div>
+                                <div className="mr-3">
+                                    <span className="text-xs grey-text font-normal ">
+                                        Email
+                                        <ArrowDownIcon strokeColor={''} className={'rotate-90 arrow-profile'} />
+                                    </span>
+                                    <p className="text-xs white-text font-bold mb-0">{user.email}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
         );
     }
 }
@@ -97,18 +128,18 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
     currentPasswordEntropy: selectCurrentPasswordEntropy(state),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
     changePassword: ({ old_password, new_password, confirm_password }) =>
         dispatch(changePasswordFetch({ old_password, new_password, confirm_password })),
     toggle2fa: ({ code, enable }) => dispatch(toggle2faFetch({ code, enable })),
-    fetchCurrentPasswordEntropy: payload => dispatch(entropyPasswordFetch(payload)),
+    fetchCurrentPasswordEntropy: (payload) => dispatch(entropyPasswordFetch(payload)),
     changePasswordReset: () => dispatch(changePasswordReset()),
 });
 
-const ProfileAuthDetailsConnected = injectIntl(connect(mapStateToProps, mapDispatchToProps)(ProfileAuthDetailsComponent));
+const ProfileAuthDetailsConnected = injectIntl(
+    connect(mapStateToProps, mapDispatchToProps)(ProfileAuthDetailsComponent)
+);
 // tslint:disable-next-line:no-any
 const ProfileAuthDetails = withRouter(ProfileAuthDetailsConnected as any);
 
-export {
-    ProfileAuthDetails,
-};
+export { ProfileAuthDetails };

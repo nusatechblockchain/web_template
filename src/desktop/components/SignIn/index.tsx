@@ -24,6 +24,8 @@ export interface SignInProps {
     onSignUp: () => void;
     onSignIn: () => void;
     className?: string;
+    classNameEmail?: string;
+    classNamePassword?: string;
     email: string;
     emailError: string;
     password: string;
@@ -71,6 +73,8 @@ const SignIn: React.FC<SignInProps> = ({
     geetestCaptchaSuccess,
     reCaptchaSuccess,
     renderCaptcha,
+    classNameEmail,
+    classNamePassword,
 }) => {
     const isMobileDevice = useSelector(selectMobileDeviceState);
     const history = useHistory();
@@ -174,6 +178,7 @@ const SignIn: React.FC<SignInProps> = ({
                     classNameLabel="form-label white-text text-sm"
                     autoFocus={!isMobileDevice}
                     labelVisible
+                    classNameInput={classNameEmail}
                 />
                 {emailError && <div className={'invalid-feedback'}>{emailError}</div>}
             </div>
@@ -190,6 +195,7 @@ const SignIn: React.FC<SignInProps> = ({
                     classNameLabel="form-label white-text text-sm"
                     autoFocus={false}
                     labelVisible
+                    classNameInput={classNamePassword}
                 />
                 {passwordError && <div className={'invalid-feedback'}>{passwordError}</div>}
             </div>
