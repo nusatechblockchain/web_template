@@ -14,11 +14,48 @@ export interface PasswordStrengthMeterProps {
 }
 
 const renderPasswordStrengthMeter = (passwordStrengthMeterLength: number) => (
-    <div className="password-strength-container mb-8 position-relative">
+    <div className="password-strength-container mb-8 d-flex justify-content-between align-items-center w-100 bg-transparent">
         <div
-            className={`position-absolute password-strength ${passwordStrengthClassName(
-                passwordStrengthMeterLength
-            )}`}></div>
+            className={`password-strength ${
+                passwordStrengthMeterLength === 0
+                    ? 'too-weak'
+                    : passwordStrengthMeterLength === 1
+                    ? 'weak'
+                    : passwordStrengthMeterLength === 2
+                    ? 'good'
+                    : passwordStrengthMeterLength === 3
+                    ? 'strong'
+                    : passwordStrengthMeterLength === 4
+                    ? 'very-strong'
+                    : ''
+            }`}></div>
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 1
+                    ? 'weak'
+                    : passwordStrengthMeterLength === 2
+                    ? 'good'
+                    : passwordStrengthMeterLength === 3
+                    ? 'strong'
+                    : passwordStrengthMeterLength === 4
+                    ? 'very-strong'
+                    : ''
+            }`}></div>
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 2
+                    ? 'good'
+                    : passwordStrengthMeterLength === 3
+                    ? 'strong'
+                    : passwordStrengthMeterLength === 4
+                    ? 'very-strong'
+                    : ''
+            }`}></div>
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 3 ? 'strong' : passwordStrengthMeterLength === 4 ? 'very-strong' : ''
+            }`}></div>
+        <div className={`password-strength ${passwordStrengthMeterLength === 4 ? 'very-strong' : ''}`}></div>
     </div>
 );
 
