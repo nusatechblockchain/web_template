@@ -6,3 +6,4 @@ export * from './ReferralProgram';
 export * from './ProfileApiKeys';
 export * from './ProfileTwoFactorAuth';
 export * from './HowToDeposit';
+export * from './ProfileDeviceTable';
