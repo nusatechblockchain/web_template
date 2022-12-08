@@ -14,6 +14,7 @@ import {
     setMobileWalletUi,
     toggleMarketSelector,
     selectUserLoggedIn,
+    logoutFetch,
 } from '../../../modules';
 import { Logo } from '../../../assets/images/Logo';
 import ProfileAvatar from '../../../assets/png/avatar.png';
@@ -32,6 +33,7 @@ interface OwnProps {
 
 interface DispatchProps {
     setMobileWalletUi: typeof setMobileWalletUi;
+    logout: typeof logoutFetch;
 }
 
 interface LocationProps extends RouterProps {
@@ -65,7 +67,7 @@ class Head extends React.Component<Props, HeaderState> {
         const { isLoggedIn } = this.props;
 
         const logoutButton = async () => {
-            await localStorage.clear();
+            await this.props.logout();
             this.props.history.push('/trading');
         };
 
@@ -318,6 +320,7 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
     setMobileWalletUi: (payload) => dispatch(setMobileWalletUi(payload)),
     toggleMarketSelector: () => dispatch(toggleMarketSelector()),
+    logout: () => dispatch(logoutFetch()),
 });
 
 export const Header = compose(

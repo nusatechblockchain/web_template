@@ -139,7 +139,7 @@ export const ChangePasswordComponent = (props) => {
                         inputValue={newPassword}
                         handleFocusInput={handleFocusNewPassword}
                         classNameLabel="white-text text-sm mb-8"
-                        classNameInput="mb-24"
+                        classNameInput=""
                         autoFocus={false}
                         labelVisible
                     />
@@ -168,7 +168,7 @@ export const ChangePasswordComponent = (props) => {
                         inputValue={confirmationPassword}
                         handleFocusInput={() => setConfirmPasswordFocus(!confirmPasswordFocus)}
                         classNameLabel="white-text text-sm mb-8"
-                        classNameInput="mb-24"
+                        classNameInput=""
                         autoFocus={false}
                         labelVisible
                     />

@@ -71,7 +71,6 @@ class Side extends React.Component<Props, SidebarState> {
     }
 
     componentDidMount() {
-        console.log(this.props);
         this.setState({
             dataProfile: [
                 {

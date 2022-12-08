@@ -63,6 +63,7 @@ class CustomInput extends React.Component<Props, State> {
             onKeyPress,
             autoComplete,
             name,
+            classNameInput,
         } = this.props;
 
         return (
@@ -86,6 +87,7 @@ class CustomInput extends React.Component<Props, State> {
                             onKeyPress={onKeyPress}
                             autoComplete={autoComplete}
                             name={name}
+                            className={classNameInput}
                         />
 
                         {type == 'password' ? (
