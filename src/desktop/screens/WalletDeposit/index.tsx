@@ -34,11 +34,11 @@ const WalletDeposit: React.FC = () => {
 
                     <div className="ml-2">
                         <Link to={`/wallets/${currency}/withdraw`}>
-                            <button className="btn btn-secondary m-1 text-sm font-bold">Withdraw</button>
+                            <button className="btn btn-secondary radius-sm m-1 text-sm font-bold">Withdraw</button>
                         </Link>
 
                         <button
-                            className="btn btn-secondary m-1 text-sm font-bold"
+                            className="btn btn-secondary radius-sm m-1 text-sm font-bold"
                             data-toggle="modal"
                             data-target="#transfer">
                             Transfer Internal

@@ -17,16 +17,12 @@ const PasswordStrengthTipComponent: React.FC<PasswordStrengthTipProps> = ({
     !(passwordErrorFirstSolved && passwordErrorSecondSolved && passwordErrorThirdSolved) ? (
         <div className="text-xs grey-text">
             <p className="m-0">{translate('password.strength.tip.influence')}:</p>
-            <ul>
-                <div className="li">
+            <ul className="p-0 style-none">
+                <li>
                     {!passwordErrorFirstSolved && <span>{translate('password.strength.tip.number.characters')}</span>}
-                </div>
-                <div className="li">
-                    {!passwordErrorSecondSolved && <span>{translate('password.strength.tip.letter')}</span>}
-                </div>
-                <div className="li">
-                    {!passwordErrorThirdSolved && <span>{translate('password.strength.tip.digit')}</span>}
-                </div>
+                </li>
+                <li>{!passwordErrorSecondSolved && <span>{translate('password.strength.tip.letter')}</span>}</li>
+                <li>{!passwordErrorThirdSolved && <span>{translate('password.strength.tip.digit')}</span>}</li>
             </ul>
         </div>
     ) : null;
