@@ -7,3 +7,6 @@ export * from './ProfileApiKeys';
 export * from './ProfileTwoFactorAuth';
 export * from './HowToDeposit';
 export * from './ProfileDeviceTable';
+export * from './Lost2FAInfo';
+export * from './Lost2FATimeline';
+export * from './Lost2FAStep';

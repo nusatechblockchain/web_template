@@ -1,0 +1,50 @@
+.lost-two-fa-screen .__tabs {
+    position: relative;
+    padding: 10px 0;
+}
+
+.lost-two-fa-screen .__tabs::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background-color: #6f6f6f;
+    left: 0;
+    right: 0;
+}
+
+.lost-two-fa-screen .__items {
+    background-color: var(--main-background-color);
+    z-index: 2;
+    padding: 4px;
+}
+
+.lost-two-fa-screen .__number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--text-primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.lost-two-fa-screen .__number p {
+    color: var(--text-grey-color);
+}
+
+.lost-two-fa-screen .__number.active {
+    background: var(--button-primary-color);
+}
+.lost-two-fa-screen .__number.active p {
+    color: var(--text-primary-color);
+}
+
+/* responsive */
+@media (max-width: 992px) {
+    .lost-two-fa-screen .main-wrapper {
+        padding-left: 20px;
+    }
+}
