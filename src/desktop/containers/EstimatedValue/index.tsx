@@ -48,15 +48,11 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
                     <p className="text-ms grey-text-accent font-extrabold mb-12">Locked</p>
                     <div className="d-flex align-items-center">
                         <span className="value-container text-md white-text">
-                            <span className="value">
-                                {showLocked
-                                    ? formatWithSeparators(estimatedValueSecondary, ',')
-                                    : formatWithSeparators(estimatedValueSecondary.replace(/./g, '*'), ',')}
-                            </span>
+                            <span className="value">{formatWithSeparators(estimatedValueSecondary, ',')}</span>
                             <span className="value-sign mr-24"> {VALUATION_SECONDARY_CURRENCY.toUpperCase()}</span>
-                            <span onClick={() => setShowLocked(!showLocked)} className="cursor-pointer">
+                            {/* <span onClick={() => setShowLocked(!showLocked)} className="cursor-pointer">
                                 {showLocked ? <EyeOpen /> : <EyeClose />}
-                            </span>
+                            </span> */}
                         </span>
                     </div>
                 </div>
@@ -75,15 +71,11 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
                 <p className="text-ms grey-text-accent font-extrabold mb-12">Available</p>
                 <div className="d-flex align-items-center">
                     <span className="value-container text-md white-text">
-                        <span className="value">
-                            {showAvailable
-                                ? formatWithSeparators(estimatedValue, ',')
-                                : formatWithSeparators(estimatedValue.replace(/./g, '*'), ',')}{' '}
-                        </span>
+                        <span className="value">{formatWithSeparators(estimatedValue, ',')}</span>
                         <span className="value-sign mr-24">{VALUATION_PRIMARY_CURRENCY.toUpperCase()}</span>
-                        <span onClick={() => setShowAvailable(!showAvailable)} className="cursor-pointer">
+                        {/* <span onClick={() => setShowAvailable(!showAvailable)} className="cursor-pointer">
                             {showAvailable ? <EyeOpen /> : <EyeClose />}
-                        </span>
+                        </span> */}
                     </span>
                 </div>
             </div>

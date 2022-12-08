@@ -4,6 +4,7 @@ import { EstimatedValue, WalletsOverview } from '../../containers';
 import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
 import { selectCurrencies, selectWallets } from 'src/modules';
 import { Sidebar } from '../../containers/Sidebar';
+import { Link } from 'react-router-dom';
 
 export const WalletsScreen: FC = (): ReactElement => {
     const wallets = useSelector(selectWallets) || [];
@@ -19,12 +20,18 @@ export const WalletsScreen: FC = (): ReactElement => {
                     <h1 className="text-xl white-text">Wallet Overview</h1>
 
                     <div>
-                        <button type="button" className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
-                            Trade History
-                        </button>
-                        <button type="button" className="btn-secondary radius-sm text-sm white-text font-bold">
-                            Transaction History
-                        </button>
+                        <Link to={`/wallets/trade-history`}>
+                            <button
+                                type="button"
+                                className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
+                                Trade History
+                            </button>
+                        </Link>
+                        <Link to={`/wallets/transaction-history`}>
+                            <button type="button" className="btn-secondary radius-sm text-sm white-text font-bold">
+                                Transaction History
+                            </button>
+                        </Link>
                     </div>
                 </div>
                 <EstimatedValue wallets={wallets} />

@@ -43,6 +43,7 @@ import {
     ReferralScreen,
     ApiKeyScreen,
     ProfileTwoFactorAuthScreen,
+    Lost2FAScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -283,6 +284,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/accounts/password_reset"
                         component={PasswordResetScreen}
+                    />
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/lost-two-fa"
+                        component={Lost2FAScreen}
                     />
                     <PrivateRoute
                         loading={userLoading}

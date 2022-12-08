@@ -35,7 +35,7 @@ const CodeVerification: FC<CodeVerificationProps> = (props: CodeVerificationProp
     };
 
     return (
-        <div className="custom-input mb-3">
+        <div className="custom-input mb-8">
             <input
                 className="form-control text-center spacing-10"
                 autoFocus={true}

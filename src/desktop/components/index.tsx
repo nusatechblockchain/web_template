@@ -15,3 +15,4 @@ export * from './DepositCrypto';
 export * from './SignUp';
 export * from './PasswordStrengthMeter';
 export * from './RecentDeposit';
+export * from './InputFile';

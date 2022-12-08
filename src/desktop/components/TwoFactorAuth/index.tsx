@@ -50,6 +50,10 @@ export const TwoFactorAuthComponent: React.FC<TwoFactorAuthProps> = ({
                     showPaste2FA={false}
                     isMobile={isMobile}
                 />
+                <Link to={`/lost-two-fa`}>
+                    <div className="w-100 mb-24 text-right text-xs grey-text">Lost Your 2FA?</div>
+                </Link>
+
                 <Button disabled={isLoading || otpCode.length < 6} onClick={onSubmit} size="lg" variant="primary" block>
                     {isLoading ? 'Loading...' : buttonLabel ? buttonLabel : 'Sign in'}
                 </Button>

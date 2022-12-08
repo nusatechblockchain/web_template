@@ -75,10 +75,10 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         () => [
             'Assets',
             translate('page.body.wallets.overview.header.total'),
-            'Locked',
-            'On Trade',
-            'Available',
-            'Estimation',
+            'Estimated Value',
+            'Spot Balance',
+            'Locked Balance',
+            '',
         ],
         [isP2PEnabled]
     );
@@ -138,13 +138,12 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                       <Decimal key={index} fixed={fixed} thousSep=",">
                           {totalBalance ? totalBalance.toString() : '0'}
                       </Decimal>,
+                      formatWithSeparators(estimatedValue, ','),
+                      <p></p>,
                       <Decimal key={index} fixed={fixed} thousSep=",">
                           {spotLocked}
                       </Decimal>,
-                      <p></p>,
-                      <p></p>,
-                      formatWithSeparators(estimatedValue, ','),
-                      <div key={index}>
+                      <div key={index} className="ml-auto">
                           <button
                               onClick={() => handleClickDeposit(currency)}
                               className="bg-transparent border-none blue-text mr-24">
@@ -159,6 +158,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                   ];
               });
     }, [filteredWallets, nonZeroSelected, abilities, currencies, markets, tickers]);
+
+    console.log(wallets, 'INI WALLET');
 
     return (
         <div>
