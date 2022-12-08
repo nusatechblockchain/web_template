@@ -135,7 +135,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
         const captchaTypeValue = captchaType();
 
         if (
-            !hasConfirmed ||
+            //!hasConfirmed ||
             isLoading ||
             !email.match(EMAIL_REGEX) ||
             !password ||
@@ -341,7 +341,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 
             <div className="mt-4 mb-4">{renderCaptcha}</div>
 
-            <label className="checkbox" onClick={handleShow}>
+            <label className="checkbox">
                 <input
                     className="checkbox__input"
                     type="checkbox"
@@ -372,7 +372,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 block={true}
                 type="button"
                 disabled={disableButton}
-                onClick={(e) => handleClick(e as any)}
+                onClick={handleShow}
                 size="lg"
                 className="button registration__button"
                 variant="primary">
@@ -421,8 +421,8 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     <Button type="button" className="btn-danger" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button className="btn-success" onClick={handleCheck}>
-                        Accept
+                    <Button className="btn-success" onClick={(e) => handleClick(e as any)}>
+                        {isLoading ? 'Loading...' : 'Accept'}
                     </Button>
                 </Modal.Footer>
             </Modal>
