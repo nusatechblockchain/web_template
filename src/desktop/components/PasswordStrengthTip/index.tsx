@@ -16,7 +16,6 @@ const PasswordStrengthTipComponent: React.FC<PasswordStrengthTipProps> = ({
 }) =>
     !(passwordErrorFirstSolved && passwordErrorSecondSolved && passwordErrorThirdSolved) ? (
         <div className="text-xs grey-text">
-            <p className="contrast-text m-0 text-xs font-bold">Password Strength must be GOOD</p>
             <p className="m-0">{translate('password.strength.tip.influence')}:</p>
             <ul className="p-0 style-none">
                 <li>

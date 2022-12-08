@@ -187,6 +187,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={false}
                     labelVisible
                 />
+                {passwordFocused &&
+                    (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) && (
+                        <p className="danger-text m-0 mb-24 text-xs">Password Strength must be GOOD</p>
+                    )}
                 {password ? (
                     <PasswordStrengthMeter
                         minPasswordEntropy={passwordMinEntropy()}
@@ -276,9 +280,12 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={!isMobileDevice}
                     labelVisible
                 />
-                {!username.match(USERNAME_REGEX) && !usernameFocused && username.length ? (
+                {/* {!username.match(USERNAME_REGEX) && !usernameFocused && username.length ? (
                     <div className="invalid-feedback">{renderUsernameError(username)}</div>
-                ) : null}
+                ) : null} */}
+                {usernameFocused && !username.match(USERNAME_REGEX) && (
+                    <p className="text-xs danger-text m-0 mb-24">Username must be at least 4 characters long</p>
+                )}
             </div>
 
             <div className="field">
@@ -295,7 +302,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={!isUsernameEnabled() && !isMobileDevice}
                     labelVisible
                 />
-                {emailError && <div className="invalid-feedback">{emailError}</div>}
+                {/* {emailError && <div className="invalid-feedback">{emailError}</div>} */}
+                {emailFocused && !email.match(EMAIL_REGEX) && (
+                    <p className="text-xs danger-text m-0 mb-24">Enter a valid email address</p>
+                )}
             </div>
 
             {/* <div className="mb-3">
@@ -326,10 +336,8 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={false}
                     labelVisible
                 />
-                {confirmPasswordFocused && confirmPassword !== password ? (
+                {confirmPasswordFocused && confirmPassword !== password && (
                     <p className="text-xs danger-text m-0 mb-24">Password Confirmation doesn't match</p>
-                ) : (
-                    ''
                 )}
             </div>
 

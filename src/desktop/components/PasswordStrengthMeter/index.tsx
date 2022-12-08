@@ -14,7 +14,7 @@ export interface PasswordStrengthMeterProps {
 }
 
 const renderPasswordStrengthMeter = (passwordStrengthMeterLength: number) => (
-    <div className="password-strength-container mb-8 d-flex justify-content-between align-items-center w-100 bg-transparent">
+    <div className="password-strength-container mb-8 mt-8 d-flex justify-content-between align-items-center w-100 bg-transparent">
         <div
             className={`password-strength ${
                 passwordStrengthMeterLength === 0
