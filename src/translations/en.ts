@@ -465,7 +465,7 @@ export const en = {
     'page.body.profile.referral.title': 'Referral Bonus',
     'page.body.profile.referral.rewards': 'Your Total Rewards',
     'page.body.profile.referral.earn': 'Earn Crypto Together',
-    'page.body.profile.referral.commission': 
+    'page.body.profile.referral.commission':
         'Invite your friend and earn 50% commission on their exchange trasaction, Copy link bellow and share referral link to your friends',
     'page.body.profile.header.referralProgram': 'Referral Link',
     'page.body.profile.content.copyLink': 'Copy',
@@ -921,6 +921,7 @@ export const en = {
     'identity.session.invalid_login_params': 'Invalid Email or Password',
     'identity.session.invalid': 'Invalid Session',
     'identity.captcha.required': 'captcha_response is required',
+    'identity.captcha.verification_failed': 'Captcha response is required',
     'identity.captcha.mandatory_fields': 'Mandatory fields must be filled in',
     'identity.session.not_active': 'Your account is not active',
     'identity.session.banned': 'Your account is banned',

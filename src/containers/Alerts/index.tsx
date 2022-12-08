@@ -34,11 +34,8 @@ class AlertComponent extends React.Component<Props> {
                         <div className="alert-wrapper">
                             <FadeIn key={index}>
                                 <div onClick={() => this.deleteAlertByIndex(index)}>
-                                    <Alert
-                                        // @ts-ignore
-                                        variant={w.type === 'error' ? 'danger' : w.type}>
+                                    <Alert variant={w.type === 'error' ? 'danger' : w.type}>
                                         {this.translate(msg)}
-                                        {/* {w.code && ` ${w.code.toString(10)}`} */}
                                     </Alert>
                                 </div>
                             </FadeIn>
