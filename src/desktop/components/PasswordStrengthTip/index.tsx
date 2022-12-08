@@ -15,19 +15,19 @@ const PasswordStrengthTipComponent: React.FC<PasswordStrengthTipProps> = ({
     translate,
 }) =>
     !(passwordErrorFirstSolved && passwordErrorSecondSolved && passwordErrorThirdSolved) ? (
-        <div>
-            <span>{translate('password.strength.tip.influence')}</span>
-            {!passwordErrorFirstSolved && (
-                <span>
-                    {translate('password.strength.tip.number.characters')}
-                </span>
-            )}
-            {!passwordErrorSecondSolved && (
-                <span>{translate('password.strength.tip.letter')}</span>
-            )}
-            {!passwordErrorThirdSolved && (
-                <span>{translate('password.strength.tip.digit')}</span>
-            )}
+        <div className="text-xs grey-text">
+            <p className="m-0">{translate('password.strength.tip.influence')}:</p>
+            <ul>
+                <div className="li">
+                    {!passwordErrorFirstSolved && <span>{translate('password.strength.tip.number.characters')}</span>}
+                </div>
+                <div className="li">
+                    {!passwordErrorSecondSolved && <span>{translate('password.strength.tip.letter')}</span>}
+                </div>
+                <div className="li">
+                    {!passwordErrorThirdSolved && <span>{translate('password.strength.tip.digit')}</span>}
+                </div>
+            </ul>
         </div>
     ) : null;
 

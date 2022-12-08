@@ -15,6 +15,7 @@ import {
 import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
 import { ArrowDownIcon } from 'src/assets/images/ArrowDownIcon';
+import { ArrowUpIcon } from 'src/assets/images/ArrowUpIcon';
 import './SignUp.pcss';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -315,8 +316,11 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 />
             </div>
 
-            <div onClick={() => setExpand(!expand)} className="label-referral cursor-pointer grey-text text-sm">
-                Referral ID (Optional) <ArrowDownIcon strokeColor={'#6f6f6f'} />
+            <div
+                onClick={() => setExpand(!expand)}
+                className={`label-referral cursor-pointer text-sm mb-8 ${expand ? 'white-text' : 'grey-text'}`}>
+                Referral ID (Optional){' '}
+                {expand ? <ArrowUpIcon fillColor={'#F2F0FF'} /> : <ArrowDownIcon strokeColor={'#6f6f6f'} />}
             </div>
 
             {expand && (
@@ -329,8 +333,8 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangeRefId}
                     inputValue={refId}
                     handleFocusInput={handleFocusRefId}
-                    classNameLabel=""
-                    classNameInput=""
+                    classNameLabel="d-none"
+                    classNameInput="m-0"
                     autoFocus={false}
                 />
             )}
