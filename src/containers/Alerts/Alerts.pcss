@@ -1,7 +1,8 @@
 .alert-component {
-    position: absolute;
-    right: 60px;
-    top: 100px;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 999999;
     .alert-wrapper {
         .alert-content {
@@ -15,7 +16,13 @@
             border-radius: 8px;
             font-size: 14px;
             line-height: 15px;
-            width: inline-block;
+            display: inline-block;
         }
     }
+
+    /* &.alert-center {
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    } */
 }

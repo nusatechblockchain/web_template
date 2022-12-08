@@ -930,6 +930,7 @@ export const ru: LangType = {
     'identity.session.invalid_login_params': 'Неправильный адрес электронной почты или пароль',
     'identity.session.invalid': 'Неверный сеанс',
     'identity.captcha.required': 'требуется captcha_response',
+    'identity.captcha.verification_failed': 'Captcha response is required',
     'identity.captcha.mandatory_fields': 'Обязательные поля должны быть заполнены',
     'identity.session.not_active': 'Ваш аккаунт не активен',
     'identity.session.banned': 'Ваш аккаунт заблокирован',
