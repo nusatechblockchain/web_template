@@ -9,8 +9,6 @@ import { captchaLogin } from '../../../api';
 import { EMAIL_REGEX } from '../../../helpers';
 import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 
 export interface SignInProps {
     labelSignIn?: string;

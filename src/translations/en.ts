@@ -465,7 +465,7 @@ export const en = {
     'page.body.profile.referral.title': 'Referral Bonus',
     'page.body.profile.referral.rewards': 'Your Total Rewards',
     'page.body.profile.referral.earn': 'Earn Crypto Together',
-    'page.body.profile.referral.commission':
+    'page.body.profile.referral.commission': 
         'Invite your friend and earn 50% commission on their exchange trasaction, Copy link bellow and share referral link to your friends',
     'page.body.profile.header.referralProgram': 'Referral Link',
     'page.body.profile.content.copyLink': 'Copy',
