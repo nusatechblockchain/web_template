@@ -2,7 +2,7 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps } from 'react-router';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
 import {
@@ -217,37 +217,37 @@ class Side extends React.Component<Props, SidebarState> {
                         <div className="mb-36"></div>
                         <ul>
                             {this.state.dataProfile.slice(0, 4).map((el, i) => (
-                                // <Link key={i} to={`${el.path}`}>
-                                <li
-                                    onClick={() => this.setState({ menuProfileActive: el.name })}
-                                    className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                    <div className="mr-8">{el.icon}</div>
-                                    <p
-                                        className={`font-bold text-sm mb-0 ${
-                                            this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
-                                        }`}>
-                                        {el.name}
-                                    </p>
-                                </li>
-                                // </Link>
+                                <Link key={i} to={`${el.path}`}>
+                                    <li
+                                        onClick={() => this.setState({ menuProfileActive: el.name })}
+                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
+                                        <div className="mr-8">{el.icon}</div>
+                                        <p
+                                            className={`font-bold text-sm mb-0 ${
+                                                this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
+                                            }`}>
+                                            {el.name}
+                                        </p>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                         <div className="devider"></div>
                         <ul>
                             {this.state.dataProfile.slice(4).map((el, i) => (
-                                // <Link key={i} to={`${el.path}`}>
-                                <li
-                                    onClick={() => this.setState({ menuProfileActive: el.name })}
-                                    className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                    <div className="mr-8">{el.icon}</div>
-                                    <p
-                                        className={`font-bold text-sm mb-0 ${
-                                            this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
-                                        }`}>
-                                        {el.name}
-                                    </p>
-                                </li>
-                                // </Link>
+                                <Link key={i} to={`${el.path}`}>
+                                    <li
+                                        onClick={() => this.setState({ menuProfileActive: el.name })}
+                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
+                                        <div className="mr-8">{el.icon}</div>
+                                        <p
+                                            className={`font-bold text-sm mb-0 ${
+                                                this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
+                                            }`}>
+                                            {el.name}
+                                        </p>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     </div>
@@ -256,38 +256,38 @@ class Side extends React.Component<Props, SidebarState> {
                     <div className="sidebar dark-bg-main">
                         <ul>
                             {this.state.dataWallet.slice(0, 4).map((el, i) => (
-                                // <Link key={i} to={`${el.path}`}>
-                                <li
-                                    onClick={() => this.setState({ menuWalletActive: el.name })}
-                                    className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                    <div className="mr-8">{el.icon}</div>
-                                    <p
-                                        className={`font-bold text-sm mb-0 ${
-                                            this.state.menuWalletActive === el.name ? 'white-text' : 'grey-text'
-                                        }`}>
-                                        {el.name}
-                                    </p>
-                                </li>
-                                // </Link>
+                                <Link key={i} to={`${el.path}`}>
+                                    <li
+                                        onClick={() => this.setState({ menuWalletActive: el.name })}
+                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
+                                        <div className="mr-8">{el.icon}</div>
+                                        <p
+                                            className={`font-bold text-sm mb-0 ${
+                                                this.state.menuWalletActive === el.name ? 'white-text' : 'grey-text'
+                                            }`}>
+                                            {el.name}
+                                        </p>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                         <div className="devider"></div>
 
                         <ul>
                             {this.state.dataWallet.slice(4).map((el, i) => (
-                                // <Link key={i} to={`${el.path}`}>
-                                <li
-                                    onClick={() => this.setState({ menuWalletActive: el.name })}
-                                    className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                    <div className="mr-8">{el.icon}</div>
-                                    <p
-                                        className={`font-bold text-sm mb-0 ${
-                                            this.state.menuWalletActive === el.name ? 'white-text' : 'grey-text'
-                                        }`}>
-                                        {el.name}
-                                    </p>
-                                </li>
-                                // </Link>
+                                <Link key={i} to={`${el.path}`}>
+                                    <li
+                                        onClick={() => this.setState({ menuWalletActive: el.name })}
+                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
+                                        <div className="mr-8">{el.icon}</div>
+                                        <p
+                                            className={`font-bold text-sm mb-0 ${
+                                                this.state.menuWalletActive === el.name ? 'white-text' : 'grey-text'
+                                            }`}>
+                                            {el.name}
+                                        </p>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     </div>

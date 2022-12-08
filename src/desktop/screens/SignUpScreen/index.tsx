@@ -348,6 +348,7 @@ class SignUp extends React.Component<Props> {
     private handleChangeConfirmPassword = (value: string) => {
         this.setState({
             confirmPassword: value,
+            confirmPasswordFocus: true,
         });
     };
 

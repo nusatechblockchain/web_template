@@ -122,7 +122,6 @@ class EmailVerificationComponent extends React.Component<Props> {
                                     <div className="mb-8 text-xs font-normal white-text">Verification Code</div>
                                     <PinInput
                                         length={6}
-                                        secret
                                         onChange={this.handleChangeConfirmChange}
                                         onComplete={this.handleChangeConfirmChange}
                                         type="numeric"

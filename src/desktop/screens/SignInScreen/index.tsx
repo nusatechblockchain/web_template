@@ -199,7 +199,7 @@ export const SignInScreen: React.FC = () => {
                             {require2FA ? (
                                 <React.Fragment>
                                     <h2 className="title-2 white-text font-semibold">Two Factor Autentication</h2>
-                                    <p className="text-sm grey-text-accent  mb-36">
+                                    <p className="text-sm grey-text mb-24">
                                         {formatMessage({ id: 'page.password2fa.message' })}
                                     </p>
 

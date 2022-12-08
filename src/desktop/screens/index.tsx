@@ -10,3 +10,4 @@ export * from './PasswordReset';
 export * from './ForgotPassword';
 export * from './ProfileScreen';
 export * from './ReferralScreen';
+export * from './Lost2FAScreen';
