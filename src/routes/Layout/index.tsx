@@ -43,7 +43,7 @@ import {
     ReferralScreen,
     ApiKeyScreen,
     ProfileTwoFactorAuthScreen,
-    Lost2FAScreen,
+    // Lost2FAScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
