@@ -319,7 +319,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     inputValue={confirmPassword}
                     handleFocusInput={handleFocusConfirmPassword}
                     classNameLabel="white-text text-sm"
-                    classNameInput=""
+                    classNameInput="rounded-sm"
                     autoFocus={false}
                     labelVisible
                 />
@@ -329,7 +329,11 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 onClick={() => setExpand(!expand)}
                 className={`label-referral cursor-pointer text-sm mb-8 ${expand ? 'white-text' : 'grey-text'}`}>
                 Referral ID (Optional){' '}
-                {expand ? <ArrowUpIcon fillColor={'#F2F0FF'} /> : <ArrowDownIcon strokeColor={'#6f6f6f'} />}
+                {expand ? (
+                    <ArrowUpIcon fillColor={'#F2F0FF'} />
+                ) : (
+                    <ArrowDownIcon className={''} strokeColor={'#6f6f6f'} />
+                )}
             </div>
 
             {expand && (

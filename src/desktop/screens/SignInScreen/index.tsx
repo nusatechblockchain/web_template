@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { captchaType, captchaLogin } from '../../../api';
 import { Captcha } from '../../../components';
@@ -48,6 +48,13 @@ export const SignInScreen: React.FC = () => {
     const geetestCaptchaSuccess = useReduxSelector(selectGeetestCaptchaSuccess);
     const captcha_response = useReduxSelector(selectCaptchaResponse);
     const isMobileDevice = useReduxSelector(selectMobileDeviceState);
+
+    useEffect(() => {
+        if (errorSignIn && errorSignIn.message[0] != '') {
+            setEmailClassname('error');
+            setPasswordClassname('error');
+        }
+    }, [errorSignIn]);
 
     useEffect(() => {
         setDocumentTitle('Sign In');
@@ -139,7 +146,6 @@ export const SignInScreen: React.FC = () => {
         if (!isEmailValid) {
             setEmailError(formatMessage({ id: ERROR_INVALID_EMAIL }));
             setPasswordError('');
-
             return;
         }
         if (!password) {

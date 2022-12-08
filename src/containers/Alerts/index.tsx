@@ -4,6 +4,8 @@ import FadeIn from 'react-fade-in';
 import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { IntlProps } from '../../';
+import { CloseIcon } from '../../assets/images/CloseIcon';
+import { ErrorAlertIcon, SuccessAlertIcon } from '../../assets/images/AlertIcon';
 import { alertDelete, alertDeleteByIndex, AlertState, RootState, selectAlertState } from '../../modules';
 
 interface ReduxProps {
@@ -33,9 +35,21 @@ class AlertComponent extends React.Component<Props> {
                     w.message.map((msg, index) => (
                         <div className="alert-wrapper">
                             <FadeIn key={index}>
-                                <div onClick={() => this.deleteAlertByIndex(index)}>
+                                <div>
                                     <Alert variant={w.type === 'error' ? 'danger' : w.type}>
-                                        {this.translate(msg)}
+                                        <div className="d-flex align-items-center">
+                                            {w.type === 'error' ? (
+                                                <ErrorAlertIcon className="mr-2" />
+                                            ) : (
+                                                <SuccessAlertIcon className="mr-2" />
+                                            )}
+                                            {this.translate(msg)}
+                                            <CloseIcon
+                                                fill="#fff"
+                                                className="ml-2 cursor-pointer"
+                                                onClick={() => this.deleteAlertByIndex(index)}
+                                            />
+                                        </div>
                                     </Alert>
                                 </div>
                             </FadeIn>
