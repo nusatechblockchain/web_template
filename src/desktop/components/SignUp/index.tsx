@@ -135,7 +135,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
         const captchaTypeValue = captchaType();
 
         if (
-            //!hasConfirmed ||
+            // !hasConfirmed ||
             isLoading ||
             !email.match(EMAIL_REGEX) ||
             !password ||
@@ -237,9 +237,18 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
         [handleSubmitForm, isValidForm, validateForm]
     );
 
-    const handleCheck = async () => {
-        await clickCheckBox;
-        setShow(false);
+    const handleCheck = () => {
+        if (hasConfirmed === false) {
+            hasConfirmed = true;
+        }
+        hasConfirmed = false;
+    };
+
+    const handleSubmit = async (e) => {
+        await handleClick(e as any);
+        await handleCheck();
+        await clickCheckBox(e);
+        handleClose();
     };
 
     const renderUsernameError = (nick: string) => {
@@ -341,13 +350,14 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 
             <div className="mt-4 mb-4">{renderCaptcha}</div>
 
-            <label className="checkbox">
+            {/* <label className="checkbox">
                 <input
                     className="checkbox__input"
                     type="checkbox"
                     id="agreeWithTerms"
-                    checked={hasConfirmed}
-                    onChange={clickCheckBox}
+                    // checked={hasConfirmed}
+                    // onClick={() => handleCheck}
+                    // onChange={clickCheckBox}
                 />
                 <span className="checkbox__inner ml-1">
                     <span className="checkbox__tick" />
@@ -366,7 +376,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                         </a>
                     </span>
                 </span>
-            </label>
+            </label> */}
 
             <Button
                 block={true}
@@ -421,7 +431,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     <Button type="button" className="btn-danger" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button className="btn-success" onClick={(e) => handleClick(e as any)}>
+                    <Button className="btn-success" onClick={(e) => handleSubmit(e)}>
                         {isLoading ? 'Loading...' : 'Accept'}
                     </Button>
                 </Modal.Footer>
