@@ -16,18 +16,22 @@ import { TipIcon } from 'src/assets/images/TipIcon';
 
 const WalletDepositBody = (props) => {
     const [networks, setNetworks] = useState([]);
-    const [addressDeposit, setAddressDeposit] = useState();
+    const [addressDeposit, setAddressDeposit] = useState({});
     const [address, setAddress] = useState('');
+    const [block, setBlock] = useState({});
+    const [blockchainNetwork, setBlockchainNetwork] = useState(null);
+    const [show, setShow] = useState(false);
+
     const { wallet } = props;
     const intl = useIntl();
     const { currency = '' } = useParams<{ currency?: string }>();
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(selectUserInfo);
-    const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
     const label = React.useMemo(
         () => intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.address' }),
         [intl]
@@ -44,21 +48,25 @@ const WalletDepositBody = (props) => {
         deposit_enabled: false,
     };
 
-    const [blockchainNetwork, setBlockchainNetwork] = useState(null);
-    if (!blockchainNetwork && currencyItem.networks && currencyItem.type !== 'fiat') {
-        setBlockchainNetwork(currencyItem.networks[0].protocol);
-    }
-    const blockchain = (blockchainNetwork && currencyItem.networks.find((n) => n.protocol === blockchainNetwork)) || {
+    const blockchain = (blockchainNetwork &&
+        currencyItem &&
+        currencyItem.networks.find((n) => n.protocol === blockchainNetwork)) || {
         blockchain_key: null,
     };
-    const blockchainKey = blockchain.blockchain_key;
+
+    // useEffect(() => {
+    //     if (blockchain && blockchain.blockchain_key !== null) {
+    //         setBlock(blockchain);
+    //     }
+    // }, [blockchain]);
+
+    const blockchainKey = blockchain && blockchain.blockchain_key;
 
     const depositAddress =
         (wallet &&
             blockchainKey &&
             wallet.deposit_addresses.find((w) => w.blockchain_key.toLowerCase() === blockchainKey.toLowerCase())) ||
         null;
-    // console.log(depositAddress);
 
     const handleGenerateAddress = useEffect(() => {
         if (!depositAddress && blockchainKey) {
@@ -79,30 +87,7 @@ const WalletDepositBody = (props) => {
     );
     const handleOnCopy = () => ({});
 
-    // useEffect(() => {
-    //     if (currencyItem && currencyItem.networks !== undefined) {
-    //         setNetworks(currencyItem && currencyItem.networks);
-    //         console.log(networks);
-    //         console.log(depositAddress);
-    //     }
-    // }, [currency, currencyItem, networks, depositAddress]);
-    // // console.log(networks, 'INI NETWORKS');
-    // console.log(currencyItem, 'INI CURRENCY ITEM');
-
-    useEffect(() => {
-        if (depositAddress !== null) {
-            setAddressDeposit(depositAddress);
-            setAddress(depositAddress.address);
-        }
-
-        if (currencyItem && currencyItem.networks !== undefined) {
-            setNetworks(currencyItem && currencyItem.networks);
-        }
-    }, [depositAddress, currencyItem, depositAddress, address]);
-
-    console.log(addressDeposit);
-
-    const minDepositAmount = blockchain.min_deposit_amount || '0';
+    const minDepositAmount = (blockchain && blockchain.min_deposit_amount) || '0';
 
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
@@ -155,6 +140,26 @@ const WalletDepositBody = (props) => {
             item.confirmation,
         ]);
     };
+
+    useEffect(() => {
+        if (depositAddress !== null) {
+            setAddressDeposit(depositAddress);
+            setAddress(depositAddress.address);
+        }
+
+        if (currencyItem && currencyItem.networks !== undefined) {
+            setNetworks(currencyItem && currencyItem.networks);
+        }
+
+        if (!blockchainNetwork && currencyItem.networks && currencyItem.type !== 'fiat') {
+            setBlockchainNetwork(currencyItem.networks[0].protocol);
+        }
+    }, [depositAddress, currencyItem, blockchainNetwork]);
+
+    // console.log(addressDeposit);
+    // console.log(block, 'BLOCK');
+    console.log(blockchain, 'BLOCKCHAIN');
+    console.log(blockchainNetwork, 'NETWORK');
 
     const renderDeposit = useMemo(() => {
         return (
@@ -223,9 +228,7 @@ const WalletDepositBody = (props) => {
                         </div>
 
                         <div className="network-container w-50">
-                            <h1 className="white-text text-ms font-extrabold mb-16">
-                                {!address ? '' : 'Select Network :'}
-                            </h1>
+                            <h1 className="white-text text-ms font-extrabold mb-16">{address && 'Select Network :'}</h1>
                             {!addressDeposit ? (
                                 <button
                                     onClick={() => handleGenerateAddress}
@@ -245,9 +248,6 @@ const WalletDepositBody = (props) => {
                                                     key={network.blockchain_key}
                                                     onClick={() => setBlockchainNetwork(network.protocol)}>
                                                     <div className="nav-link">{network.protocol}</div>
-                                                    {console.log(blockchainNetwork)}
-                                                    {console.log(network.protocol)}
-                                                    {console.log(address)}
                                                 </li>
                                             ))}
                                         </ul>
@@ -255,9 +255,7 @@ const WalletDepositBody = (props) => {
                                 </div>
                             )}
 
-                            {!address ? (
-                                ''
-                            ) : (
+                            {address && (
                                 <React.Fragment>
                                     <h3 className="white-text text-sm font-bold">Address</h3>
                                     <input
@@ -312,7 +310,7 @@ const WalletDepositBody = (props) => {
             </React.Fragment>
         );
     }, [
-        // currency,
+        currency,
         currencies,
         optionCurrency,
         CustomStylesSelect,
@@ -322,19 +320,21 @@ const WalletDepositBody = (props) => {
         setAddressDeposit,
         networks,
         setNetworks,
-        // handleGenerateAddress,
+        handleGenerateAddress,
         currencyItem,
         blockchainNetwork,
-        // blockchain,
-        // blockchainKey,
+        blockchain,
+        blockchainKey,
         setBlockchainNetwork,
-        // doCopy,
-        // handleClose,
-        // handleShow,
-        // getTableData,
-        // getTableHeaders,
-        // walletsAddressFetch,
-        // wallet,
+        block,
+        setBlock,
+        doCopy,
+        handleClose,
+        handleShow,
+        getTableData,
+        getTableHeaders,
+        walletsAddressFetch,
+        wallet,
     ]);
 
     return renderDeposit;

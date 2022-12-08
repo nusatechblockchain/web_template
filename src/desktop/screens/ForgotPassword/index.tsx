@@ -120,7 +120,9 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
 
     private handleChangePassword = () => {
         const { email } = this.state;
-        const { captcha_response } = this.props;
+        const { captcha_response, error } = this.props;
+
+        console.log(error);
 
         switch (captchaType()) {
             case 'recaptcha':
