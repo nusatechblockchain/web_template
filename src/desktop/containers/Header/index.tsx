@@ -100,7 +100,7 @@ class Head extends React.Component<Props, HeaderState> {
                 name: 'Refferal',
                 desc: 'invite friend to reach bonus',
                 icon: <Referral />,
-                url: '/referral',
+                url: '/profile/referral',
             },
             {
                 name: 'API Management',
