@@ -18,15 +18,20 @@ export const Lost2FAScreen: React.FC = () => {
     const [stepOne, setStepOne] = useState(true);
     const [stepTwo, setStepTwo] = useState(false);
     const [stepThree, setStepThree] = useState(false);
+    const [stepOneActive, setStepOneActive] = useState(true);
+    const [stepTwoActive, setStepTwoActive] = useState(false);
+    const [stepThreeActive, setStepThreeActive] = useState(false);
 
     const handleNextStep = () => {
         setStepOne(false);
         setStepTwo(true);
+        setStepTwoActive(true);
     };
 
     const handleSubmit = () => {
         setStepTwo(false);
         setStepThree(true);
+        setStepThreeActive(true);
     };
 
     return (
@@ -50,7 +55,11 @@ export const Lost2FAScreen: React.FC = () => {
                             <div className="row justify-content-center">
                                 <div className="col-8 dark-bg-main py-5 px-5">
                                     {!stepThree && <Lost2FAInfo />}
-                                    <Lost2FATimeline stepOne={stepOne} stepTwo={stepTwo} stepThree={stepThree} />
+                                    <Lost2FATimeline
+                                        stepOneActive={stepOneActive}
+                                        stepTwoActive={stepTwoActive}
+                                        stepThreeActive={stepThreeActive}
+                                    />
                                     <Lost2FAStep
                                         stepOne={stepOne}
                                         stepTwo={stepTwo}

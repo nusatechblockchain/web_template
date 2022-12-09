@@ -196,7 +196,7 @@ export const SignInScreen: React.FC = () => {
                     </div>
                     <div className="main-wrapper d-flex align-items-center">
                         <div className="main-form position-relative">
-                            {require2FA ? (
+                            {!require2FA ? (
                                 <React.Fragment>
                                     <h2 className="title-2 white-text font-semibold">Two Factor Autentication</h2>
                                     <p className="text-sm grey-text mb-24">

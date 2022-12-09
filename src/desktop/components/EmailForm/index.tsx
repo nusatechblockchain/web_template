@@ -40,6 +40,7 @@ export const EmailForm: React.FC<EmailFormProps> = (props) => {
         emailLabel,
         email,
         emailError,
+        emailFocused,
         captchaType,
         geetestCaptchaSuccess,
         reCaptchaSuccess,
@@ -95,12 +96,15 @@ export const EmailForm: React.FC<EmailFormProps> = (props) => {
                     inputValue={email}
                     handleFocusInput={props.handleFieldFocus}
                     classNameLabel="form-label white-text text-sm mb-8"
-                    classNameInput=""
+                    classNameInput={`${emailFocused && !email.match(EMAIL_REGEX) && 'error'}`}
                     autoFocus={!isMobileDevice}
                     labelVisible
                 />
                 {emailError && <div className="invalid-feedback">{emailError}</div>}
             </div>
+            {emailFocused && !email.match(EMAIL_REGEX) && (
+                <p className="text-xs danger-text m-0 mb-24">Enter a valid email address</p>
+            )}
             <div className="mb-24">{props.renderCaptcha}</div>
 
             <Button

@@ -11,9 +11,9 @@ import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
 import { InputFile } from '../../components';
 
 interface TimelineElement {
-    stepOne;
-    stepTwo;
-    stepThree;
+    stepOneActive: boolean;
+    stepTwoActive: boolean;
+    stepThreeActive: boolean;
 }
 
 type Props = TimelineElement;
@@ -22,7 +22,7 @@ export const Lost2FATimeline: React.FC<Props> = (props: Props): React.ReactEleme
     const dispatch = useDispatch();
     const history = useHistory();
     const { formatMessage } = useIntl();
-    const { stepOne, stepTwo, stepThree } = props;
+    const { stepOneActive, stepTwoActive, stepThreeActive } = props;
 
     return (
         <React.Fragment>
@@ -30,26 +30,30 @@ export const Lost2FATimeline: React.FC<Props> = (props: Props): React.ReactEleme
                 <div className="d-flex justify-content-between">
                     <div className="__items">
                         <div className="d-flex align-items-center">
-                            <div className={`__number ${stepOne && 'active'}`} id="tabs-icon-one">
+                            <div className={`__number ${stepOneActive && 'active'}`} id="tabs-icon-one">
                                 <p className="mb-0">1</p>
                             </div>
-                            <p className="white-text text-xs mb-0">Security Verification</p>
+                            <p className={`text-xs mb-0 ${stepOneActive ? 'gradient-text' : 'white-text'}`}>
+                                Security Verification
+                            </p>
                         </div>
                     </div>
                     <div className="__items">
                         <div className="d-flex align-items-center">
-                            <div className={`__number ${stepTwo && 'active'}`} id="tabs-icon-two">
+                            <div className={`__number ${stepTwoActive && 'active'}`} id="tabs-icon-two">
                                 <p className="mb-0">2</p>
                             </div>
-                            <p className="white-text text-xs mb-0">identity Verification</p>
+                            <p className={`text-xs mb-0 ${stepTwoActive ? 'gradient-text' : 'white-text'}`}>
+                                identity Verification
+                            </p>
                         </div>
                     </div>
                     <div className="__items">
                         <div className="d-flex align-items-center">
-                            <div className={`__number ${stepThree && 'active'}`} id="tabs-icon-three">
+                            <div className={`__number ${stepThreeActive && 'active'}`} id="tabs-icon-three">
                                 <p className="mb-0">3</p>
                             </div>
-                            <p className="white-text text-xs mb-0">Done</p>
+                            <p className={`text-xs mb-0 ${stepThreeActive ? 'gradient-text' : 'white-text'}`}>Done</p>
                         </div>
                     </div>
                 </div>

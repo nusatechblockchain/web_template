@@ -11,6 +11,7 @@ import { EMAIL_REGEX, ERROR_INVALID_EMAIL, setDocumentTitle } from '../../../hel
 import { IntlProps } from '../../../index';
 import {
     forgotPassword,
+    forgotPasswordError,
     GeetestCaptchaResponse,
     resetCaptchaState,
     RootState,
@@ -30,6 +31,7 @@ interface ReduxProps {
     captcha_response?: string | GeetestCaptchaResponse;
     reCaptchaSuccess: boolean;
     geetestCaptchaSuccess: boolean;
+    errorForgotPassword: any;
 }
 
 interface DispatchProps {
@@ -60,6 +62,10 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
         setDocumentTitle('Forgot password');
     }
 
+    public componentDidUpdate() {
+        console.log(this.props.errorForgotPassword, 'INI DARI DID UPDATE');
+    }
+
     public renderCaptcha = () => {
         const { error, success } = this.props;
 
@@ -69,7 +75,6 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
     public render() {
         const { email, emailFocused, emailError } = this.state;
         const { captcha_response, reCaptchaSuccess, geetestCaptchaSuccess } = this.props;
-
         return (
             <React.Fragment>
                 <div className="row sign-up-screen">
@@ -120,10 +125,9 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
 
     private handleChangePassword = () => {
         const { email } = this.state;
-        const { captcha_response, error } = this.props;
+        const { captcha_response, errorForgotPassword } = this.props;
 
-        console.log(error);
-
+        console.log(errorForgotPassword, 'INI DARI FUNCTION');
         switch (captchaType()) {
             case 'recaptcha':
             case 'geetest':
@@ -133,12 +137,18 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
                 this.props.forgotPassword({ email });
                 break;
         }
-        this.props.history.push({
-            pathname: '/accounts/password_reset',
-            state: {
-                email: this.state.email,
-            },
-        });
+
+        if (errorForgotPassword) {
+            ('');
+        } else {
+            this.props.history.push({
+                pathname: '/accounts/password_reset',
+                state: {
+                    email: this.state.email,
+                },
+            });
+        }
+
         this.props.resetCaptchaState();
     };
 
@@ -183,7 +193,7 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
 
 const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => ({
     success: selectForgotPasswordSuccess(state),
-    error: selectForgotPasswordError(state),
+    errorForgotPassword: selectForgotPasswordError(state),
     i18n: selectCurrentLanguage(state),
     captcha_response: selectCaptchaResponse(state),
     reCaptchaSuccess: selectRecaptchaSuccess(state),
@@ -191,6 +201,7 @@ const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => (
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
+    forgotPasswordError: (error) => dispatch(forgotPasswordError(error)),
     forgotPassword: (credentials) => dispatch(forgotPassword(credentials)),
     resetCaptchaState: () => dispatch(resetCaptchaState()),
 });

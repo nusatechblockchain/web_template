@@ -12,9 +12,9 @@ import { InputFile } from '../../components';
 import lostImg from '../../../assets/png/lost-two-fa.svg';
 
 interface StepElement {
-    stepOne;
-    stepTwo;
-    stepThree;
+    stepOne: boolean;
+    stepTwo: boolean;
+    stepThree: boolean;
     handleNextStep;
     handleSubmit;
 }

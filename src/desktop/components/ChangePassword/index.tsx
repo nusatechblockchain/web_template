@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 export const ChangePasswordComponent = (props) => {
     const [oldPassword, setOldPassword] = React.useState('');
     const [newPassword, setNewPassword] = React.useState('');
+    const [newPasswordFocus, setNewPasswordFocus] = React.useState(false);
     const [confirmationPassword, setConfirmationPassword] = React.useState('');
     const [confirmPasswordFocus, setConfirmPasswordFocus] = React.useState(false);
     const [passwordErrorFirstSolved, setPasswordErrorFirstSolved] = React.useState(false);
@@ -82,12 +83,17 @@ export const ChangePasswordComponent = (props) => {
 
     const handleFocusNewPassword = () => {
         setPasswordPopUp(!passwordPopUp);
+        setNewPasswordFocus(!newPasswordFocus);
     };
 
     const translate = (key: string) => intl.formatMessage({ id: key });
 
     const isValidForm = () => {
-        const isNewPasswordValid = newPassword.match(PASSWORD_REGEX);
+        const isNewPasswordValid =
+            newPassword.match(PASSWORD_REGEX) &&
+            passwordErrorFirstSolved &&
+            passwordErrorSecondSolved &&
+            passwordErrorThirdSolved;
         const isConfirmPasswordValid = newPassword === confirmationPassword;
         const isOldPasswordValid = (!props.hideOldPassword && oldPassword) || true;
 
@@ -126,7 +132,7 @@ export const ChangePasswordComponent = (props) => {
                     autoSelect={true}
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
-                <p className="text-right text-sm grey-text">Send Code</p>
+                <p className="text-right text-sm grey-text cursor-pointer">Send Code</p>
                 <div>
                     <CustomInput
                         type="password"
@@ -139,10 +145,18 @@ export const ChangePasswordComponent = (props) => {
                         inputValue={newPassword}
                         handleFocusInput={handleFocusNewPassword}
                         classNameLabel="white-text text-sm mb-8"
-                        classNameInput=""
+                        classNameInput={`${
+                            newPasswordFocus &&
+                            (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) &&
+                            'error'
+                        }`}
                         autoFocus={false}
                         labelVisible
                     />
+                    {newPasswordFocus &&
+                        (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) && (
+                            <p className="danger-text m-0 mb-24 text-xs">Password Strength must be GOOD</p>
+                        )}
                 </div>
                 <div>
                     <PasswordStrengthMeter
@@ -168,10 +182,18 @@ export const ChangePasswordComponent = (props) => {
                         inputValue={confirmationPassword}
                         handleFocusInput={() => setConfirmPasswordFocus(!confirmPasswordFocus)}
                         classNameLabel="white-text text-sm mb-8"
-                        classNameInput=""
+                        classNameInput={`${
+                            confirmPasswordFocus &&
+                            (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) &&
+                            'error'
+                        }`}
                         autoFocus={false}
                         labelVisible
                     />
+
+                    {confirmPasswordFocus && confirmationPassword !== newPassword && (
+                        <p className="text-xs danger-text m-0 mb-24">Password Confirmation doesn't match</p>
+                    )}
                 </div>
 
                 <div className="form-button-group mt-4">
