@@ -68,6 +68,8 @@ export const SignInScreen: React.FC = () => {
 
     useEffect(() => {
         if (requireEmailVerification) {
+            setEmailClassname('');
+            setPasswordClassname('');
             history.push('/email-verification', { email: email });
         }
     }, [requireEmailVerification, history]);
@@ -121,6 +123,8 @@ export const SignInScreen: React.FC = () => {
     }, [history]);
 
     const forgotPassword = useCallback(() => {
+        setEmailClassname('');
+        setPasswordClassname('');
         history.push('/forgot_password');
     }, [history]);
 

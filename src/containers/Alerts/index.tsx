@@ -36,7 +36,7 @@ class AlertComponent extends React.Component<Props> {
                         <div className="alert-wrapper">
                             <FadeIn key={index}>
                                 <div>
-                                    <Alert variant={w.type === 'error' ? 'danger' : w.type}>
+                                    <Alert variant={w.type === 'error' ? 'danger' : 'success'}>
                                         <div className="d-flex align-items-center">
                                             {w.type === 'error' ? (
                                                 <ErrorAlertIcon className="mr-2" />
