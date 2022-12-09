@@ -1,7 +1,7 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 import { ProfileAuthDetails } from '../../containers';
 import { useDocumentTitle } from 'src/hooks';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Notification } from '../../../assets/images/Notification';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import {
@@ -24,15 +24,189 @@ import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { ProfileDeviceTable } from '../../containers';
 import { useSelector } from 'react-redux';
 import { selectUserInfo } from '../../../modules';
+import { Modal, CustomInput } from '../../components';
+import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
+    const history = useHistory();
+    const [showModal2Fa, setShowModal2FA] = useState(false);
+    const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
+    const [showModalChangePhone, setShowModalChangePhone] = useState(false);
+    const [twoFaPhoneValue, settwoFaPhoneValue] = useState('');
+    const [twoFaGoogleValue, settwoFaGoogleValue] = useState('');
+    const [newPhoneValue, setNewPhoneValue] = useState('');
+    const [verificationCode, setVerificationCode] = useState('');
+
+    const handleFetchTwoFaPhone = () => {
+        if (twoFaPhoneValue === '123456') {
+            setShowModal2FA(false);
+            setShowModalChangePhone(true);
+        } else {
+            alert('Two Fa Code Tidak sesuai (Just Contoh)');
+        }
+    };
+
+    const handleFetchTwoFaGoogle = () => {
+        if (twoFaGoogleValue === '123456') {
+            setShowModal2FAGoogle(false);
+            history.push('/lost-two-fa');
+        } else {
+            alert('Two Fa Code Tidak sesuai (Just Contoh)');
+        }
+    };
+
+    // render two fa phone modal
+    const modalTwoFaPhoneContent = () => {
+        return (
+            <React.Fragment>
+                <p className="text-sm grey-text mb-24">
+                    To ensure security, withdrawals, P2P transactions, and red envelopes will be temporarily unavailable
+                    for 24 hours after changing the security settings.
+                </p>
+                <div className="form">
+                    <div className="form-group mb-24">
+                        <CustomInput
+                            defaultLabel="two-fa"
+                            inputValue={twoFaPhoneValue}
+                            label="2FA Code"
+                            placeholder="______"
+                            type="text"
+                            labelVisible
+                            classNameInput="text-center spacing-10"
+                            classNameLabel="white-text text-sm"
+                            handleChangeInput={(e) => settwoFaPhoneValue(e)}
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-primary btn-block"
+                        data-dismiss="modal"
+                        onClick={handleFetchTwoFaPhone}>
+                        Next
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const modalTwoFaPhoneHeader = () => {
+        return (
+            <React.Fragment>
+                <h6 className="text-xl font-bold white-text mb-0">2FA Verification</h6>
+                <ModalCloseIcon className="cursor-pointer" onClick={() => setShowModal2FA(false)} />
+            </React.Fragment>
+        );
+    };
+
+    // Render phone modal
+    const modalPhoneContent = () => {
+        return (
+            <React.Fragment>
+                <p className="text-sm grey-text mb-24">Set your new Phone number and verifed</p>
+                <div className="form">
+                    <div className="form-group mb-24">
+                        <CustomInput
+                            defaultLabel="New Phone Number"
+                            inputValue={newPhoneValue}
+                            label="New Phone Number"
+                            placeholder="+6281902912921"
+                            type="text"
+                            labelVisible
+                            classNameLabel="white-text text-sm"
+                            handleChangeInput={(e) => setNewPhoneValue(e)}
+                        />
+                    </div>
+                    <div className="form-group mb-24">
+                        <label className="white-text text-sm ">Verification Code</label>
+                        <div className="d-flex align-items-center">
+                            <CustomInput
+                                defaultLabel=""
+                                inputValue={verificationCode}
+                                label=""
+                                placeholder="_____"
+                                type="text"
+                                labelVisible={false}
+                                classNameLabel="d-none"
+                                classNameInput="spacing-10"
+                                classNameGroup="mb-0 w-100"
+                                handleChangeInput={(e) => setVerificationCode(e)}
+                            />
+                            <button className="btn btn-primary ml-2 text-nowrap">Send Code</button>
+                        </div>
+                    </div>
+                    <button
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                        data-toggle="modal"
+                        data-target="#change-phone"
+                        data-dismiss="modal">
+                        Change
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const modalPhoneHeader = () => {
+        return (
+            <React.Fragment>
+                <h6 className="text-xl font-bold white-text mb-0">Change Phone Number</h6>
+                <ModalCloseIcon className="cursor-pointer ml-4" onClick={() => setShowModalChangePhone(false)} />
+            </React.Fragment>
+        );
+    };
+
+    // modal google two fa
+    const modalTwoFaGoogleContent = () => {
+        return (
+            <React.Fragment>
+                <p className="text-sm grey-text mb-24">
+                    To ensure security, withdrawals, P2P transactions, and red envelopes will be temporarily unavailable
+                    for 24 hours after changing the security settings.
+                </p>
+                <div className="form">
+                    <div className="form-group mb-24">
+                        <CustomInput
+                            defaultLabel="two-fa"
+                            inputValue={twoFaGoogleValue}
+                            label="2FA Code"
+                            placeholder="______"
+                            type="text"
+                            labelVisible
+                            classNameInput="text-center spacing-10"
+                            classNameLabel="white-text text-sm"
+                            handleChangeInput={(e) => settwoFaGoogleValue(e)}
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-primary btn-block"
+                        data-dismiss="modal"
+                        onClick={handleFetchTwoFaGoogle}>
+                        Next
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const modalTwoFaGoogleHeader = () => {
+        return (
+            <React.Fragment>
+                <h6 className="text-xl font-bold white-text mb-0">2FA Verification</h6>
+                <ModalCloseIcon className="cursor-pointer" onClick={() => setShowModal2FAGoogle(false)} />
+            </React.Fragment>
+        );
+    };
+
     return (
         <React.Fragment>
             <div className="profile-screen">
                 <div className="content-wrapper dark-bg-accent pb-5">
                     <ProfileAuthDetails />
+
                     <div className="profile-menu px-24">
                         <div className="row">
                             <div className="col-6 col-lg-8">
@@ -81,7 +255,9 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </Link>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <button className="btn-transparent" data-toggle="modal" data-target="#two-fa">
+                                        <button
+                                            className="btn-transparent"
+                                            onClick={() => setShowModal2FA(!showModal2Fa)}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <PhoneProfileIcon />
@@ -116,8 +292,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                     <div className="menu-item py-24 mb-4">
                                         <button
                                             className="btn-transparent"
-                                            data-toggle="modal"
-                                            data-target="#two-fa-google">
+                                            onClick={() => setShowModal2FAGoogle(!showModal2FaGoogle)}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <GoogleProfileIcon />
@@ -510,6 +685,11 @@ export const ProfileScreen: FC = (): ReactElement => {
                     <ProfileDeviceTable />
                 </div>
             </div>
+
+            {/* modal */}
+            <Modal content={modalTwoFaPhoneContent()} header={modalTwoFaPhoneHeader()} show={showModal2Fa} />
+            <Modal content={modalTwoFaGoogleContent()} header={modalTwoFaGoogleHeader()} show={showModal2FaGoogle} />
+            <Modal content={modalPhoneContent()} header={modalPhoneHeader()} show={showModalChangePhone} />
         </React.Fragment>
     );
 };

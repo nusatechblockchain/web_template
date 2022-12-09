@@ -16,3 +16,4 @@ export * from './SignUp';
 export * from './PasswordStrengthMeter';
 export * from './RecentDeposit';
 export * from './InputFile';
+export * from './Modal';
