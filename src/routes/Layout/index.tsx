@@ -44,6 +44,7 @@ import {
     ApiKeyScreen,
     ProfileTwoFactorAuthScreen,
     Lost2FAScreen,
+    TwoFaActivationScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -302,6 +303,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/profile/api-key"
                         component={ApiKeyScreen}
+                    />
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/two-fa-activation"
+                        component={TwoFaActivationScreen}
                     />
                     <PrivateRoute
                         loading={userLoading}
