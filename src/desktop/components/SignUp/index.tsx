@@ -183,7 +183,11 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     inputValue={password}
                     handleFocusInput={handleFocusPassword}
                     classNameLabel="white-text text-sm"
-                    classNameInput=""
+                    classNameInput={`${
+                        passwordFocused &&
+                        (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) &&
+                        'error'
+                    }`}
                     autoFocus={false}
                     labelVisible
                 />
@@ -276,7 +280,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     inputValue={username}
                     handleFocusInput={handleFocusUsername}
                     classNameLabel="white-text text-sm"
-                    classNameInput=""
+                    classNameInput={`${usernameFocused && !username.match(USERNAME_REGEX) && 'error'}`}
                     autoFocus={!isMobileDevice}
                     labelVisible
                 />
@@ -298,7 +302,7 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     inputValue={email}
                     handleFocusInput={handleFocusEmail}
                     classNameLabel="white-text text-sm"
-                    classNameInput=""
+                    classNameInput={`${emailFocused && !email.match(EMAIL_REGEX) && 'error'}`}
                     autoFocus={!isUsernameEnabled() && !isMobileDevice}
                     labelVisible
                 />
@@ -332,7 +336,9 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     inputValue={confirmPassword}
                     handleFocusInput={handleFocusConfirmPassword}
                     classNameLabel="white-text text-sm"
-                    classNameInput="rounded-sm m-0"
+                    classNameInput={`rounded-sm m-0 ${
+                        confirmPasswordFocused && confirmPassword !== password && 'error'
+                    }`}
                     autoFocus={false}
                     labelVisible
                 />
