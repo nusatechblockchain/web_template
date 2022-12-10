@@ -21,3 +21,4 @@ export * from './ModalAddBeneficiary';
 export * from './ModalBeneficiaryList';
 export * from './CustomStyleSelect';
 export * from './Modal';
+export * from './KycInputFileComponent';
