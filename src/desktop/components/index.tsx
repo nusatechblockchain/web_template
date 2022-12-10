@@ -16,3 +16,7 @@ export * from './SignUp';
 export * from './PasswordStrengthMeter';
 export * from './RecentDeposit';
 export * from './InputFile';
+export * from './ModalInternalTransfer';
+export * from './ModalAddBeneficiary';
+export * from './ModalBeneficiaryList';
+export * from './CustomStyleSelect';

@@ -208,7 +208,8 @@ class Side extends React.Component<Props, SidebarState> {
         const thisSidebarWallet = sidebarWallet.some(
             (r) =>
                 location.pathname.includes(r) &&
-                !location.pathname.includes('deposit' || 'withdrawl' || 'internal-transfer')
+                !location.pathname.includes('deposit') &&
+                !location.pathname.includes('withdraw')
         );
         return (
             <React.Fragment>

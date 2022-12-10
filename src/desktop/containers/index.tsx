@@ -10,3 +10,5 @@ export * from './ProfileDeviceTable';
 export * from './Lost2FAInfo';
 export * from './Lost2FATimeline';
 export * from './Lost2FAStep';
+export * from './WalletWithdrawalForm';
+export * from './WalletWithdrawalInfo';
