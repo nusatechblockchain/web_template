@@ -36,6 +36,7 @@ import {
     SignUpScreen,
     WalletsScreen,
     WalletDeposit,
+    WalletWitdrawal,
     EmailVerificationScreen,
     ForgotPasswordScreen,
     PasswordResetScreen,
@@ -262,6 +263,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/wallets/:currency/deposit"
                         component={WalletDeposit}
+                    />
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/wallets/:currency/withdraw"
+                        component={WalletWitdrawal}
                     />
                     <PrivateRoute
                         loading={userLoading}

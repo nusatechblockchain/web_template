@@ -13,3 +13,5 @@ export * from './Lost2FAStep';
 export * from './KycPasport';
 export * from './KycNationalCard';
 export * from './KycDrivingLicense';
+export * from './WalletWithdrawalForm';
+export * from './WalletWithdrawalInfo';

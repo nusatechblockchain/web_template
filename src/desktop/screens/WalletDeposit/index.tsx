@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useWalletsFetch } from '../../../hooks';
 import { selectWallets, Wallet } from '../../../modules/user/wallets';
-import { WalletDepositBody, WalletHeader } from '../../components';
+import { WalletDepositBody, WalletHeader, ModalInternalTransfer } from '../../components';
 import { HowToDeposit } from '../../containers';
 import { DEFAULT_WALLET } from '../../../constants';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
@@ -15,6 +15,7 @@ const WalletDeposit: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
     const { currency = '' } = useParams<{ currency?: string }>();
+    const [showModalTransfer, setShowModalTransfer] = React.useState(false);
     const wallets = useSelector(selectWallets) || [];
 
     useWalletsFetch();
@@ -38,6 +39,7 @@ const WalletDeposit: React.FC = () => {
                         </Link>
 
                         <button
+                            onClick={() => setShowModalTransfer(!showModalTransfer)}
                             className="btn btn-secondary radius-sm m-1 text-sm font-bold"
                             data-toggle="modal"
                             data-target="#transfer">
@@ -51,6 +53,8 @@ const WalletDeposit: React.FC = () => {
                     <WalletDepositBody wallet={wallet} />
                 </div>
             </div>
+
+            {showModalTransfer && <ModalInternalTransfer showModalTransfer={showModalTransfer} />}
         </React.Fragment>
     );
 };

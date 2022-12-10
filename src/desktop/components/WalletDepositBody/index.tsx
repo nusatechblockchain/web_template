@@ -7,10 +7,10 @@ import { selectUserInfo } from '../../../modules/user/profile';
 import { alertPush, Currency, selectCurrencies, walletsAddressFetch } from '../../../modules';
 import './WalletDepositBody.pcss';
 import { QRCode, Tooltip, Decimal, Table } from '../../../components';
+import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
 import { Modal, OverlayTrigger } from 'react-bootstrap';
 import Select from 'react-select';
-import { CustomStylesSelect } from './CustomStyleSelect';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { TipIcon } from 'src/assets/images/TipIcon';
 
