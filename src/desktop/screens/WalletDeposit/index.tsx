@@ -27,7 +27,7 @@ const WalletDeposit: React.FC = () => {
                 <div className="header-deposit dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
                     <div className="mr-2">
                         <Link to="/wallets" className="white-text text-lg">
-                            <ArrowLeftIcon />
+                            <ArrowLeftIcon className={''} />
                             Deposit Crypto
                         </Link>
                     </div>

@@ -53,7 +53,7 @@ export const WalletWitdrawal: React.FC = () => {
                 <div className="header-withdraw dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
                     <div className="mr-2">
                         <Link to="/wallets" className="white-text text-lg">
-                            <ArrowLeftIcon />
+                            <ArrowLeftIcon className={''} />
                             Withdrawal Crypto
                         </Link>
                     </div>
