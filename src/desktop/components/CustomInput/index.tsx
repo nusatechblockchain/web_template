@@ -21,6 +21,7 @@ export interface CustomInputProps {
     labelVisible?: boolean;
     autoComplete?: string;
     name?: string;
+    classNameGroup?: string;
 }
 
 interface OnChangeEvent {
@@ -64,11 +65,12 @@ class CustomInput extends React.Component<Props, State> {
             autoComplete,
             name,
             classNameInput,
+            classNameGroup,
         } = this.props;
 
         return (
             <React.Fragment>
-                <div className="custom-input form-group">
+                <div className={`custom-input form-group ${classNameGroup}`}>
                     <label className={classNameLabel}>{(labelVisible || inputValue) && (label || defaultLabel)}</label>
                     <InputGroup size="lg">
                         <FormControl

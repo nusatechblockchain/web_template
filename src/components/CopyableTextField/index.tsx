@@ -31,6 +31,7 @@ export interface CopyableTextFieldProps {
      */
     disabled?: boolean;
     label?: string;
+    classNameInput?: string;
 }
 
 /**
@@ -44,7 +45,7 @@ class CopyableTextField extends React.Component<CopyableTextFieldProps> {
     }
 
     public render() {
-        const { value, className, disabled, fieldId, copyButtonText, label } = this.props;
+        const { value, className, classNameInput, disabled, fieldId, copyButtonText, label } = this.props;
         const doCopy = () => copy(fieldId);
         const cx = classnames('cr-copyable-text-field', className);
 
@@ -61,7 +62,7 @@ class CopyableTextField extends React.Component<CopyableTextFieldProps> {
                         label={label || ''}
                         defaultLabel={label || ''}
                         placeholder={label || ''}
-                        classNameInput="cr-copyable-text-field__input"
+                        classNameInput={`cr-copyable-text-field__input ` + classNameInput}
                     />
                     <InputGroup.Append>
                         <Button

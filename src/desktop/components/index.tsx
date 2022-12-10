@@ -20,3 +20,4 @@ export * from './ModalInternalTransfer';
 export * from './ModalAddBeneficiary';
 export * from './ModalBeneficiaryList';
 export * from './CustomStyleSelect';
+export * from './Modal';
