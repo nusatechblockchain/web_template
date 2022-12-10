@@ -9,11 +9,11 @@ import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
 import { selectCurrencies, Currency } from '../../../modules';
 import Select from 'react-select';
 
-export interface ModalTransferShow {
+export interface ModalTransferShowProps {
     showModalTransfer: boolean;
 }
 
-export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShow> = (props) => {
+export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowProps> = (props) => {
     const intl = useIntl();
     const history = useHistory();
     const [showModalTransfer, setShowModalTransfer] = React.useState(props.showModalTransfer);

@@ -911,6 +911,7 @@ export const en = {
     'password.password.password_strength': 'Password is too weak',
 
     'email.taken': 'Email already have been taken',
+    'success.confirm.code.created': 'Account created',
 
     'identity.user.invalid_referral_format': 'Invalid referral uid format',
     'identity.user.referral_doesnt_exist': "Referral doesn't exist",

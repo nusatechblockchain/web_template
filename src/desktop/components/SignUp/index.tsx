@@ -16,6 +16,7 @@ import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
 import { ArrowDownIcon } from 'src/assets/images/ArrowDownIcon';
 import { ArrowUpIcon } from 'src/assets/images/ArrowUpIcon';
+import { ModalAddBeneficiary, ModalBeneficiaryList } from '../';
 import './SignUp.pcss';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -129,6 +130,8 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
     const [expand, setExpand] = React.useState(false);
     const [show, setShow] = React.useState(false);
     const [showError, setShowError] = React.useState(false);
+    const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
+    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -409,11 +412,20 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 type="button"
                 disabled={disableButton}
                 onClick={handleShow}
+                // onClick={() => setShowModalBeneficiaryList(!showModalBeneficiaryList)}
                 size="lg"
                 className="button registration__button"
                 variant="primary">
                 {isLoading ? 'Loading...' : labelSignUp ? labelSignUp : 'Sign up'}
             </Button>
+
+            {/* {showModalBeneficiaryList && (
+                <ModalBeneficiaryList
+                    showModalBeneficiaryList={showModalBeneficiaryList}
+                    showModalAddBeneficiary={showModalAddBeneficiary}
+                />
+            )}
+            {showModalAddBeneficiary && <ModalAddBeneficiary showModalAddBeneficiary={showModalAddBeneficiary} />} */}
 
             <Modal show={show} onHide={handleClose} className="w-100">
                 <Modal.Header className="rounded-top-10 border-none">

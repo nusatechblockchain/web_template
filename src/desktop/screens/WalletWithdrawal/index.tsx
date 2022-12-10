@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
 import { WalletWithdrawalForm, WalletWithdrawalInfo } from '../../containers';
-import { ModalInternalTransfer } from '../../components';
+import { ModalInternalTransfer, Modal } from '../../components';
 import { Table } from '../../../components';
 
 export const WalletWitdrawal: React.FC = () => {

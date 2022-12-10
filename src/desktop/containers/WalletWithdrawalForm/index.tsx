@@ -6,12 +6,17 @@ import { Link } from 'react-router-dom';
 import './WalletWithdrawalForm.pcss';
 import Select from 'react-select';
 import { CustomStylesSelect, CustomInput } from '../../components';
+import { Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
 import { selectCurrencies, Currency } from '../../../modules';
 import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 
 export const WalletWithdrawalForm: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
+    const [showModalWithdrawalConfirmation, setShowModalWithdrawalConfirmation] = React.useState(false);
+    const [showModalWithdrawalSuccessfully, setShowModalWithdrawalSuccessfully] = React.useState(false);
+    const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
+    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
     const { currency = '' } = useParams<{ currency?: string }>();
 
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -34,6 +39,65 @@ export const WalletWithdrawalForm: React.FC = () => {
         };
     });
 
+    const renderHeaderModalWithdrawalConfirmation = () => {
+        return (
+            <React.Fragment>
+                <h6 className="text-md white-text font-semibold mb-0">Withdraw Confirmation</h6>
+            </React.Fragment>
+        );
+    };
+
+    const renderContentModalWithdrawalConfirmation = () => {
+        return (
+            <React.Fragment>
+                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10">
+                    Please check the target address carefully before confirming the withdrawal.
+                </div>
+                <p className="text-ms grey-text-accent font-semibold mb-24">
+                    You've requested to withdraw 0.0233 ETH, Are you sure to do Withdraw?
+                </p>
+                <div className="d-flex">
+                    <button
+                        className="btn btn-danger sm px-5 mr-3"
+                        onClick={() => setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation)}>
+                        Cancel
+                    </button>
+                    <button
+                        className="btn btn-success sm px-5"
+                        onClick={() => {
+                            setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
+                            setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully);
+                        }}>
+                        Withdraw
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const renderHeaderModalWithdrawalSuccessfully = () => {
+        return (
+            <React.Fragment>
+                <h6 className="text-md white-text font-semibold m-0">Withdrawal has Successfully</h6>
+            </React.Fragment>
+        );
+    };
+
+    const renderContentModalWithdrawalSuccessfully = () => {
+        return (
+            <React.Fragment>
+                <p className="text-ms grey-text-accent font-semibold mb-24">You success to withdraw 0.002 BTC</p>
+                <div className="d-flex">
+                    <button
+                        className="btn btn-danger sm px-5 mr-3"
+                        onClick={() => setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully)}>
+                        Cancel
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
     return (
         <React.Fragment>
             <div>
@@ -47,28 +111,32 @@ export const WalletWithdrawalForm: React.FC = () => {
                             styles={CustomStylesSelect}
                             options={optionCurrency}
                         />
-                        {/* <p className="m-0 text-sm grey-text">Min Deposit : {minDepositAmount}</p> */}
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-start select-container mb-24">
                     <p className="text-ms font-extrabold white-text">Select Coin</p>
                     <div className="w-70 position-relative input-add-address">
-                        <CustomInput
-                            type="text"
-                            isDisabled={true}
-                            label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.new' })}
-                            placeholder={''}
-                            defaultLabel="New password"
-                            inputValue={''}
-                            classNameLabel="d-none"
-                            classNameInput={`cursor-pointer dark-bg-accent`}
-                            autoFocus={false}
-                            labelVisible={false}
-                        />
-                        <span className="position-absolute cursor-pointer">
+                        <div onClick={() => setShowModalBeneficiaryList(!showModalBeneficiaryList)}>
+                            <CustomInput
+                                type="text"
+                                isDisabled={true}
+                                label={intl.formatMessage({
+                                    id: 'page.body.profile.header.account.content.password.new',
+                                })}
+                                placeholder={''}
+                                defaultLabel="New password"
+                                inputValue={''}
+                                classNameLabel="d-none"
+                                classNameInput={`cursor-pointer dark-bg-accent`}
+                                autoFocus={false}
+                                labelVisible={false}
+                            />
+                        </div>
+                        <span
+                            onClick={() => setShowModalModalAddBeneficiary(!showModalAddBeneficiary)}
+                            className="position-absolute cursor-pointer">
                             <CirclePlusIcon />
                         </span>
-                        {/* <p className="m-0 text-sm grey-text">Min Deposit : {minDepositAmount}</p> */}
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-start select-container mb-24">
@@ -100,10 +168,36 @@ export const WalletWithdrawalForm: React.FC = () => {
                     <p className="mb-0 text-ms grey-text-accent">Total Withdrawal Amount</p>
                     <p className="mb-0 text-ms grey-text-accent font-bold">0.55 BTC</p>
                 </div>
-                <button className="btn btn-primary btn-block" data-toggle="modal" data-target="#withdraw-confirm">
+                <button
+                    onClick={() => setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation)}
+                    className="btn btn-primary btn-block">
                     Withdraw
                 </button>
             </div>
+
+            {showModalWithdrawalConfirmation && (
+                <Modal
+                    show={showModalWithdrawalConfirmation}
+                    header={renderHeaderModalWithdrawalConfirmation()}
+                    content={renderContentModalWithdrawalConfirmation()}
+                />
+            )}
+
+            {showModalWithdrawalSuccessfully && (
+                <Modal
+                    show={showModalWithdrawalSuccessfully}
+                    header={renderHeaderModalWithdrawalSuccessfully()}
+                    content={renderContentModalWithdrawalSuccessfully()}
+                />
+            )}
+
+            {showModalBeneficiaryList && (
+                <ModalBeneficiaryList
+                    showModalBeneficiaryList={showModalBeneficiaryList}
+                    showModalAddBeneficiary={showModalAddBeneficiary}
+                />
+            )}
+            {showModalAddBeneficiary && <ModalAddBeneficiary showModalAddBeneficiary={showModalAddBeneficiary} />}
         </React.Fragment>
     );
 };

@@ -16,8 +16,9 @@ import {
 } from 'src/modules';
 import { estimateUnitValue } from 'src/helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY } from 'src/constants';
-import { WalletsHeader } from '../../components';
+import { WalletsHeader, Modal } from '../../components';
 import { useHistory } from 'react-router';
+import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIcon';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -34,6 +35,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
+    const [showModalLocked, setShowModalLocked] = React.useState<boolean>(false);
 
     const { formatMessage } = useIntl();
     const { isP2PEnabled } = props;
@@ -151,6 +153,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                           </button>
                           <button
                               onClick={() => handleClickWithdraw(currency)}
+                              //   onClick={() => setShowModalLocked(!showModalLocked)}
                               className="bg-transparent border-none danger-text">
                               {translate('page.body.wallets.overview.action.withdraw')}
                           </button>
@@ -159,10 +162,34 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
               });
     }, [filteredWallets, nonZeroSelected, abilities, currencies, markets, tickers]);
 
-    console.log(wallets, 'INI WALLET');
+    const renderHeaderModalLocked = () => {
+        return (
+            <React.Fragment>
+                <div className="text-center">
+                    <CircleCloseDangerLargeIcon />
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const renderContentModalLocked = () => {
+        return (
+            <React.Fragment>
+                <h1 className="white-text text-lg mb-24">Withdraw Locked</h1>
+                <p className="grey-text text-ms font-extrabold mb-24">To withdraw you have to enable 2FA</p>
+                <div className="d-flex">
+                    <button
+                        className="btn btn-danger sm px-5 mr-3"
+                        onClick={() => setShowModalLocked(!showModalLocked)}>
+                        Enable 2FA
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
 
     return (
-        <div>
+        <React.Fragment>
             <WalletsHeader
                 wallets={wallets}
                 nonZeroSelected={nonZeroSelected}
@@ -172,7 +199,11 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
             />
             <p className="text-sm grey-text-accent mb-8">Asset balance</p>
             <Table header={headerTitles()} data={retrieveData()} />
-        </div>
+
+            {showModalLocked && (
+                <Modal show={showModalLocked} header={renderHeaderModalLocked()} content={renderContentModalLocked()} />
+            )}
+        </React.Fragment>
     );
 };
 

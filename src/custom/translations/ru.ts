@@ -920,6 +920,7 @@ export const ru: LangType = {
     'password.password.password_strength': 'Пароль слишком слабый',
 
     'email.taken': 'Почта уже зарегистрирована',
+    'success.confirm.code.created': 'Аккаунт создан',
 
     'identity.user.invalid_referral_format': 'Неверный формат UID реферала',
     'identity.user.referral_doesnt_exist': 'Реферал не существует',
