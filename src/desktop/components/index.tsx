@@ -17,3 +17,4 @@ export * from './PasswordStrengthMeter';
 export * from './RecentDeposit';
 export * from './InputFile';
 export * from './Modal';
+export * from './KycInputFileComponent';

@@ -1,0 +1,48 @@
+.kyc-screen {
+    &.content-wrapper {
+        position: relative;
+        margin-left: 223px;
+        width: calc(100% - 223px);
+        min-height: 100vh;
+        padding-top: 70px;
+    }
+    .notification {
+        max-width: 738px;
+        width: 100%;
+        .close-icon {
+            svg {
+                position: absolute;
+                right: 10px;
+                top: 16px;
+                cursor: pointer;
+            }
+        }
+    }
+    .nav-tabs {
+        border: 0;
+        .nav-link {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 16px;
+            width: 230px;
+            text-align: center;
+            margin-right: 24px;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 30px;
+            color: var(--text-secondary-color);
+            margin-bottom: 16px;
+            &.active {
+                background: var(--text-gradient-color);
+                color: var(--text-primary-color);
+            }
+        }
+    }
+    .docs {
+        width: 100%;
+        border: 1.5px dashed var(--border-grey-color);
+        border-radius: 6px;
+        padding: 32px;
+    }
+}

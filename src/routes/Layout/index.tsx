@@ -45,6 +45,7 @@ import {
     ProfileTwoFactorAuthScreen,
     Lost2FAScreen,
     TwoFaActivationScreen,
+    KycScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -313,6 +314,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
+                        path="/profile/kyc"
+                        component={KycScreen}
+                    />
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
                         path="/profile"
                         component={ProfileScreen}
                     />
@@ -322,6 +329,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
+
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
                         <Redirect to="/trading/" />

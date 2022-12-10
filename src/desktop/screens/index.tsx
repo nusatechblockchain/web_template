@@ -12,3 +12,4 @@ export * from './ProfileScreen';
 export * from './ReferralScreen';
 export * from './Lost2FAScreen';
 export * from './TwoFaActivationScreen';
+export * from './KycScreen';
