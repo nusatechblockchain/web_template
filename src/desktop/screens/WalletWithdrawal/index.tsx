@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
 import { WalletWithdrawalForm, WalletWithdrawalInfo } from '../../containers';
+import { ModalInternalTransfer } from '../../components';
 import { Table } from '../../../components';
 
 export const WalletWitdrawal: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
     const { currency = '' } = useParams<{ currency?: string }>();
+    const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
     const dataTable = [
         {
@@ -64,6 +66,7 @@ export const WalletWitdrawal: React.FC = () => {
                         </Link>
 
                         <button
+                            onClick={() => setShowModalTransfer(!showModalTransfer)}
                             className="btn btn-secondary radius-sm m-1 text-sm font-bold"
                             data-toggle="modal"
                             data-target="#transfer">
@@ -86,6 +89,8 @@ export const WalletWitdrawal: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {showModalTransfer && <ModalInternalTransfer showModalTransfer={showModalTransfer} />}
         </React.Fragment>
     );
 };
