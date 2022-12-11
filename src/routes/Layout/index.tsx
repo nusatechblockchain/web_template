@@ -50,6 +50,7 @@ import {
     MarketListScreen,
     HistoryTransactionScreen,
     Security,
+    MarketOpen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -327,7 +328,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/profile/kyc"
                         component={KycScreen}
                     />
-                    <PrivateRoute
+                    <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/security"
@@ -345,12 +346,19 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/markets-open"
+                        component={MarketOpen}
+                    />
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/markets"
                         component={MarketListScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
