@@ -47,6 +47,8 @@ import {
     Lost2FAScreen,
     TwoFaActivationScreen,
     KycScreen,
+    MarketListScreen,
+    HistoryTransactionScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -336,7 +338,18 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
-
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/markets"
+                        component={MarketListScreen}
+                    />
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/history-transaction"
+                        component={HistoryTransactionScreen}
+                    />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
                         <Redirect to="/trading/" />
