@@ -1,0 +1,39 @@
+/* main content */
+.profile-security-screen {
+    &.content-wrapper {
+        position: relative;
+        margin-left: 223px;
+        width: calc(100% - 223px);
+        min-height: 100vh;
+        padding-top: 70px;
+        .img-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: middle;
+        }
+        .box {
+            position: relative;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+        .icon-bg {
+            height: 48px;
+            width: 48px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &.pointer {
+                cursor: pointer;
+            }
+        }
+        .check {
+            position: absolute;
+            right: 0;
+            top: 3rem;
+        }
+    }
+}

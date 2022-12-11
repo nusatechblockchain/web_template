@@ -41,8 +41,8 @@ export const ArrowLeftGradient = () => {
                     x2="24.9718"
                     y2="16.8394"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <clipPath id="clip0_1641_14451">
                     <rect width="32" height="32" fill="white" transform="translate(0 0.00585938)" />
