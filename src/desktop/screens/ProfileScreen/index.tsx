@@ -238,7 +238,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </Link>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={''}>
+                                        <Link to={'/profile/kyc'}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <KycProfileIcon />
@@ -272,7 +272,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </button>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={''}>
+                                        <Link to={'/profile/security'}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <SecurityProfileIcon />

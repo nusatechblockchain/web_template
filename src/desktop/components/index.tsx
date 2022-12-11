@@ -22,3 +22,4 @@ export * from './ModalBeneficiaryList';
 export * from './CustomStyleSelect';
 export * from './Modal';
 export * from './KycInputFileComponent';
+export * from './ModalTwoFa';

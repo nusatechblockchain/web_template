@@ -47,6 +47,7 @@ import {
     Lost2FAScreen,
     TwoFaActivationScreen,
     KycScreen,
+    Security,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -323,6 +324,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/profile/kyc"
                         component={KycScreen}
+                    />
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/security"
+                        component={Security}
                     />
                     <PrivateRoute
                         loading={userLoading}
