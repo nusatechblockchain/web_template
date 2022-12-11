@@ -1,0 +1,32 @@
+.market-order-screen {
+    &.content-wrapper {
+        position: relative;
+        margin-left: 223px;
+        width: calc(100% - 223px);
+        min-height: 100vh;
+        .nav-tabs {
+            border: 0;
+        }
+        .nav-link {
+            background: transparent;
+            color: var(--text-secondary-color);
+            padding: 8px 18px;
+            border-radius: 4px;
+            border: 0;
+            margin-right: 24px;
+            &.active {
+                background: var(--button-secondary-color);
+                color: var(--text-primary-color);
+            }
+        }
+        .cancel-all-order {
+            position: absolute;
+            right: 0;
+            top: 0;
+            .small-icon {
+                width: 14px;
+                margin-left: 6px;
+            }
+        }
+    }
+}

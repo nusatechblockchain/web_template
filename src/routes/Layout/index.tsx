@@ -51,6 +51,7 @@ import {
     HistoryTransactionScreen,
     Security,
     MarketDetailScreen,
+    MarketOpen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -260,12 +261,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         return (
             <div className={desktopCls}>
                 <Switch>
-                    <PublicRoute
-                        loading={userLoading}
-                        isLogged={isLoggedIn}
-                        path="/signin"
-                        component={HistoryTransactionScreen}
-                    />
+                    <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signin" component={SignInScreen} />
                     <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signup" component={SignUpScreen} />
                     <PrivateRoute
                         loading={userLoading}
@@ -351,19 +347,26 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
-                    <PublicRoute
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/markets/:currency/detail"
                         component={MarketDetailScreen}
                     />
-                    <PublicRoute
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/markets-open"
+                        component={MarketOpen}
+                    />
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/markets"
                         component={MarketListScreen}
                     />
-                    <PublicRoute
+
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/history-transaction"

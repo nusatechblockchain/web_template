@@ -53,7 +53,7 @@ export interface SidebarState {
     dataWallet: any;
 }
 
-const sidebarProfile = ['/profile', '/profile/referral', '/profile/api-key', '/security/2fa'];
+const sidebarProfile = ['/profile', '/profile/referral', '/profile/api-key', '/markets-open', '/security/2fa'];
 const sidebarWallet = ['/wallets', '/history-transaction'];
 
 type Props = DispatchProps & LocationProps;
