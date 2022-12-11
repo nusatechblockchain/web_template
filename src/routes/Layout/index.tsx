@@ -47,6 +47,8 @@ import {
     Lost2FAScreen,
     TwoFaActivationScreen,
     KycScreen,
+    MarketListScreen,
+    HistoryTransactionScreen,
     Security,
 } from '../../desktop/screens';
 
@@ -343,7 +345,18 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
-
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/markets"
+                        component={MarketListScreen}
+                    />
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/history-transaction"
+                        component={HistoryTransactionScreen}
+                    />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
                         <Redirect to="/trading/" />

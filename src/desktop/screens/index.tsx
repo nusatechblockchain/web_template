@@ -14,4 +14,6 @@ export * from './Lost2FAScreen';
 export * from './WalletWithdrawal';
 export * from './TwoFaActivationScreen';
 export * from './KycScreen';
+export * from './MarketListScreen';
+export * from './HistoryTransactionScreen';
 export * from './ProfileSecurityScreen';
