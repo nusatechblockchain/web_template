@@ -325,7 +325,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/profile/kyc"
                         component={KycScreen}
                     />
-                    <PublicRoute
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/security"
