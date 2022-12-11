@@ -29,3 +29,4 @@ export * from './MarketFuturesTabs';
 export * from './MarketNewListingTabs';
 export * from './MarketSpotTabs';
 export * from './ModalTwoFa';
+export * from './CardMarketDetail';

@@ -17,3 +17,5 @@ export * from './WalletWithdrawalForm';
 export * from './WalletWithdrawalInfo';
 export * from './MarketListHeader';
 export * from './MarketListTable';
+export * from './MarketDetailCalculator';
+export * from './MarketDetailInfo';
