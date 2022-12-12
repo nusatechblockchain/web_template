@@ -278,44 +278,6 @@ const MarketsTableComponent = (props) => {
                         Most popular coins to trade
                     </p>
                     <div className="market-list">
-                        {/* <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                            <li className="nav-item">
-                                <a
-                                    className="nav-link active"
-                                    id="pills-deposit-tab"
-                                    data-toggle="pill"
-                                    href="#pills-deposit"
-                                    role="tab"
-                                    aria-controls="pills-deposit"
-                                    aria-selected="true">
-                                    Hot List
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    id="pills-withdrawl-tab"
-                                    data-toggle="pill"
-                                    href="#pills-withdrawl"
-                                    role="tab"
-                                    aria-controls="pills-withdrawl"
-                                    aria-selected="false">
-                                    New Coins
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    id="pills-transfer-tab"
-                                    data-toggle="pill"
-                                    href="#pills-transfer"
-                                    role="tab"
-                                    aria-controls="pills-transfer"
-                                    aria-selected="false">
-                                    Top Gainers
-                                </a>
-                            </li>
-                        </ul> */}
                         <TickerTable
                             currentBidUnit={currentBidUnit}
                             currentBidUnitsList={currentBidUnitsList}

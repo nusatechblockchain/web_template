@@ -53,6 +53,7 @@ import {
     MarketDetailScreen,
     MarketOpen,
     TradingFutureScreen,
+    TradingScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -287,6 +288,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/email-verification"
                         component={EmailVerificationScreen}
+                    />
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/trading"
+                        component={TradingScreen}
                     />
                     <PublicRoute
                         loading={userLoading}

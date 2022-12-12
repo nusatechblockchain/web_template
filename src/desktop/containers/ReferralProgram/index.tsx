@@ -69,7 +69,7 @@ class ReferralProgramClass extends React.Component<Props> {
             },
         ];
         return (
-            <div className="content-wrapper dark-bg-accent">
+            <div className="referral-program content-wrapper dark-bg-accent">
                 <div className="header dark-bg-main py-4 px-24 mb-24">
                     <h2 className="mb-0 text-xl white-text font-bold pt-2">Refferal Bonus</h2>
                 </div>
