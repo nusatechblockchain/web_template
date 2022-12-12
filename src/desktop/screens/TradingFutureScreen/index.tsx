@@ -4,6 +4,7 @@ import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
 import { selectCurrencies } from 'src/modules';
 import { Link } from 'react-router-dom';
 import {
+    OpenOrders,
     TradingFutureChart,
     TradingFutureOrderBook,
     TradingFutureOrderForm,
@@ -39,8 +40,8 @@ export const TradingFutureScreen: FC = (): ReactElement => {
                                 <TradingFutureOrderForm />
                             </div>
 
-                            <div className="grid-item open-orders mt-50">
-                                <h1>Ini Open Order</h1>
+                            <div className="grid-item open-orders mt-24 p-3">
+                                <OpenOrders />
                             </div>
                         </div>
                     </div>
