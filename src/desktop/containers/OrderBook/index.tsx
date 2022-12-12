@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
 
 const OrderBookComponent = (props) => {
+    const MarketDeal = 1; //dummy value
     return (
         <React.Fragment>
             <div className="p-3">
@@ -189,8 +191,8 @@ const OrderBookComponent = (props) => {
                     </table>
                 </div>
                 <div className="price-highlight py-3">
-                    <h3 className="green-text text-md font-bold mb-0">
-                        0.059132 <img src="../../Assets/Icon/trade-up.svg" className="ml-2" alt="trade-up" />
+                    <h3 className={`text-md font-bold mb-0 ${MarketDeal > 0 ? 'green-text' : 'danger-text'}`}>
+                        0.059132 {MarketDeal > 0 ? <TradeUp /> : <TradeDown />}
                     </h3>
                 </div>
                 <div className="max-400 position-relative">

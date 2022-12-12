@@ -49,7 +49,8 @@ export interface HeaderState {
     showProfileDropdown: boolean;
 }
 
-const authHeader = ['/signin', '/signup', '/email-verification', '/forgot_password', '/password_reset', 'trading'];
+const authHeader = ['/signin', '/signup', '/email-verification', '/forgot_password', '/password_reset', '/trading'];
+const tradingHeader = ['/trading'];
 
 type Props = ReduxProps & DispatchProps & IntlProps & LocationProps & OwnProps;
 
@@ -65,6 +66,8 @@ class Head extends React.Component<Props, HeaderState> {
 
     public render() {
         const thisAuthHeader = authHeader.some((r) => location.pathname.includes(r)) && location.pathname !== '/';
+        const thisTradingHeader = tradingHeader.some((r) => location.pathname.includes(r));
+
         const { showLanguage, showProfileDropdown } = this.state;
         const { isLoggedIn } = this.props;
 
@@ -76,13 +79,12 @@ class Head extends React.Component<Props, HeaderState> {
         const SelectMarketTrade = {
             control: (provided, state) => ({
                 ...provided,
-                // borderColor: 'rgba(35, 38, 47)',
                 border: 'none',
                 background: 'var(--main-background-color)',
                 borderRadius: '4px',
                 boxShadow: state.isFocused ? null : null,
-                padding: '12px 16px',
-                marginBottom: '24px',
+                padding: '6px',
+                marginBottom: '0',
                 cursor: 'pointer',
                 '&:hover': {
                     borderColor: 'rgba(35, 38, 47)',
@@ -229,7 +231,7 @@ class Head extends React.Component<Props, HeaderState> {
                                         </Link>
                                     </li>
                                 </ul>
-                            ) : (
+                            ) : thisTradingHeader ? (
                                 <ul className="navbar-nav main-navbar align-items-center">
                                     <li className="nav-item dropdown market-dropdown ">
                                         <Select
@@ -271,6 +273,8 @@ class Head extends React.Component<Props, HeaderState> {
                                         </div>
                                     </li>
                                 </ul>
+                            ) : (
+                                ''
                             )}
                         </div>
 
