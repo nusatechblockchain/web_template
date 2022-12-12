@@ -1,6 +1,49 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { SearchIcon } from '../../../assets/images/ProfileIcon';
+import { Decimal } from '../../../components';
+import { useMarketsFetch, useMarketsTickersFetch } from '../../../hooks';
+import {
+    selectCurrencies,
+    selectMarketTickers,
+    MarketsTickersData,
+    Currency,
+    selectMarkets,
+    Market,
+} from '../../../modules';
+
+const defaultTicker = {
+    amount: '0.0',
+    last: '0.0',
+    high: '0.0',
+    open: '0.0',
+    low: '0.0',
+    price_change_percent: '+0.00%',
+    volume: '0.0',
+};
 
 const MarketListTradeComponent = (props) => {
+    useMarketsFetch();
+    useMarketsTickersFetch();
+    const markets = useSelector(selectMarkets);
+    const marketTickers = useSelector(selectMarketTickers);
+    const currencies: Currency[] = useSelector(selectCurrencies);
+
+    const marketList = markets
+        .map((market) => ({
+            ...market,
+            currency: currencies.find((cur) => cur.id == market.base_unit),
+            last: Decimal.format(Number((marketTickers[market.id] || defaultTicker).last), market.amount_precision),
+            open: Decimal.format(Number((marketTickers[market.id] || defaultTicker).open), market.price_precision),
+        }))
+        .map((market) => ({
+            ...market,
+            change: Decimal.format(
+                (+market.last - +market.open).toFixed(market.price_precision),
+                market.price_precision
+            ),
+        }));
+
     return (
         <React.Fragment>
             <div className="p-3">
@@ -13,7 +56,7 @@ const MarketListTradeComponent = (props) => {
                             id="search"
                             placeholder="Search Coin"
                         />
-                        <img src="../../Assets/Icon/profile-search.svg" className="search-icon" alt="search icon" />
+                        <SearchIcon className="search-icon" />
                     </div>
                 </div>
                 <div className="max-300 position-relative mt-2">
@@ -21,161 +64,49 @@ const MarketListTradeComponent = (props) => {
                         <thead>
                             <tr>
                                 <th className="grey-text-accent text-left">Price</th>
-                                <th className="grey-text-accent text-right">Amount</th>
-                                <th className="grey-text-accent text-right">Time</th>
+                                <th className="grey-text-accent text-right text-nowrap">Last Price</th>
+                                <th className="grey-text-accent text-right">Change</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="mr-3 d-flex align-items-center">
-                                            <span className="cr-crypto-icon">
-                                                <img src="../../Assets/Icon/Coin/eth.svg" alt="btc icon" />
-                                            </span>
-                                            <div className="name ml-3">
-                                                <p className="text-sm text-white font-bold mb-0">ETH</p>
-                                                <span className="text-xs grey-text-accent">Etherum</span>
+                            {marketList &&
+                                marketList.map((item) => (
+                                    <tr>
+                                        <td>
+                                            <div className="d-flex justify-content-between">
+                                                <div className="mr-0 d-flex align-items-center">
+                                                    <span className="cr-crypto-icon">
+                                                        <img
+                                                            src={item.currency.icon_url}
+                                                            className="small-coin-icon"
+                                                            alt="btc icon"
+                                                        />
+                                                    </span>
+                                                    <div className="name ml-3">
+                                                        <p className="text-sm text-white font-bold mb-0">
+                                                            {item.currency.id.toUpperCase()}
+                                                        </p>
+                                                        <span className="text-xs grey-text-accent">
+                                                            {item.currency.name.toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs green-text my-auto  mb-0 text-right">20,245.22</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs mb-0 green-text text-right">+4.50%</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="mr-3 d-flex align-items-center">
-                                            <span className="cr-crypto-icon">
-                                                <img src="../../Assets/Icon/Coin/eth.svg" alt="btc icon" />
-                                            </span>
-                                            <div className="name ml-3">
-                                                <p className="text-sm text-white font-bold mb-0">ETH</p>
-                                                <span className="text-xs grey-text-accent">Etherum</span>
+                                        </td>
+                                        <td>
+                                            <div className="py-2">
+                                                <p className="text-xs green-text my-auto  mb-0 text-right">
+                                                    {item.last}
+                                                </p>
                                             </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs green-text my-auto  mb-0 text-right">20,245.22</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs mb-0 green-text text-right">+4.50%</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="mr-3 d-flex align-items-center">
-                                            <span className="cr-crypto-icon">
-                                                <img src="../../Assets/Icon/Coin/eth.svg" alt="btc icon" />
-                                            </span>
-                                            <div className="name ml-3">
-                                                <p className="text-sm text-white font-bold mb-0">ETH</p>
-                                                <span className="text-xs grey-text-accent">Etherum</span>
+                                        </td>
+                                        <td>
+                                            <div className="py-2">
+                                                <p className="text-xs mb-0 green-text text-right">{item.change}%</p>
                                             </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs green-text my-auto  mb-0 text-right">20,245.22</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs mb-0 green-text text-right">+4.50%</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="mr-3 d-flex align-items-center">
-                                            <span className="cr-crypto-icon">
-                                                <img src="../../Assets/Icon/Coin/eth.svg" alt="btc icon" />
-                                            </span>
-                                            <div className="name ml-3">
-                                                <p className="text-sm text-white font-bold mb-0">ETH</p>
-                                                <span className="text-xs grey-text-accent">Etherum</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs green-text my-auto  mb-0 text-right">20,245.22</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs mb-0 green-text text-right">+4.50%</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="mr-3 d-flex align-items-center">
-                                            <span className="cr-crypto-icon">
-                                                <img src="../../Assets/Icon/Coin/eth.svg" alt="btc icon" />
-                                            </span>
-                                            <div className="name ml-3">
-                                                <p className="text-sm text-white font-bold mb-0">ETH</p>
-                                                <span className="text-xs grey-text-accent">Etherum</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs green-text my-auto  mb-0 text-right">20,245.22</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs mb-0 green-text text-right">+4.50%</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="mr-3 d-flex align-items-center">
-                                            <span className="cr-crypto-icon">
-                                                <img src="../../Assets/Icon/Coin/eth.svg" alt="btc icon" />
-                                            </span>
-                                            <div className="name ml-3">
-                                                <p className="text-sm text-white font-bold mb-0">ETH</p>
-                                                <span className="text-xs grey-text-accent">Etherum</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs green-text my-auto  mb-0 text-right">20,245.22</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="py-2">
-                                        <p className="text-xs mb-0 green-text text-right">+4.50%</p>
-                                    </div>
-                                </td>
-                            </tr>
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 </div>

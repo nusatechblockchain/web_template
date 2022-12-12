@@ -33,6 +33,8 @@ const MarketsTableComponent = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const markets = useSelector(selectMarkets);
+    console.log(markets);
+
     const marketTickers = useSelector(selectMarketTickers);
     const currencies = useSelector(selectCurrencies);
     const userData = useSelector(selectUserInfo);
