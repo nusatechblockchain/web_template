@@ -1,0 +1,45 @@
+/* main content  */
+.pg-trading-future-screen.content-wrapper {
+    min-height: 100vh;
+}
+
+/* grid trade */
+.pg-trading-future-screen .content-wrapper .grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    grid-template-rows: 225px 225px 350px 400px;
+}
+
+.pg-trading-future-screen .content-wrapper .grid-wrapper .grid-item {
+    background: var(--main-background-color);
+}
+
+.pg-trading-future-screen .content-wrapper .grid-wrapper .grid-item.chart {
+    grid-column: 1/15;
+    grid-row: 1/4;
+}
+
+.pg-trading-future-screen .content-wrapper .grid-wrapper .grid-item.order-book {
+    grid-column: 15/20;
+    grid-row: 1/3;
+}
+
+.pg-trading-future-screen .content-wrapper .grid-wrapper .grid-item.recent-trades {
+    grid-row: 3/4;
+    grid-column: 15/20;
+}
+
+.pg-trading-future-screen .content-wrapper .grid-wrapper .grid-item.order-form {
+    grid-row: 1/3;
+    grid-column: 20/25;
+}
+
+.pg-trading-future-screen .content-wrapper .grid-wrapper .grid-item.open-orders {
+    grid-row: 4/5;
+    grid-column: 1/25;
+}
+
+/* .pg-trading-future-screen .content-wrapper .grid-wrapper #tradingview_2d0d5 {
+    height: 800px;
+} */
+/* end grid trade */
