@@ -50,6 +50,7 @@ import {
     MarketListScreen,
     HistoryTransactionScreen,
     Security,
+    MarketDetailScreen,
     MarketOpen,
     TradingScreen,
 } from '../../desktop/screens';
@@ -353,7 +354,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
-                    <PublicRoute
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/markets/:currency/detail"
+                        component={MarketDetailScreen}
+                    />
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/markets-open"

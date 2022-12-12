@@ -17,5 +17,6 @@ export * from './KycScreen';
 export * from './MarketListScreen';
 export * from './HistoryTransactionScreen';
 export * from './ProfileSecurityScreen';
+export * from './MarketDetailScreen';
 export * from './MarketOpen';
 export * from './TradingScreen';

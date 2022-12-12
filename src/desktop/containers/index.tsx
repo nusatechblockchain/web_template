@@ -23,3 +23,5 @@ export * from './OrderForm';
 export * from './MarketListTrade';
 export * from './RecentTrades';
 export * from './Charts';
+export * from './MarketDetailCalculator';
+export * from './MarketDetailInfo';
