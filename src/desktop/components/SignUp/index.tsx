@@ -291,7 +291,9 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     <div className="invalid-feedback">{renderUsernameError(username)}</div>
                 ) : null} */}
                 {usernameFocused && !username.match(USERNAME_REGEX) && (
-                    <p className="text-xs danger-text m-0 mb-24">Username must be at least 4 characters long</p>
+                    <p className="text-xs danger-text m-0 mb-24">
+                        Username must be at least 4 characters long and maximum 12 characters
+                    </p>
                 )}
             </div>
 
