@@ -27,7 +27,7 @@ export const WalletsScreen: FC = (): ReactElement => {
                                 Trade History
                             </button>
                         </Link>
-                        <Link to={`/wallets/transaction-history`}>
+                        <Link to={`/history-transaction`}>
                             <button type="button" className="btn-secondary radius-sm text-sm white-text font-bold">
                                 Transaction History
                             </button>

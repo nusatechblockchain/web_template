@@ -152,7 +152,9 @@ const WalletDepositBody = (props) => {
         }
 
         if (!blockchainNetwork && currencyItem.networks && currencyItem.type !== 'fiat') {
-            setBlockchainNetwork(currencyItem.networks[0].protocol);
+            setBlockchainNetwork(
+                currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
+            );
         }
     }, [depositAddress, currencyItem, blockchainNetwork]);
 
@@ -237,7 +239,7 @@ const WalletDepositBody = (props) => {
                                     Generate Address
                                 </button>
                             ) : (
-                                <div className="navbar navbar-expand-lg mb-24">
+                                <div className="navbar position-relative navbar-expand-lg mb-24">
                                     <div className="collapse navbar-collapse">
                                         <ul className="navbar-nav">
                                             {networks.map((network) => (
