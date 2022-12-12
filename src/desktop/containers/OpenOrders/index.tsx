@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Sell, Buy } from '../../../assets/images/TradeIcon';
 
 const OpenOrdersComponent = (props) => {
     return (
@@ -11,11 +12,11 @@ const OpenOrdersComponent = (props) => {
                             <p className="text-sm grey-text font-bold mb-0 mr-2">Sort by: </p>
                             <button className="btn btn-transparent w-auto danger-text text-sm font-bold">
                                 Sell
-                                <img src="../../Assets/Icon/sell.svg" />
+                                <Sell />
                             </button>
                             <button className="btn btn-transparent w-auto contrast-text text-sm font-bold">
                                 Buy
-                                <img src="../../Assets/Icon/buy.svg" />
+                                <Buy />
                             </button>
                             <div className="form-group form-check mb-0">
                                 <input type="checkbox" className="form-check-input" id="hide-all" />

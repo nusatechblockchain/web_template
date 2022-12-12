@@ -31,3 +31,31 @@ export const TradeDown = (className) => {
         </svg>
     );
 };
+
+export const Sell = () => {
+    return (
+        <svg width={31} height={32} viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="7.23047" y={11} width={9} height={1} rx="0.5" fill="#FF4445" />
+            <rect x="7.23047" y={15} width={7} height={1} rx="0.5" fill="#FF4445" />
+            <rect x="7.23047" y={19} width={4} height={1} rx="0.5" fill="#FF4445" />
+        </svg>
+    );
+};
+
+export const Buy = () => {
+    return (
+        <svg width={31} height={32} viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect
+                x="23.2305"
+                y={21}
+                width={10}
+                height={1}
+                rx="0.5"
+                transform="rotate(-180 23.2305 21)"
+                fill="#24AE8F"
+            />
+            <rect x="23.2305" y={17} width={7} height={1} rx="0.5" transform="rotate(-180 23.2305 17)" fill="#24AE8F" />
+            <rect x="23.2305" y={13} width={5} height={1} rx="0.5" transform="rotate(-180 23.2305 13)" fill="#24AE8F" />
+        </svg>
+    );
+};
