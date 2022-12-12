@@ -25,3 +25,7 @@ export * from './RecentTrades';
 export * from './Charts';
 export * from './MarketDetailCalculator';
 export * from './MarketDetailInfo';
+export * from './TradingFutureChart';
+export * from './TradingFutureOrderBook';
+export * from './TradingFutureOrderForm';
+export * from './TradingFutureRecentTrades';

@@ -52,6 +52,7 @@ import {
     Security,
     MarketDetailScreen,
     MarketOpen,
+    TradingFutureScreen,
     TradingScreen,
 } from '../../desktop/screens';
 
@@ -378,6 +379,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/history-transaction"
                         component={HistoryTransactionScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/trading-future"
+                        component={TradingFutureScreen}
                     />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
