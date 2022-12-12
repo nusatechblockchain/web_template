@@ -15,7 +15,7 @@ export const WalletsScreen: FC = (): ReactElement => {
 
     return (
         <React.Fragment>
-            <div className="content-wrapper dark-bg-main">
+            <div className="wallet-screen content-wrapper dark-bg-main">
                 <div className="d-flex justify-content-between align-items-center mb-24">
                     <h1 className="text-xl white-text">Wallet Overview</h1>
 

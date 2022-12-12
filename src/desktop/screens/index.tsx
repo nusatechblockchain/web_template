@@ -18,3 +18,4 @@ export * from './MarketListScreen';
 export * from './HistoryTransactionScreen';
 export * from './ProfileSecurityScreen';
 export * from './MarketOpen';
+export * from './TradingScreen';
