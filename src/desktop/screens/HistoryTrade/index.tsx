@@ -4,6 +4,7 @@ import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
 import { selectCurrencies, Currency } from 'src/modules';
 import { Table } from 'src/components';
 import { CustomStylesSelect } from 'src/desktop/components';
+import { BtcIcon } from '../../../assets/images/CoinIcon';
 import Select from 'react-select';
 
 export const HistoryTrade: FC = (): ReactElement => {
@@ -15,113 +16,63 @@ export const HistoryTrade: FC = (): ReactElement => {
     const dataOpen = [
         {
             date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
             type: 'Buy',
+            market: 'Limit Order',
+            assets: (
+                <div>
+                    <BtcIcon /> BTC
+                </div>
+            ),
+            volume: '1 BTC',
             price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
+            total: '$ 252.125.536',
+            status: 'Success',
         },
         {
             date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
             type: 'Buy',
+            market: 'Limit Order',
+            assets: (
+                <div>
+                    <BtcIcon /> BTC
+                </div>
+            ),
+            volume: '1 BTC',
             price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
+            total: '$ 252.125.536',
+            status: 'Success',
         },
         {
             date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
             type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
             market: 'Limit Order',
-            type: 'Buy',
+            assets: (
+                <div>
+                    <BtcIcon /> BTC
+                </div>
+            ),
+            volume: '1 BTC',
             price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-    ];
-
-    const dataClose = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
+            total: '$ 252.125.536',
+            status: 'Success',
         },
     ];
 
     const getTableHeaders = () => {
-        return ['Date', 'Market', 'Type', 'Price', 'Volume', 'Executed', 'Unexecuted', 'Status'];
+        return ['Date', 'Type', 'Market', 'Assets', 'Volume', 'Price', 'Total', 'Status'];
     };
 
     const getTableData = (data) => {
         return data.map((item) => [
             <p className="m-0 text-sm white-text">{item.date}</p>,
-            <p className="m-0 text-sm white-text">{item.market}</p>,
             <p className={`m-0 text-sm ${item.type == 'Buy' ? 'green-text' : 'danger-text'}`}>{item.type}</p>,
+            <p className="m-0 text-sm white-text">{item.market}</p>,
+            <p className="m-0 text-sm white-text">{item.assets}</p>,
+            <p className="m-0 text-sm white-text">{item.volume}</p>,
             <p className="m-0 text-sm white-text">{item.price}</p>,
-            <p className="m-0 text-sm white-text text-italic">{item.volume}</p>,
-            <p className="m-0 text-sm white-text text-italic">{item.executed}</p>,
-            <p className="m-0 text-sm white-text text-italic">{item.unexecuted}</p>,
-            <button className="btn btn-sm btn-danger text-sm font-normal">Cancle Button</button>,
+            <p className="m-0 text-sm white-text">{item.total}</p>,
+            <p className="m-0 text-sm green-text">{item.status}</p>,
+            <p></p>,
         ]);
     };
 
@@ -196,8 +147,8 @@ export const HistoryTrade: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="history-trade-screen content-wrapper dark-bg-main">
-                <div className="px-24 dark-bg-main pt-5">
-                    <h1 className="m-0 white-text text-xl">Market Orders</h1>
+                <div className="px-24 dark-bg-main pt-4 pb-4">
+                    <h1 className="m-0 white-text text-xl">Trade History</h1>
                 </div>
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="position-relative">{renderFilter()}</div>
