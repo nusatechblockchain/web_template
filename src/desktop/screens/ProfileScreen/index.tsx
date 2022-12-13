@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState } from 'react';
+import React, { FC, ReactElement, useState, useEffect } from 'react';
 import { ProfileAuthDetails } from '../../containers';
 import { useDocumentTitle } from 'src/hooks';
 import { Link, useHistory } from 'react-router-dom';
@@ -23,17 +23,18 @@ import {
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { ProfileDeviceTable } from '../../containers';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserInfo, selectSignInRequire2FA } from '../../../modules';
+import { selectUserInfo, toggle2faFetch, selectTwoFactorAuthSuccess } from '../../../modules';
 import { Modal, CustomInput } from '../../components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
-
-    const require2FA = useSelector(selectSignInRequire2FA);
+    const twoFactorDisabledSuccess = useSelector(selectTwoFactorAuthSuccess);
     const history = useHistory();
     const dispatch = useDispatch();
+
+    console.log(user);
 
     const [showModal2Fa, setShowModal2FA] = useState(false);
     const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
@@ -53,7 +54,12 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const handleFetchTwoFaGoogle = () => {
-        require2FA ? setShowModal2FAGoogle(!showModal2FaGoogle) : history.push('/two-fa-activation');
+        user.otp ? setShowModal2FAGoogle(!showModal2FaGoogle) : history.push('/two-fa-activation');
+    };
+
+    const handleDisableTwoFactor = async () => {
+        await dispatch(toggle2faFetch({ code: twoFaGoogleValue, enable: false }));
+        setShowModal2FAGoogle(!showModal2FaGoogle);
     };
 
     // render two fa phone modal
@@ -183,8 +189,8 @@ export const ProfileScreen: FC = (): ReactElement => {
                         type="button"
                         className="btn btn-primary btn-block"
                         data-dismiss="modal"
-                        onClick={handleFetchTwoFaGoogle}>
-                        Next
+                        onClick={handleDisableTwoFactor}>
+                        Disable
                     </button>
                 </div>
             </React.Fragment>
@@ -279,7 +285,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                 <div className="ml-3 mr-3">
                                                     <p className="mb-1 text-ms font-normal white-text">Security</p>
                                                     <span className="d-block text-left text-xs contrast-text font-normal ">
-                                                        Enabled
+                                                        Disabled
                                                     </span>
                                                 </div>
                                                 <div className="check">
@@ -298,13 +304,17 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                     <p className="mb-1 text-ms font-normal white-text">Google Auth</p>
                                                     <span
                                                         id="two-fa-text"
-                                                        className="d-block text-left text-xs contrast-text font-normal ">
-                                                        Enabled
+                                                        className={`d-block text-left text-xs font-normal ${
+                                                            user.otp ? 'contrast-text' : 'danger-text'
+                                                        }`}>
+                                                        {user.otp ? 'Enabled' : 'Disabled'}
                                                     </span>
                                                 </div>
-                                                <div className="check">
-                                                    <CheckIcon />
-                                                </div>
+                                                {user.otp && (
+                                                    <div className="check">
+                                                        <CheckIcon />
+                                                    </div>
+                                                )}
                                             </div>
                                         </button>
                                     </div>
