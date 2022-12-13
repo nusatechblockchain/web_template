@@ -220,6 +220,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                 this.props.history.push('/trading/');
             }
         }
+
+        if (
+            this.props.location.pathname === '/wallets/deposit' ||
+            this.props.location.pathname === '/wallets/withdraw'
+        ) {
+            this.props.history.push('/wallets');
+        }
     }
 
     public componentWillUnmount() {
@@ -338,7 +345,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/profile/kyc"
                         component={KycScreen}
                     />
-                    <PublicRoute
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/security"

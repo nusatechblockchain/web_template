@@ -114,7 +114,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-start select-container mb-24">
-                    <p className="text-ms font-extrabold white-text">Select Coin</p>
+                    <p className="text-ms font-extrabold white-text">Select Address</p>
                     <div className="w-70 position-relative input-add-address">
                         <div onClick={() => setShowModalBeneficiaryList(!showModalBeneficiaryList)}>
                             <CustomInput

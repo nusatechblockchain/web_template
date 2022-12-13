@@ -8,8 +8,10 @@ import { IntlProps } from '../../../';
 import {
     Market,
     RootState,
+    Currency,
     selectCurrentColorTheme,
     selectCurrentMarket,
+    selectCurrencies,
     setMobileWalletUi,
     toggleMarketSelector,
 } from '../../../modules';
@@ -34,6 +36,7 @@ import './Sidebar.pcss';
 interface ReduxProps {
     currentMarket: Market | undefined;
     colorTheme: string;
+    currencies: Currency | any;
 }
 
 interface DispatchProps {
@@ -50,11 +53,18 @@ export interface SidebarState {
     menuProfileActive: string;
     menuWalletActive: string;
     dataProfile: any;
-    dataWallet: any;
 }
 
-const sidebarProfile = ['/profile', '/profile/referral', '/profile/api-key', '/markets-open', '/security/2fa'];
-const sidebarWallet = ['/wallets', '/history-transaction'];
+const sidebarProfile = [
+    '/profile',
+    '/profile/referral',
+    '/profile/api-key',
+    '/markets-open',
+    '/security/2fa',
+    '/wallets',
+    '/history-transaction',
+    '/trade-history',
+];
 
 type Props = DispatchProps & LocationProps;
 
@@ -66,7 +76,6 @@ class Side extends React.Component<Props, SidebarState> {
             menuProfileActive: 'Dashboard',
             menuWalletActive: 'Overview',
             dataProfile: [],
-            dataWallet: [],
         };
     }
 
@@ -92,7 +101,7 @@ class Side extends React.Component<Props, SidebarState> {
                             fillColor={this.state.menuProfileActive === 'Market Order' ? '#F2F0FF' : '#B5B3BC'}
                         />
                     ),
-                    path: '/market-order',
+                    path: '/markets-open',
                 },
                 {
                     name: 'Trade History',
@@ -117,7 +126,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <SecurityIcon fillColor={this.state.menuProfileActive === 'Security' ? '#F2F0FF' : '#B5B3BC'} />
                     ),
-                    path: '/security',
+                    path: '/profile/security',
                 },
                 {
                     name: 'Referral',
@@ -133,7 +142,7 @@ class Side extends React.Component<Props, SidebarState> {
                             fillColor={this.state.menuProfileActive === 'API Management' ? '#F2F0FF' : '#B5B3BC'}
                         />
                     ),
-                    path: '/api-management',
+                    path: '/profile/api-key',
                 },
                 {
                     name: 'Announcement',
@@ -150,67 +159,17 @@ class Side extends React.Component<Props, SidebarState> {
                     path: '/faq',
                 },
             ],
-            dataWallet: [
-                {
-                    name: 'Overview',
-                    icon: (
-                        <OverviewIcon fillColor={this.state.menuWalletActive === 'Overview' ? '#F2F0FF' : '#B5B3BC'} />
-                    ),
-                    path: '/wallets',
-                },
-                {
-                    name: 'Deposit',
-                    icon: <DepositIcon fillColor={this.state.menuWalletActive === 'Deposit' ? '#F2F0FF' : '#B5B3BC'} />,
-                    path: '/wallets/deposit',
-                },
-                {
-                    name: 'Withdrawl',
-                    icon: (
-                        <WithdrawlIcon
-                            fillColor={this.state.menuWalletActive === 'Withdrawl' ? '#F2F0FF' : '#B5B3BC'}
-                        />
-                    ),
-                    path: '/wallets/withdrawl',
-                },
-                {
-                    name: 'Internal Transfer',
-                    icon: (
-                        <InternalTransferIcon
-                            fillColor={this.state.menuWalletActive === 'Internal Transfer' ? '#F2F0FF' : '#B5B3BC'}
-                        />
-                    ),
-                    path: '/wallets/internal-transfer',
-                },
-                {
-                    name: 'Market Order',
-                    icon: (
-                        <AnalysIcon
-                            fillColor={this.state.menuWalletActive === 'Market Order' ? '#F2F0FF' : '#B5B3BC'}
-                        />
-                    ),
-                    path: '/market-order',
-                },
-                {
-                    name: 'Trade History',
-                    icon: (
-                        <CalendarIcon
-                            fillColor={this.state.menuWalletActive === 'Trade History' ? '#F2F0FF' : '#B5B3BC'}
-                        />
-                    ),
-                    path: '/trade-history',
-                },
-            ],
         });
     }
 
     public render() {
-        const thisSidebarProfile = sidebarProfile.some((r) => location.pathname.includes(r));
-        const thisSidebarWallet = sidebarWallet.some(
+        const thisSidebarProfile = sidebarProfile.some(
             (r) =>
                 location.pathname.includes(r) &&
                 !location.pathname.includes('deposit') &&
                 !location.pathname.includes('withdraw')
         );
+
         return (
             <React.Fragment>
                 {thisSidebarProfile && (
@@ -253,53 +212,15 @@ class Side extends React.Component<Props, SidebarState> {
                         </ul>
                     </div>
                 )}
-                {thisSidebarWallet && (
-                    <div className="sidebar dark-bg-main">
-                        <ul>
-                            {this.state.dataWallet.slice(0, 4).map((el, i) => (
-                                <Link key={i} to={`${el.path}`}>
-                                    <li
-                                        onClick={() => this.setState({ menuWalletActive: el.name })}
-                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                        <div className="mr-8">{el.icon}</div>
-                                        <p
-                                            className={`font-bold text-sm mb-0 ${
-                                                this.state.menuWalletActive === el.name ? 'white-text' : 'grey-text'
-                                            }`}>
-                                            {el.name}
-                                        </p>
-                                    </li>
-                                </Link>
-                            ))}
-                        </ul>
-                        <div className="devider"></div>
 
-                        <ul>
-                            {this.state.dataWallet.slice(4).map((el, i) => (
-                                <Link key={i} to={`${el.path}`}>
-                                    <li
-                                        onClick={() => this.setState({ menuWalletActive: el.name })}
-                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                        <div className="mr-8">{el.icon}</div>
-                                        <p
-                                            className={`font-bold text-sm mb-0 ${
-                                                this.state.menuWalletActive === el.name ? 'white-text' : 'grey-text'
-                                            }`}>
-                                            {el.name}
-                                        </p>
-                                    </li>
-                                </Link>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-                {(!thisSidebarProfile || !thisSidebarWallet) && <React.Fragment />}
+                {!thisSidebarProfile && <React.Fragment />}
             </React.Fragment>
         );
     }
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => ({
+    currencies: selectCurrencies(state),
     currentMarket: selectCurrentMarket(state),
     colorTheme: selectCurrentColorTheme(state),
 });
