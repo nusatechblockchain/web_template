@@ -384,6 +384,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
+                        path="/trade-history"
+                        component={HistoryTransactionScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
                         path="/trading-future"
                         component={TradingFutureScreen}
                     />

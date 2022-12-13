@@ -9,7 +9,7 @@ export interface ModalProps {
     /**
      * Modal header
      */
-    header: React.ReactNode;
+    header?: React.ReactNode;
     /**
      * Content that will be displayed in modal body
      */

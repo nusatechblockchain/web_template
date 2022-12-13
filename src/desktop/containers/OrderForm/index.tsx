@@ -1,9 +1,72 @@
 import * as React from 'react';
+import { Modal } from '../../components';
 
 const OrderFormComponent = (props) => {
     const [orderType, setOrderType] = React.useState('');
     const [orderPrecentageBuy, setOrderPrecentageBuy] = React.useState(0);
     const [orderPrecentageSell, setOrderPrecentageSell] = React.useState(0);
+    const [showModalSell, setShowModalSell] = React.useState(false);
+    const [showModalBuy, setShowModalBuy] = React.useState(false);
+    const [showModalSellSuccess, setShowModalSellSuccess] = React.useState(false);
+
+    const renderModalContentSell = () => (
+        <React.Fragment>
+            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Sell BTC?</h6>
+            <ul className="pl-2 mb-24">
+                <li className="text-ms grey-text-accent font-semibold">Sell in 0.00003324 BTC = $ 857,887,545</li>
+                <li className="text-ms grey-text-accent font-semibold">Total spent $ 12,453</li>
+            </ul>
+            <div className="d-flex">
+                <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalSell(false)}>
+                    Cancel
+                </button>
+                <button className="btn btn-success sm px-5" onClick={handleSellOrder}>
+                    Sell
+                </button>
+            </div>
+        </React.Fragment>
+    );
+
+    const renderModalContentBuy = () => (
+        <React.Fragment>
+            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Buy BTC?</h6>
+            <ul className="pl-2 mb-24">
+                <li className="text-ms grey-text-accent font-semibold">Bought 0.00003324 BTC = $ 212,642,342</li>
+                <li className="text-ms grey-text-accent font-semibold">Total spent $ 12,453</li>
+            </ul>
+            <div className="d-flex">
+                <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalBuy(false)}>
+                    Cancel
+                </button>
+                <button className="btn btn-success sm px-5">Buy</button>
+            </div>
+        </React.Fragment>
+    );
+
+    const renderModalContentSellSuccess = () => (
+        <React.Fragment>
+            <h6 className="text-md white-text font-semibold mb-24">Sell BTC has Succesfully </h6>
+            <ul className="pl-2">
+                <li className="text-ms grey-text-accent font-semibold">Bought 0.00003324 BTC = $ 212,642,342</li>
+                <li className="text-ms grey-text-accent font-semibold">Sell in 0.00003324 BTC = $ 857,887,545</li>
+                <li className="text-ms grey-text-accent font-semibold">Fee $ 64</li>
+                <li className="text-ms grey-text-accent font-semibold">Amount Received : 0.000002154</li>
+            </ul>
+            <div className="d-flex">
+                <button className="btn btn-success sm px-5 mr-3" onClick={() => setShowModalSellSuccess(false)}>
+                    Close
+                </button>
+            </div>
+        </React.Fragment>
+    );
+
+    const handleSellOrder = () => {
+        setShowModalSell(false);
+        setTimeout(() => {
+            setShowModalSellSuccess(true);
+        }, 1000);
+    };
+
     return (
         <React.Fragment>
             <div className="p-3">
@@ -224,8 +287,7 @@ const OrderFormComponent = (props) => {
                             <button
                                 type="button"
                                 className="btn btn-success btn-block"
-                                data-toggle="modal"
-                                data-target="#buy-order">
+                                onClick={() => setShowModalBuy(true)}>
                                 Buy BTC
                             </button>
                         </form>
@@ -454,14 +516,17 @@ const OrderFormComponent = (props) => {
                             <button
                                 type="button"
                                 className="btn btn-danger btn-block"
-                                data-toggle="modal"
-                                data-target="#sell-order">
+                                onClick={() => setShowModalSell(true)}>
                                 Sell BTC
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
+
+            <Modal content={renderModalContentSell()} show={showModalSell} />
+            <Modal content={renderModalContentBuy()} show={showModalBuy} />
+            <Modal content={renderModalContentSellSuccess()} show={showModalSellSuccess} />
         </React.Fragment>
     );
 };
