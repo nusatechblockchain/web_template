@@ -20,7 +20,7 @@ export const WalletsScreen: FC = (): ReactElement => {
                     <h1 className="text-xl white-text">Wallet Overview</h1>
 
                     <div>
-                        <Link to={`/wallets/trade-history`}>
+                        <Link to={`/trade-history`}>
                             <button
                                 type="button"
                                 className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
