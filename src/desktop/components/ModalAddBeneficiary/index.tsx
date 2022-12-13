@@ -7,6 +7,7 @@ import './ModalAddBeneficiary.pcss';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import { Modal, CustomInput } from '..';
 import { Tabs, Tab } from 'react-bootstrap';
+import '../../../styles/colors.pcss';
 
 export interface ModalAddBeneficiaryProps {
     showModalAddBeneficiary: boolean;
@@ -52,7 +53,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                         </div>
                     </div>
                     <Tabs defaultActiveKey="standart" id="uncontrolled-tab-example" className="mb-3">
-                        <Tab eventKey="standart" title="Standart Address" className="br-1">
+                        <Tab eventKey="standart" title="Standart Address">
                             <form action="">
                                 <div>
                                     <CustomInput
