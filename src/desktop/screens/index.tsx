@@ -21,3 +21,4 @@ export * from './MarketDetailScreen';
 export * from './MarketOpen';
 export * from './TradingFutureScreen';
 export * from './TradingScreen';
+export * from './HistoryTrade';
