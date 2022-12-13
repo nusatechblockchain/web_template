@@ -54,6 +54,7 @@ import {
     MarketOpen,
     TradingFutureScreen,
     TradingScreen,
+    HistoryTrade,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -385,7 +386,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/trade-history"
-                        component={HistoryTransactionScreen}
+                        component={HistoryTrade}
                     />
 
                     <PrivateRoute
