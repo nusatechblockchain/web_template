@@ -32,6 +32,7 @@ import {
     InternalTransferIcon,
 } from '../../../assets/images/sidebar';
 import './Sidebar.pcss';
+import '../../../styles/colors.pcss';
 
 interface ReduxProps {
     currentMarket: Market | undefined;
@@ -80,25 +81,44 @@ class Side extends React.Component<Props, SidebarState> {
     }
 
     componentDidMount() {
+        console.log(this.state.menuProfileActive);
         this.setState({
             dataProfile: [
                 {
                     name: 'Dashboard',
                     icon: (
-                        <UserIcon strokeColor={this.state.menuProfileActive === 'Dashboard' ? '#F2F0FF' : '#B5B3BC'} />
+                        <UserIcon
+                            strokeColor={
+                                this.state.menuProfileActive === 'Dashboard'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
+                        />
                     ),
                     path: '/profile',
                 },
                 {
                     name: 'Wallet',
-                    icon: <WalletIcon fillColor={this.state.menuProfileActive === 'Wallet' ? '#F2F0FF' : '#B5B3BC'} />,
+                    icon: (
+                        <WalletIcon
+                            fillColor={
+                                this.state.menuProfileActive === 'Wallet'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
+                        />
+                    ),
                     path: '/wallets',
                 },
                 {
                     name: 'Market Order',
                     icon: (
                         <AnalysIcon
-                            fillColor={this.state.menuProfileActive === 'Market Order' ? '#F2F0FF' : '#B5B3BC'}
+                            fillColor={
+                                this.state.menuProfileActive === 'Market Order'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
                         />
                     ),
                     path: '/markets-open',
@@ -107,7 +127,11 @@ class Side extends React.Component<Props, SidebarState> {
                     name: 'Trade History',
                     icon: (
                         <CalendarIcon
-                            fillColor={this.state.menuProfileActive === 'Trade History' ? '#F2F0FF' : '#B5B3BC'}
+                            fillColor={
+                                this.state.menuProfileActive === 'Trade History'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
                         />
                     ),
                     path: '/trade-history',
@@ -116,7 +140,11 @@ class Side extends React.Component<Props, SidebarState> {
                     name: 'Profile Setting',
                     icon: (
                         <SettingIcon
-                            fillColor={this.state.menuProfileActive === 'Profile Setting' ? '#F2F0FF' : '#B5B3BC'}
+                            fillColor={
+                                this.state.menuProfileActive === 'Profile Setting'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
                         />
                     ),
                     path: '/profile-setting',
@@ -124,14 +152,26 @@ class Side extends React.Component<Props, SidebarState> {
                 {
                     name: 'Security',
                     icon: (
-                        <SecurityIcon fillColor={this.state.menuProfileActive === 'Security' ? '#F2F0FF' : '#B5B3BC'} />
+                        <SecurityIcon
+                            fillColor={
+                                this.state.menuProfileActive === 'Security'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
+                        />
                     ),
                     path: '/profile/security',
                 },
                 {
                     name: 'Referral',
                     icon: (
-                        <AddUserIcon fillColor={this.state.menuProfileActive === 'Referral' ? '#F2F0FF' : '#B5B3BC'} />
+                        <AddUserIcon
+                            fillColor={
+                                this.state.menuProfileActive === 'Referral'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
+                        />
                     ),
                     path: '/profile/referral',
                 },
@@ -139,7 +179,11 @@ class Side extends React.Component<Props, SidebarState> {
                     name: 'API Management',
                     icon: (
                         <ApiIcon
-                            fillColor={this.state.menuProfileActive === 'API Management' ? '#F2F0FF' : '#B5B3BC'}
+                            fillColor={
+                                this.state.menuProfileActive === 'API Management'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
                         />
                     ),
                     path: '/profile/api-key',
@@ -148,14 +192,26 @@ class Side extends React.Component<Props, SidebarState> {
                     name: 'Announcement',
                     icon: (
                         <AnnouncementIcon
-                            fillColor={this.state.menuProfileActive === 'Announcement' ? '#F2F0FF' : '#B5B3BC'}
+                            fillColor={
+                                this.state.menuProfileActive === 'Announcement'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
                         />
                     ),
                     path: '/announcement',
                 },
                 {
                     name: 'FAQ',
-                    icon: <FaqIcon fillColor={this.state.menuProfileActive === 'FAQ' ? '#F2F0FF' : '#B5B3BC'} />,
+                    icon: (
+                        <FaqIcon
+                            fillColor={
+                                this.state.menuProfileActive === 'FAQ'
+                                    ? 'var(--text-primary-color)'
+                                    : 'var(--text-secondary-color)'
+                            }
+                        />
+                    ),
                     path: '/faq',
                 },
             ],

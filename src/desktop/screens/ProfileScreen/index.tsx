@@ -22,15 +22,19 @@ import {
 } from '../../../assets/images/ProfileIcon';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { ProfileDeviceTable } from '../../containers';
-import { useSelector } from 'react-redux';
-import { selectUserInfo } from '../../../modules';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUserInfo, selectSignInRequire2FA } from '../../../modules';
 import { Modal, CustomInput } from '../../components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
+
+    const require2FA = useSelector(selectSignInRequire2FA);
     const history = useHistory();
+    const dispatch = useDispatch();
+
     const [showModal2Fa, setShowModal2FA] = useState(false);
     const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
     const [showModalChangePhone, setShowModalChangePhone] = useState(false);
@@ -49,12 +53,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const handleFetchTwoFaGoogle = () => {
-        if (twoFaGoogleValue === '123456') {
-            setShowModal2FAGoogle(false);
-            history.push('/lost-two-fa');
-        } else {
-            alert('Two Fa Code Tidak sesuai (Just Contoh)');
-        }
+        require2FA ? setShowModal2FAGoogle(!showModal2FaGoogle) : history.push('/two-fa-activation');
     };
 
     // render two fa phone modal
@@ -290,9 +289,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </Link>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <button
-                                            className="btn-transparent"
-                                            onClick={() => setShowModal2FAGoogle(!showModal2FaGoogle)}>
+                                        <button className="btn-transparent" onClick={handleFetchTwoFaGoogle}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <GoogleProfileIcon />

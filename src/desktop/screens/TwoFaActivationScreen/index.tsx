@@ -1,21 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeftIcon } from '../../../assets/images/ArrowLeftIcon';
 import { CopyButton } from '../../../assets/images/CopyButton';
 import QRCode from 'react-qr-code';
 import { copy } from '../../../helpers';
 import { CustomInput } from '../../components';
 import { CopyableTextField } from '../../../components';
-import { useDispatch } from 'react-redux';
-import { alertPush } from '../../../modules';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    alertPush,
+    selectTwoFactorAuthBarcode,
+    selectTwoFactorAuthQR,
+    selectTwoFactorAuthSuccess,
+    toggle2faFetch,
+    toggle2faData,
+    toggle2faError,
+    generate2faQRFetch,
+} from '../../../modules';
 
 export const TwoFaActivationScreen: React.FC = () => {
     const [twoFaValue, setTwoFaValue] = useState('');
     const dispatch = useDispatch();
 
+    const twoFactorBarcode = useSelector(selectTwoFactorAuthBarcode);
+    const twoFactorAuthQr = useSelector(selectTwoFactorAuthQR);
+    const twoFactorAuthSuccess = useSelector(selectTwoFactorAuthSuccess);
+    console.log(twoFactorBarcode, 'INI BARCODE');
+    console.log(twoFactorAuthQr, 'INI QR');
+    console.log(twoFactorAuthSuccess, 'INI SUCCESS');
+
+    useEffect(() => {
+        dispatch(generate2faQRFetch());
+    }, [dispatch]);
+
+    const handleTwoFactorAuth = () => {
+        dispatch(toggle2faFetch({ code: twoFaValue, enable: true }));
+    };
+
     const doCopy = () => {
         copy('referral-id');
         dispatch(alertPush({ message: ['page.body.wallets.tabs.deposit.ccy.message.success'], type: 'success' }));
     };
+
     return (
         <React.Fragment>
             <div className="content-wrapper no-sidebar dark-bg-main two-fa-activation-screen">
@@ -46,7 +71,7 @@ export const TwoFaActivationScreen: React.FC = () => {
                             <div className="d-flex flex-wrap">
                                 <div>
                                     <div className="qr-code mt-3">
-                                        <QRCode size={148} value={'6KJBR7WC63H3L7FM35IIQ7SKKGBQ56FE'} />
+                                        <QRCode size={148} value={twoFactorAuthQr} />
                                     </div>
                                 </div>
                                 <div className="form mt-3">
@@ -59,7 +84,7 @@ export const TwoFaActivationScreen: React.FC = () => {
                                         </label>
                                         <fieldset onClick={doCopy}>
                                             <CopyableTextField
-                                                value={'6KJBR7WC63H3L7FM35IIQ7SKKGBQ56FE'}
+                                                value={twoFactorBarcode}
                                                 fieldId="referral-id"
                                                 classNameInput="input-classname"
                                             />
@@ -84,7 +109,10 @@ export const TwoFaActivationScreen: React.FC = () => {
                                     </div>
                                     <div className="d-flex justify-content-end">
                                         <div className="twofa-button">
-                                            <button type="submit" className="btn btn-primary btn-block">
+                                            <button
+                                                type="submit"
+                                                onClick={handleTwoFactorAuth}
+                                                className="btn btn-primary btn-block">
                                                 Enable 2FA Code
                                             </button>
                                         </div>
