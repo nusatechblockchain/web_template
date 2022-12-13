@@ -55,6 +55,7 @@ import {
     TradingFutureScreen,
     TradingScreen,
     HistoryTrade,
+    ChangeEmail,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -401,6 +402,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/trading-future"
                         component={TradingFutureScreen}
+                    />
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/change-email"
+                        component={ChangeEmail}
                     />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">

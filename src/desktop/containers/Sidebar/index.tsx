@@ -65,6 +65,7 @@ const sidebarProfile = [
     '/wallets',
     '/history-transaction',
     '/trade-history',
+    'change-email',
 ];
 
 type Props = DispatchProps & LocationProps;
