@@ -201,7 +201,7 @@ class Head extends React.Component<Props, HeaderState> {
                         aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon" />
                     </button>
-                    <div className="collapse navbar-collapse justify-content-between py-2" id="navbarNavDropdown">
+                    <div className="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
                         <div>
                             {!thisAuthHeader ? (
                                 <ul className="navbar-nav main-navbar">
