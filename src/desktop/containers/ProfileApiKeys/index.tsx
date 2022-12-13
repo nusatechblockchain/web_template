@@ -95,7 +95,6 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
 
     public render() {
         const { apiKeys, dataLoaded, firstElemIndex, lastElemIndex, nextPageExists, pageIndex, user } = this.props;
-        console.log(user);
 
         return (
             <React.Fragment>

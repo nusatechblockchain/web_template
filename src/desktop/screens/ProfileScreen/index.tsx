@@ -23,18 +23,25 @@ import {
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { ProfileDeviceTable } from '../../containers';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserInfo, toggle2faFetch, selectTwoFactorAuthSuccess } from '../../../modules';
+import {
+    selectUserInfo,
+    toggle2faFetch,
+    toggle2faData,
+    selectTwoFactorAuthSuccess,
+    sendPhoneCode,
+    selectVerifyPhoneSuccess,
+} from '../../../modules';
 import { Modal, CustomInput } from '../../components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
-    const twoFactorDisabledSuccess = useSelector(selectTwoFactorAuthSuccess);
+    // console.log(user);
+
+    const verifyPhoneSuccess = useSelector(selectVerifyPhoneSuccess);
     const history = useHistory();
     const dispatch = useDispatch();
-
-    console.log(user);
 
     const [showModal2Fa, setShowModal2FA] = useState(false);
     const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
@@ -44,14 +51,13 @@ export const ProfileScreen: FC = (): ReactElement => {
     const [newPhoneValue, setNewPhoneValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
 
-    const handleFetchTwoFaPhone = () => {
-        if (twoFaPhoneValue === '123456') {
-            setShowModal2FA(false);
-            setShowModalChangePhone(true);
-        } else {
-            alert('Two Fa Code Tidak sesuai (Just Contoh)');
-        }
+    const handleFetchTwoFaPhone = async () => {
+        user.otp ? setShowModalChangePhone(!showModalChangePhone) : history.push('/two-fa-activation');
     };
+
+    // const handleSendCodePhone = () => {
+    //     dispatch(sendPhoneCode({codeSend: true}));
+    // };
 
     const handleFetchTwoFaGoogle = () => {
         user.otp ? setShowModal2FAGoogle(!showModal2FaGoogle) : history.push('/two-fa-activation');
@@ -260,18 +266,19 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </Link>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <button
-                                            className="btn-transparent"
-                                            onClick={() => setShowModal2FA(!showModal2Fa)}>
+                                        <button className="btn-transparent" onClick={handleFetchTwoFaPhone}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <PhoneProfileIcon />
                                                 </div>
                                                 <div className="ml-3 mr-3">
                                                     <p className="mb-1 text-ms font-normal white-text">Phone</p>
-                                                    <span className="d-block text-left text-xs danger-text font-normal ">
-                                                        Disabled
-                                                    </span>
+                                                    {/* <span
+                                                        className={`d-block text-left text-xs  font-normal ${
+                                                            !user.phones[0] ? 'danger-text' : 'contrast-text'
+                                                        }`}>
+                                                        {!user.phones[0] ? 'Unverified' : 'Verified'}
+                                                    </span> */}
                                                 </div>
                                             </div>
                                         </button>

@@ -29,9 +29,6 @@ export const TwoFaActivationScreen: React.FC = () => {
     const secretMatch = twoFactorAuthQr.match(secretRegex);
     const secret = secretMatch ? secretMatch[1] : null;
 
-    console.log(secret);
-    console.log(secretMatch, 'MATCH');
-
     useEffect(() => {
         dispatch(generate2faQRFetch());
     }, []);
