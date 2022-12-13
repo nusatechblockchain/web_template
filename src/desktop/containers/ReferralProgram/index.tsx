@@ -26,11 +26,16 @@ class ReferralProgramClass extends React.Component<Props> {
         copy('referral-id');
         this.props.fetchSuccess({ message: ['page.body.wallets.tabs.deposit.ccy.message.success'], type: 'success' });
     };
+    public doCopyReferralCode = () => {
+        copy('referral-code');
+        this.props.fetchSuccess({ message: ['page.body.wallets.tabs.deposit.ccy.message.success'], type: 'success' });
+    };
 
     public render() {
         const { user } = this.props;
 
         const referralLink = `${window.document.location.origin}/signup?refid=${user.uid}`;
+        const referralCode = user.uid;
         const dataTable = [
             {
                 time: '20-01-2022',
@@ -96,8 +101,8 @@ class ReferralProgramClass extends React.Component<Props> {
                             <div className="item">
                                 <div className="px-5 py-1">
                                     <p className="text-ms grey-text-accent font-normal mb-0">Referal Code</p>
-                                    <fieldset onClick={this.doCopy}>
-                                        <CopyableTextField value={'rPf3Xs'} fieldId="referral-code" />
+                                    <fieldset onClick={this.doCopyReferralCode}>
+                                        <CopyableTextField value={referralCode} fieldId="referral-code" />
                                     </fieldset>
                                 </div>
                             </div>
