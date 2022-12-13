@@ -922,7 +922,7 @@ export const en = {
     'identity.user.wrong_code_error': 'Code incorrect, please try again',
     'identity.session.invalid_login_params': 'Invalid Email or Password',
     'identity.session.invalid': 'Invalid Session',
-    'identity.captcha.required': 'captcha_response is required',
+    'identity.captcha.required': 'Captcha is required',
     'identity.captcha.verification_failed': 'Captcha response is required',
     'identity.captcha.mandatory_fields': 'Mandatory fields must be filled in',
     'identity.session.not_active': 'Your account is not active',
