@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { passwordMinEntropy } from '../../../api/config';
 import {
     PASSWORD_REGEX,
@@ -8,10 +9,27 @@ import {
     passwordErrorSecondSolution,
     passwordErrorThirdSolution,
 } from '../../../helpers';
+import {
+    forgotPassword,
+    forgotPasswordError,
+    GeetestCaptchaResponse,
+    resetCaptchaState,
+    RootState,
+    selectCaptchaResponse,
+    selectCurrentLanguage,
+    selectForgotPasswordError,
+    selectForgotPasswordSuccess,
+    selectGeetestCaptchaSuccess,
+    selectRecaptchaSuccess,
+} from '../../../modules';
+import { CommonError } from '../../../modules/types';
+import { captchaType } from '../../../api/config';
 import { CustomInput } from '../CustomInput';
+import { Modal } from '../Modal';
 import { PasswordStrengthMeter } from '../index';
 import PinInput from 'react-pin-input';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Captcha } from 'src/components';
 
 export const ChangePasswordComponent = (props) => {
     const [oldPassword, setOldPassword] = React.useState('');
@@ -24,12 +42,18 @@ export const ChangePasswordComponent = (props) => {
     const [passwordErrorThirdSolved, setPasswordErrorThirdSolved] = React.useState(false);
     const [passwordPopUp, setPasswordPopUp] = React.useState(false);
     const [code, setCode] = React.useState('');
-    const [show, setShow] = React.useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+    const [showModalConfirmation, setShowModalConfirmation] = React.useState(false);
+    const [showModalResendCode, setShowModalResendCode] = React.useState(false);
+    const location: { state: { email: string } } = useLocation();
+    const dispatch = useDispatch();
     const intl = useIntl();
+
+    const captcha_response = useSelector(selectCaptchaResponse);
+    const success = useSelector(selectForgotPasswordSuccess);
+    const errorForgotPassword = useSelector(selectForgotPasswordError);
+    const geetestCaptchaSuccess = useSelector(selectGeetestCaptchaSuccess);
+    const reCaptchaSuccess = useSelector(selectRecaptchaSuccess);
+    const i18n = useSelector(selectCurrentLanguage);
 
     const handleChangePassword = () => {
         const payload = props.hideOldPassword
@@ -100,6 +124,87 @@ export const ChangePasswordComponent = (props) => {
         return isOldPasswordValid && isNewPasswordValid && isConfirmPasswordValid;
     };
 
+    const handleResendCode = () => {
+        const email = location.state.email;
+
+        switch (captchaType()) {
+            case 'recaptcha':
+            case 'geetest':
+                dispatch(forgotPassword({ email, captcha_response }));
+                break;
+            default:
+                dispatch(forgotPassword({ email }));
+                break;
+        }
+
+        if (success) {
+            setShowModalResendCode(!showModalResendCode);
+        }
+
+        dispatch(resetCaptchaState());
+    };
+
+    const renderHeaderModalConfirmation = () => {
+        return (
+            <div className="text-center w-100">
+                <h6 className="text-md white-text m-0">Reset Password</h6>
+            </div>
+        );
+    };
+
+    const renderContentModalConfirmation = () => {
+        return (
+            <React.Fragment>
+                <p className="grey-text-accent text-center m-0 mb-24">
+                    Are you sure you want to change your password? ,make sure you remember your new password
+                </p>
+
+                <div className="d-flex justify-content-center p-0 border-none rounded-bottom-10">
+                    <Button type="button" className="btn-danger mr-24" onClick={() => setShowModalConfirmation(false)}>
+                        Close
+                    </Button>
+                    <Button className="btn-primary" onClick={handleChangePassword}>
+                        Continue
+                    </Button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const renderHeaderModalResendCode = () => {
+        return (
+            <div className="text-center w-100">
+                <h6 className="text-md white-text m-0">Resend Code</h6>
+            </div>
+        );
+    };
+
+    const renderContentModalResendCode = () => {
+        const { error, success } = props;
+
+        return (
+            <React.Fragment>
+                <div className="mb-24">
+                    <Captcha error={error} success={success} />
+                </div>
+                <div className="d-flex justify-content-center p-0 border-none rounded-bottom-10">
+                    <Button
+                        type="button"
+                        className="btn-danger mr-24"
+                        onClick={() => setShowModalResendCode(!showModalResendCode)}>
+                        Close
+                    </Button>
+                    <Button
+                        className="btn-primary"
+                        disabled={!captcha_response ? true : false}
+                        onClick={handleResendCode}>
+                        Resend
+                    </Button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
     const renderForm = () => {
         return (
             <React.Fragment>
@@ -132,7 +237,11 @@ export const ChangePasswordComponent = (props) => {
                     autoSelect={true}
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
-                <p className="text-right text-sm grey-text cursor-pointer">Send Code</p>
+                <p
+                    onClick={() => setShowModalResendCode(!showModalResendCode)}
+                    className="text-right text-sm grey-text cursor-pointer">
+                    Send Code
+                </p>
                 <div>
                     <CustomInput
                         type="password"
@@ -198,7 +307,12 @@ export const ChangePasswordComponent = (props) => {
 
                 <div className="form-button-group mt-4">
                     <div className="footer-section">
-                        <Button block={true} disabled={!isValidForm()} onClick={handleShow} size="lg" variant="primary">
+                        <Button
+                            block={true}
+                            disabled={!isValidForm()}
+                            onClick={() => setShowModalConfirmation(true)}
+                            size="lg"
+                            variant="primary">
                             {intl.formatMessage({
                                 id: 'page.body.profile.header.account.content.password.button.change',
                             })}
@@ -206,24 +320,21 @@ export const ChangePasswordComponent = (props) => {
                     </div>
                 </div>
 
-                <Modal centered show={show} onHide={handleClose} className="w-100">
-                    <Modal.Header className="rounded-top-10 p-0 mt-24 mb-24 justify-content-center border-none">
-                        <h6 className="text-md white-text m-0">Reset Password</h6>
-                    </Modal.Header>
-                    <Modal.Body className="tos-content mb-24 p-0">
-                        <p className="grey-text-accent text-center m-0">
-                            Are you sure you want to change your password? ,make sure you remember your new password
-                        </p>
-                    </Modal.Body>
-                    <Modal.Footer className="d-flex justify-content-center p-0 mb-24 border-none rounded-bottom-10">
-                        <Button type="button" className="btn-danger mr-24" onClick={handleClose}>
-                            Close
-                        </Button>
-                        <Button className="btn-primary" onClick={handleChangePassword}>
-                            Continue
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                {showModalConfirmation && (
+                    <Modal
+                        show={showModalConfirmation}
+                        header={renderHeaderModalConfirmation()}
+                        content={renderContentModalConfirmation()}
+                    />
+                )}
+
+                {showModalResendCode && (
+                    <Modal
+                        show={showModalResendCode}
+                        header={renderHeaderModalResendCode()}
+                        content={renderContentModalResendCode()}
+                    />
+                )}
             </React.Fragment>
         );
     };
