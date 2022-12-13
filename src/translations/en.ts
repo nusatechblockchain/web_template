@@ -500,7 +500,7 @@ export const en = {
     'page.body.profile.apiKeys.modal.btn.disabled': 'Disable',
     'page.body.profile.apiKeys.modal.btn.delete': 'Delete',
     'page.body.profile.apiKeys.modal.header': '2FA Verification',
-    'page.body.profile.apiKeys.modal.created_header': 'Created',
+    'page.body.profile.apiKeys.modal.created_header': 'Created API Key',
     'page.body.profile.apiKeys.modal.access_key': 'Access Key',
     'page.body.profile.apiKeys.modal.secret_key': 'Secret Key',
     'page.body.profile.apiKeys.modal.secret_key_info':

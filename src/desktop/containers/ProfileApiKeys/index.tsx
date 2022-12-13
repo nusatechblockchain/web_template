@@ -8,6 +8,7 @@ import { IntlProps } from '../../../';
 import { CodeVerification, Pagination } from '../../components';
 import { CopyableTextField, Table } from '../../../components';
 import { localeDate } from '../../../helpers/localeDate';
+import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 import Modal from 'react-bootstrap/Modal';
 
 import {
@@ -94,38 +95,79 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
 
     public render() {
         const { apiKeys, dataLoaded, firstElemIndex, lastElemIndex, nextPageExists, pageIndex, user } = this.props;
+        console.log(user);
 
         return (
             <React.Fragment>
-                {this.t('page.body.profile.apiKeys.header')}
-
-                {!user.otp && (
-                    <div>
-                        <p>{this.t('page.body.profile.apiKeys.noOtp')}</p>
+                <div className="api-screen dark-bg-accent pb-5">
+                    <div className="header dark-bg-main py-4 px-24 mb-24">
+                        <h2 className="mb-0 text-xl white-text font-bold pt-2">API Management</h2>
                     </div>
-                )}
+                    <div className="px-24">
+                        <div className="d-flex justify-content-between mb-24">
+                            <h6 className="text-md white-text font-semibold mb-0">My API Keys</h6>
+                            <div className="button">
+                                {user.otp && dataLoaded && (
+                                    <div>
+                                        <div
+                                            className="btn btn-transparent w-auto gradient-text font-bold text-ms mr-3"
+                                            onClick={this.handleCreateKeyClick}>
+                                            {this.t('page.body.profile.apiKeys.header.create')}
+                                        </div>
 
-                {user.otp && dataLoaded && (
-                    <div className="btn btn-primary" onClick={this.handleCreateKeyClick}>
-                        {this.t('page.body.profile.apiKeys.header.create')}
+                                        <div
+                                            className="btn btn-transparent w-auto gradient-text font-bold text-ms"
+                                            onClick={this.handleDeleteKeyClick}>
+                                            Delete All
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="mb-24">
+                            <p className="text-sm mb-2 grey-text-accent">
+                                1. Each account can create up to 30 API Keys.
+                            </p>
+                            <p className="text-sm mb-2 grey-text-accent">
+                                2. Do not disclose your API Key to anyone to avoid asset losses. It is recommended to
+                                bind IP for API Key to increase your account security.
+                            </p>
+                            <p className="text-sm mb-2 grey-text-accent">
+                                3. Be aware that your API Key may be disclosed by authorizing it to a third-party
+                                platform.
+                            </p>
+                            <p className="text-sm mb-2 grey-text-accent">
+                                4. You will not be able to create an API if KYC is not completed.
+                            </p>
+                        </div>
                     </div>
-                )}
 
-                {user.otp && dataLoaded && !apiKeys.length && <div>{this.t('page.body.profile.apiKeys.noKeys')}</div>}
+                    {!user.otp && (
+                        <div>
+                            <p>{this.t('page.body.profile.apiKeys.noOtp')}</p>
+                        </div>
+                    )}
 
-                {user.otp && dataLoaded && apiKeys.length > 0 && (
-                    <React.Fragment>
-                        <Table header={this.getTableHeaders()} data={this.getTableData(apiKeys)} />
-                        <Pagination
-                            firstElemIndex={firstElemIndex}
-                            lastElemIndex={lastElemIndex}
-                            page={pageIndex}
-                            nextPageExists={nextPageExists}
-                            onClickPrevPage={this.onClickPrevPage}
-                            onClickNextPage={this.onClickNextPage}
-                        />
-                    </React.Fragment>
-                )}
+                    {user.otp && dataLoaded && !apiKeys.length && (
+                        <div>{this.t('page.body.profile.apiKeys.noKeys')}</div>
+                    )}
+
+                    {user.otp && dataLoaded && apiKeys.length > 0 && (
+                        <React.Fragment>
+                            <div className="px-24">
+                                <Table header={this.getTableHeaders()} data={this.getTableData(apiKeys)} />
+                                <Pagination
+                                    firstElemIndex={firstElemIndex}
+                                    lastElemIndex={lastElemIndex}
+                                    page={pageIndex}
+                                    nextPageExists={nextPageExists}
+                                    onClickPrevPage={this.onClickPrevPage}
+                                    onClickNextPage={this.onClickNextPage}
+                                />
+                            </div>
+                        </React.Fragment>
+                    )}
+                </div>
 
                 <Modal
                     show={this.props.modal.active}
@@ -144,10 +186,9 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
             this.t('page.body.profile.apiKeys.table.header.kid'),
             this.t('page.body.profile.apiKeys.table.header.algorithm'),
             this.t('page.body.profile.apiKeys.table.header.state'),
-            '',
             this.t('page.body.profile.apiKeys.table.header.created'),
             this.t('page.body.profile.apiKeys.table.header.updated'),
-            '',
+            'Action',
         ];
     };
 
@@ -158,6 +199,8 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
             <div>
                 <span className={item.state === 'active' ? 'active' : 'disabled'}>{item.state}</span>
             </div>,
+            localeDate(item.created_at, 'fullDate'),
+            localeDate(item.updated_at, 'fullDate'),
             <div>
                 <Form>
                     <Form.Check
@@ -169,9 +212,6 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                     />
                 </Form>
             </div>,
-            localeDate(item.created_at, 'fullDate'),
-            localeDate(item.updated_at, 'fullDate'),
-            <span className="" key={item.kid} onClick={() => this.handleDeleteKeyClick(item)} />,
         ]);
     }
 
@@ -182,9 +222,11 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                 : this.t('page.body.profile.apiKeys.modal.header');
 
         return (
-            <div>
-                {headerText}
-                <span className="" onClick={this.handleHide2FAModal} />
+            <div className="d-flex justify-content-between">
+                <h3 className="mb-24 white-text text-xl font-bold">{headerText}</h3>
+                <span className="" onClick={this.handleHide2FAModal}>
+                    <ModalCloseIcon />
+                </span>
             </div>
         );
     };
@@ -229,12 +271,16 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                             </fieldset>
                         </div>
                         <div className="secret-section">
-                            <span className="secret-sign">&#9888;</span>
-                            <p className="secret-warning">
-                                <span>{this.t('page.body.profile.apiKeys.modal.secret_key')}</span>
+                            <p className="secret-warning grey-text-accent text-xs">
+                                <span className="secret-sign text-ms mr-2">&#9888;</span>
+                                <span className="white-text text-sm">
+                                    {this.t('page.body.profile.apiKeys.modal.secret_key')}
+                                </span>
                                 <br />
                                 {this.t('page.body.profile.apiKeys.modal.secret_key_info')}
-                                <span> {this.t('page.body.profile.apiKeys.modal.secret_key_store')}</span>
+                                <span className="grey-text-accent text-sm">
+                                    {this.t('page.body.profile.apiKeys.modal.secret_key_store')}
+                                </span>
                             </p>
                         </div>
                         <div>
@@ -248,8 +294,10 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                                 />
                             </fieldset>
                         </div>
-                        <p className="note-section">
-                            <span>{this.t('page.body.profile.apiKeys.modal.note')} </span>
+                        <p className="note-section grey-text-accent text-xs">
+                            <span className="white-text text-sm">
+                                {this.t('page.body.profile.apiKeys.modal.note')}{' '}
+                            </span>
                             <br />
                             {this.t('page.body.profile.apiKeys.modal.note_content')}
                         </p>
@@ -288,7 +336,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
         }
         body = !body ? (
             <div>
-                <div>{this.t('page.body.profile.apiKeys.modal.title')}</div>
+                <div className="text-sm white-text mb-12">{this.t('page.body.profile.apiKeys.modal.title')}</div>
                 <div>
                     <CodeVerification
                         code={otpCode}
@@ -298,7 +346,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                         type="text"
                         placeholder="X"
                         inputMode="decimal"
-                        showPaste2FA={true}
+                        showPaste2FA={false}
                         isMobile={isMobile}
                     />
                 </div>
