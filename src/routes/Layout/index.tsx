@@ -56,6 +56,7 @@ import {
     TradingScreen,
     HistoryTrade,
     ChangeEmail,
+    ProfileSetting,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -351,6 +352,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         isLogged={isLoggedIn}
                         path="/profile/security"
                         component={Security}
+                    />
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/setting"
+                        component={ProfileSetting}
                     />
                     <PrivateRoute
                         loading={userLoading}

@@ -863,3 +863,97 @@ export const SearchCoinIcon: React.FC<ProfileIconProps> = (props: ProfileIconPro
         </svg>
     );
 };
+
+export const UsernameIcon: React.FC<ProfileIconProps> = (props: ProfileIconProps) => {
+    return (
+        <svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M20.0003 19.9999C24.6027 19.9999 28.3337 16.269 28.3337 11.6666C28.3337 7.06421 24.6027 3.33325 20.0003 3.33325C15.398 3.33325 11.667 7.06421 11.667 11.6666C11.667 16.269 15.398 19.9999 20.0003 19.9999Z"
+                stroke="url(#paint0_linear_306_5060)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M34.3169 36.6667C34.3169 30.2167 27.9003 25 20.0003 25C12.1003 25 5.68359 30.2167 5.68359 36.6667"
+                stroke="url(#paint1_linear_306_5060)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <defs>
+                <linearGradient
+                    id="paint0_linear_306_5060"
+                    x1="11.667"
+                    y1="3.33325"
+                    x2="28.3337"
+                    y2="19.9999"
+                    gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#02C3BD" />
+                    <stop offset={1} stopColor="#4062BB" />
+                </linearGradient>
+                <linearGradient
+                    id="paint1_linear_306_5060"
+                    x1="5.68359"
+                    y1={25}
+                    x2="13.8372"
+                    y2="45.0112"
+                    gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#02C3BD" />
+                    <stop offset={1} stopColor="#4062BB" />
+                </linearGradient>
+            </defs>
+        </svg>
+    );
+};
+
+export const PasswordIcon: React.FC<ProfileIconProps> = (props: ProfileIconProps) => {
+    return (
+        <svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M10 12C10 12.5304 10.2107 13.0391 10.5858 13.4142C10.9609 13.7893 11.4696 14 12 14C12.5304 14 13.0391 13.7893 13.4142 13.4142C13.7893 13.0391 14 12.5304 14 12C14 11.4696 13.7893 10.9609 13.4142 10.5858C13.0391 10.2107 12.5304 10 12 10C11.4696 10 10.9609 10.2107 10.5858 10.5858C10.2107 10.9609 10 11.4696 10 12ZM15 4C21.152 4 26 8.848 26 15C26 15.794 25.92 16.592 25.756 17.35C25.64 17.89 25.772 18.358 26.04 18.626L35.12 27.706C35.3991 27.9848 35.6205 28.3159 35.7715 28.6804C35.9225 29.0448 36.0002 29.4355 36 29.83V33C36 33.7956 35.6839 34.5587 35.1213 35.1213C34.5587 35.6839 33.7956 36 33 36H29C28.2044 36 27.4413 35.6839 26.8787 35.1213C26.3161 34.5587 26 33.7956 26 33V32H24C23.4696 32 22.9609 31.7893 22.5858 31.4142C22.2107 31.0391 22 30.5304 22 30V28H20C19.4696 28 18.9609 27.7893 18.5858 27.4142C18.2107 27.0391 18 26.5304 18 26V25.64C17.014 25.908 15.986 26 15 26C8.848 26 4 21.152 4 15C4 8.848 8.848 4 15 4ZM24 15C24 9.952 20.048 6 15 6C9.952 6 6 9.952 6 15C6 20.048 9.952 24 15 24C16.32 24 17.546 23.81 18.552 23.306C18.7045 23.2296 18.8739 23.1935 19.0443 23.201C19.2146 23.2086 19.3802 23.2596 19.5253 23.3491C19.6704 23.4387 19.7902 23.5639 19.8733 23.7129C19.9564 23.8618 20 24.0295 20 24.2V26H22C22.5304 26 23.0391 26.2107 23.4142 26.5858C23.7893 26.9609 24 27.4696 24 28V30H26C26.5304 30 27.0391 30.2107 27.4142 30.5858C27.7893 30.9609 28 31.4696 28 32V33C28 33.2652 28.1054 33.5196 28.2929 33.7071C28.4804 33.8946 28.7348 34 29 34H33C33.2652 34 33.5196 33.8946 33.7071 33.7071C33.8946 33.5196 34 33.2652 34 33V29.828C33.9999 29.5633 33.8949 29.3094 33.708 29.122L24.626 20.04C23.762 19.176 23.582 17.952 23.802 16.928C23.9354 16.2941 24.0018 15.6478 24 15V15Z"
+                fill="url(#paint0_linear_613_5353)"
+            />
+            <defs>
+                <linearGradient
+                    id="paint0_linear_613_5353"
+                    x1={36}
+                    y1={4}
+                    x2={4}
+                    y2={36}
+                    gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#02C3BD" />
+                    <stop offset={1} stopColor="#4062BB" />
+                </linearGradient>
+            </defs>
+        </svg>
+    );
+};
+
+export const DocumentIcon: React.FC<ProfileIconProps> = (props: ProfileIconProps) => {
+    return (
+        <svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_306_5074)">
+                <path
+                    d="M13.3337 26.6666H26.667V29.9999H13.3337V26.6666ZM13.3337 19.9999H26.667V23.3333H13.3337V19.9999ZM23.3337 3.33325H10.0003C8.16699 3.33325 6.66699 4.83325 6.66699 6.66659V33.3333C6.66699 35.1666 8.15033 36.6666 9.98366 36.6666H30.0003C31.8337 36.6666 33.3337 35.1666 33.3337 33.3333V13.3333L23.3337 3.33325ZM30.0003 33.3333H10.0003V6.66659H21.667V14.9999H30.0003V33.3333Z"
+                    fill="url(#paint0_linear_306_5074)"
+                />
+            </g>
+            <defs>
+                <linearGradient
+                    id="paint0_linear_306_5074"
+                    x1="6.66699"
+                    y1="3.33325"
+                    x2="39.1873"
+                    y2="29.3495"
+                    gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#02C3BD" />
+                    <stop offset={1} stopColor="#4062BB" />
+                </linearGradient>
+                <clipPath id="clip0_306_5074">
+                    <rect width={40} height={40} fill="white" />
+                </clipPath>
+            </defs>
+        </svg>
+    );
+};

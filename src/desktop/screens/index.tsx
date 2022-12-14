@@ -23,3 +23,4 @@ export * from './TradingFutureScreen';
 export * from './TradingScreen';
 export * from './HistoryTrade';
 export * from './ChangeEmail';
+export * from './ProfileSettingScreen';
