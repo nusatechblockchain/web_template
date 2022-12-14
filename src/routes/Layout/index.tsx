@@ -55,6 +55,8 @@ import {
     TradingFutureScreen,
     TradingScreen,
     HistoryTrade,
+    AnnouncementScreen,
+    FAQScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -402,6 +404,8 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/trading-future"
                         component={TradingFutureScreen}
                     />
+                    <PublicRoute loading={userLoading} path="/announcement" component={AnnouncementScreen} />
+                    <PublicRoute loading={userLoading} path="/faq" component={FAQScreen} />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
                         <Redirect to="/trading/" />
