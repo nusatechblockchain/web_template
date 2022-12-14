@@ -6,7 +6,7 @@ import { RouterProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
-import { passwordMinEntropy } from 'src/api';
+import { passwordMinEntropy } from '../../../api/config';
 import {
     setDocumentTitle,
     PASSWORD_REGEX,
@@ -22,6 +22,10 @@ import {
     User,
     userFetch,
     RootState,
+    entropyPasswordFetch, 
+    selectCurrentPasswordEntropy,
+    sendCode,
+    verifyPhone
 } from '../../../modules';
 import { ModalTwoFa, Modal, CustomInput, PasswordStrengthMeter } from '../../components';
 import { CheckIcon, GoogleIcon, KeyIcon, MailIcon, PhoneIcon } from '../../../assets/images/ProfileSecurityIcon';
@@ -41,9 +45,14 @@ interface ProfileSecurityState {
     passwordNew: string;
     passwordOld: string;
     passwordConfirm: string;
+    passwordNewFocus: boolean;
+    passwordConfirmFocus: boolean;
     twoFaStatus: boolean;
     passwordMatches: boolean;
     passwordPopUp: boolean;
+    passwordErrorFirstSolved: boolean;
+    passwordErrorSecondSolved: boolean;
+    passwordErrorThirdSolved: boolean;
 }
 
 interface OwnProps {
@@ -52,10 +61,13 @@ interface OwnProps {
 
 interface ReduxProps {
     user: User;
+    currentPasswordEntropy: number;
 }
 
 interface DispatchProps {
     changePasswordFetch: typeof changePasswordFetch;
+    fetchCurrentPasswordEntropy: typeof entropyPasswordFetch;
+    toggle2faFetch: typeof toggle2faFetch;
 }
 
 type Props = RouterProps & IntlProps & OwnProps & DispatchProps & ReduxProps;
@@ -78,15 +90,19 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             passwordNew: '',
             passwordOld: '',
             passwordConfirm: '',
+            passwordNewFocus: false,
+            passwordConfirmFocus: false,
             twoFaStatus: false,
             passwordMatches: true,
             passwordPopUp: false,
+            passwordErrorFirstSolved: false,
+            passwordErrorSecondSolved: false,
+            passwordErrorThirdSolved: false,
         };
     }
 
     public componentDidMount() {
         setDocumentTitle('Profile Security');
-        console.log(this.props.user);
     }
 
     public componentDidUpdate() {
@@ -106,24 +122,29 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             passwordConfirm,
             passwordNew,
             passwordOld,
+            passwordErrorFirstSolved,
+            passwordErrorSecondSolved,
+            passwordErrorThirdSolved,
         } = this.state;
 
-        // google two fa
-        const handleSubmitTwoFa = () => {
-            if (twoFaCode == '123456') {
-                this.setState({ showTwoFaModal: false });
-                this.setState({ twoFaCode: '' });
-                this.setState({ twoFaStatus: !this.state.twoFaStatus });
-            } else {
-                alert('kode yang anda masukkan salah');
-            }
-        };
-
-        // handle fa and password
+        // handle click menu change password
         const handleClickPassword = () => {
             this.props.user.otp
-                ? this.setState({ showTwoFaPhoneModal: true })
-                : this.setState({ showPasswordModal: true });
+            ? this.setState({ showTwoFaPhoneModal: true })
+            : this.setState({ showPasswordModal: true });
+        };
+
+        // handle click menu google authenticator
+        const handleClickGoogleAuth = () => {
+            this.props.user.otp
+            ? this.setState({ showTwoFaModal: true })
+            : this.props.history.push("/two-fa-activation");
+        };
+
+        // handle submit google two fa
+        const handleSubmitTwoFa = async () => {
+            await this.props.toggle2faFetch({code: twoFaCode, enable: false})
+            this.setState({showTwoFaModal: !this.state.showTwoFaModal})
         };
 
         // two fa phone
@@ -191,23 +212,13 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                                 Yubikey.
                                             </span>
                                             <div className="d-flex mt-3">
-                                                {this.state.twoFaStatus ? (
                                                     <button
                                                         id="button-remove-2fa"
                                                         type="button"
-                                                        onClick={() => this.setState({ showTwoFaModal: true })}
-                                                        className="btn btn-transparent w-auto font-bold text-sm grey-text px-0">
-                                                        Remove
+                                                        onClick={handleClickGoogleAuth}
+                                                        className={`btn btn-transparent w-auto font-bold text-sm px-0 ${this.props.user.otp ? "grey-text" : "gradient-text"}`}>
+                                                            {this.props.user.otp ? "Remove" : "Activate"}
                                                     </button>
-                                                ) : (
-                                                    <button
-                                                        id="button-change-2fa"
-                                                        type="button"
-                                                        className="btn btn-transparent gradient-text font-bold text-sm w-auto px-0 mr-3"
-                                                        onClick={() => this.setState({ showTwoFaModal: true })}>
-                                                        Activate
-                                                    </button>
-                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -324,6 +335,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
         );
     }
 
+    // **PHONE NUMBER PUBLIC FUNCTION
     // Render phone modal
     public modalPhoneContent = () => {
         return (
@@ -384,9 +396,29 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             </React.Fragment>
         );
     };
+    // **END PHONE NUMBER PUBLIC FUNCTION
 
-    // Render password modal
+
+    // **PASSWORD PUBLIC FUNCTION
+    // Render password modal content
     public modalPasswordContent = () => {
+        const translate = (key: string) => this.props.intl.formatMessage({ id: key });
+
+        const isValidForm = () => {
+            const isOldPasswordValid = this.state.passwordOld.match(PASSWORD_REGEX) &&
+            this.state.passwordErrorFirstSolved &&
+            this.state.passwordErrorSecondSolved &&
+            this.state.passwordErrorThirdSolved;
+            const isNewPasswordValid =
+                this.state.passwordNew.match(PASSWORD_REGEX) &&
+                this.state.passwordErrorFirstSolved &&
+                this.state.passwordErrorSecondSolved &&
+                this.state.passwordErrorThirdSolved;
+            const isConfirmPasswordValid = this.state.passwordNew === this.state.passwordConfirm;
+    
+            return isOldPasswordValid && isNewPasswordValid && isConfirmPasswordValid;
+        };
+    
         return (
             <React.Fragment>
                 <>
@@ -409,27 +441,40 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                         <div className="form-group position-relative mb-24">
                             <CustomInput
                                 defaultLabel="New Password "
+                                
                                 inputValue={this.state.passwordNew}
                                 label="New Password"
                                 placeholder="New Password"
                                 type="password"
                                 labelVisible
                                 classNameLabel="white-text text-sm"
-                                // classNameInput={this.state.passwordMatches ? '' : 'error'}
-                                handleChangeInput={(e) => this.setState({ passwordNew: e })}
+                                classNameInput={`${
+                                    this.state.passwordNewFocus &&
+                                    (!this.state.passwordErrorFirstSolved || !this.state.passwordErrorSecondSolved || !this.state.passwordErrorThirdSolved) &&
+                                    'error'
+                                }`}
+                                autoFocus={false}
+                                handleFocusInput={this.handleFocusNewPassword}
+                                handleChangeInput={this.handleChangeNewPassword}
                             />
+
+                            {this.state.passwordNewFocus &&
+                                    (!this.state.passwordErrorFirstSolved || !this.state.passwordErrorSecondSolved || !this.state.passwordErrorThirdSolved) && (
+                            <p className="danger-text m-0 mb-24 text-xs">Password Strength must be GOOD</p>
+                        )}
                         </div>
 
                         <div>
-                            {/* <PasswordStrengthMeter
+                            <PasswordStrengthMeter
                         minPasswordEntropy={passwordMinEntropy()}
-                        currentPasswordEntropy={props.currentPasswordEntropy}
+                        currentPasswordEntropy={this.props.currentPasswordEntropy}
                         passwordExist={this.state.passwordNew !== ''}
-                        passwordErrorFirstSolved={this.passwordErrorFirstSolved}
-                        passwordErrorSecondSolved={passwordErrorSecondSolved}
-                        passwordErrorThirdSolved={passwordErrorThirdSolved}
-                        passwordPopUp={passwordPopUp}
-                    /> */}
+                        passwordErrorFirstSolved={this.state.passwordErrorFirstSolved}
+                        passwordErrorSecondSolved={this.state.passwordErrorSecondSolved}
+                        passwordErrorThirdSolved={this.state.passwordErrorThirdSolved}
+                        passwordPopUp={this.state.passwordPopUp}
+                        translate={translate}
+                    />
                         </div>
                         <div className="form-group position-relative mb-24">
                             <CustomInput
@@ -440,13 +485,24 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                 type="password"
                                 labelVisible
                                 classNameLabel="white-text text-sm"
-                                // classNameInput={this.state.passwordMatches ? '' : 'error'}
+                                classNameInput={`${
+                                    this.state.passwordConfirmFocus &&
+                                    this.state.passwordConfirm != this.state.passwordNew &&
+                                    'error'
+                                }`}
+                                handleFocusInput={this.handleFocusConfirmPassword}
                                 handleChangeInput={(e) => this.setState({ passwordConfirm: e })}
                             />
+
+                            
+                    {this.state.passwordConfirmFocus && this.state.passwordConfirm != this.state.passwordNew && (
+                        <p className="text-xs danger-text m-0 mb-24">Password Confirmation doesn't match</p>
+                    )}
                         </div>
                         <button
-                            onClick={this.handleChangePassword}
-                            type="submit"
+                        disabled={!isValidForm()}
+                            onClick={this.handleSubmitChangePassword}
+                            type="submit" 
                             className="btn btn-primary btn-block"
                             data-dismiss="modal"
                             data-toggle="modal"
@@ -471,22 +527,65 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
         );
     };
 
-    // handle change password
-    public handleChangePassword = () => {
+    // handle focus password focus
+    public handleFocusNewPassword = () => {
+        this.setState({passwordPopUp: !this.state.passwordPopUp})
+        this.setState({passwordNewFocus: !this.state.passwordNewFocus})
+    };
+
+    // handle focus confirm password focus
+    public handleFocusConfirmPassword = () => {
+        this.setState({passwordConfirmFocus: !this.state.passwordConfirmFocus})
+    };
+
+    // handle change new password
+    public handleChangeNewPassword = (value: string) => {
+        if (passwordErrorFirstSolution(value) && !this.state.passwordErrorFirstSolved) {
+            this.setState({passwordErrorFirstSolved: true});
+        } else if (!passwordErrorFirstSolution(value) && this.state.passwordErrorFirstSolved) {
+            this.setState({passwordErrorFirstSolved: false});
+        }
+
+        if (passwordErrorSecondSolution(value) && !this.state.passwordErrorSecondSolved) {
+            this.setState({passwordErrorSecondSolved: true});
+        } else if (!passwordErrorSecondSolution(value) && this.state.passwordErrorSecondSolved) {
+            this.setState({passwordErrorSecondSolved: false});
+        }
+
+        if (passwordErrorThirdSolution(value) && !this.state.passwordErrorThirdSolved) {
+            this.setState({passwordErrorThirdSolved: true});
+        } else if (!passwordErrorThirdSolution(value) && this.state.passwordErrorThirdSolved) {
+            this.setState({passwordErrorThirdSolved: false});
+        }
+
+        this.setState({passwordNew: value});
+        setTimeout(() => {
+            this.props.fetchCurrentPasswordEntropy({ password: value });
+        }, 500);
+    };
+
+    // handle change password (POST)
+    public handleSubmitChangePassword = () => {
         this.props.changePasswordFetch({
             old_password: this.state.passwordOld,
             new_password: this.state.passwordNew,
             confirm_password: this.state.passwordConfirm,
         });
+
+        this.setState({showPasswordModal: false})
     };
+    //**END PASSWORD PUBLIC FUNCTION
 }
 
 const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => ({
     user: selectUserInfo(state),
+    currentPasswordEntropy: selectCurrentPasswordEntropy(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
-    changePasswordFetch: (credentials) => dispatch(changePasswordFetch(credentials)),
+    changePasswordFetch: (credentials) => dispatch(changePasswordFetch(credentials)), 
+    fetchCurrentPasswordEntropy: (payload) => dispatch(entropyPasswordFetch(payload)),
+    toggle2faFetch: (payload) => dispatch(toggle2faFetch(payload))
 });
 
 export const Security = compose(
