@@ -61,7 +61,7 @@ export const TwoFaActivationScreen: React.FC = () => {
                         </div>
                         <div className="main-content mt-5">
                             <h6 className="mb-4 white-text text-md font-semibold">Google Authencticator Activation</h6>
-                            <p className=" white-text text-ms ">
+                            <p className=" white-text text-ms mb-8">
                                 1. Download and install Google Authenticator application from
                                 <a href="https://www.apple.com/app-store/" target="_blank">
                                     <span className="text-ms warning-text"> AppStore </span>
@@ -71,9 +71,13 @@ export const TwoFaActivationScreen: React.FC = () => {
                                     <span className="text-ms warning-text"> Google play </span>
                                 </a>
                             </p>
-                            <p className="text-ms white-text mb-4">
+                            <p className="text-ms white-text mb-8">
                                 2. Scan QR code or use secret MFA code:* Save this secret in a secure location. This
                                 code can be used to gain 2FA access from a different device.
+                            </p>
+                            <p className="text-ms white-text font-extrabold mb-24">
+                                3. Please erase your old 2FA Verification in google authenticator application, if you
+                                want to create new 2FA Verification Again.
                             </p>
                             <div className="d-flex flex-wrap">
                                 <div>
