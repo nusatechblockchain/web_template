@@ -47,6 +47,10 @@ export const ChangeEmail: FC = (): ReactElement => {
         dispatch(alertPush({ message: ['success change email'], type: 'success' }));
     };
 
+    const disableButton = () => {
+        return emailCode != '' && code2Fa != '';
+    };
+
     return (
         <React.Fragment>
             <div className="change-email-screen dark-bg-accent pb-5">
@@ -130,6 +134,7 @@ export const ChangeEmail: FC = (): ReactElement => {
                                     type="button"
                                     className="btn btn-primary px-5"
                                     id="next-step"
+                                    disabled={!disableButton}
                                     onClick={() => setStep(2)}>
                                     Continue
                                 </button>
