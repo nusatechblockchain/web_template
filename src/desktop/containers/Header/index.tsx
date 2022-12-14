@@ -116,19 +116,13 @@ class Head extends React.Component<Props, HeaderState> {
                 name: 'Wallet',
                 desc: 'deposit and withdraw wallet',
                 icon: <Wallet />,
-                url: '/wallet',
-            },
-            {
-                name: 'Profile Setting',
-                desc: 'setting your perosenal profile',
-                icon: <Setting />,
-                url: '/setting',
+                url: '/wallets',
             },
             {
                 name: 'Security',
                 desc: 'secure your account',
                 icon: <Security />,
-                url: '/security',
+                url: '/profile/security',
             },
             {
                 name: 'Refferal',
@@ -140,7 +134,7 @@ class Head extends React.Component<Props, HeaderState> {
                 name: 'API Management',
                 desc: 'api Management for your account',
                 icon: <Api />,
-                url: '/api',
+                url: '/profile/api-key',
             },
         ];
 
@@ -205,29 +199,29 @@ class Head extends React.Component<Props, HeaderState> {
                         <div>
                             {!thisAuthHeader ? (
                                 <ul className="navbar-nav main-navbar">
-                                    <li className="nav-item active">
-                                        <Link to={'/'} className="nav-link text-sm font-bold">
+                                    <li
+                                        className={`nav-item ${
+                                            (location.pathname == '/profile' || location.pathname == '/') && 'active'
+                                        }`}>
+                                        <Link
+                                            to={isLoggedIn ? '/profile' : '/'}
+                                            className="nav-link px-3 text-sm font-bold">
                                             Home
                                         </Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <Link to={'/market'} className="nav-link text-sm font-bold">
+                                    <li className={`nav-item ${location.pathname == '/markets' && 'active'}`}>
+                                        <Link to={'/markets'} className="nav-link px-3 text-sm font-bold">
                                             Market
                                         </Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <Link to={'/faq'} className="nav-link text-sm font-bold">
+                                    <li className={`nav-item ${location.pathname == '/faq' && 'active'}`}>
+                                        <Link to={'/faq'} className="nav-link px-3 text-sm font-bold">
                                             Support
                                         </Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <Link to={'/announcement'} className="nav-link text-sm font-bold">
+                                    <li className={`nav-item ${location.pathname == '/announcement' && 'active'}`}>
+                                        <Link to={'/announcement'} className="nav-link px-3 text-sm font-bold">
                                             Announcement
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to={'/market'} className="nav-link text-sm font-bold">
-                                            Discover
                                         </Link>
                                     </li>
                                 </ul>
@@ -316,18 +310,6 @@ class Head extends React.Component<Props, HeaderState> {
                                                 <div className="dropdown-item grey-text-accent text-sm active cursor-pointer">
                                                     <div className="dots" />
                                                     USD
-                                                </div>
-                                                <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
-                                                    <div className="dots" />
-                                                    RUB
-                                                </div>
-                                                <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
-                                                    <div className="dots" />
-                                                    EUR
-                                                </div>
-                                                <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
-                                                    <div className="dots" />
-                                                    JPY
                                                 </div>
                                                 <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
                                                     <div className="dots" />

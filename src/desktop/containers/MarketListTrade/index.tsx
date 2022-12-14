@@ -27,7 +27,7 @@ const MarketListTradeComponent = (props) => {
     useMarketsTickersFetch();
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencies = useSelector(selectCurrencies);
 
     const marketList = markets
         .map((market) => ({
@@ -77,17 +77,17 @@ const MarketListTradeComponent = (props) => {
                                                 <div className="mr-0 d-flex align-items-center">
                                                     <span className="cr-crypto-icon">
                                                         <img
-                                                            src={item.currency.icon_url}
+                                                            src={item.currency && item.currency.icon_url}
                                                             className="small-coin-icon"
                                                             alt="btc icon"
                                                         />
                                                     </span>
                                                     <div className="name ml-3">
                                                         <p className="text-sm text-white font-bold mb-0">
-                                                            {item.currency.id.toUpperCase()}
+                                                            {item.currency && item.currency.id.toUpperCase()}
                                                         </p>
                                                         <span className="text-xs grey-text-accent">
-                                                            {item.currency.name.toUpperCase()}
+                                                            {item.currency && item.currency.name.toUpperCase()}
                                                         </span>
                                                     </div>
                                                 </div>

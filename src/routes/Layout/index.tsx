@@ -301,7 +301,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/email-verification"
                         component={EmailVerificationScreen}
                     />
-                    <PrivateRoute
+                    <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/trading"
@@ -385,9 +385,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/markets-open"
                         component={MarketOpen}
                     />
-                    <PrivateRoute
+                    <PublicRoute
                         loading={userLoading}
-                        isLogged={isLoggedIn}
+                        // isLogged={isLoggedIn}
                         path="/markets"
                         component={MarketListScreen}
                     />
