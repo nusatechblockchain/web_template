@@ -1,7 +1,5 @@
 import React, { FC, ReactElement, Component } from 'react';
-import { useSelector } from 'react-redux';
 import { useDocumentTitle } from 'src/hooks';
-import { Link } from 'react-router-dom';
 import AnouncementIcon from '../../../assets/png/landing-announcement.png';
 import { ArrowLeftIcon } from '../../../assets/images/ArrowLeftIcon';
 import Slider from 'react-slick';
