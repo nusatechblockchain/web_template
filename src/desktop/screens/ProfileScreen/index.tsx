@@ -32,6 +32,7 @@ import {
     selectVerifyPhoneSuccess,
     sendCode,
     changeUserLevel,
+    verifyPhone,
 } from '../../../modules';
 import { Modal, CustomInput } from '../../components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
@@ -52,13 +53,21 @@ export const ProfileScreen: FC = (): ReactElement => {
     const [newPhoneValue, setNewPhoneValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
 
+    const phone = user.phones && user.phones.reverse();
+
+    console.log(user);
+
     const handleFetchTwoFaPhone = async () => {
-        user.otp ? setShowModalChangePhone(!showModalChangePhone) : history.push('/two-fa-activation');
+        user.otp ? setShowModal2FA(!showModal2Fa) : setShowModalChangePhone(!showModalChangePhone);
     };
 
-    // const handleSendCodePhone = () => {
-    //     dispatch(sendPhoneCode({codeSend: true}));
-    // };
+    const handleSendCodePhone = () => {
+        dispatch(sendCode({ phone_number: newPhoneValue }));
+    };
+
+    const handleChangePhone = () => {
+        dispatch(verifyPhone({ phone_number: newPhoneValue, verification_code: verificationCode }));
+    };
 
     const handleFetchTwoFaGoogle = () => {
         user.otp ? setShowModal2FAGoogle(!showModal2FaGoogle) : history.push('/two-fa-activation');
@@ -116,13 +125,15 @@ export const ProfileScreen: FC = (): ReactElement => {
     const modalPhoneContent = () => {
         return (
             <React.Fragment>
-                <p className="text-sm grey-text mb-24">Set your new Phone number and verifed</p>
+                <p className="text-sm grey-text mb-24">
+                    Set Your {!user.phones[0] ? '' : 'New'} Phone Number And Verifed
+                </p>
                 <div className="form">
                     <div className="form-group mb-24">
                         <CustomInput
-                            defaultLabel="New Phone Number"
+                            defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
                             inputValue={newPhoneValue}
-                            label="New Phone Number"
+                            label={`${!user.phones[0] ? '' : 'New'} Phone Number`}
                             placeholder="+6281902912921"
                             type="text"
                             labelVisible
@@ -131,7 +142,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                         />
                     </div>
                     <div className="form-group mb-24">
-                        <label className="white-text text-sm ">Verification Code</label>
+                        <label className="white-text text-sm">Verification Code</label>
                         <div className="d-flex align-items-center">
                             <CustomInput
                                 defaultLabel=""
@@ -145,16 +156,22 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 classNameGroup="mb-0 w-100"
                                 handleChangeInput={(e) => setVerificationCode(e)}
                             />
-                            <button className="btn btn-primary ml-2 text-nowrap">Send Code</button>
+                            <button
+                                disabled={newPhoneValue === '' ? true : false}
+                                onClick={handleSendCodePhone}
+                                className="btn btn-primary ml-2 text-nowrap">
+                                Send Code
+                            </button>
                         </div>
                     </div>
                     <button
                         type="submit"
+                        onClick={handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
                         data-target="#change-phone"
                         data-dismiss="modal">
-                        Change
+                        {!user.phones[0] ? 'Add' : 'Change'}
                     </button>
                 </div>
             </React.Fragment>
@@ -164,7 +181,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     const modalPhoneHeader = () => {
         return (
             <React.Fragment>
-                <h6 className="text-xl font-bold white-text mb-0">Change Phone Number</h6>
+                <h6 className="text-xl font-bold white-text mb-0">{!user.phones[0] ? 'Add' : 'Change'} Phone Number</h6>
                 <ModalCloseIcon className="cursor-pointer ml-4" onClick={() => setShowModalChangePhone(false)} />
             </React.Fragment>
         );
@@ -273,18 +290,24 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                     <PhoneProfileIcon />
                                                 </div>
                                                 <div className="ml-3 mr-3">
-                                                    <p className="mb-1 text-ms font-normal white-text">Phone</p>
-                                                    {/* <span
+                                                    <p className="mb-1 text-ms font-normal white-text text-left">
+                                                        Phone
+                                                    </p>
+                                                    <span className="d-block text-xs grey-text-accent font-normal ">
+                                                        +{phone[0] && phone[0].number}
+                                                    </span>
+                                                    <span
                                                         className={`d-block text-left text-xs  font-normal ${
                                                             !user.phones[0] ? 'danger-text' : 'contrast-text'
                                                         }`}>
                                                         {!user.phones[0] ? 'Unverified' : 'Verified'}
-                                                    </span> */}
-                                                    <span
-                                                        className={`d-block text-left text-xs  font-normal danger-text`}>
-                                                        Unverified
                                                     </span>
                                                 </div>
+                                                {user.phones && user.phones[0] && (
+                                                    <div className="check">
+                                                        <CheckIcon />
+                                                    </div>
+                                                )}
                                             </div>
                                         </button>
                                     </div>

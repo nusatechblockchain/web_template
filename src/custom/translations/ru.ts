@@ -1037,6 +1037,7 @@ export const ru: LangType = {
     'resource.phone.empty_phone_number': 'Номер телефона отсутствует',
     'resource.phone.missing_verification_code': 'Код проверки отсутствует',
     'resource.phone.empty_verification_code': 'Код проверки отсутствует',
+    'resource.phone.too_many_retries': 'Вы слишком много раз запрашивали код подтверждения',
 
     'account.currency.withdrawal.disabled': 'Withdraw is currenctly disabled for currency',
     'account.currency.doesnt_exist': 'Валюта не существует',

@@ -1029,6 +1029,7 @@ export const en = {
     'resource.phone.empty_phone_number': 'Phone number is missing or empty',
     'resource.phone.missing_verification_code': 'Verification code is missing',
     'resource.phone.empty_verification_code': 'Verification code is missing or empty',
+    'resource.phone.too_many_retries': 'You have retried the request verification code too many times',
 
     'account.currency.withdrawal.disabled': 'Withdraw is currenctly disabled for currency',
     'account.currency.doesnt_exist': "Currency doesn't exist",

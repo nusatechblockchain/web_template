@@ -1,13 +1,29 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, MapDispatchToPropsFunction, MapStateToProps } from 'react-redux';
 import { History } from 'history';
 import { RouterProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
-import { setDocumentTitle } from '../../../helpers';
-import { ModalTwoFa, Modal, CustomInput } from '../../components';
+import { passwordMinEntropy } from 'src/api';
+import {
+    setDocumentTitle,
+    PASSWORD_REGEX,
+    passwordErrorFirstSolution,
+    passwordErrorSecondSolution,
+    passwordErrorThirdSolution,
+} from '../../../helpers';
+import {
+    toggle2faFetch,
+    selectChangePasswordSuccess,
+    changePasswordFetch,
+    selectUserInfo,
+    User,
+    userFetch,
+    RootState,
+} from '../../../modules';
+import { ModalTwoFa, Modal, CustomInput, PasswordStrengthMeter } from '../../components';
 import { CheckIcon, GoogleIcon, KeyIcon, MailIcon, PhoneIcon } from '../../../assets/images/ProfileSecurityIcon';
 import { Notification } from '../../../assets/images/Notification';
 import { CloseIcon, ModalCloseIcon } from '../../../assets/images/CloseIcon';
@@ -27,13 +43,22 @@ interface ProfileSecurityState {
     passwordConfirm: string;
     twoFaStatus: boolean;
     passwordMatches: boolean;
+    passwordPopUp: boolean;
 }
 
 interface OwnProps {
     history: History;
 }
 
-type Props = RouterProps & IntlProps & OwnProps;
+interface ReduxProps {
+    user: User;
+}
+
+interface DispatchProps {
+    changePasswordFetch: typeof changePasswordFetch;
+}
+
+type Props = RouterProps & IntlProps & OwnProps & DispatchProps & ReduxProps;
 
 class ProfileSecurityComponent extends React.Component<Props, ProfileSecurityState> {
     constructor(props: Props) {
@@ -55,21 +80,33 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             passwordConfirm: '',
             twoFaStatus: false,
             passwordMatches: true,
+            passwordPopUp: false,
         };
     }
 
     public componentDidMount() {
         setDocumentTitle('Profile Security');
+        console.log(this.props.user);
     }
 
-    // public componentDidUpdate() {
-    //     if (this.state.passwordNew !== this.state.passwordConfirm) {
-    //         this.setState({ passwordMatches: false });
-    //     }
-    // }
+    public componentDidUpdate() {
+        // if (this.state.passwordNew !== this.state.passwordConfirm) {
+        //     this.setState({ passwordMatches: false });
+        // }
+        // console.log(this.props.user);
+    }
 
     public render() {
-        const { twoFaCode, twoFaPasswordCode, showPhoneModal, showPasswordModal, twoFaStatus } = this.state;
+        const {
+            twoFaCode,
+            twoFaPasswordCode,
+            showPhoneModal,
+            showPasswordModal,
+            twoFaStatus,
+            passwordConfirm,
+            passwordNew,
+            passwordOld,
+        } = this.state;
 
         // google two fa
         const handleSubmitTwoFa = () => {
@@ -80,6 +117,13 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             } else {
                 alert('kode yang anda masukkan salah');
             }
+        };
+
+        // handle fa and password
+        const handleClickPassword = () => {
+            this.props.user.otp
+                ? this.setState({ showTwoFaPhoneModal: true })
+                : this.setState({ showPasswordModal: true });
         };
 
         // two fa phone
@@ -234,7 +278,8 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                             <button
                                                 type="button"
                                                 className="btn btn-transparent gradient-text font-bold text-sm w-auto px-0 mr-3"
-                                                onClick={() => this.setState({ showTwoFaPasswordModal: true })}>
+                                                // onClick={() => this.setState({ showTwoFaPasswordModal: true })}
+                                                onClick={() => handleClickPassword()}>
                                                 Change
                                             </button>
                                         </div>
@@ -340,7 +385,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
         );
     };
 
-    // Render phone modal
+    // Render password modal
     public modalPasswordContent = () => {
         return (
             <React.Fragment>
@@ -374,6 +419,18 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                 handleChangeInput={(e) => this.setState({ passwordNew: e })}
                             />
                         </div>
+
+                        <div>
+                            {/* <PasswordStrengthMeter
+                        minPasswordEntropy={passwordMinEntropy()}
+                        currentPasswordEntropy={props.currentPasswordEntropy}
+                        passwordExist={this.state.passwordNew !== ''}
+                        passwordErrorFirstSolved={this.passwordErrorFirstSolved}
+                        passwordErrorSecondSolved={passwordErrorSecondSolved}
+                        passwordErrorThirdSolved={passwordErrorThirdSolved}
+                        passwordPopUp={passwordPopUp}
+                    /> */}
+                        </div>
                         <div className="form-group position-relative mb-24">
                             <CustomInput
                                 defaultLabel="Confirm Password "
@@ -388,6 +445,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                             />
                         </div>
                         <button
+                            onClick={this.handleChangePassword}
                             type="submit"
                             className="btn btn-primary btn-block"
                             data-dismiss="modal"
@@ -412,6 +470,27 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             </React.Fragment>
         );
     };
+
+    // handle change password
+    public handleChangePassword = () => {
+        this.props.changePasswordFetch({
+            old_password: this.state.passwordOld,
+            new_password: this.state.passwordNew,
+            confirm_password: this.state.passwordConfirm,
+        });
+    };
 }
 
-export const Security = compose(injectIntl, withRouter, connect())(ProfileSecurityComponent) as React.ComponentClass;
+const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => ({
+    user: selectUserInfo(state),
+});
+
+const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
+    changePasswordFetch: (credentials) => dispatch(changePasswordFetch(credentials)),
+});
+
+export const Security = compose(
+    injectIntl,
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(ProfileSecurityComponent) as React.ComponentClass;
