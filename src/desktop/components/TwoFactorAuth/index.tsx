@@ -1,7 +1,9 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { CodeVerification } from '../../components';
+import { signInRequire2FA } from '../../../modules';
 
 export interface TwoFactorAuthProps {
     isMobile?: boolean;
@@ -18,14 +20,13 @@ export interface TwoFactorAuthProps {
 export const TwoFactorAuthComponent: React.FC<TwoFactorAuthProps> = ({
     isMobile,
     isLoading,
-    title,
-    message,
     otpCode,
     buttonLabel,
     onSubmit,
     handleOtpCodeChange,
-    handleClose2fa,
 }) => {
+    const dispatch = useDispatch();
+
     const handleEnterPress = React.useCallback(
         (event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.key === 'Enter' && otpCode.length >= 6) {
@@ -35,6 +36,10 @@ export const TwoFactorAuthComponent: React.FC<TwoFactorAuthProps> = ({
         },
         [onSubmit, otpCode]
     );
+
+    const handleRemoveRequire2Fa = useCallback(() => {
+        dispatch(signInRequire2FA({ require2fa: false }));
+    }, [dispatch]);
 
     return (
         <React.Fragment>
@@ -59,9 +64,12 @@ export const TwoFactorAuthComponent: React.FC<TwoFactorAuthProps> = ({
                 </Button>
             </form>
             <div className="mt-3">
-                <Link to="/signin" className="cursor-pointer btn btn-primary btn-outline btn-block">
+                <button
+                    type="button"
+                    onClick={handleRemoveRequire2Fa}
+                    className="cursor-pointer btn btn-primary btn-outline btn-block">
                     <span className="gradient-text">+ Sign In With Another Account</span>
-                </Link>
+                </button>
             </div>
         </React.Fragment>
     );

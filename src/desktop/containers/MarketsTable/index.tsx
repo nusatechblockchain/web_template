@@ -37,6 +37,8 @@ const MarketsTableComponent = (props) => {
 
     const marketTickers = useSelector(selectMarketTickers);
     const currencies = useSelector(selectCurrencies);
+    console.log(currencies);
+
     const userData = useSelector(selectUserInfo);
     const [currentBidUnit, setCurrentBidUnit] = React.useState('');
 

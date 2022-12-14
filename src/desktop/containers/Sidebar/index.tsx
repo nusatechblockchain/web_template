@@ -135,19 +135,6 @@ class Side extends React.Component<Props, SidebarState> {
                     path: '/trade-history',
                 },
                 {
-                    name: 'Profile Setting',
-                    icon: (
-                        <SettingIcon
-                            fillColor={
-                                this.state.menuProfileActive === 'Profile Setting'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
-                    path: '/profile/setting',
-                },
-                {
                     name: 'Security',
                     icon: (
                         <SecurityIcon

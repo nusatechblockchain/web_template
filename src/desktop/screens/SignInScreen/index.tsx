@@ -188,6 +188,10 @@ export const SignInScreen: React.FC = () => {
         [formatMessage, history]
     );
 
+    const handleRemoveRequire2Fa = useCallback(() => {
+        dispatch(signInRequire2FA({ require2fa: false }));
+    }, [dispatch]);
+
     return (
         <React.Fragment>
             <div className="row sign-in-screen">
