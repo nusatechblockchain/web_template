@@ -142,13 +142,17 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                     </div>
 
                     {!user.otp && (
-                        <div>
-                            <p>{this.t('page.body.profile.apiKeys.noOtp')}</p>
+                        <div className="px-24">
+                            <p className="mt-4  warning-text font-semibold text-md">
+                                {this.t('page.body.profile.apiKeys.noOtp')}
+                            </p>
                         </div>
                     )}
 
                     {user.otp && dataLoaded && !apiKeys.length && (
-                        <div>{this.t('page.body.profile.apiKeys.noKeys')}</div>
+                        <div className="text-center mt-4 grey-text-accent text-ms">
+                            {this.t('page.body.profile.apiKeys.noKeys')}
+                        </div>
                     )}
 
                     {user.otp && dataLoaded && apiKeys.length > 0 && (
@@ -271,7 +275,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                         </div>
                         <div className="secret-section">
                             <p className="secret-warning grey-text-accent text-xs">
-                                <span className="secret-sign text-ms mr-2">&#9888;</span>
+                                <span className="secret-sign warning-text text-ms mr-2">&#9888;</span>
                                 <span className="white-text text-sm">
                                     {this.t('page.body.profile.apiKeys.modal.secret_key')}
                                 </span>
@@ -294,6 +298,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                             </fieldset>
                         </div>
                         <p className="note-section grey-text-accent text-xs">
+                            <span className="secret-sign warning-text text-ms mr-2">&#9888;</span>
                             <span className="white-text text-sm">
                                 {this.t('page.body.profile.apiKeys.modal.note')}{' '}
                             </span>

@@ -64,6 +64,7 @@ const sidebarProfile = [
     '/wallets',
     '/history-transaction',
     '/trade-history',
+    'change-email',
 ];
 
 type Props = DispatchProps & LocationProps;
@@ -144,7 +145,7 @@ class Side extends React.Component<Props, SidebarState> {
                             }
                         />
                     ),
-                    path: '/profile-setting',
+                    path: '/profile/setting',
                 },
                 {
                     name: 'Security',

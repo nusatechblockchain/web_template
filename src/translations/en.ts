@@ -489,7 +489,7 @@ export const en = {
     'page.body.profile.apiKeys.header': 'My API Keys',
     'page.body.profile.apiKeys.header.create': 'Create new',
 
-    'page.body.profile.apiKeys.noOtp': 'Please enable Two-factor authentication',
+    'page.body.profile.apiKeys.noOtp': 'Please enable Two-Factor Authentication',
     'page.body.profile.apiKeys.show': 'Show',
     'page.body.profile.apiKeys.noKeys': 'You have no API keys',
 

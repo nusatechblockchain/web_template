@@ -231,7 +231,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 </div>
                                 <div className="main-menu">
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={''}>
+                                        <Link to={'/change-email'}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <EmailProfileIcon />
@@ -331,7 +331,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </button>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={'api'}>
+                                        <Link to={'/profile/api-key'}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <ApiProfileIcon />
