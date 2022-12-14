@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { EstimatedValue, WalletsOverview } from '../../containers';
 import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
 import { selectCurrencies, selectWallets } from 'src/modules';
-import { Sidebar } from '../../containers/Sidebar';
 import { Link } from 'react-router-dom';
 
 export const WalletsScreen: FC = (): ReactElement => {

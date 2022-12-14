@@ -145,7 +145,7 @@ class Side extends React.Component<Props, SidebarState> {
                             }
                         />
                     ),
-                    path: '/profile-setting',
+                    path: '/profile/setting',
                 },
                 {
                     name: 'Security',

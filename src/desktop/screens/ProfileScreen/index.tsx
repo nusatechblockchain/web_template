@@ -30,6 +30,8 @@ import {
     selectTwoFactorAuthSuccess,
     sendPhoneCode,
     selectVerifyPhoneSuccess,
+    sendCode,
+    changeUserLevel,
 } from '../../../modules';
 import { Modal, CustomInput } from '../../components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';

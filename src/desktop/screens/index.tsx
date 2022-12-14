@@ -22,5 +22,7 @@ export * from './MarketOpen';
 export * from './TradingFutureScreen';
 export * from './TradingScreen';
 export * from './HistoryTrade';
+export * from './AnnouncementScreen';
+export * from './FAQScreen';
 export * from './ChangeEmail';
 export * from './ProfileSettingScreen';
