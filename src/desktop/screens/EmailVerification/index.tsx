@@ -166,9 +166,6 @@ class EmailVerificationComponent extends React.Component<Props> {
                                     variant="primary">
                                     Activate Account
                                 </Button>
-                                <p className="gradient-text font-normal text-sm text-underline">
-                                    Didn't receive the verification code?
-                                </p>
                             </div>
                         </div>
                     </div>

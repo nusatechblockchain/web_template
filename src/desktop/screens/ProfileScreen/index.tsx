@@ -37,7 +37,6 @@ import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
-    // console.log(user);
 
     const verifyPhoneSuccess = useSelector(selectVerifyPhoneSuccess);
     const history = useHistory();
@@ -279,6 +278,10 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                         }`}>
                                                         {!user.phones[0] ? 'Unverified' : 'Verified'}
                                                     </span> */}
+                                                    <span
+                                                        className={`d-block text-left text-xs  font-normal danger-text`}>
+                                                        Unverified
+                                                    </span>
                                                 </div>
                                             </div>
                                         </button>
