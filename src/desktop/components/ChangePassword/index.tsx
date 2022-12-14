@@ -137,9 +137,9 @@ export const ChangePasswordComponent = (props) => {
                 break;
         }
 
-        if (success) {
-            setShowModalResendCode(!showModalResendCode);
-        }
+        // if (success) {
+        setShowModalResendCode(!showModalResendCode);
+        // }
 
         dispatch(resetCaptchaState());
     };

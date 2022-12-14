@@ -987,6 +987,8 @@ export const ru: LangType = {
     'identity.session.invalid_captcha_format': 'Неверный формат captcha',
 
     // resource module
+    'resource.email.code_sent_too_fast': 'Вы слишком быстро отправили код подтверждения по электронной почте',
+
     'resource.otp.missing_code': '2FA отсутствует',
     'resource.otp.empty_code': '2FA отсутствует',
 

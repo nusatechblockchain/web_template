@@ -52,7 +52,6 @@ interface LocationProps extends RouterProps {
 
 export interface SidebarState {
     menuProfileActive: string;
-    menuWalletActive: string;
     dataProfile: any;
 }
 
@@ -75,14 +74,12 @@ class Side extends React.Component<Props, SidebarState> {
         super(props);
 
         this.state = {
-            menuProfileActive: 'Dashboard',
-            menuWalletActive: 'Overview',
+            menuProfileActive: 'Wallet',
             dataProfile: [],
         };
     }
 
     componentDidMount() {
-        console.log(this.state.menuProfileActive);
         this.setState({
             dataProfile: [
                 {
@@ -238,7 +235,43 @@ class Side extends React.Component<Props, SidebarState> {
                                     <li
                                         onClick={() => this.setState({ menuProfileActive: el.name })}
                                         className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                        <div className="mr-8">{el.icon}</div>
+                                        <div className="mr-8">
+                                            {el.name === 'Dashboard' ? (
+                                                <UserIcon
+                                                    strokeColor={
+                                                        this.state.menuProfileActive === 'Dashboard'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'Wallet' ? (
+                                                <WalletIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Wallet'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'Market Order' ? (
+                                                <AnalysIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Market Order'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'Trade History' ? (
+                                                <CalendarIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Trade History'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : (
+                                                ''
+                                            )}
+                                        </div>
                                         <p
                                             className={`font-bold text-sm mb-0 ${
                                                 this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
@@ -256,7 +289,59 @@ class Side extends React.Component<Props, SidebarState> {
                                     <li
                                         onClick={() => this.setState({ menuProfileActive: el.name })}
                                         className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                        <div className="mr-8">{el.icon}</div>
+                                        <div className="mr-8">
+                                            {el.name === 'Profile Setting' ? (
+                                                <SettingIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Profile Setting'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'Security' ? (
+                                                <SecurityIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Security'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'Referral' ? (
+                                                <AddUserIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Referral'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'API Management' ? (
+                                                <ApiIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'API Management'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'Announcement' ? (
+                                                <AnnouncementIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'Announcement'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : el.name === 'FAQ' ? (
+                                                <FaqIcon
+                                                    fillColor={
+                                                        this.state.menuProfileActive === 'FAQ'
+                                                            ? 'var(--text-primary-color)'
+                                                            : 'var(--text-secondary-color)'
+                                                    }
+                                                />
+                                            ) : (
+                                                ''
+                                            )}
+                                        </div>
                                         <p
                                             className={`font-bold text-sm mb-0 ${
                                                 this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'

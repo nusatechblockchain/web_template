@@ -979,6 +979,8 @@ export const en = {
     'identity.session.invalid_captcha_format': 'Invalid captcha format',
 
     // resource module
+    'resource.email.code_sent_too_fast': 'You sent the verification email code too fast',
+
     'resource.otp.missing_code': 'OTP code is missing',
     'resource.otp.empty_code': 'OTP code is missing or empty',
 
