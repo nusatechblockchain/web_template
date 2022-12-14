@@ -198,7 +198,7 @@ export const MarketOpen: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="market-order-screen content-wrapper dark-bg-main">
-                <div className="px-24 dark-bg-main">
+                <div className="px-24 pt-4 pb-4 dark-bg-main">
                     <h1 className="m-0 white-text text-xl">Market Orders</h1>
                 </div>
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
