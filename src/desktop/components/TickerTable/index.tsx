@@ -23,7 +23,7 @@ export const TickerTable: React.FC<Props> = ({
 
     const renderItem = React.useCallback(
         (market, index: number) => {
-            const marketChangeColor = +(market.change || 0) < 0 ? 'negative' : 'positive';
+            const marketChangeColor = +(market.change || 0) < 0 ? 'negative-price' : 'positive-price';
             return (
                 <tr key={index} onClick={() => redirectToTrading(market.id)}>
                     <td>

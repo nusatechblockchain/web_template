@@ -158,11 +158,6 @@ const WalletDepositBody = (props) => {
         }
     }, [depositAddress, currencyItem, blockchainNetwork]);
 
-    // console.log(addressDeposit);
-    // console.log(block, 'BLOCK');
-    console.log(blockchain, 'BLOCKCHAIN');
-    console.log(blockchainNetwork, 'NETWORK');
-
     const renderDeposit = useMemo(() => {
         return (
             <React.Fragment>
