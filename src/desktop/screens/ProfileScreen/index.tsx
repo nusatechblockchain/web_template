@@ -292,7 +292,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                         Phone
                                                     </p>
                                                     <span className="d-block text-xs grey-text-accent font-normal ">
-                                                        +{phone[0] && phone[0].number}
+                                                        {phone[0] && phone[0].number && `+ ${phone[0].number}`}
                                                     </span>
                                                     <span
                                                         className={`d-block text-left text-xs  font-normal ${

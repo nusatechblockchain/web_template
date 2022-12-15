@@ -373,9 +373,8 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
-                    <PrivateRoute
+                    <PublicRoute
                         loading={userLoading}
-                        isLogged={isLoggedIn}
                         path="/markets/:currency/detail"
                         component={MarketDetailScreen}
                     />
@@ -385,12 +384,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/markets-open"
                         component={MarketOpen}
                     />
-                    <PublicRoute
-                        loading={userLoading}
-                        // isLogged={isLoggedIn}
-                        path="/markets"
-                        component={MarketListScreen}
-                    />
+                    <PublicRoute loading={userLoading} path="/markets" component={MarketListScreen} />
 
                     <PrivateRoute
                         loading={userLoading}
