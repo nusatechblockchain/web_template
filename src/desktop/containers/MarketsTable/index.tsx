@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Decimal } from '../../../components';
 import { TickerTable } from '../../components';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { useMarketsFetch, useMarketsTickersFetch } from '../../../hooks';
 import {
     Market,
@@ -27,18 +30,32 @@ const defaultTicker = {
     volume: '0.0',
 };
 
+const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
+};
+
+const cardBanner = [
+    { date: '12-12-2022', title: 'Title card banner', desc: 'description banner card' },
+    { date: '12-12-2022', title: 'Title card banner', desc: 'description banner card' },
+    { date: '12-12-2022', title: 'Title card banner', desc: 'description banner card' },
+    { date: '12-12-2022', title: 'Title card banner', desc: 'description banner card' },
+    { date: '12-12-2022', title: 'Title card banner', desc: 'description banner card' },
+];
+
 const MarketsTableComponent = (props) => {
     useMarketsFetch();
     useMarketsTickersFetch();
     const history = useHistory();
     const dispatch = useDispatch();
     const markets = useSelector(selectMarkets);
-    console.log(markets);
-
     const marketTickers = useSelector(selectMarketTickers);
     const currencies = useSelector(selectCurrencies);
-    console.log(currencies);
-
     const userData = useSelector(selectUserInfo);
     const [currentBidUnit, setCurrentBidUnit] = React.useState('');
 
@@ -111,7 +128,10 @@ const MarketsTableComponent = (props) => {
               }))
         : [];
 
-    const filteredMarkets = formattedMarkets
+    const popularMarket = [...formattedMarkets].sort((a, b) => b.price - a.price);
+    const topPopular = popularMarket.slice(0, 10);
+
+    const filteredMarkets = topPopular
         .map((market) => {
             if (
                 market.state &&
@@ -158,125 +178,40 @@ const MarketsTableComponent = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="container index-2">
-                    <div className="overflow-auto py-5">
-                        <div className="slider-announcement mb-12">
-                            <div className="dark-bg-main mr-4 radius-md">
-                                <div
-                                    className="slider-item"
-                                    style={{
-                                        backgroundImage: `url(${SliderBgImage})`,
-                                    }}>
-                                    <div className="content">
-                                        <div className="d-flex justify-content-end">
-                                            <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div className="mr-2">
-                                                <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
-                                                <p className="text-sm font-bold white-text mb-1">Menu card image</p>
-                                                <p className="text-xs grey-text-accent">Body menu card</p>
+                <div className="container index-2 mt-5">
+                    <div className="mb-12">
+                        <Slider {...settings}>
+                            {cardBanner &&
+                                cardBanner.map((item, key) => (
+                                    <div key={key} className="p-2">
+                                        <div className="dark-bg-main p-3 radius-md">
+                                            <div
+                                                className="slider-item"
+                                                style={{
+                                                    backgroundImage: `url(${SliderBgImage})`,
+                                                }}>
+                                                <div className="content">
+                                                    <div className="d-flex justify-content-end">
+                                                        <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                                    </div>
+                                                    <div className="d-flex justify-content-between align-items-center">
+                                                        <div className="mr-2">
+                                                            <p className="text-ms grey-text-accent mb-8">{item.date}</p>
+                                                            <p className="text-sm font-bold white-text mb-1">
+                                                                {item.title}
+                                                            </p>
+                                                            <p className="text-xs grey-text-accent">{item.desc}</p>
+                                                        </div>
+                                                        <a href="">
+                                                            <ArrowDownLarge className={'mx-1'} />
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <a href="">
-                                                <ArrowDownLarge className={'mx-1'} />
-                                            </a>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="dark-bg-main mr-4 radius-md">
-                                <div
-                                    className="slider-item"
-                                    style={{
-                                        backgroundImage: `url(${SliderBgImage})`,
-                                    }}>
-                                    <div className="content">
-                                        <div className="d-flex justify-content-end">
-                                            <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div className="mr-2">
-                                                <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
-                                                <p className="text-sm font-bold white-text mb-1">Menu card image</p>
-                                                <p className="text-xs grey-text-accent">Body menu card</p>
-                                            </div>
-                                            <a href="">
-                                                <ArrowDownLarge className={'mx-1'} />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="dark-bg-main mr-4 radius-md">
-                                <div
-                                    className="slider-item"
-                                    style={{
-                                        backgroundImage: `url(${SliderBgImage})`,
-                                    }}>
-                                    <div className="content">
-                                        <div className="d-flex justify-content-end">
-                                            <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div className="mr-2">
-                                                <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
-                                                <p className="text-sm font-bold white-text mb-1">Menu card image</p>
-                                                <p className="text-xs grey-text-accent">Body menu card</p>
-                                            </div>
-                                            <a href="">
-                                                <ArrowDownLarge className={'mx-1'} />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="dark-bg-main mr-4 radius-md">
-                                <div
-                                    className="slider-item"
-                                    style={{
-                                        backgroundImage: `url(${SliderBgImage})`,
-                                    }}>
-                                    <div className="content">
-                                        <div className="d-flex justify-content-end">
-                                            <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div className="mr-2">
-                                                <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
-                                                <p className="text-sm font-bold white-text mb-1">Menu card image</p>
-                                                <p className="text-xs grey-text-accent">Body menu card</p>
-                                            </div>
-                                            <a href="">
-                                                <ArrowDownLarge className={'mx-1'} />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="dark-bg-main mr-4 radius-md">
-                                <div
-                                    className="slider-item"
-                                    style={{
-                                        backgroundImage: `url(${SliderBgImage})`,
-                                    }}>
-                                    <div className="content">
-                                        <div className="d-flex justify-content-end">
-                                            <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div className="mr-2">
-                                                <p className="text-ms grey-text-accent mb-8">21Hours Ago</p>
-                                                <p className="text-sm font-bold white-text mb-1">Menu card image</p>
-                                                <p className="text-xs grey-text-accent">Body menu card</p>
-                                            </div>
-                                            <a href="">
-                                                <ArrowDownLarge className={'mx-1'} />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                ))}
+                        </Slider>
                     </div>
                     <h2 className="text-main-title white-text text-center font-extrabold ">Popular Crypto Coins</h2>
                     <p className=" mb-24 text-md font-normal grey-text-accent text-center">

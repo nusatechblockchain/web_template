@@ -55,8 +55,6 @@ export const ProfileScreen: FC = (): ReactElement => {
 
     const phone = user.phones && user.phones.reverse();
 
-    console.log(user);
-
     const handleFetchTwoFaPhone = async () => {
         user.otp ? setShowModal2FA(!showModal2Fa) : setShowModalChangePhone(!showModalChangePhone);
     };

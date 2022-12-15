@@ -3,7 +3,7 @@ import { useDocumentTitle } from 'src/hooks';
 import { CustomInput, CodeVerification, Modal } from '../../components';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { alertPush } from '../../../modules';
+import { alertPush, selectUserInfo } from '../../../modules';
 
 export const ChangeEmail: FC = (): ReactElement => {
     useDocumentTitle('ChangeEmail');
@@ -15,6 +15,7 @@ export const ChangeEmail: FC = (): ReactElement => {
     const [showModal, setShowModal] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
+    const user = useSelector(selectUserInfo);
 
     const renderModalContent = () => (
         <React.Fragment>
@@ -47,8 +48,17 @@ export const ChangeEmail: FC = (): ReactElement => {
         dispatch(alertPush({ message: ['success change email'], type: 'success' }));
     };
 
-    const disableButton = () => {
-        return emailCode != '' && code2Fa != '';
+    const disableButton = (buttonActive) => {
+        switch (buttonActive) {
+            case 'continue':
+                if (user.otp) {
+                    return emailCode == '' || code2Fa == '';
+                } else {
+                    return emailCode == '';
+                }
+            case 'submit':
+                return newEmail == '' || verificationCode == '';
+        }
     };
 
     return (
@@ -88,8 +98,8 @@ export const ChangeEmail: FC = (): ReactElement => {
                             </div>
                         </div>
                     </div>
-                    <h6 className="text-ms white-text font-semibold">Security Verification</h6>
-                    <form action="" className="change-email-form">
+                    <h6 className="text-ms white-text font-semibold px-3">Security Verification</h6>
+                    <form action="" className="change-email-form px-3">
                         <div className={`mb-24 step ${step == 1 ? ' show' : 'hide'}`} id="step-one">
                             <div className="d-flex align-items-center justify-content-between mb-24">
                                 <label
@@ -115,26 +125,31 @@ export const ChangeEmail: FC = (): ReactElement => {
                                     </button>
                                 </div>
                             </div>
-                            <div className="d-flex align-items-center justify-content-between mb-24">
-                                <label className="input-label text-ms white-text pr-4 font-normal" htmlFor="">
-                                    2FA Code
-                                </label>
-                                <div className="input-classname">
-                                    <CodeVerification
-                                        code={code2Fa}
-                                        codeLength={6}
-                                        onChange={(e) => setCode2Fa(e)}
-                                        placeholder=""
-                                        type="text"
-                                    />
+                            {user && user.otp ? (
+                                <div className="d-flex align-items-center justify-content-between mb-24">
+                                    <label className="input-label text-ms white-text pr-4 font-normal" htmlFor="">
+                                        2FA Code
+                                    </label>
+                                    <div className="input-classname">
+                                        <CodeVerification
+                                            code={code2Fa}
+                                            codeLength={6}
+                                            onChange={(e) => setCode2Fa(e)}
+                                            placeholder="______"
+                                            type="text"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                ''
+                            )}
+
                             <div className="d-flex justify-content-end">
                                 <button
                                     type="button"
                                     className="btn btn-primary px-5"
                                     id="next-step"
-                                    disabled={!disableButton}
+                                    disabled={disableButton('continue')}
                                     onClick={() => setStep(2)}>
                                     Continue
                                 </button>
@@ -185,6 +200,7 @@ export const ChangeEmail: FC = (): ReactElement => {
                                 <button
                                     type="button"
                                     className="btn btn-primary px-5"
+                                    disabled={disableButton('submit')}
                                     onClick={() => setShowModal(true)}>
                                     Submit
                                 </button>

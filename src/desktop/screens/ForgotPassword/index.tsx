@@ -127,7 +127,7 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
         const { email } = this.state;
         const { captcha_response, errorForgotPassword } = this.props;
 
-        console.log(errorForgotPassword, 'INI DARI FUNCTION');
+        // console.log(errorForgotPassword, 'INI DARI FUNCTION');
         switch (captchaType()) {
             case 'recaptcha':
             case 'geetest':
