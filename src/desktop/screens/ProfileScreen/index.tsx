@@ -56,7 +56,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     const phone = user.phones && user.phones.reverse();
 
     const handleFetchTwoFaPhone = async () => {
-        user.otp ? setShowModal2FA(!showModal2Fa) : setShowModalChangePhone(!showModalChangePhone);
+        user.otp ? setShowModalChangePhone(!showModalChangePhone) : history.push('/two-fa-activation');
     };
 
     const handleSendCodePhone = () => {
@@ -74,49 +74,6 @@ export const ProfileScreen: FC = (): ReactElement => {
     const handleDisableTwoFactor = async () => {
         await dispatch(toggle2faFetch({ code: twoFaGoogleValue, enable: false }));
         setShowModal2FAGoogle(!showModal2FaGoogle);
-    };
-
-    // render two fa phone modal
-    const modalTwoFaPhoneContent = () => {
-        return (
-            <React.Fragment>
-                <p className="text-sm grey-text mb-24">
-                    To ensure security, withdrawals, P2P transactions, and red envelopes will be temporarily unavailable
-                    for 24 hours after changing the security settings.
-                </p>
-                <div className="form">
-                    <div className="form-group mb-24">
-                        <CustomInput
-                            defaultLabel="two-fa"
-                            inputValue={twoFaPhoneValue}
-                            label="2FA Code"
-                            placeholder="______"
-                            type="text"
-                            labelVisible
-                            classNameInput="text-center spacing-10"
-                            classNameLabel="white-text text-sm"
-                            handleChangeInput={(e) => settwoFaPhoneValue(e)}
-                        />
-                    </div>
-                    <button
-                        type="button"
-                        className="btn btn-primary btn-block"
-                        data-dismiss="modal"
-                        onClick={handleFetchTwoFaPhone}>
-                        Next
-                    </button>
-                </div>
-            </React.Fragment>
-        );
-    };
-
-    const modalTwoFaPhoneHeader = () => {
-        return (
-            <React.Fragment>
-                <h6 className="text-xl font-bold white-text mb-0">2FA Verification</h6>
-                <ModalCloseIcon className="cursor-pointer" onClick={() => setShowModal2FA(false)} />
-            </React.Fragment>
-        );
     };
 
     // Render phone modal
@@ -727,7 +684,6 @@ export const ProfileScreen: FC = (): ReactElement => {
             </div>
 
             {/* modal */}
-            <Modal content={modalTwoFaPhoneContent()} header={modalTwoFaPhoneHeader()} show={showModal2Fa} />
             <Modal content={modalTwoFaGoogleContent()} header={modalTwoFaGoogleHeader()} show={showModal2FaGoogle} />
             <Modal content={modalPhoneContent()} header={modalPhoneHeader()} show={showModalChangePhone} />
         </React.Fragment>

@@ -141,7 +141,9 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                           {totalBalance ? totalBalance.toString() : '0'}
                       </Decimal>,
                       formatWithSeparators(estimatedValue, ','),
-                      <p></p>,
+                      <Decimal key={index} fixed={fixed} thousSep=",">
+                          {spotBalance}
+                      </Decimal>,
                       <Decimal key={index} fixed={fixed} thousSep=",">
                           {spotLocked}
                       </Decimal>,
