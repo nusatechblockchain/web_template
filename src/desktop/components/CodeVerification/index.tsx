@@ -44,6 +44,7 @@ const CodeVerification: FC<CodeVerificationProps> = (props: CodeVerificationProp
                 inputMode={inputMode}
                 onChange={onCodeChange}
                 onKeyPress={onSubmit}
+                placeholder={placeholder}
             />
             {showPaste2FA && (
                 <div className="cursor-pointer grey-text text-sm mt-1" onClick={() => paste2FA()}>

@@ -414,7 +414,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                     />
                     <PublicRoute loading={userLoading} path="/announcement" component={AnnouncementScreen} />
                     <PublicRoute loading={userLoading} path="/faq" component={FAQScreen} />
-                    <PrivateRoute
+                    <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/change-email"
