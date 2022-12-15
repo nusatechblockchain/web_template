@@ -69,10 +69,12 @@ export const ChangePasswordComponent = (props) => {
 
         props.handleChangePassword(payload);
 
+        setCode('');
         setOldPassword('');
         setNewPassword('');
         setConfirmationPassword('');
         setConfirmPasswordFocus(false);
+        setShowModalConfirmation(false);
     };
 
     const handleChangeOTP = (e) => {

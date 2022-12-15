@@ -7,7 +7,7 @@ import { BtcIcon, DogeIcon, BnbIcon } from '../../../assets/images/CoinIcon';
 
 export interface CardMarketProps {
     title: string;
-    data?: [];
+    data?: any;
 }
 
 export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
@@ -19,30 +19,24 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
             <div className="com-card-market dark-bg-accent radius-md mb-24">
                 <h3 className="text-xs font-bold grey-text-accent">{title}</h3>
                 <table>
-                    <tr className="text-sm font-bold com-card-market__data">
-                        <td className="d-flex align-items-center pr-8">
-                            <BtcIcon className="mr-8 coin" />
-                            <p className="white-text m-0">BTC</p>
-                        </td>
-                        <td className="white-text pr-8">19385.01</td>
-                        <td className="primary">+0.17%</td>
-                    </tr>
-                    <tr className="text-sm font-bold com-card-market__data">
-                        <td className="d-flex align-items-center pr-8">
-                            <BnbIcon className="mr-8 icon" />
-                            <p className="white-text m-0">BNB</p>
-                        </td>
-                        <td className="white-text pr-8">0.4436</td>
-                        <td className="primary">+0.25%</td>
-                    </tr>
-                    <tr className="text-sm font-bold com-card-market__data">
-                        <td className="d-flex align-items-center pr-8">
-                            <DogeIcon className="mr-8 coin" />
-                            <p className="white-text m-0">DOGE</p>
-                        </td>
-                        <td className="white-text pr-8">225.6</td>
-                        <td className="danger">-0.82%</td>
-                    </tr>
+                    {data.slice(0, 3).map((el, i) => (
+                        <tr className="text-sm font-bold com-card-market__data">
+                            <td className="d-flex align-items-center pr-8">
+                                <div className="mr-8">
+                                    <img
+                                        src={el && el.currency && el.currency.icon_url}
+                                        alt="coin"
+                                        className="coin rounded-pill"
+                                    />
+                                </div>
+                                <p className="white-text m-0">{el && el.currency && el.currency.id.toUpperCase()}</p>
+                            </td>
+                            <td className="white-text pr-8">{el && el.currency && el.currency.price}</td>
+                            <td className={el && el.price_change_percent?.includes('-') ? 'danger' : 'primary'}>
+                                {el && el.price_change_percent}
+                            </td>
+                        </tr>
+                    ))}
                 </table>
             </div>
         </React.Fragment>
