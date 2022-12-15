@@ -30,6 +30,8 @@ import {
     selectAbilities,
 } from '../../modules';
 
+import { SignInMobileScreen } from '../../mobile/screens';
+
 import {
     LandingScreen,
     SignInScreen,
@@ -249,7 +251,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         const desktopCls = classnames('container-fluid p-0 pg-layout', {
             'trading-layout': location.pathname.includes('/trading'),
         });
-        const mobileCls = classnames('container-fluid pg-layout pg-layout--mobile', {
+        const mobileCls = classnames(' pg-layout pg-layout--mobile', {
             'pg-layout--mobile-setup': location.pathname.includes('/setup'),
         });
         toggleColorTheme(colorTheme);
@@ -262,6 +264,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
             return (
                 <div className={mobileCls}>
                     <Switch>
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/signin"
+                            component={SignInMobileScreen}
+                        />
+
                         <Route path="**">
                             <Redirect to="/trading/" />
                         </Route>
