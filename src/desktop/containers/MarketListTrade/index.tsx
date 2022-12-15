@@ -44,6 +44,8 @@ const MarketListTradeComponent = (props) => {
             ),
         }));
 
+    console.log(marketList);
+
     return (
         <React.Fragment>
             <div className="p-3">
@@ -63,7 +65,7 @@ const MarketListTradeComponent = (props) => {
                     <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
                         <thead>
                             <tr>
-                                <th className="grey-text-accent text-left">Price</th>
+                                <th className="grey-text-accent text-left">Pair</th>
                                 <th className="grey-text-accent text-right text-nowrap">Last Price</th>
                                 <th className="grey-text-accent text-right">Change</th>
                             </tr>
@@ -82,7 +84,7 @@ const MarketListTradeComponent = (props) => {
                                                             alt="btc icon"
                                                         />
                                                     </span>
-                                                    <div className="name ml-3">
+                                                    <div className="name ml-1">
                                                         <p className="text-sm text-white font-bold mb-0">
                                                             {item.currency && item.currency.id.toUpperCase()}
                                                         </p>
@@ -95,14 +97,26 @@ const MarketListTradeComponent = (props) => {
                                         </td>
                                         <td>
                                             <div className="py-2">
-                                                <p className="text-xs green-text my-auto  mb-0 text-right">
+                                                <p
+                                                    className={`text-xs my-auto  mb-0 text-right ${
+                                                        item.last < item.open ? 'danger-text' : 'green-text'
+                                                    }`}>
                                                     {item.last}
                                                 </p>
                                             </div>
                                         </td>
                                         <td>
                                             <div className="py-2">
-                                                <p className="text-xs mb-0 green-text text-right">{item.change}%</p>
+                                                <p
+                                                    className={`text-xs mb-0 text-right ${
+                                                        item.change.includes('+')
+                                                            ? 'green-text'
+                                                            : item.change.includes('-')
+                                                            ? 'danger-text'
+                                                            : 'green-text'
+                                                    }`}>
+                                                    {item.change}%
+                                                </p>
                                             </div>
                                         </td>
                                     </tr>
