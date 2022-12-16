@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { CustomInput, PasswordStrengthMeter } from '../../../desktop/components';
 import { ArrowLeft } from '../../assets/Arrow';
 import { useDispatch, useSelector } from 'react-redux';
 import { passwordMinEntropy } from '../../../api/config';
+import { ModalMobile } from '../../components';
+import { ModalResetPassword } from '../../assets/Modal';
+import { useHistory } from 'react-router';
 import { entropyPasswordFetch, selectCurrentPasswordEntropy } from '../../../modules';
 import {
     passwordErrorFirstSolution,
@@ -13,18 +17,23 @@ import {
     USERNAME_REGEX,
     EMAIL_REGEX,
 } from '../../../helpers';
+import { ModalCheck } from '../../assets/Modal';
 
 const ResetPasswordMobileScreen: React.FC = () => {
     const [pinCodeValue, setPinCodevalue] = React.useState('');
     const [passwordNewFocus, setPasswordNewFocus] = React.useState(false);
     const [passwordValue, setPasswordvalue] = React.useState('');
+    const [showModal, setShowModal] = React.useState(false);
+    const [confirmPasswordValue, setConfirmPasswordvalue] = React.useState('');
     const dispatch = useDispatch();
     const [passwordErrorFirstSolved, setPasswordErrorFirstSolved] = React.useState(false);
     const [passwordErrorSecondSolved, setPasswordErrorSecondSolved] = React.useState(false);
     const [passwordErrorThirdSolved, setPasswordErrorThirdSolved] = React.useState(false);
     const [passwordPopUp, setPasswordPopUp] = React.useState(false);
+    const [passwordMatch, setPasswordMatch] = React.useState(true);
     const currentPasswordEntropy = useSelector(selectCurrentPasswordEntropy);
     const intl = useIntl();
+    const history = useHistory();
 
     const translate = (key: string) => intl.formatMessage({ id: key });
 
@@ -57,6 +66,51 @@ const ResetPasswordMobileScreen: React.FC = () => {
             dispatch(entropyPasswordFetch({ password: value }));
         }, 100);
     };
+
+    const isValidForm = () => {
+        if (
+            !passwordErrorFirstSolved ||
+            !passwordErrorSecondSolved ||
+            !passwordErrorThirdSolved ||
+            pinCodeValue.length < 6 ||
+            !passwordValue ||
+            passwordValue != confirmPasswordValue
+        ) {
+            return true;
+        }
+    };
+
+    React.useEffect(() => {
+        if (passwordValue == confirmPasswordValue) {
+            setPasswordMatch(true);
+        } else {
+            setPasswordMatch(false);
+        }
+    }, [confirmPasswordValue]);
+
+    const handleResetPassword = () => {
+        history.push('/signin');
+    };
+
+    console.log(passwordMatch);
+
+    const renderModal = () => (
+        <React.Fragment>
+            <div className="d-flex justify-content-center">
+                <ModalResetPassword />
+            </div>
+            <h5 className="text-md font-extrabold contrast-text text-center mb-3">Change Password Confirmation</h5>
+            <p className="text-center text-sm grey-text">
+                Are you sure you want to change your password? ,make sure you remember your new password
+            </p>
+            <button onClick={handleResetPassword} className="btn btn-primary btn-mobile btn-block mb-3">
+                Continue
+            </button>
+            <button className="btn btn-success btn-mobile btn-outline w-100" onClick={() => setShowModal(false)}>
+                Close
+            </button>
+        </React.Fragment>
+    );
 
     return (
         <React.Fragment>
@@ -115,34 +169,27 @@ const ResetPasswordMobileScreen: React.FC = () => {
                         translate={translate}
                     />
                 </div>
-                <div className="form-group">
-                    <div className="form-group">
-                        <label htmlFor="password" className="label-form p-0 m-0">
-                            Confirm Password
-                        </label>
-                        <div className="input-group">
-                            <input
-                                type="password"
-                                className="form-control input-password"
-                                id="password"
-                                placeholder="Confirm Password"
-                            />
-                            <div className="input-group-append">
-                                <span className="input-group-text" id="basic-addon2">
-                                    <img
-                                        src="../../../assets/icons/eye-off.svg"
-                                        alt="visibility"
-                                        className="visibility"
-                                    />
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <button data-toggle="modal" data-target="#modal-confirmation" className="btn btn-primary">
-                        Submit
-                    </button>
-                </div>
+                <CustomInput
+                    defaultLabel="Confirm Password"
+                    inputValue={confirmPasswordValue}
+                    label="Confirm Password"
+                    placeholder="Confirm password"
+                    type="password"
+                    classNameLabel="white-text text-sm"
+                    classNameInput="text-ms input-mobile"
+                    handleChangeInput={(e) => setConfirmPasswordvalue(e)}
+                    labelVisible
+                />
+                {!passwordMatch && <p className="danger-text font-normal text-xs">Password doesn't match</p>}
+                <button
+                    type="button"
+                    className="btn btn-primary btn-block btn-mobile"
+                    onClick={() => setShowModal(true)}
+                    disabled={isValidForm()}>
+                    Submit
+                </button>
             </div>
+            <ModalMobile content={renderModal()} show={showModal} />
         </React.Fragment>
     );
 };

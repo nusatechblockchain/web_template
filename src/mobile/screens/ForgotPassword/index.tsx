@@ -10,7 +10,7 @@ const ForgotPasswordMobileScreen: React.FC = () => {
     const history = useHistory();
 
     const handleForgotPassword = () => {
-        history.push('/change-password');
+        history.push('/reset-password');
     };
 
     return (
