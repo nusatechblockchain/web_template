@@ -196,7 +196,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                             <div className="col-6 col-lg-8">
                                 <div className="notification-warning alert show text-ms white-text font-normal position-relative mb-24">
                                     <Notification className="mr-2" />
-                                    Complete your identity verify to start trading with digicoins
+                                    Complete your identity verify to start trading with heaven exchange
                                     <div className="close-icon">
                                         <CloseIcon fill="#F2F0FF" className="ml-2" />
                                     </div>

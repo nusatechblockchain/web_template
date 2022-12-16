@@ -27,7 +27,7 @@ import EtherumIcon from '../../../assets/png/Etherium.png';
 import LiteIcon from '../../../assets/png/LiteCoin.png';
 import MoneroIcon from '../../../assets/png/Monero.png';
 import MarketAnalysisImage from '../../../assets/png/image-blog.png';
-import LandingAplicationImage from '../../../assets/png/aplication.png';
+import LandingAplicationImage from '../../../assets/png/application.png';
 
 interface ReduxProps {
     isLoggedIn: boolean;

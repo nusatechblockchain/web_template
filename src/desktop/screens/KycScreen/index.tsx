@@ -62,7 +62,7 @@ class KycComponent extends React.Component<Props, KycScreenState> {
                         <div className="row">
                             <div className="col-lg-10 col-12">
                                 <div className="notification-warning notification alert show text-ms white-text font-normal position-relative mb-24">
-                                    Complete your identity verify to start trading with digicoins
+                                    Complete your identity verify to start trading with heaven exchange
                                     <div className="close-icon">
                                         <CloseIcon fill="#fff" />
                                     </div>

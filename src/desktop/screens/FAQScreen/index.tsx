@@ -57,7 +57,7 @@ export const FAQScreen: FC = (): ReactElement => {
             <div className="content-wrapper no-sidebar dark-bg-accent pb-5">
                 <div className="overflow-auto py-lg-5" style={{ backgroundImage: `url(${Background})` }}>
                     <div className="d-flex justify-content-center align-items-center">
-                        <h3 className="title-1 white-text py-5 font-bold">Digicoins FAQ</h3>
+                        <h3 className="title-1 white-text py-5 font-bold">Heaven Exchange FAQ</h3>
                     </div>
                 </div>
                 <div className="container">
