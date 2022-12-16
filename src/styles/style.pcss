@@ -8,6 +8,7 @@
 @import "../mobile/components/style.pcss";
 @import "../mobile/containers/style.pcss";
 @import "../routes/Layout/style.pcss"; /* CUSTOM VARIABLE */
+@import "../mobile/screens/style.pcss";
 
 #root {
     position: relative;
@@ -525,6 +526,9 @@
     padding: 0 24px;
     min-height: 100vh;
     padding-top: 72px;
+    &.no-header {
+        padding-top: 24px;
+    }
 }
 
 .pg-mobile-app {

@@ -8,7 +8,7 @@ const SignInMobileScreen: React.FC = () => {
 
     return (
         <React.Fragment>
-            <div className="mobile-container dark-bg-main">
+            <div className="mobile-container no-header dark-bg-main">
                 {require2FA ? <TwoFaAuthenticationMobile /> : <SignInMobile />}
             </div>
         </React.Fragment>

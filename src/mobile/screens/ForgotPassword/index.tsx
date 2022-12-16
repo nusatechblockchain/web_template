@@ -15,7 +15,7 @@ const ForgotPasswordMobileScreen: React.FC = () => {
 
     return (
         <React.Fragment>
-            <div className="mobile-container dark-bg-main">
+            <div className="mobile-container  no-header dark-bg-main">
                 <ArrowLeft className={'back'} />
                 <h1 className="mt-4 font-extrabold text-md grey-text-accent mb-3">Forgot Password</h1>
                 <p className="text-sm grey-text">
