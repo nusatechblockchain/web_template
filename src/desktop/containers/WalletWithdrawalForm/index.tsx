@@ -7,7 +7,7 @@ import './WalletWithdrawalForm.pcss';
 import Select from 'react-select';
 import { CustomStylesSelect, CustomInput } from '../../components';
 import { Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
-import { selectCurrencies, Currency } from '../../../modules';
+import { selectCurrencies, Currency, beneficiariesCreate } from '../../../modules';
 import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 
 export const WalletWithdrawalForm: React.FC = () => {
@@ -17,13 +17,14 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [showModalWithdrawalSuccessfully, setShowModalWithdrawalSuccessfully] = React.useState(false);
     const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
+    const [amount, setAmount] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
 
     const currencies: Currency[] = useSelector(selectCurrencies);
 
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
-            <Link key={item.id} to={`/wallets/${item.id}/deposit`}>
+            <Link key={item.id} to={`/wallets/${item.id}/withdraw`}>
                 <div className="d-flex align-items-center">
                     <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
                     <div>
@@ -146,9 +147,9 @@ export const WalletWithdrawalForm: React.FC = () => {
                             type="text"
                             label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.new' })}
                             placeholder={'Add Amount'}
-                            defaultLabel="New password"
-                            // handleChangeInput={handleChangeNewPassword}
-                            inputValue={''}
+                            defaultLabel=""
+                            handleChangeInput={(e) => setAmount(e)}
+                            inputValue={amount}
                             // handleFocusInput={}
                             classNameLabel="d-none"
                             classNameInput={`dark-bg-accent`}

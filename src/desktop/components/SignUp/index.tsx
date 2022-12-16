@@ -436,35 +436,36 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                 <Modal.Body className="tos-content">
                     <p className="grey-text-accent">SYARAT – SYARAT DAN KETENTUAN UMUM</p>
                     <p className="grey-text-accent">
-                        Syarat – Syarat dan Ketentuan Umum (selanjutnya disebut sebagai “SKU”) INDODAX adalah ketentuan
-                        yang berisikan syarat dan ketentuan mengenai penggunaan produk, jasa, teknologi, fitur layanan
-                        yang diberikan oleh INDODAX termasuk, namun tidak terbatas pada penggunaan Website, Dompet
-                        Bitcoin Indonesia dan INDODAX Trading Platform (Trading App) (untuk selanjutnya disebut sebagai
-                        “Platform INDODAX”) sepanjang tidak diatur secara khusus sebagaimana tercantum pada bagian
-                        registrasi Akun INDODAX yang dibuat pada hari dan tanggal yang tercantum dalam bagian registrasi
-                        Akun https://indodax.com, merupakan satu kesatuan tidak terpisahkan dan persetujuan atas SKU
-                        ini. Dengan mendaftar menjadi Member/Verified Member, Anda menyatakan telah MEMBACA, MEMAHAMI,
-                        MENYETUJUI dan MEMATUHI Persyaratan dan Ketentuan di bawah. Anda disarankan membaca semua
-                        persyaratan dan ketentuan secara seksama sebelum menggunakan layanan platform INDODAX atau
-                        segala layanan yang diberikan, dan bersama dengan ini Anda setuju dan mengikatkan diri terhadap
-                        seluruh kegiatan dalam SKU ini dengan persyaratan dan ketentuan sebagai berikut : DEFINISI
-                        sepanjang konteks kalimatnya tidak menentukan lain, istilah atau definisi dalam SKU memiliki
-                        arti sebagai berikut :
+                        Syarat – Syarat dan Ketentuan Umum (selanjutnya disebut sebagai “SKU”) HEAVEN EXCHANGE adalah
+                        ketentuan yang berisikan syarat dan ketentuan mengenai penggunaan produk, jasa, teknologi, fitur
+                        layanan yang diberikan oleh HEAVEN EXCHANGE termasuk, namun tidak terbatas pada penggunaan
+                        Website, Dompet Bitcoin Indonesia dan HEAVEN EXCHANGE Trading Platform (Trading App) (untuk
+                        selanjutnya disebut sebagai “Platform HEAVEN EXCHANGE”) sepanjang tidak diatur secara khusus
+                        sebagaimana tercantum pada bagian registrasi Akun HEAVEN EXCHANGE yang dibuat pada hari dan
+                        tanggal yang tercantum dalam bagian registrasi Akun https://HEAVEN EXCHANGE.com, merupakan satu
+                        kesatuan tidak terpisahkan dan persetujuan atas SKU ini. Dengan mendaftar menjadi
+                        Member/Verified Member, Anda menyatakan telah MEMBACA, MEMAHAMI, MENYETUJUI dan MEMATUHI
+                        Persyaratan dan Ketentuan di bawah. Anda disarankan membaca semua persyaratan dan ketentuan
+                        secara seksama sebelum menggunakan layanan platform HEAVEN EXCHANGE atau segala layanan yang
+                        diberikan, dan bersama dengan ini Anda setuju dan mengikatkan diri terhadap seluruh kegiatan
+                        dalam SKU ini dengan persyaratan dan ketentuan sebagai berikut : DEFINISI sepanjang konteks
+                        kalimatnya tidak menentukan lain, istilah atau definisi dalam SKU memiliki arti sebagai berikut
+                        :
                     </p>
                     <p className="grey-text-accent">
-                        Website mengacu pada situs online dengan alamat https://indodax.com. Website ini dikelola oleh
-                        INDODAX, dengan tidak terbatas pada para pemilik, investor, karyawan dan pihak-pihak yang
-                        terkait dengan INDODAX. Tergantung pada konteks, “Website” dapat juga mengacu pada jasa, produk,
-                        situs, konten atau layanan lain yang disediakan oleh INDODAX. Aset Kripto adalah komoditas
-                        digital yang menggunakan prinsip teknologi desentralisasi berbasiskan jaringan peer-to-peer
-                        (antar muka)atau disebut dengan Jaringan Blockchain yang diperdagangkan di dalam platform
-                        Blockchain adalah sebuah buku besar terdistribusi (distributed ledger) terbuka yang dapat
-                        mencatat transaksi antara dua pihak secara efisien dan dengan cara yang dapat diverifikasi
-                        secara permanen. Registrasi adalah proses pendaftaran menjadi Member dalam platform INDODAX yang
-                        merupakan proses verifikasi awal untuk memperoleh keterangan, pernyataan dalam penggunaan
-                        layanan platform Member adalah orang (perseorangan), badan usaha, maupun badan hukum yang telah
-                        melakukan registrasi pada platform INDODAX, sehingga memperoleh otorisasi dari platform INDODAX
-                        untuk melakukan{' '}
+                        Website mengacu pada situs online dengan alamat https://HEAVEN EXCHANGE.com. Website ini
+                        dikelola oleh HEAVEN EXCHANGE, dengan tidak terbatas pada para pemilik, investor, karyawan dan
+                        pihak-pihak yang terkait dengan HEAVEN EXCHANGE. Tergantung pada konteks, “Website” dapat juga
+                        mengacu pada jasa, produk, situs, konten atau layanan lain yang disediakan oleh HEAVEN EXCHANGE.
+                        Aset Kripto adalah komoditas digital yang menggunakan prinsip teknologi desentralisasi
+                        berbasiskan jaringan peer-to-peer (antar muka)atau disebut dengan Jaringan Blockchain yang
+                        diperdagangkan di dalam platform Blockchain adalah sebuah buku besar terdistribusi (distributed
+                        ledger) terbuka yang dapat mencatat transaksi antara dua pihak secara efisien dan dengan cara
+                        yang dapat diverifikasi secara permanen. Registrasi adalah proses pendaftaran menjadi Member
+                        dalam platform HEAVEN EXCHANGE yang merupakan proses verifikasi awal untuk memperoleh
+                        keterangan, pernyataan dalam penggunaan layanan platform Member adalah orang (perseorangan),
+                        badan usaha, maupun badan hukum yang telah melakukan registrasi pada platform HEAVEN EXCHANGE,
+                        sehingga memperoleh otorisasi dari platform HEAVEN EXCHANGE untuk melakukan{' '}
                     </p>
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-between border-none rounded-bottom-10">

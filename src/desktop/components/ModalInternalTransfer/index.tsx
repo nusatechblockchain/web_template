@@ -19,21 +19,23 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const [showModalTransfer, setShowModalTransfer] = React.useState(props.showModalTransfer);
     const [showModalTransferConfirmation, setShowModalTransferConfirmation] = React.useState(false);
     const [showModalTransferSuccessfully, setShowModalTransferSuccessfully] = React.useState(false);
+    const [cur, setCur] = React.useState('');
+    const [amount, setAmount] = React.useState('');
+    const [uid, setUid] = React.useState('');
+    const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
 
     const currencies: Currency[] = useSelector(selectCurrencies);
 
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
-            <Link key={item.id} to={`/wallets/${item.id}/deposit`}>
-                <div className="d-flex align-items-center">
-                    <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                    <div>
-                        <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                        <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                    </div>
+            <div className="d-flex align-items-center">
+                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
+                <div>
+                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
+                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
                 </div>
-            </Link>
+            </div>
         );
         return {
             label: customLabel,
@@ -88,6 +90,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                     })}
                                     styles={CustomStylesSelect}
                                     options={optionCurrency}
+                                    onChange={(e) => setCur(e.value)}
                                 />
                             </div>
                         </div>

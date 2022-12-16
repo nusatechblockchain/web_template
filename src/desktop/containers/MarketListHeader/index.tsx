@@ -1,14 +1,7 @@
 import React, { FC, ReactElement, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Decimal } from 'src/components';
-import {
-    selectCurrencies,
-    Market,
-    selectMarkets,
-    selectMarketTickers,
-    setCurrentMarket,
-    selectUserInfo,
-} from 'src/modules';
+import { selectCurrencies, Market, selectMarkets, selectMarketTickers, setCurrentMarket } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { CardMarket } from '../../components';
@@ -30,9 +23,6 @@ export const MarketListHeader: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    const user = useSelector(selectUserInfo);
-
-    console.log(marketTickers, 'INI TICKER');
 
     const marketList = markets.map((market) => ({
         ...market,
@@ -40,8 +30,6 @@ export const MarketListHeader: FC = (): ReactElement => {
         price_change_percent: marketTickers[market.id].price_change_percent || defaultTicker.price_change_percent,
         volume: Decimal.format(Number((marketTickers[market.id] || defaultTicker).volume), market.price_precision),
     }));
-
-    console.log(marketList);
 
     const dataVolumes = marketList && marketList.sort((a, b) => +b.volume - +a.volume);
     const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);

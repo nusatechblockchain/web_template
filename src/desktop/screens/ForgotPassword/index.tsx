@@ -138,16 +138,18 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
                 break;
         }
 
-        // if (errorForgotPassword) {
-        //     ('');
-        // } else {
-        this.props.history.push({
-            pathname: '/accounts/password_reset',
-            state: {
-                email: this.state.email,
-            },
-        });
-        // }
+        console.log(errorForgotPassword, 'INI ERROR');
+
+        if (errorForgotPassword) {
+            ('');
+        } else {
+            this.props.history.push({
+                pathname: '/accounts/password_reset',
+                state: {
+                    email: this.state.email,
+                },
+            });
+        }
 
         this.props.resetCaptchaState();
     };

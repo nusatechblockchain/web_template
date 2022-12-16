@@ -118,7 +118,7 @@ class FooterContainer extends React.Component<Props, State> {
                                     Contact
                                 </a>
                             </div>
-                            <p className="text-sm font-normal white-text mb-0">Copyright @ 2022 Digicoins</p>
+                            <p className="text-sm font-normal white-text mb-0">Copyright @ 2022 Heaven Exchange</p>
                             <div className="d-flex">
                                 <a href="">
                                     <div className="mx-1">

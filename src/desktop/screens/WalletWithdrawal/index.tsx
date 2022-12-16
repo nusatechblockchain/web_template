@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
+import { useDocumentTitle } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
@@ -12,6 +13,7 @@ import { Table } from '../../../components';
 export const WalletWitdrawal: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
+    useDocumentTitle('Wallet || Withdrawal');
     const { currency = '' } = useParams<{ currency?: string }>();
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
