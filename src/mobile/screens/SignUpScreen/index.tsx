@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSignInRequire2FA } from '../../../modules/user/auth';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { CustomInput, PasswordStrengthMeter } from '../../../desktop/components';
@@ -21,7 +20,6 @@ import {
 } from '../../../helpers';
 
 const SignUpMobileScreen: React.FC = () => {
-    const require2FA = useSelector(selectSignInRequire2FA);
     const [usernameValue, setUsernamevalue] = React.useState('');
     const [emailValue, setEmailvalue] = React.useState('');
     const [passwordValue, setPasswordvalue] = React.useState('');
@@ -162,7 +160,7 @@ const SignUpMobileScreen: React.FC = () => {
                 </p>
                 <div className=" d-flex flex-row justify-content-between align-items-center w-100">
                     <button type="button" className="btn btn-primary btn-mobile w-50 mx-2" onClick={handleSignUp}>
-                        Save changes
+                        Accept
                     </button>
                     <button
                         type="button"

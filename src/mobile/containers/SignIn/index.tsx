@@ -2,12 +2,14 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { EMAIL_REGEX } from '../../../helpers';
 import { selectSignInRequire2FA } from '../../../modules/user/auth';
 import { CustomInput } from '../../../desktop/components';
 import { ModalMobile } from '../../components';
 import { ArrowLeft } from '../../assets/Arrow';
 import { UnlockIcon } from '../../assets/UnlockIcon';
 import { ModalCheck } from '../../assets/Modal';
+import { Captcha } from '../../../components';
 
 const SignInMobile: React.FC = () => {
     const require2FA = useSelector(selectSignInRequire2FA);
@@ -16,7 +18,11 @@ const SignInMobile: React.FC = () => {
     const [passwordValue, setPasswordvalue] = React.useState('');
     const history = useHistory();
 
-    const disabelButton = () => emailValue == '' || passwordValue == '';
+    const isValidForm = () => {
+        if (!emailValue.match(EMAIL_REGEX) || passwordValue == '') {
+            return true;
+        }
+    };
 
     const handleSignIn = () => {
         history.push('profile');
@@ -79,9 +85,10 @@ const SignInMobile: React.FC = () => {
                 <p className="text-right w-100 contrast-text text-sm" onClick={() => setShowModal(true)}>
                     Forgot Password?
                 </p>
+
                 <button
                     className="btn btn-primary btn-block btn-mobile"
-                    disabled={disabelButton()}
+                    disabled={isValidForm()}
                     onClick={handleSignIn}>
                     Login
                 </button>
