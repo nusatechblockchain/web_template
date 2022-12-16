@@ -30,7 +30,7 @@ import {
     selectAbilities,
 } from '../../modules';
 
-import { SignInMobileScreen } from '../../mobile/screens';
+import { SignInMobileScreen, SignUpMobileScreen } from '../../mobile/screens';
 
 import {
     LandingScreen,
@@ -269,6 +269,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/signin"
                             component={SignInMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/signup"
+                            component={SignUpMobileScreen}
                         />
 
                         <Route path="**">
