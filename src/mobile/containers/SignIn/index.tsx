@@ -79,7 +79,10 @@ const SignInMobile: React.FC = () => {
                 <p className="text-right w-100 contrast-text text-sm" onClick={() => setShowModal(true)}>
                     Forgot Password?
                 </p>
-                <button className="btn btn-primary btn-block" disabled={disabelButton()} onClick={handleSignIn}>
+                <button
+                    className="btn btn-primary btn-block btn-mobile"
+                    disabled={disabelButton()}
+                    onClick={handleSignIn}>
                     Login
                 </button>
                 <p className="create-account text-xs text-center font-semibold grey-text-accent mt-3">
