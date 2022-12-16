@@ -38,10 +38,10 @@ export const ModalMobile: React.FunctionComponent<ModalProps> = (props) => {
     }
     return (
         <React.Fragment>
-            <div className={`custom-modal fade `}>
+            <div className={`custom-modal-mobile fade `}>
                 <div className="custom-modal-dialog" role="document">
                     <div className="custom-modal-content">
-                        <div className="header d-flex justify-content-between mb-24">{props.header}</div>
+                        <div className="header mb-24">{props.header}</div>
                         <div className="body mb-24">{props.content}</div>
                         {footer ? <div className="footer">{props.footer}</div> : ''}
                     </div>

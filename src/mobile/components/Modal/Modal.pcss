@@ -1,4 +1,4 @@
-.custom-modal {
+.custom-modal-mobile {
     z-index: 99999;
     background: var(--modal-background-color) !important;
     position: fixed;
@@ -13,7 +13,7 @@
     .custom-modal-dialog {
         max-width: 400px !important;
         height: 100%;
-        padding: 24px;
+        padding: 8px;
         display: flex;
         align-items: center;
         margin-top: 0;
@@ -21,7 +21,12 @@
 
     .custom-modal-content {
         background-color: var(--main-background-color);
-        padding: 24px;
+        padding: 12px;
         border-radius: 16px;
+
+        .body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
     }
 }
