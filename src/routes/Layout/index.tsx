@@ -35,6 +35,7 @@ import {
     SignUpMobileScreen,
     EmailVerificationMobileScreen,
     ForgotPasswordMobileScreen,
+    ResetPasswordMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -295,6 +296,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/forgot-password"
                             component={ForgotPasswordMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/reset-password"
+                            component={ResetPasswordMobileScreen}
                         />
 
                         <Route path="**">
