@@ -3,3 +3,22 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.sidebar-offcanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 99999;
+
+    &.hide {
+        transform: translateX(100%);
+        transition: 0.1s;
+    }
+
+    &.show {
+        transform: translateX(0);
+        transition: 0.1s;
+    }
+}
