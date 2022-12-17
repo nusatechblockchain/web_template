@@ -192,7 +192,7 @@ const SignInMobileScreen: React.FC = () => {
     }, [dispatch]);
     return (
         <React.Fragment>
-            <div className="mobile-container dark-bg-main">
+            <div className="mobile-container no-header dark-bg-main">
                 {require2FA ? (
                     <TwoFaAuthenticationMobile
                         isLoading={loading}

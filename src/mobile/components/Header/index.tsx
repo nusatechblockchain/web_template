@@ -22,7 +22,7 @@ import {
     Wallet,
 } from '../../assets/Sidebar';
 
-const noHeaderRoutes = ['/setup', '/signin', '/forgot-password', 'signup', '/email-verification', '/reset-password'];
+const noHeaderRoutes = ['/', '/dashboard'];
 
 const HeaderComponent: React.FC = () => {
     const userLoggedIn = useSelector(selectUserLoggedIn);
@@ -121,6 +121,10 @@ const HeaderComponent: React.FC = () => {
                                     </Link>
                                 </React.Fragment>
                             ))}
+
+                        <div className="px-24 mt-5">
+                            <button className="btn btn-primary btn-mobile btn-block btn-outline">Logout</button>
+                        </div>
                     </div>
                 </div>
             </div>

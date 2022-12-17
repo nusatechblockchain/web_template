@@ -37,6 +37,7 @@ import {
     ForgotPasswordMobileScreen,
     ResetPasswordMobileScreen,
     HomeMobileScreen,
+    ProfileMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -274,13 +275,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PublicRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
-                            path="/"
-                            component={HomeMobileScreen}
-                        />
-
-                        <PublicRoute
-                            loading={userLoading}
-                            isLogged={isLoggedIn}
                             path="/signin"
                             component={SignInMobileScreen}
                         />
@@ -302,6 +296,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PublicRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
+                            path="/profile"
+                            component={ProfileMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
                             path="/forgot-password"
                             component={ForgotPasswordMobileScreen}
                         />
@@ -311,6 +312,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/reset-password"
                             component={ResetPasswordMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/"
+                            component={HomeMobileScreen}
                         />
 
                         <Route path="**">
