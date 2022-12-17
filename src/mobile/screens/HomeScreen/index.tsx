@@ -9,8 +9,17 @@ import { BgCardSmall } from '../../assets/BackgroundCard';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import { Table } from '../../../components';
+import { BnbIcon } from '../../../assets/images/CoinIcon';
+import { BtcIcon } from '../../../assets/images/CoinIcon';
+import GrapUp from '../../assets/Images/home/grap-up.png';
+import GrapDown from '../../assets/Images/home/grapH-down.png';
 
 const HomeMobileScreen: React.FC = () => {
+    const [key, setKey] = React.useState('trading');
+
     const banner = [
         { background: Background1 },
         { background: Background2 },
@@ -25,6 +34,270 @@ const HomeMobileScreen: React.FC = () => {
         { title: 'Menu Card Image', date: '20-12-2022', desc: 'body card image' },
         { title: 'Menu Card Image', date: '20-12-2022', desc: 'body card image' },
         { title: 'Menu Card Image', date: '20-12-2022', desc: 'body card image' },
+    ];
+
+    const trading = [
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+0.20%',
+        },
+    ];
+
+    const newVolume = [
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+0.20%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+    ];
+
+    const Gainers = [
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+0.20%',
+        },
+    ];
+
+    const Losers = [
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-1.00%',
+        },
+        {
+            icon: <BnbIcon />,
+            iconName: 'BNB',
+            iconCode: 'Bnb',
+            tradingCart: <img src={GrapDown}></img>,
+            change: '-2.00%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+0.20%',
+        },
+        {
+            icon: <BtcIcon />,
+            iconName: 'Bitcoin',
+            iconCode: 'Btc',
+            tradingCart: <img src={GrapUp}></img>,
+            change: '+2.00%',
+        },
     ];
 
     const settings = {
@@ -45,6 +318,20 @@ const HomeMobileScreen: React.FC = () => {
         autoplay: true,
         autoplaySpeed: 3000,
         pauseOnHover: true,
+    };
+
+    const renderDataTable = (data) => {
+        return data.map((item) => [
+            <div className="d-flex align-items-center text-sm">
+                {item.icon}
+                <p className="mb-0 white-text text-sm ml-2">{item.iconName}</p>
+                <p className="mb-0 grey-text text-xs ml-2">{item.iconCode}</p>
+            </div>,
+            <div>{item.tradingCart}</div>,
+            <p className={`badge white-text font-bold ${item.change.includes('-') ? 'badge-danger' : 'badge-success'}`}>
+                {item.change}
+            </p>,
+        ]);
     };
 
     return (
@@ -91,6 +378,20 @@ const HomeMobileScreen: React.FC = () => {
                             ))}
                     </Slider>
                 </div>
+                <Tabs id="controlled-tab-example" activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
+                    <Tab eventKey="trading" title="Trading">
+                        <Table data={renderDataTable(trading)} />
+                    </Tab>
+                    <Tab eventKey="new-volume" title="New Volume">
+                        <Table data={renderDataTable(newVolume)} />
+                    </Tab>
+                    <Tab eventKey="gainers" title="Gainers">
+                        <Table data={renderDataTable(Gainers)} />
+                    </Tab>
+                    <Tab eventKey="loser" title="Loser">
+                        <Table data={renderDataTable(Losers)} />
+                    </Tab>
+                </Tabs>
             </div>
         </React.Fragment>
     );

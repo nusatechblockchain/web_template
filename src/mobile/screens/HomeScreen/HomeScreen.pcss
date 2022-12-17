@@ -1,6 +1,8 @@
 .home-screen {
-    background: #333;
-
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 68px !important;
+    max-height: 100vh;
     .heroid {
         transition: all 1s ease-in;
     }
@@ -26,6 +28,10 @@
         }
     }
 
+    .slick-dots {
+        display: none !important;
+    }
+
     .bg-card {
         position: absolute;
         top: 0;
@@ -33,5 +39,26 @@
         right: 0;
         bottom: 0;
         object-fit: cover;
+    }
+
+    .nav {
+        border: 0;
+        display: flex;
+        justify-content: space-between;
+        .nav-link {
+            border-radius: 8px;
+            padding: 4px 16px;
+            color: var(--text-secondary-color);
+            border-radius: 8px;
+            border: 1px solid transparent;
+            font-size: 10px;
+            &.active {
+                background: linear-gradient(var(--main-background-color), var(--main-background-color)) padding-box,
+                    var(--text-gradient-color) border-box !important;
+            }
+        }
+    }
+    .tab-content {
+        overflow-y: auto;
     }
 }
