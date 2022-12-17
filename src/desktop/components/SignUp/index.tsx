@@ -287,9 +287,6 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={!isMobileDevice}
                     labelVisible
                 />
-                {/* {!username.match(USERNAME_REGEX) && !usernameFocused && username.length ? (
-                    <div className="invalid-feedback">{renderUsernameError(username)}</div>
-                ) : null} */}
                 {usernameFocused && !username.match(USERNAME_REGEX) && (
                     <p className="text-xs danger-text m-0 mb-24">
                         Username must be at least 4 characters long and maximum 12 characters
@@ -311,23 +308,10 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     autoFocus={!isUsernameEnabled() && !isMobileDevice}
                     labelVisible
                 />
-                {/* {emailError && <div className="invalid-feedback">{emailError}</div>} */}
                 {emailFocused && !email.match(EMAIL_REGEX) && (
                     <p className="text-xs danger-text m-0 mb-24">Enter a valid email address</p>
                 )}
             </div>
-
-            {/* <div className="mb-3">
-                    <label className="white-text text-sm">Phone</label>
-                    <PhoneInput
-                        country={'id'}
-                        value={''}
-                        onChange={(e) => console.log(e)}
-                        containerClass="container-phone"
-                        inputClass="input-phone"
-                        buttonClass="button-phone"
-                    />
-                </div> */}
 
             {renderPasswordInput()}
 
@@ -381,53 +365,16 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 
             <div className="mt-4 mb-4">{renderCaptcha}</div>
 
-            {/* <label className="checkbox">
-                <input
-                    className="checkbox__input"
-                    type="checkbox"
-                    id="agreeWithTerms"
-                    // checked={hasConfirmed}
-                    // onClick={() => handleCheck}
-                    // onChange={clickCheckBox}
-                />
-                <span className="checkbox__inner ml-1">
-                    <span className="checkbox__tick" />
-                    <span className="checkbox__text grey-text-accent text-sm">
-                        By signing up I agree that I’m 18 years of age or older, to the{' '}
-                        <a className="checkbox__link contrast-text" href="#">
-                            User Agreements
-                        </a>{' '}
-                        ,{' '}
-                        <a className="checkbox__link contrast-text" href="#">
-                            Privacy Policy
-                        </a>{' '}
-                        ,{' '}
-                        <a className="checkbox__link contrast-text" href="#">
-                            Cookie Policy
-                        </a>
-                    </span>
-                </span>
-            </label> */}
-
             <Button
                 block={true}
                 type="button"
                 disabled={disableButton}
                 onClick={handleShow}
-                // onClick={() => setShowModalBeneficiaryList(!showModalBeneficiaryList)}
                 size="lg"
                 className="button registration__button"
                 variant="primary">
                 {isLoading ? 'Loading...' : labelSignUp ? labelSignUp : 'Sign up'}
             </Button>
-
-            {/* {showModalBeneficiaryList && (
-                <ModalBeneficiaryList
-                    showModalBeneficiaryList={showModalBeneficiaryList}
-                    showModalAddBeneficiary={showModalAddBeneficiary}
-                />
-            )}
-            {showModalAddBeneficiary && <ModalAddBeneficiary showModalAddBeneficiary={showModalAddBeneficiary} />} */}
 
             <Modal show={show} onHide={handleClose} className="w-100">
                 <Modal.Header className="rounded-top-10 border-none">

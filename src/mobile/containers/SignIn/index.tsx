@@ -242,8 +242,9 @@ const SignInMobile: React.FC<SignInProps> = ({
                     onClick={handleClick as any}>
                     Login
                 </button>
+
                 <p className="create-account text-xs text-center font-semibold grey-text-accent mt-3">
-                    Create Digicoins account?{' '}
+                    Create Heaven Exchange account?{' '}
                     <Link to={'/signup'} className="contrast-text">
                         Sign up
                     </Link>
