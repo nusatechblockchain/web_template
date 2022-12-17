@@ -39,7 +39,6 @@ import {
 } from '../../../modules';
 import './SignUpScreen.pcss';
 import bgAuth from '../../../assets/png/bg-auth2.png';
-import { Tab, Tabs } from 'react-bootstrap';
 
 interface ReduxProps {
     requireVerification?: boolean;

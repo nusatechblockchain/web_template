@@ -1,5 +1,5 @@
-import { History } from 'history';
 import * as React from 'react';
+import { History } from 'history';
 import { Button, Spinner } from 'react-bootstrap';
 import { injectIntl } from 'react-intl';
 import { connect, MapStateToProps } from 'react-redux';
@@ -69,14 +69,14 @@ class EmailVerificationComponent extends React.Component<Props> {
         setDocumentTitle('Email verification');
 
         if (!this.props.location.state) {
-            this.props.history.push('/login');
+            this.props.history.push('/signin');
         }
     }
 
     public componentDidUpdate(prevProps: Props) {
         const { history, ConfirmationCodeCreateSuccess } = this.props;
         if (ConfirmationCodeCreateSuccess === true) {
-            history.push('/login');
+            history.push('/signin');
         }
     }
 
