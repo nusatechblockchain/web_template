@@ -8,6 +8,8 @@ import { ScanIcon } from '../../assets/ScanIcon';
 import { SearchIcon } from '../../assets/SearchIcon';
 import { UserIcon } from '../../assets/UserIcon';
 import { ArrowLeft, ArrowRight } from '../../assets/Arrow';
+import { CopyableTextField } from '../../../components';
+import Avatar from '../../assets/Images/avatar.png';
 import {
     Announcement,
     ApiManagement,
@@ -27,7 +29,7 @@ const HeaderComponent: React.FC = () => {
     const intl = useIntl();
     const [showSidebar, setShowSidebar] = React.useState(false);
     const shouldRenderHeader = !noHeaderRoutes.some((r) => location.pathname.includes(r));
-
+    const uid = '533221334';
     if (!shouldRenderHeader) {
         return <React.Fragment />;
     }
@@ -63,17 +65,47 @@ const HeaderComponent: React.FC = () => {
                         <div className="sidebar-head mb-24 px-24" onClick={() => setShowSidebar(false)}>
                             <ArrowLeft className={'cursorPointer'} />
                         </div>
-                        <Link to={''}>
-                            <div className="card-user-info d-flex align-items-center px-24 mb-24">
-                                <div className="user-info d-flex justify-content-between align-items-center w-100">
-                                    <div className="login-user d-flex flex-column">
-                                        <h1 className="gradient-text text-lg font-bold">Login</h1>
-                                        <h3 className="grey-text text-sm font-normal">Welcome to Digicoins</h3>
+                        {userLoggedIn ? (
+                            <Link to={''}>
+                                <div className="card-user-info d-flex align-items-center px-24 mb-24">
+                                    <img src={Avatar} className="avatar-image" alt="ava" />
+                                    <div className="user-info d-flex justify-content-between align-items-center ml-2 w-100">
+                                        <div>
+                                            <div className="user-name d-flex align-items-center">
+                                                <h1 className="gradient-text text-md font-bold mb-2">
+                                                    Hi, Nusatech Dev
+                                                </h1>
+                                                <p className="badge badge-warning white-text mb-0 ml-3">Unverifed</p>
+                                            </div>
+                                            <div className="user-id d-flex align-items-center">
+                                                <h3 className="text-sm grey-text d-flex align-items-center">
+                                                    UID :{' '}
+                                                    <CopyableTextField
+                                                        value={uid}
+                                                        className="ml-3"
+                                                        fieldId="referral-code"
+                                                    />
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <ArrowRight className={'cursor-pointer'} />
                                     </div>
-                                    <ArrowRight className={'cursor-pointer'} />
                                 </div>
-                            </div>
-                        </Link>
+                            </Link>
+                        ) : (
+                            <Link to={''}>
+                                <div className="card-user-info d-flex align-items-center px-24 mb-24">
+                                    <div className="user-info d-flex justify-content-between align-items-center w-100">
+                                        <div className="login-user d-flex flex-column">
+                                            <h1 className="gradient-text text-md font-bold">Login</h1>
+                                            <h3 className="grey-text text-sm font-normal">Welcome to Digicoins</h3>
+                                        </div>
+                                        <ArrowRight className={'cursor-pointer'} />
+                                    </div>
+                                </div>
+                            </Link>
+                        )}
+
                         {sidebarMenu &&
                             sidebarMenu.map((item, key) => (
                                 <React.Fragment>
