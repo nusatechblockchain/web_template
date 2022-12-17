@@ -18,8 +18,15 @@ import {
     USERNAME_REGEX,
     EMAIL_REGEX,
 } from '../../../helpers';
+import { SignInProps } from 'src/mobile/containers';
 
-const SignUpMobileScreen: React.FC = () => {
+const SignUpMobileScreen: React.FC<SignInProps> = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const intl = useIntl();
+
+    const currentPasswordEntropy = useSelector(selectCurrentPasswordEntropy);
+
     const [usernameValue, setUsernamevalue] = React.useState('');
     const [emailValue, setEmailvalue] = React.useState('');
     const [passwordValue, setPasswordvalue] = React.useState('');
@@ -31,10 +38,6 @@ const SignUpMobileScreen: React.FC = () => {
     const [passwordErrorSecondSolved, setPasswordErrorSecondSolved] = React.useState(false);
     const [passwordErrorThirdSolved, setPasswordErrorThirdSolved] = React.useState(false);
     const [passwordPopUp, setPasswordPopUp] = React.useState(false);
-    const dispatch = useDispatch();
-    const currentPasswordEntropy = useSelector(selectCurrentPasswordEntropy);
-    const intl = useIntl();
-    const history = useHistory();
 
     const handleFocusNewPassword = () => {
         setPasswordPopUp(!passwordPopUp);

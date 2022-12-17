@@ -1,32 +1,171 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { EMAIL_REGEX } from '../../../helpers';
-import { selectSignInRequire2FA } from '../../../modules/user/auth';
+import { useReduxSelector } from 'src/hooks';
+import { EMAIL_REGEX, ERROR_EMPTY_PASSWORD, ERROR_INVALID_EMAIL, setDocumentTitle } from '../../../helpers';
+import { captchaType, captchaLogin } from 'src/api';
 import { CustomInput } from '../../../desktop/components';
 import { ModalMobile } from '../../components';
 import { ArrowLeft } from '../../assets/Arrow';
 import { UnlockIcon } from '../../assets/UnlockIcon';
 import { ModalCheck } from '../../assets/Modal';
-import { Captcha } from '../../../components';
+import { GeetestCaptchaResponse } from '../../../modules';
 
-const SignInMobile: React.FC = () => {
-    const require2FA = useSelector(selectSignInRequire2FA);
-    const [showModal, setShowModal] = React.useState(false);
-    const [emailValue, setEmailvalue] = React.useState('');
-    const [passwordValue, setPasswordvalue] = React.useState('');
+export interface SignInProps {
+    labelSignIn?: string;
+    labelSignUp?: string;
+    emailLabel?: string;
+    passwordLabel?: string;
+    receiveConfirmationLabel?: string;
+    forgotPasswordLabel?: string;
+    isLoading: boolean;
+    title?: string;
+    onForgotPassword: (email?: string) => void;
+    onConfirmationResend?: (email?: string) => void;
+    onSignUp: () => void;
+    onSignIn: () => void;
+    className?: string;
+    classNameEmail?: string;
+    classNamePassword?: string;
+    emailValue: string;
+    emailError: string;
+    passwordValue: string;
+    passwordError: string;
+    emailFocused: boolean;
+    emailPlaceholder: string;
+    passwordFocused: boolean;
+    passwordPlaceholder: string;
+    isFormValid: () => void;
+    refreshError: () => void;
+    handleChangeFocusField: (value: string) => void;
+    changePassword: (value: string) => void;
+    changeEmail: (value: string) => void;
+    captchaType?: 'recaptcha' | 'geetest' | 'none';
+    renderCaptcha?: JSX.Element | null;
+    reCaptchaSuccess?: boolean;
+    geetestCaptchaSuccess?: boolean;
+    captcha_response?: string | GeetestCaptchaResponse;
+}
+
+const SignInMobile: React.FC<SignInProps> = ({
+    emailValue,
+    emailError,
+    emailPlaceholder,
+    passwordValue,
+    passwordError,
+    passwordPlaceholder,
+    isLoading,
+    onSignUp,
+    labelSignIn,
+    labelSignUp,
+    emailLabel,
+    passwordLabel,
+    emailFocused,
+    passwordFocused,
+    onForgotPassword,
+    forgotPasswordLabel,
+    refreshError,
+    onSignIn,
+    isFormValid,
+    handleChangeFocusField,
+    changePassword,
+    changeEmail,
+    captchaType,
+    geetestCaptchaSuccess,
+    reCaptchaSuccess,
+    renderCaptcha,
+    classNameEmail,
+    classNamePassword,
+}) => {
     const history = useHistory();
+    const dispatch = useDispatch();
+    const { formatMessage } = useIntl();
+    const [showModal, setShowModal] = React.useState(false);
 
-    const isValidForm = () => {
-        if (!emailValue.match(EMAIL_REGEX) || passwordValue == '') {
-            return true;
-        }
-    };
+    const isValidForm = React.useCallback(() => {
+        const isEmailValid = emailValue.match(EMAIL_REGEX);
 
-    const handleSignIn = () => {
-        history.push('profile');
-    };
+        return emailValue && isEmailValid && passwordValue;
+    }, [emailValue, passwordValue]);
+
+    const handleChangeEmail = React.useCallback(
+        (value: string) => {
+            changeEmail(value);
+        },
+        [changeEmail]
+    );
+
+    const handleChangePassword = React.useCallback(
+        (value: string) => {
+            changePassword(value);
+        },
+        [changePassword]
+    );
+
+    const handleFieldFocus = React.useCallback(
+        (field: string) => {
+            handleChangeFocusField(field);
+        },
+        [handleChangeFocusField]
+    );
+
+    const isButtonDisabled = React.useMemo(
+        () => !!(captchaLogin() && captchaType !== 'none' && !(reCaptchaSuccess || geetestCaptchaSuccess)),
+        [reCaptchaSuccess, geetestCaptchaSuccess]
+    );
+
+    const handleSubmitForm = React.useCallback(() => {
+        refreshError();
+        onSignIn();
+    }, [onSignIn, refreshError]);
+
+    const handleValidateForm = React.useCallback(() => {
+        isFormValid();
+    }, [isFormValid]);
+
+    const handleClick = React.useCallback(
+        (e?: MouseEvent) => {
+            if (e) {
+                e.preventDefault();
+            }
+            if (!isValidForm()) {
+                handleValidateForm();
+            } else {
+                handleSubmitForm();
+            }
+        },
+        [handleSubmitForm, handleValidateForm, isValidForm]
+    );
+
+    const handleEnterPress = React.useCallback(
+        (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+
+                handleClick();
+            }
+        },
+        [handleClick]
+    );
+
+    const renderForgotButton = React.useMemo(
+        () => <div onClick={() => onForgotPassword(emailValue)}>{forgotPasswordLabel || 'Forgot your password?'}</div>,
+        [forgotPasswordLabel, onForgotPassword, emailValue]
+    );
+
+    const renderRegister = React.useMemo(
+        () => (
+            <span>
+                {formatMessage({ id: 'page.header.signIN.noAccountYet' })}
+                <span onClick={() => history.push('/signup')}>
+                    {formatMessage({ id: 'page.body.landing.header.button3' })}
+                </span>
+            </span>
+        ),
+        [formatMessage, history]
+    );
 
     const renderModal = () => (
         <React.Fragment>
@@ -60,36 +199,47 @@ const SignInMobile: React.FC = () => {
                 id="nav-email"
                 role="tabpanel"
                 aria-labelledby="nav-email-tab">
-                <CustomInput
-                    defaultLabel="email"
-                    inputValue={emailValue}
-                    label="Email"
-                    placeholder="your email address"
-                    type="email"
-                    classNameLabel="white-text text-sm"
-                    classNameInput="text-ms input-mobile"
-                    handleChangeInput={(e) => setEmailvalue(e)}
-                    labelVisible
-                />
-                <CustomInput
-                    defaultLabel="Password"
-                    inputValue={passwordValue}
-                    label="Password"
-                    placeholder="your password"
-                    type="password"
-                    classNameLabel="white-text text-sm"
-                    classNameInput="text-ms input-mobile"
-                    handleChangeInput={(e) => setPasswordvalue(e)}
-                    labelVisible
-                />
-                <p className="text-right w-100 contrast-text text-sm" onClick={() => setShowModal(true)}>
-                    Forgot Password?
-                </p>
+                <div>
+                    <CustomInput
+                        defaultLabel="email"
+                        inputValue={emailValue}
+                        label={emailLabel || 'Email'}
+                        handleFocusInput={() => handleFieldFocus('email')}
+                        placeholder={emailPlaceholder}
+                        type="email"
+                        classNameLabel="white-text text-sm"
+                        classNameInput="text-ms input-mobile"
+                        handleChangeInput={handleChangeEmail}
+                        labelVisible
+                    />
+                    {emailError && <div className={'invalid-feedback'}>{emailError}</div>}
+                </div>
+
+                <div>
+                    <CustomInput
+                        defaultLabel="Password"
+                        inputValue={passwordValue}
+                        label={passwordLabel || 'Password'}
+                        placeholder={passwordPlaceholder}
+                        handleFocusInput={() => handleFieldFocus('password')}
+                        type="password"
+                        classNameLabel="white-text text-sm"
+                        classNameInput="text-ms input-mobile"
+                        handleChangeInput={handleChangePassword}
+                        labelVisible
+                    />
+                    {passwordError && <div className={'invalid-feedback'}>{passwordError}</div>}
+                    <p className="text-right w-100 contrast-text text-sm" onClick={() => setShowModal(true)}>
+                        Forgot Password?
+                    </p>
+                </div>
+
+                <div className="mt-2 mb-2">{captchaLogin() && renderCaptcha}</div>
 
                 <button
                     className="btn btn-primary btn-block btn-mobile"
-                    disabled={isValidForm()}
-                    onClick={handleSignIn}>
+                    disabled={isLoading || !emailValue.match(EMAIL_REGEX) || !passwordValue || isButtonDisabled}
+                    onClick={handleClick as any}>
                     Login
                 </button>
                 <p className="create-account text-xs text-center font-semibold grey-text-accent mt-3">

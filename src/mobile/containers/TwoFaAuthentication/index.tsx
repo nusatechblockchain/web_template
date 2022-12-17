@@ -1,18 +1,43 @@
 import * as React from 'react';
 import { ArrowLeft } from '../../assets/Arrow';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { signInRequire2FA } from '../../../modules';
 import PinInput from 'react-pin-input';
 
-const TwoFaAuthenticationMobile: React.FC = () => {
-    const [pinCode, setPinCode] = React.useState('');
-    const history = useHistory();
+export interface TwoFactorAuthProps {
+    isLoading?: boolean;
+    onSubmit: () => void;
+    title: string;
+    buttonLabel: string;
+    message: string;
+    otpCode: string;
+    handleOtpCodeChange: (e: any) => void;
+    handleClose2fa: () => void;
+}
 
-    const disableButton = () => pinCode == '';
+const TwoFaAuthenticationMobile: React.FC<TwoFactorAuthProps> = ({
+    isLoading,
+    otpCode,
+    buttonLabel,
+    onSubmit,
+    handleOtpCodeChange,
+}) => {
+    const dispatch = useDispatch();
 
-    const handleAnotherAcount = () => {
-        history.push('/signin');
-    };
+    const handleEnterPress = React.useCallback(
+        (event: React.KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === 'Enter' && otpCode.length >= 6) {
+                event.preventDefault();
+                onSubmit();
+            }
+        },
+        [onSubmit, otpCode]
+    );
+
+    const handleRemoveRequire2Fa = React.useCallback(() => {
+        dispatch(signInRequire2FA({ require2fa: false }));
+    }, [dispatch]);
     return (
         <React.Fragment>
             <Link to={''}>
@@ -23,7 +48,8 @@ const TwoFaAuthenticationMobile: React.FC = () => {
             <div className="mb-2">
                 <PinInput
                     length={6}
-                    onChange={(e) => setPinCode(e)}
+                    onChange={(e) => handleOtpCodeChange(e)}
+                    onComplete={(e) => handleOtpCodeChange(e)}
                     type="numeric"
                     inputMode="number"
                     style={{
@@ -48,14 +74,18 @@ const TwoFaAuthenticationMobile: React.FC = () => {
                     Lost Two-Factor Authentication Code?
                 </Link>
             </div>
-            <button type="button" disabled={disableButton()} className="btn btn-primary btn-block btn-mobile px-4 mb-3">
-                Login
+            <button
+                type="button"
+                disabled={isLoading || otpCode.length < 6}
+                onClick={onSubmit}
+                className="btn btn-primary btn-block btn-mobile px-4 mb-3">
+                {isLoading ? 'Loading...' : buttonLabel ? buttonLabel : 'Login'}
             </button>
             <div className="continue-with mb-3">
                 <span>or continue with</span>
             </div>
             <button
-                onClick={() => handleAnotherAcount()}
+                onClick={handleRemoveRequire2Fa}
                 type="button"
                 className="btn btn-primary btn-outline btn-mobile btn-block px-4">
                 Login with another account
