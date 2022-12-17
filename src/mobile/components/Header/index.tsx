@@ -7,7 +7,7 @@ import { ScanIcon } from '../../assets/ScanIcon';
 import { SearchIcon } from '../../assets/SearchIcon';
 import { UserIcon } from '../../assets/UserIcon';
 
-const noHeaderRoutes = ['/setup'];
+const noHeaderRoutes = ['/setup', '/signin', '/forgot-password', 'signup', '/email-verification', '/reset-password'];
 
 const HeaderComponent: React.FC = () => {
     const userLoggedIn = useSelector(selectUserLoggedIn);

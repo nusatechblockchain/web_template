@@ -179,7 +179,7 @@ const SignUpMobileScreen: React.FC<SignInProps> = () => {
 
     return (
         <React.Fragment>
-            <div className="mobile-container dark-bg-main">
+            <div className="mobile-container no-header dark-bg-main">
                 <Link to={''}>
                     <ArrowLeft className={'back'} />
                 </Link>
