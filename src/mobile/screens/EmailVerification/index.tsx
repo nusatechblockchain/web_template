@@ -82,9 +82,7 @@ const EmailVerificationMobileScreen: React.FC = () => {
 
     const translate = (id: string) => intl.formatMessage({ id });
 
-    const isValidForm = () => code.length < 6;
-
-    const handleChangeConfirmChange = (value: string) => {
+    const handleChangeCode = (value: string) => {
         setCode(value);
     };
 
@@ -148,8 +146,8 @@ const EmailVerificationMobileScreen: React.FC = () => {
                 <p className="text-sm grey-text">Enter the code we just sent you on your email address</p>
                 <PinInput
                     length={6}
-                    onChange={handleChangeConfirmChange}
-                    onComplete={handleChangeConfirmChange}
+                    onChange={handleChangeCode}
+                    onComplete={handleChangeCode}
                     type="numeric"
                     inputMode="number"
                     style={{
