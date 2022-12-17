@@ -4,3 +4,4 @@ export * from './EmailVerification';
 export * from './ForgotPassword';
 export * from './ResetPassword';
 export * from './HomeScreen';
+export * from './Profile';
