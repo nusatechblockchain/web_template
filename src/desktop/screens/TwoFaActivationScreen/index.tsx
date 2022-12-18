@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import {
     alertPush,
-    selectTwoFactorAuthBarcode,
     selectTwoFactorAuthQR,
     selectTwoFactorAuthSuccess,
     toggle2faFetch,

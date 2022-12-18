@@ -15,25 +15,19 @@ import {
     ApiKeyStateModal,
     ApiKeyUpdateFetch,
     apiKeyUpdateFetch,
-    RootState,
-    selectMobileDeviceState,
     selectUserInfo,
     User,
 } from '../../../modules';
-import {
-    selectApiKeys,
-    selectApiKeysDataLoaded,
-    selectApiKeysFirstElemIndex,
-    selectApiKeysLastElemIndex,
-    selectApiKeysModal,
-    selectApiKeysNextPageExists,
-    selectApiKeysPageIndex,
-} from 'src/modules/user/apiKeys/selectors';
+import { selectApiKeys, selectApiKeysDataLoaded, selectApiKeysModal } from 'src/modules/user/apiKeys/selectors';
 import { ArrowLeft } from '../../assets/Arrow';
 import { Table } from '../../../components';
 import { Form } from 'react-bootstrap';
 import { ModalDanger } from '../../assets/Modal';
 import { ModalMobile } from '../../components';
+
+interface ModalProps {
+    modal: ApiKeyStateModal;
+}
 
 const ApiListMobileScreen: React.FC = () => {
     const history = useHistory();
@@ -44,10 +38,6 @@ const ApiListMobileScreen: React.FC = () => {
     const dataLoaded = useSelector(selectApiKeysDataLoaded);
     const modal = useSelector(selectApiKeysModal);
     const user = useSelector(selectUserInfo);
-    const pageIndex = useSelector(selectApiKeysPageIndex);
-    // const firstElemIndex = useSelector((state) => selectApiKeysFirstElemIndex(state, 4));
-    // const lastElemIndex = useSelector((state) => selectApiKeysLastElemIndex(state, 4));
-    const nextPageExists = useSelector(selectApiKeysNextPageExists);
 
     const [state, setState] = React.useState(true);
     const [otpCode, setOtpCode] = React.useState('');
@@ -56,13 +46,6 @@ const ApiListMobileScreen: React.FC = () => {
     const handleTwoFa = () => {
         setState(!state);
     };
-
-    // const apiKeys = [
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    // ];
 
     const translate = (key: string) => {
         return intl.formatMessage({ id: key });
@@ -158,11 +141,6 @@ const ApiListMobileScreen: React.FC = () => {
         setOtpCode('');
     };
 
-    const handleCopy = (id: string, type: string) => {
-        copy(id);
-        dispatch(alertPush({ message: [`success.api_keys.copied.${type}`], type: 'success' }));
-    };
-
     const handleDeleteKeyClick = (apiKey) => {
         const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'deleteKey', apiKey };
         dispatch(apiKeys2FAModal(payload));
@@ -175,14 +153,6 @@ const ApiListMobileScreen: React.FC = () => {
         };
         dispatch(apiKeyDeleteFetch(payload));
         setOtpCode('');
-    };
-
-    const onClickPrevPage = () => {
-        apiKeysFetch({ pageIndex: Number(pageIndex) - 1, limit: 4 });
-    };
-
-    const onClickNextPage = () => {
-        apiKeysFetch({ pageIndex: Number(pageIndex) + 1, limit: 4 });
     };
 
     const renderModal = () => (
