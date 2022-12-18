@@ -63,7 +63,11 @@ const ProfileMobileScreen: React.FC = () => {
                             Hi, {user && user.username !== null ? user.username : 'The Awesome Member'}
                         </h1>
                         <p className="badge badge-warning white-text mb-0 ml-3">
-                            {titleCase(user && user.labels && user.labels[0] && user.labels[0].value)}
+                            {user &&
+                                user.labels &&
+                                user.labels[0] &&
+                                user.labels[0].value &&
+                                titleCase(user.labels[0].value)}
                         </p>
                     </div>
                 </div>
