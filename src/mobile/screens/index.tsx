@@ -19,3 +19,5 @@ export * from './WalletDetail';
 export * from './WalletList';
 export * from './MarketOrder';
 export * from './HistoryTransaction';
+export * from './Trading';
+export * from './TradingFuture';

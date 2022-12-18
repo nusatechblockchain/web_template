@@ -52,6 +52,8 @@ import {
     WalletDetailMobileScreen,
     MarketOrderMobileScreen,
     HistoryTransactionMobileScreen,
+    TradingMobileScreen,
+    TradingFutureMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -382,6 +384,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={MarketDetailMobileScreen}
                         />
 
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/markets/:currency/trading-future"
+                            component={TradingFutureMobileScreen}
+                        />
+
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
@@ -419,6 +427,8 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             path="/wallet/detail"
                             component={WalletDetailMobileScreen}
                         />
+
+                        <PublicRoute loading={userLoading} path="/trading" component={TradingMobileScreen} />
 
                         <PublicRoute loading={userLoading} path="/" component={HomeMobileScreen} />
 

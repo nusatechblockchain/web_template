@@ -11,6 +11,7 @@ import {
     setCurrentMarket,
     selectCurrencies,
     selectUserInfo,
+    logoutFetch,
 } from '../../../modules';
 import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch, useDocumentTitle } from '../../../hooks';
 import { Decimal } from '../../../components';
@@ -27,8 +28,6 @@ import Background4 from '../../assets/Images/home/background-4.png';
 import ImgCard from '../../assets/Images/home/img-card.png';
 import { BgCardSmall } from '../../assets/BackgroundCard';
 import { Table } from '../../../components';
-import { BnbIcon } from '../../../assets/images/CoinIcon';
-import { BtcIcon } from '../../../assets/images/CoinIcon';
 import GrapUp from '../../assets/Images/home/grap-up.png';
 import GrapDown from '../../assets/Images/home/grapH-down.png';
 import { LogoIcon } from '../../assets/Logo';
@@ -68,6 +67,9 @@ const HomeMobileScreen: React.FC = () => {
     useMarketsFetch();
     useMarketsTickersFetch();
 
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     const userLoggedIn = useSelector(selectUserLoggedIn);
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
@@ -82,6 +84,11 @@ const HomeMobileScreen: React.FC = () => {
     if (shouldRenderHeader) {
         return <React.Fragment />;
     }
+
+    const handleLogout = async () => {
+        await dispatch(logoutFetch());
+        history.push('/trading');
+    };
 
     const marketList = markets
         .map((market) => ({
@@ -257,7 +264,12 @@ const HomeMobileScreen: React.FC = () => {
                                 ))}
 
                             <div className="px-24 mt-5">
-                                <button className="btn btn-primary btn-mobile btn-block btn-outline">Logout</button>
+                                <button
+                                    onClick={handleLogout}
+                                    type="button"
+                                    className="btn btn-primary btn-mobile btn-block btn-outline">
+                                    Logout
+                                </button>
                             </div>
                         </div>
                     </div>
