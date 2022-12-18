@@ -44,8 +44,6 @@ const MarketListTradeComponent = (props) => {
             ),
         }));
 
-    console.log(marketList);
-
     return (
         <React.Fragment>
             <div className="p-3">

@@ -78,7 +78,6 @@ const HomeMobileScreen: React.FC = () => {
     const [showSidebar, setShowSidebar] = React.useState(false);
 
     const shouldRenderHeader = !noHeaderRoutes.some((r) => location.pathname.includes(r));
-    const uid = '533221334';
 
     if (shouldRenderHeader) {
         return <React.Fragment />;

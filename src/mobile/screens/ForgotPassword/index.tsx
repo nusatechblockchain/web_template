@@ -42,8 +42,6 @@ const ForgotPasswordMobileScreen: React.FC<CaptchaProps> = (props) => {
     const [loading, setLoading] = React.useState(false);
 
     const handleChangePassword = () => {
-        console.log(errorForgotPassword);
-
         switch (captchaType()) {
             case 'recaptcha':
             case 'geetest':

@@ -63,7 +63,7 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
     }
 
     public componentDidUpdate() {
-        console.log(this.props.errorForgotPassword, 'INI DARI DID UPDATE');
+        // console.log(this.props.errorForgotPassword, 'INI DARI DID UPDATE');
     }
 
     public renderCaptcha = () => {
@@ -138,7 +138,7 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
                 break;
         }
 
-        console.log(errorForgotPassword, 'INI ERROR');
+        // console.log(errorForgotPassword, 'INI ERROR');
 
         if (errorForgotPassword) {
             ('');

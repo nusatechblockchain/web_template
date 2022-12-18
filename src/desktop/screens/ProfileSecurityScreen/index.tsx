@@ -109,7 +109,6 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
         // if (this.state.passwordNew !== this.state.passwordConfirm) {
         //     this.setState({ passwordMatches: false });
         // }
-        // console.log(this.props.user);
     }
 
     public render() {

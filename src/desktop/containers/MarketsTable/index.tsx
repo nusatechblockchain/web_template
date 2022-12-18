@@ -148,7 +148,6 @@ const MarketsTableComponent = (props) => {
 
     const sortMarket = [...formattedMarkets].sort((a, b) => b.volume - a.volume);
     const highestMarket = sortMarket.slice(0, 4);
-    console.log(sortMarket);
 
     return (
         <React.Fragment>
