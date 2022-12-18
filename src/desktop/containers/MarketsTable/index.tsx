@@ -34,7 +34,7 @@ const defaultTicker = {
 const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -184,33 +184,36 @@ const MarketsTableComponent = (props) => {
                         <Slider {...settings}>
                             {cardBanner &&
                                 cardBanner.map((item, key) => (
-                                    <div key={key} className="p-2">
-                                        <div className="dark-bg-main p-3 radius-md">
-                                            <div
-                                                className="slider-item"
-                                                style={{
-                                                    backgroundImage: `url(${SliderBgImage})`,
-                                                }}>
-                                                <div className="content">
-                                                    <div className="d-flex justify-content-end">
-                                                        <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                                    </div>
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <div className="mr-2">
-                                                            <p className="text-ms grey-text-accent mb-8">{item.date}</p>
-                                                            <p className="text-sm font-bold white-text mb-1">
-                                                                {item.title}
-                                                            </p>
-                                                            <p className="text-xs grey-text-accent">{item.desc}</p>
-                                                        </div>
-                                                        <a href="">
-                                                            <ArrowDownLarge className={'mx-1'} />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="d-flex justify-content-between align-items-center p-2">
+                                        <img src={card} alt="card" />
                                     </div>
+                                    // <div key={key} className="p-2">
+                                    //     <div className="dark-bg-main p-3 radius-md">
+                                    //         <div
+                                    //             className="slider-item"
+                                    //             style={{
+                                    //                 backgroundImage: `url(${SliderBgImage})`,
+                                    //             }}>
+                                    //             <div className="content">
+                                    //                 <div className="d-flex justify-content-end">
+                                    //                     <img src={AnouncementIcon} className="icon-slider" alt="" />
+                                    //                 </div>
+                                    //                 <div className="d-flex justify-content-between align-items-center">
+                                    //                     <div className="mr-2">
+                                    //                         <p className="text-ms grey-text-accent mb-8">{item.date}</p>
+                                    //                         <p className="text-sm font-bold white-text mb-1">
+                                    //                             {item.title}
+                                    //                         </p>
+                                    //                         <p className="text-xs grey-text-accent">{item.desc}</p>
+                                    //                     </div>
+                                    //                     <a href="">
+                                    //                         <ArrowDownLarge className={'mx-1'} />
+                                    //                     </a>
+                                    //                 </div>
+                                    //             </div>
+                                    //         </div>
+                                    //     </div>
+                                    // </div>
                                 ))}
                         </Slider>
                     </div>

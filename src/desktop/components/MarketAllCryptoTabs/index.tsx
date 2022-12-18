@@ -43,41 +43,6 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
             ),
         }));
 
-    const dataTable = [
-        {
-            name: 'Bitcoin',
-            currency: 'BTC',
-            price: '$10,098.36',
-            change: '-0.82%',
-            cap: '$19.358.255',
-            icon: <BtcIcon />,
-        },
-        {
-            name: 'Binance',
-            currency: 'BNB',
-            price: '$10,098.36',
-            change: '+1.37%',
-            cap: '$19.358.255',
-            icon: <BnbIcon />,
-        },
-        {
-            name: 'Bitcoin',
-            currency: 'BTC',
-            price: '$10,098.36',
-            change: '-0.82%',
-            cap: '$19.358.255',
-            icon: <BtcIcon />,
-        },
-        {
-            name: 'Binance',
-            currency: 'BNB',
-            price: '$10,098.36',
-            change: '+1.37%',
-            cap: '$19.358.255',
-            icon: <BnbIcon />,
-        },
-    ];
-
     const getTableHeaders = () => {
         return ['Name', 'Price', '24 Change', 'Market Cap', '', ''];
     };
@@ -97,7 +62,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
             <Link to={`/markets/${item.base_unit}/detail`}>
                 <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Detail</p>
             </Link>,
-            <Link to={`/trading`}>
+            <Link to={`/markets/${item.base_unit}/trading-future`}>
                 <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
             </Link>,
         ]);
@@ -106,20 +71,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-all-tabs">
-                <Tabs defaultActiveKey="all" id="uncontrolled-tab-example" className="mb-3">
-                    <Tab eventKey="all" title="All">
-                        <Table header={getTableHeaders()} data={getTableData(marketList)} />
-                    </Tab>
-                    <Tab eventKey="metaverse" title="Metaverse">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                    <Tab eventKey="games" title="Games">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                    <Tab eventKey="defi" title="DeFi">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                </Tabs>
+                <Table header={getTableHeaders()} data={getTableData(marketList)} />
             </div>
         </React.Fragment>
     );

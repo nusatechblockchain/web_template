@@ -2,7 +2,6 @@ import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrencies } from 'src/modules';
 import { Link } from 'react-router-dom';
-import { Tabs, Tab } from 'react-bootstrap';
 import { Table } from 'src/components';
 import { StarIconActive } from 'src/assets/images/StarIcon';
 import './MarketFavoriteTabs.pcss';
@@ -65,14 +64,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-favorite-tabs">
-                <Tabs defaultActiveKey="spot" id="uncontrolled-tab-example" className="mb-3">
-                    <Tab eventKey="spot" title="Spot">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                    <Tab eventKey="future" title="Future">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                </Tabs>
+                <Table header={getTableHeaders()} data={getTableData(dataTable)} />
             </div>
         </React.Fragment>
     );

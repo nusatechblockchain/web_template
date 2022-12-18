@@ -1,13 +1,14 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { selectCurrencies, Currency } from 'src/modules';
+import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 import { Link } from 'react-router-dom';
 import { BtcIcon } from 'src/assets/images/CoinIcon';
 import { InfoIcon } from 'src/assets/images/InfoIcon';
 import Select from 'react-select';
 import { CustomStylesSelect } from 'src/desktop/components';
 import './MarketDetailInfo.pcss';
-import tradeView from '../../../assets/png/market-detail.png';
 
 export interface InfoMarketDetailProps {
     amount_precision: string;
@@ -38,6 +39,7 @@ export interface MarketDetailInfoProps {
 
 export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) => {
     const currencies = useSelector(selectCurrencies);
+    const { currency = '' } = useParams<{ currency?: string }>();
 
     const optionCurrency = [
         { label: <p className="m-0 text-sm grey-text-accent">USD - $</p>, value: 'USD' },
@@ -87,7 +89,17 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                 <span className="text-ms grey-text font-normal">(1D)</span>
             </div>
 
-            <img src={tradeView} alt="trade" className="mr-12 mb-24" width={700} />
+            <div className="mb-24 mr-12">
+                <TradingViewEmbed
+                    widgetType={widgetType.ADVANCED_CHART}
+                    widgetConfig={{
+                        colorTheme: 'dark',
+                        symbol: currency,
+                        width: '100%',
+                        height: '500px',
+                    }}
+                />
+            </div>
 
             <>
                 <div className="information">

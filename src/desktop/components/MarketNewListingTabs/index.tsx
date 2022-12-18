@@ -2,7 +2,6 @@ import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrencies } from 'src/modules';
 import { Link } from 'react-router-dom';
-import { Tabs, Tab } from 'react-bootstrap';
 import { Table } from 'src/components';
 import { BtcIcon, BnbIcon } from 'src/assets/images/CoinIcon';
 import './MarketNewListingTabs.pcss';
@@ -67,20 +66,7 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-new-listing-tabs">
-                <Tabs defaultActiveKey="all" id="uncontrolled-tab-example" className="mb-3">
-                    <Tab eventKey="all" title="All">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                    <Tab eventKey="metaverse" title="Metaverse">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                    <Tab eventKey="games" title="Games">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                    <Tab eventKey="defi" title="DeFi">
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
-                    </Tab>
-                </Tabs>
+                <Table header={getTableHeaders()} data={getTableData(dataTable)} />
             </div>
         </React.Fragment>
     );

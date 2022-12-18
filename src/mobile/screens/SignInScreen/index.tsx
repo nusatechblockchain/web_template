@@ -163,7 +163,6 @@ const SignInMobileScreen: React.FC = () => {
 
     const handleChangePasswordValue = React.useCallback((value: string) => {
         setPasswordvalue(value);
-        console.log(value);
     }, []);
 
     const handleClose = React.useCallback(() => {

@@ -1,21 +1,19 @@
 import * as React from 'react';
+import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 
 const ChartsComponent = (props) => {
     return (
         <React.Fragment>
             {/* TradingView Widget BEGIN */}
-            <div className="tradingview-widget-container">
-                <div id="tradingview_2d0d5" />
-                <div className="tradingview-widget-copyright">
-                    <a
-                        href="https://www.tradingview.com/symbols/BTCUSDT/?exchange=BINANCE"
-                        rel="noopener"
-                        target="_blank">
-                        <span className="blue-text">BTCUSDT Chart</span>
-                    </a>
-                    by TradingView
-                </div>
-            </div>
+            <TradingViewEmbed
+                widgetType={widgetType.ADVANCED_CHART}
+                widgetConfig={{
+                    colorTheme: 'dark',
+                    symbol: 'BITMEX:XBTUSD',
+                    width: '100%',
+                    height: '100%',
+                }}
+            />
             {/* TradingView Widget END */}
         </React.Fragment>
     );
