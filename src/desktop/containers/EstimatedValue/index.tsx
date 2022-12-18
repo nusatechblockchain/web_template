@@ -16,8 +16,6 @@ interface EstimatedValueProps {
 type Props = EstimatedValueProps;
 
 const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
-    const [showAvailable, setShowAvailable] = React.useState(true);
-    const [showLocked, setShowLocked] = React.useState(true);
     const { formatMessage } = useIntl();
     const translate = React.useCallback((id: string, value?: any) => formatMessage({ id: id }, { ...value }), [
         formatMessage,
