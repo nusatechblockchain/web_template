@@ -1,17 +1,44 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from '../../assets/Arrow';
-import { useHistory } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import {
+    alertPush,
+    selectTwoFactorAuthBarcode,
+    selectTwoFactorAuthQR,
+    selectTwoFactorAuthSuccess,
+    toggle2faFetch,
+    generate2faQRFetch,
+} from '../../../modules';
 import QRCode from 'react-qr-code';
+import PinInput from 'react-pin-input';
+import { copy } from '../../../helpers';
 import { CopyableTextField } from '../../../components';
 import { WarningIcon } from '../../assets/Warning';
-import PinInput from 'react-pin-input';
+import { ArrowLeft } from '../../assets/Arrow';
 
 const TwoFaAuthenticationMobileScreen: React.FC = () => {
-    const [otpCode, setOtpCode] = React.useState('');
-    const [state, setState] = React.useState(true);
+    const dispatch = useDispatch();
     const history = useHistory();
-    const twoFactorAuthQr = '1N4Vf8BG2GWxYRv4VKm2BPzyFFMSR4fmYP';
+
+    const [otpCode, setOtpCode] = React.useState('');
+
+    // const twoFactorBarcode = useSelector(selectTwoFactorAuthBarcode);
+    const twoFactorAuthQr = useSelector(selectTwoFactorAuthQR);
+    const twoFactorEnabledSucces = useSelector(selectTwoFactorAuthSuccess);
+
+    const secretRegex = /secret=(\w+)/;
+    const secretMatch = twoFactorAuthQr.match(secretRegex);
+    const secret = secretMatch ? secretMatch[1] : null;
+
+    React.useEffect(() => {
+        dispatch(generate2faQRFetch());
+    }, []);
+
+    React.useEffect(() => {
+        if (twoFactorEnabledSucces) {
+            history.push('/profile');
+        }
+    }, [twoFactorEnabledSucces]);
 
     const isValidForm = () => {
         if (otpCode.length < 6) {
@@ -19,12 +46,17 @@ const TwoFaAuthenticationMobileScreen: React.FC = () => {
         }
     };
 
-    const handleTwoFa = () => {
-        setState(!state);
+    const doCopy = () => {
+        copy('two-fa-code');
+        dispatch(alertPush({ message: ['page.body.wallets.tabs.deposit.ccy.message.success'], type: 'success' }));
     };
 
-    const handleActivateTwoFa = () => {
-        history.push('/two-fa');
+    const handleChangeCode = (value: string) => {
+        setOtpCode(value);
+    };
+
+    const handleEnable = () => {
+        dispatch(toggle2faFetch({ code: otpCode, enable: true }));
     };
 
     return (
@@ -53,7 +85,10 @@ const TwoFaAuthenticationMobileScreen: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <CopyableTextField value={twoFactorAuthQr} className="ml-3 mva-code" fieldId="two-fa-code" />
+                <fieldset onClick={doCopy}>
+                    {secret && <CopyableTextField value={secret} className="ml-3 mva-code" fieldId="two-fa-code" />}
+                </fieldset>
+
                 <div className="d-flex align-items-start mb-24">
                     <div className="mr-2">
                         <WarningIcon className={''} />
@@ -70,8 +105,8 @@ const TwoFaAuthenticationMobileScreen: React.FC = () => {
                 <div className="mb-2">
                     <PinInput
                         length={6}
-                        onChange={(e) => setOtpCode(e)}
-                        onComplete={(e) => console.log('')}
+                        onChange={handleChangeCode}
+                        onComplete={handleChangeCode}
                         type="numeric"
                         inputMode="number"
                         style={{
@@ -91,7 +126,7 @@ const TwoFaAuthenticationMobileScreen: React.FC = () => {
                         regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                     />
                 </div>
-                <button className="btn btn-primary btn-mobile" disabled={isValidForm()}>
+                <button className="btn btn-primary btn-mobile" disabled={isValidForm()} onClick={handleEnable}>
                     Activate
                 </button>
                 <div className="pb-5"></div>

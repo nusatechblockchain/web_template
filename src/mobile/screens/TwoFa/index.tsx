@@ -1,17 +1,48 @@
 import * as React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import {
+    alertPush,
+    selectTwoFactorAuthBarcode,
+    selectTwoFactorAuthQR,
+    selectTwoFactorAuthSuccess,
+    toggle2faFetch,
+    generate2faQRFetch,
+} from '../../../modules';
 import { ArrowLeft } from '../../assets/Arrow';
-import { Link } from 'react-router-dom';
 import { CheckSuccess } from '../../assets/CheckIcon';
 import PinInput from 'react-pin-input';
-import { useHistory } from 'react-router';
 
 const TwoFaMobileScreen: React.FC = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const twoFactorDisabledSucces = useSelector(selectTwoFactorAuthSuccess);
+
     const [otpCode, setOtpCode] = React.useState('');
     const [otpStatus, setOtpStatus] = React.useState(false);
-    const history = useHistory();
+
+    React.useEffect(() => {
+        if (twoFactorDisabledSucces) {
+            setOtpStatus(true);
+
+            setTimeout(() => {
+                setOtpStatus(false);
+                history.push('/two-fa-activation');
+            }, 1000);
+        }
+    }, [twoFactorDisabledSucces]);
 
     const handleBackTwoFA = () => {
         history.push('/profile');
+    };
+
+    const handleChangeCode = (value: string) => {
+        setOtpCode(value);
+    };
+
+    const handleDisabled = () => {
+        dispatch(toggle2faFetch({ code: otpCode, enable: false }));
     };
 
     return (
@@ -28,8 +59,8 @@ const TwoFaMobileScreen: React.FC = () => {
                 <div className="mb-2">
                     <PinInput
                         length={6}
-                        onChange={(e) => setOtpCode(e)}
-                        onComplete={(e) => console.log('')}
+                        onChange={handleChangeCode}
+                        onComplete={handleChangeCode}
                         type="numeric"
                         inputMode="number"
                         style={{
@@ -48,9 +79,6 @@ const TwoFaMobileScreen: React.FC = () => {
                         autoSelect={true}
                         regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                     />
-                </div>
-                <div className="d-flex justify-content-end mb-3">
-                    <p className="w-100 text-right grey-text text-xs ">Resen Code</p>
                 </div>
 
                 {otpStatus ? (
@@ -73,10 +101,10 @@ const TwoFaMobileScreen: React.FC = () => {
                 ) : (
                     <button
                         type="button"
-                        onClick={() => setOtpStatus(true)}
+                        onClick={handleDisabled}
                         disabled={otpCode.length < 6}
                         className="btn btn-primary btn-block btn-mobile px-4 mb-3">
-                        Verify
+                        Disabled
                     </button>
                 )}
             </div>

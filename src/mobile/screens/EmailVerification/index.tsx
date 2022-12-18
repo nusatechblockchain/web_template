@@ -75,7 +75,7 @@ const EmailVerificationMobileScreen: React.FC = () => {
             setTimeout(() => {
                 setVerificationStatus({ ...verificationStatus, show: false });
                 history.push('/signin');
-            }, 500);
+            }, 1000);
         }
     }, [ConfirmationCodeCreateSuccess]);
 

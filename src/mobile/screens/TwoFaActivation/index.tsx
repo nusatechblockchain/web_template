@@ -1,19 +1,22 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from '../../assets/Arrow';
 import { Form } from 'react-bootstrap';
+import { selectUserInfo } from 'src/modules';
 import { useHistory } from 'react-router';
 
 const TwoFaActivationMobileScreen: React.FC = () => {
-    const [state, setState] = React.useState(true);
     const history = useHistory();
+    const user = useSelector(selectUserInfo);
+    const [state, setState] = React.useState(true);
 
     const handleTwoFa = () => {
         setState(!state);
     };
 
     const handleActivateTwoFa = () => {
-        history.push('/two-fa');
+        user.otp ? history.push('/two-fa') : history.push('/two-fa-authentication');
     };
 
     return (
@@ -26,28 +29,25 @@ const TwoFaActivationMobileScreen: React.FC = () => {
                     <h1 className="text-center text-md grey-text-accent font-bold">Two-factor Authentication</h1>
                 </div>
                 <div className="two-container">
-                    <a href="../2FAVerification/index.html">
-                        <div className="card-fa d-flex justify-content-between align-items-center">
-                            <div className="d-flex flex-column card-fa-content">
-                                <h4 className="grey-text-accent text-ms font-bold mb-1">
-                                    Two-Factor Authentication (2FA)
-                                </h4>
-                                <h5 className="text-xxs grey-text">
-                                    To protect yout account, it is recommend to turn on at least one 2FA.
-                                </h5>
-                            </div>
-                            <Form>
-                                <Form.Check
-                                    type="switch"
-                                    id={`two-fa`}
-                                    label=""
-                                    onClick={handleActivateTwoFa}
-                                    onChange={handleTwoFa}
-                                    checked={state}
-                                />
-                            </Form>
+                    <div className="card-fa d-flex justify-content-between align-items-center">
+                        <div className="d-flex flex-column card-fa-content">
+                            <h4 className="grey-text-accent text-ms font-bold mb-1">Two-Factor Authentication (2FA)</h4>
+                            <h5 className="text-xxs grey-text">
+                                To protect yout account, it is recommend to turn on at least one 2FA.
+                            </h5>
                         </div>
-                    </a>
+                        <Form>
+                            <Form.Check
+                                type="switch"
+                                id={`two-fa`}
+                                label=""
+                                onClick={handleActivateTwoFa}
+                                onChange={handleTwoFa}
+                                checked={state}
+                                className="cursor-pointer"
+                            />
+                        </Form>
+                    </div>
                 </div>
             </div>
         </React.Fragment>
