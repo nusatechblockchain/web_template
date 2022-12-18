@@ -1,10 +1,39 @@
 import * as React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { alertPush } from 'src/modules';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { ArrowLeft } from '../../assets/Arrow';
+import { copy } from '../../../helpers';
 import { CopyableTextField } from '../../../components';
 
+type LocationProps = {
+    state: {
+        kid: string;
+        secret: string;
+    };
+};
+
 const CreateApiMobileScreen: React.FC = () => {
-    const keyId = 'f8a6a5e60cc7e2d8';
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const location = (useLocation() as unknown) as LocationProps;
+
+    const kid = location.state?.kid;
+    const secret = location.state?.secret;
+
+    const doCopyKid = () => {
+        copy('kid-code');
+        dispatch(alertPush({ message: ['Key ID copied'], type: 'success' }));
+    };
+
+    const doCopySecret = () => {
+        copy('secret-code');
+        dispatch(alertPush({ message: ['Secret Key copied'], type: 'success' }));
+    };
+
+    const handleSubmit = () => {
+        history.push('/api-key');
+    };
 
     return (
         <React.Fragment>
@@ -25,11 +54,16 @@ const CreateApiMobileScreen: React.FC = () => {
                     <form action="">
                         <div className="mb-3">
                             <label className="mb-3 grey-text-accent text-sm font-semibold">Key ID</label>
-                            <CopyableTextField value={keyId} className="ml-3" fieldId="referral-code" />
+
+                            <fieldset onClick={doCopyKid}>
+                                <CopyableTextField value={kid} className="ml-3 w-100 " fieldId="kid-code" />
+                            </fieldset>
                         </div>
                         <div className="mb-3">
                             <label className="mb-3 grey-text-accent text-sm font-semibold">Secret Key</label>
-                            <CopyableTextField value={keyId} className="ml-3" fieldId="referral-code" />
+                            <fieldset onClick={doCopySecret}>
+                                <CopyableTextField value={secret} className="ml-3 w-100 " fieldId="secret-code" />
+                            </fieldset>
                         </div>
                     </form>
                     <ul className="pl-2">
@@ -42,9 +76,11 @@ const CreateApiMobileScreen: React.FC = () => {
                         </li>
                     </ul>
                 </div>
-                <button type="button" className="btn btn-primary btn-mobile btn-block">
+                {/* <Link to="/api-key"> */}
+                <button onClick={handleSubmit} type="button" className="btn btn-primary btn-mobile btn-block">
                     Submit
                 </button>
+                {/* </Link> */}
             </div>
         </React.Fragment>
     );

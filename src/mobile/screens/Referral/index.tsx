@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { selectUserInfo, alertPush } from 'src/modules';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowLeft } from '../../assets/Arrow';
 import { Table } from '../../../components';
 import { copy } from '../../../helpers';

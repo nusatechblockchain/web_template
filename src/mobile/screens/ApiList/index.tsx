@@ -16,7 +16,6 @@ import {
     ApiKeyUpdateFetch,
     apiKeyUpdateFetch,
     selectUserInfo,
-    User,
 } from '../../../modules';
 import { selectApiKeys, selectApiKeysDataLoaded, selectApiKeysModal } from 'src/modules/user/apiKeys/selectors';
 import { ArrowLeft } from '../../assets/Arrow';
@@ -40,34 +39,15 @@ const ApiListMobileScreen: React.FC = () => {
     const modal = useSelector(selectApiKeysModal);
     const user = useSelector(selectUserInfo);
 
-    const [state, setState] = React.useState(true);
     const [otpCode, setOtpCode] = React.useState('');
-    const [twoFaCode, settwoFaCode] = React.useState('');
     const [showModalDelete, setShowModalDelete] = React.useState(false);
-    const [showModalTwoFa, setShowModalTwoFa] = React.useState(true);
+    const [showModalTwoFa, setShowModalTwoFa] = React.useState(false);
 
-    const handleChangeCode = (value: string) => {
-        settwoFaCode(value);
-    };
+    console.log(apiKeys, 'INI API KEYS CUY');
 
     const translate = (key: string) => {
         return intl.formatMessage({ id: key });
     };
-
-    const copy = (id: string) => {
-        const copyText: HTMLInputElement | null = document.querySelector(`#${id}`);
-
-        if (copyText) {
-            copyText.select();
-
-            document.execCommand('copy');
-            (window.getSelection() as any).removeAllRanges(); // tslint:disable-line
-        }
-    };
-
-    React.useEffect(() => {
-        dispatch(apiKeysFetch({ pageIndex: 0, limit: 4 }));
-    }, []);
 
     // const handleToggleStateKeyClick = (apiKey) => () => {
     //     // const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
@@ -89,6 +69,15 @@ const ApiListMobileScreen: React.FC = () => {
         setOtpCode(value);
     };
 
+    const success = modal.action === 'createSuccess';
+
+    // React.useEffect(() => {
+    //     if (success) {
+    //         setShowModalTwoFa(false);
+    //         history.push('/create-api', { kid: modal.apiKey.kid, secret: modal.apiKey.secret });
+    //     }
+    // }, [success]);
+
     const renderOnClick = () => {
         switch (modal.action) {
             case 'createKey':
@@ -108,27 +97,28 @@ const ApiListMobileScreen: React.FC = () => {
         }
     };
 
-    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            renderOnClick();
-        }
-    };
+    // const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    //     if (event.key === 'Enter') {
+    //         event.preventDefault();
+    //         renderOnClick();
+    //     }
+    // };
 
-    const handleCreateKeyClick = () => {
-        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'createKey' };
-        apiKeys2FAModal(payload);
-    };
+    // const handleCreateKeyClick = () => {
+    //     const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'createKey' };
+    //     apiKeys2FAModal(payload);
+    // };
 
     const handleCreateKey = () => {
         const payload: ApiKeyCreateFetch['payload'] = { totp_code: otpCode };
         dispatch(apiKeyCreateFetch(payload));
         setOtpCode('');
+        // setShowModalTwoFa(false);
     };
 
     const handleCreateSuccess = () => {
-        const payload: ApiKeys2FAModal['payload'] = { active: false };
-        dispatch(apiKeys2FAModal(payload));
+        setShowModalTwoFa(false);
+        history.push('/create-api', { kid: 'test' });
     };
 
     const handleToggleStateKeyClick = (apiKey) => () => {
@@ -189,8 +179,8 @@ const ApiListMobileScreen: React.FC = () => {
             <div className="mb-4">
                 <PinInput
                     length={6}
-                    onChange={handleChangeCode}
-                    onComplete={handleChangeCode}
+                    onChange={handleOtpCodeChange}
+                    onComplete={handleOtpCodeChange}
                     type="numeric"
                     inputMode="number"
                     style={{
@@ -210,7 +200,7 @@ const ApiListMobileScreen: React.FC = () => {
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
             </div>
-            <button className="btn btn-primary btn-mobile btn-block w-100" onClick={() => setShowModalTwoFa(false)}>
+            <button type="button" className="btn btn-primary btn-mobile btn-block w-100" onClick={handleCreateKey}>
                 Submit
             </button>
         </React.Fragment>
@@ -266,20 +256,43 @@ const ApiListMobileScreen: React.FC = () => {
                         </li>
                     </ul>
                 </div>
-                <div className="table-mobile-wrapper">
-                    <Table header={getTableHeaders()} data={getTableData(apiKeys)} />
-                </div>
-                <div className="mt-3 mb-4">
-                    <Link to="/create-api" className="btn btn-primary btn-mobile btn-block">
-                        Create Api
-                    </Link>
-                    <button
-                        type="button"
-                        className="btn btn-secondary btn-outline btn-mobile btn-block"
-                        onClick={() => setShowModalDelete(true)}>
-                        Delete All
-                    </button>
-                </div>
+
+                {!user.otp && (
+                    <div className="px-24">
+                        <p className="mt-4  warning-text font-semibold text-md">
+                            {translate('page.body.profile.apiKeys.noOtp')}
+                        </p>
+                    </div>
+                )}
+
+                {user.otp && !apiKeys.length && (
+                    <div className="text-center mt-4 grey-text-accent text-ms">
+                        {translate('page.body.profile.apiKeys.noKeys')}
+                    </div>
+                )}
+
+                {user.otp && apiKeys.length > 0 && (
+                    <div className="table-mobile-wrapper">
+                        <Table header={getTableHeaders()} data={getTableData(apiKeys)} />
+                    </div>
+                )}
+
+                {user.otp && (!apiKeys.length || apiKeys.length > 0) && (
+                    <div className="mt-3 mb-4">
+                        <button
+                            onClick={() => setShowModalTwoFa(true)}
+                            type="button"
+                            className="btn btn-primary btn-mobile btn-block">
+                            Create Api
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-secondary btn-outline btn-mobile btn-block"
+                            onClick={() => setShowModalDelete(true)}>
+                            Delete All
+                        </button>
+                    </div>
+                )}
             </div>
             <ModalMobile content={renderModal()} show={showModalDelete} />
             <ModalMobile content={renderModalTwoFa()} show={showModalTwoFa} />
