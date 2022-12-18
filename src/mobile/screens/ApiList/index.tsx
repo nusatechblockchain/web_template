@@ -16,6 +16,7 @@ import {
     ApiKeyUpdateFetch,
     apiKeyUpdateFetch,
     selectUserInfo,
+    apiKeyCreate,
 } from '../../../modules';
 import { selectApiKeys, selectApiKeysDataLoaded, selectApiKeysModal } from 'src/modules/user/apiKeys/selectors';
 import { ArrowLeft } from '../../assets/Arrow';
@@ -38,64 +39,62 @@ const ApiListMobileScreen: React.FC = () => {
     const dataLoaded = useSelector(selectApiKeysDataLoaded);
     const modal = useSelector(selectApiKeysModal);
     const user = useSelector(selectUserInfo);
+    const apiKeyCreates = useSelector(apiKeyCreate);
 
-    const [otpCode, setOtpCode] = React.useState('');
+    const [otpCreate, setOtpCreate] = React.useState('');
+    const [showModalTwoFaCreate, setShowModalTwoFaCreate] = React.useState(false);
+
+    const [otpDelete, setOtpDelete] = React.useState('');
+    const [showModalTwoFaDelete, setShowModalTwoFaDelete] = React.useState(false);
     const [showModalDelete, setShowModalDelete] = React.useState(false);
-    const [showModalTwoFa, setShowModalTwoFa] = React.useState(false);
 
     console.log(apiKeys, 'INI API KEYS CUY');
+
+    React.useEffect(() => {
+        console.log(apiKeyCreates);
+    }, [apiKeyCreates]);
 
     const translate = (key: string) => {
         return intl.formatMessage({ id: key });
     };
 
-    // const handleToggleStateKeyClick = (apiKey) => () => {
+    const handleOtpCreateChange = (value: string) => {
+        setOtpCreate(value);
+    };
+
+    const handleOtpDeleteChange = (value: string) => {
+        setOtpDelete(value);
+    };
+
+    // const handleToggleActive = (apiKey) => () => {
     //     // const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
     //     // this.props.toggleApiKeys2FAModal(payload);
     // };
 
-    const handleDeleteApi = () => {
-        setShowModalDelete(false);
-        history.push('/api-key');
-    };
+    // const handleHide2FAModal = () => {
+    //     const payload: ApiKeys2FAModal['payload'] = { active: false };
+    //     dispatch(apiKeys2FAModal(payload));
+    //     setOtpCreate('');
+    // };
 
-    const handleHide2FAModal = () => {
-        const payload: ApiKeys2FAModal['payload'] = { active: false };
-        dispatch(apiKeys2FAModal(payload));
-        setOtpCode('');
-    };
-
-    const handleOtpCodeChange = (value: string) => {
-        setOtpCode(value);
-    };
-
-    const success = modal.action === 'createSuccess';
-
-    // React.useEffect(() => {
-    //     if (success) {
-    //         setShowModalTwoFa(false);
-    //         history.push('/create-api', { kid: modal.apiKey.kid, secret: modal.apiKey.secret });
+    // const renderOnClick = () => {
+    //     switch (modal.action) {
+    //         case 'createKey':
+    //             handleCreateKey();
+    //             break;
+    //         case 'createSuccess':
+    //             handleCreateSuccess();
+    //             break;
+    //         case 'updateKey':
+    //             handleUpdateKey();
+    //             break;
+    //         case 'deleteKey':
+    //             handleDeleteKey();
+    //             break;
+    //         default:
+    //             break;
     //     }
-    // }, [success]);
-
-    const renderOnClick = () => {
-        switch (modal.action) {
-            case 'createKey':
-                handleCreateKey();
-                break;
-            case 'createSuccess':
-                handleCreateSuccess();
-                break;
-            case 'updateKey':
-                handleUpdateKey();
-                break;
-            case 'deleteKey':
-                handleDeleteKey();
-                break;
-            default:
-                break;
-        }
-    };
+    // };
 
     // const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     //     if (event.key === 'Enter') {
@@ -110,45 +109,54 @@ const ApiListMobileScreen: React.FC = () => {
     // };
 
     const handleCreateKey = () => {
-        const payload: ApiKeyCreateFetch['payload'] = { totp_code: otpCode };
+        const payload: ApiKeyCreateFetch['payload'] = { totp_code: otpCreate };
         dispatch(apiKeyCreateFetch(payload));
-        setOtpCode('');
-        // setShowModalTwoFa(false);
+        setOtpCreate('');
     };
 
+    // const success = modal.action === 'createSuccess';
+
+    // React.useEffect(() => {
+    //     if (success) {
+    //         setShowModalTwoFaCreate(false);
+    //         history.push('/create-api', { kid: modal.apiKey.kid, secret: modal.apiKey.secret });
+    //     }
+    // }, [success]);
+
     const handleCreateSuccess = () => {
-        setShowModalTwoFa(false);
+        setShowModalTwoFaCreate(false);
         history.push('/create-api', { kid: 'test' });
     };
 
-    const handleToggleStateKeyClick = (apiKey) => () => {
-        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
-        dispatch(apiKeys2FAModal(payload));
-    };
-
-    const handleUpdateKey = () => {
-        const apiKey: ApiKeyDataInterface = { ...modal.apiKey } as any;
-        apiKey.state = apiKey.state === 'active' ? 'disabled' : 'active';
-        const payload: ApiKeyUpdateFetch['payload'] = { totp_code: otpCode, apiKey: apiKey };
-        dispatch(apiKeyUpdateFetch(payload));
-        setOtpCode('');
-    };
-
-    const handleDeleteKeyClick = (apiKey) => {
-        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'deleteKey', apiKey };
-        dispatch(apiKeys2FAModal(payload));
-    };
+    // const handleUpdateKey = () => {
+    //     const apiKey: ApiKeyDataInterface = { ...modal.apiKey } as any;
+    //     apiKey.state = apiKey.state === 'active' ? 'disabled' : 'active';
+    //     const payload: ApiKeyUpdateFetch['payload'] = { totp_code: otpCreate, apiKey: apiKey };
+    //     dispatch(apiKeyUpdateFetch(payload));
+    //     setOtpCreate('');
+    // };
 
     const handleDeleteKey = () => {
         const payload: ApiKeyDeleteFetch['payload'] = {
             kid: (modal.apiKey && modal.apiKey.kid) || '',
-            totp_code: otpCode,
+            totp_code: otpDelete,
         };
         dispatch(apiKeyDeleteFetch(payload));
-        setOtpCode('');
+        setShowModalTwoFaDelete(false);
+        setOtpDelete('');
     };
 
-    const renderModal = () => (
+    const handleToggleActive = (apiKey) => () => {
+        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
+        dispatch(apiKeys2FAModal(payload));
+    };
+
+    const handleToggleNonActive = (apiKey) => {
+        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'deleteKey', apiKey };
+        dispatch(apiKeys2FAModal(payload));
+    };
+
+    const renderModalDelete = () => (
         <React.Fragment>
             <div className="d-flex justify-content-center">
                 <ModalDanger />
@@ -157,7 +165,12 @@ const ApiListMobileScreen: React.FC = () => {
             <p className="text-center text-sm grey-text">
                 Are you sure you want to delete all the API addresses you have?
             </p>
-            <button onClick={handleDeleteApi} className="btn btn-primary btn-mobile btn-block mb-3">
+            <button
+                onClick={() => {
+                    setShowModalDelete(false);
+                    setShowModalTwoFaDelete(true);
+                }}
+                className="btn btn-primary btn-mobile btn-block mb-3">
                 Continue
             </button>
             <button className="btn btn-success btn-mobile btn-outline w-100" onClick={() => setShowModalDelete(false)}>
@@ -166,7 +179,7 @@ const ApiListMobileScreen: React.FC = () => {
         </React.Fragment>
     );
 
-    const renderModalTwoFa = () => (
+    const renderModalTwoFaDelete = () => (
         <React.Fragment>
             <div className="d-flex justify-content-center">
                 <ModalResetPassword />
@@ -179,8 +192,8 @@ const ApiListMobileScreen: React.FC = () => {
             <div className="mb-4">
                 <PinInput
                     length={6}
-                    onChange={handleOtpCodeChange}
-                    onComplete={handleOtpCodeChange}
+                    onChange={handleOtpDeleteChange}
+                    onComplete={handleOtpDeleteChange}
                     type="numeric"
                     inputMode="number"
                     style={{
@@ -200,7 +213,55 @@ const ApiListMobileScreen: React.FC = () => {
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
             </div>
-            <button type="button" className="btn btn-primary btn-mobile btn-block w-100" onClick={handleCreateKey}>
+            <button
+                type="button"
+                className="btn btn-primary btn-mobile btn-block w-100"
+                disabled={otpCreate.length < 6}
+                onClick={handleDeleteKey}>
+                Submit
+            </button>
+        </React.Fragment>
+    );
+
+    const renderModalTwoFaCreate = () => (
+        <React.Fragment>
+            <div className="d-flex justify-content-center">
+                <ModalResetPassword />
+            </div>
+            <h5 className="text-md font-extrabold contrast-text text-center mb-3">Two Factor-Authentication</h5>
+            <p className="text-center text-sm grey-text">
+                To ensure security, withdrawals, P2P transactions, and red envelopes will be temporarily unavailable for
+                24 hours after changing the security settings.
+            </p>
+            <div className="mb-4">
+                <PinInput
+                    length={6}
+                    onChange={handleOtpCreateChange}
+                    onComplete={handleOtpCreateChange}
+                    type="numeric"
+                    inputMode="number"
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '8px',
+                    }}
+                    inputStyle={{
+                        background: '#15191D',
+                        borderRadius: '4px',
+                        borderColor: '#15191D',
+                        fontSize: '20px',
+                        color: ' #DEDEDE',
+                    }}
+                    inputFocusStyle={{ fontSize: '20px', color: 'color: #23262F' }}
+                    autoSelect={true}
+                    regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+                />
+            </div>
+            <button
+                type="button"
+                className="btn btn-primary btn-mobile btn-block w-100"
+                disabled={otpCreate.length < 6}
+                onClick={handleCreateKey}>
                 Submit
             </button>
         </React.Fragment>
@@ -223,7 +284,7 @@ const ApiListMobileScreen: React.FC = () => {
                         type="switch"
                         id={`apiKeyCheck-${item.kid}`}
                         label=""
-                        onChange={handleToggleStateKeyClick(item)}
+                        onChange={handleToggleActive(item)}
                         checked={item.state === 'active'}
                     />
                 </Form>
@@ -280,7 +341,7 @@ const ApiListMobileScreen: React.FC = () => {
                 {user.otp && (!apiKeys.length || apiKeys.length > 0) && (
                     <div className="mt-3 mb-4">
                         <button
-                            onClick={() => setShowModalTwoFa(true)}
+                            onClick={() => setShowModalTwoFaCreate(true)}
                             type="button"
                             className="btn btn-primary btn-mobile btn-block">
                             Create Api
@@ -288,14 +349,16 @@ const ApiListMobileScreen: React.FC = () => {
                         <button
                             type="button"
                             className="btn btn-secondary btn-outline btn-mobile btn-block"
+                            disabled={!apiKeys[0]}
                             onClick={() => setShowModalDelete(true)}>
                             Delete All
                         </button>
                     </div>
                 )}
             </div>
-            <ModalMobile content={renderModal()} show={showModalDelete} />
-            <ModalMobile content={renderModalTwoFa()} show={showModalTwoFa} />
+            <ModalMobile content={renderModalDelete()} show={showModalDelete} />
+            <ModalMobile content={renderModalTwoFaDelete()} show={showModalTwoFaDelete} />
+            <ModalMobile content={renderModalTwoFaCreate()} show={showModalTwoFaCreate} />
         </React.Fragment>
     );
 };
