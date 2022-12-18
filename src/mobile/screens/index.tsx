@@ -17,3 +17,4 @@ export * from './MarketList';
 export * from './TwoFaAuthentication';
 export * from './WalletDetail';
 export * from './WalletList';
+export * from './MarketOrder';
