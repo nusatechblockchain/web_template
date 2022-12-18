@@ -1,16 +1,29 @@
 import * as React from 'react';
+import { selectUserInfo, alertPush } from 'src/modules';
 import { Link, useHistory } from 'react-router-dom';
 import { ArrowLeft } from '../../assets/Arrow';
 import { Table } from '../../../components';
+import { copy } from '../../../helpers';
 import { ReferralIcon } from '../../assets/ReferralGift';
 import { CopyableTextField } from '../../../components';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ReferralMobileScreen: React.FC = () => {
+    const dispatch = useDispatch();
+
+    const user = useSelector(selectUserInfo);
+
+    const referralLink = `${window.document.location.origin}/signup?refid=${user && user.uid}`;
+    const referralCode = user && user.uid;
+
+    const doCopyReferralCode = () => {
+        copy('referral-code');
+        dispatch(alertPush({ message: ['page.body.wallets.tabs.deposit.ccy.message.success'], type: 'success' }));
+    };
+
     const referral = [
         { register: '20-12-2022', email: 'tester@nusatech.id', username: 'tester', level: 'level 1', status: 'active' },
     ];
-
-    const referralCode = 'https://app.koinku.co/signup?refid=ID3AB5C3EB70';
 
     const getTableData = (data) => {
         return data.map((item) => [
@@ -58,7 +71,9 @@ const ReferralMobileScreen: React.FC = () => {
                     </div>
                 </div>
                 <div className="mb-4">
-                    <CopyableTextField value={referralCode} className="ml-3 w-100 " fieldId="referral-code" />
+                    <fieldset onClick={doCopyReferralCode}>
+                        <CopyableTextField value={referralLink} className="ml-3 w-100 " fieldId="referral-code" />
+                    </fieldset>
                 </div>
                 <div className="table-mobile-wrapper">
                     <Table header={getTableHeaders()} data={getTableData(referral)} />

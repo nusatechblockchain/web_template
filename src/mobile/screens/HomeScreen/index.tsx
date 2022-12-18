@@ -107,8 +107,6 @@ const HomeMobileScreen: React.FC = () => {
     const dataLosers = marketList && marketList.sort((a, b) => +a.price_change_percent - +b.price_change_percent);
     const dataVolume = marketList && marketList.sort((a, b) => +a.volume - +b.volume);
 
-    console.log(user);
-
     const sidebarMenu = [
         { icon: <Dashboard />, name: 'Dashborad', path: '/profile' },
         { icon: <Wallet />, name: 'Wallet', path: '/wallet' },
@@ -161,7 +159,9 @@ const HomeMobileScreen: React.FC = () => {
             <div className="d-flex align-items-center text-sm">
                 <img src={item && item.currency && item.currency.icon_url} alt="coin" className="small-coin-icon" />
                 <p className="mb-0 white-text text-sm ml-2">{item && item.currency && item.currency.name}</p>
-                <p className="mb-0 grey-text text-xs ml-2">{item && item.currency && item.currency.id}</p>
+                <p className="mb-0 grey-text text-xs ml-2">
+                    {item && item.currency && item.currency.id && item.currency.id.toUpperCase()}
+                </p>
             </div>,
             <div>
                 <img src={GrapUp} alt="grap" />

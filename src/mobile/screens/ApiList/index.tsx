@@ -1,5 +1,34 @@
 import * as React from 'react';
+import { useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    alertPush,
+    ApiKeyCreateFetch,
+    apiKeyCreateFetch,
+    ApiKeyDataInterface,
+    ApiKeyDeleteFetch,
+    apiKeyDeleteFetch,
+    ApiKeys2FAModal,
+    apiKeys2FAModal,
+    apiKeysFetch,
+    ApiKeyStateModal,
+    ApiKeyUpdateFetch,
+    apiKeyUpdateFetch,
+    RootState,
+    selectMobileDeviceState,
+    selectUserInfo,
+    User,
+} from '../../../modules';
+import {
+    selectApiKeys,
+    selectApiKeysDataLoaded,
+    selectApiKeysFirstElemIndex,
+    selectApiKeysLastElemIndex,
+    selectApiKeysModal,
+    selectApiKeysNextPageExists,
+    selectApiKeysPageIndex,
+} from 'src/modules/user/apiKeys/selectors';
 import { ArrowLeft } from '../../assets/Arrow';
 import { Table } from '../../../components';
 import { Form } from 'react-bootstrap';
@@ -7,20 +36,176 @@ import { ModalDanger } from '../../assets/Modal';
 import { ModalMobile } from '../../components';
 
 const ApiListMobileScreen: React.FC = () => {
-    const [state, setState] = React.useState(true);
-    const [showModalDelete, setShowModalDelete] = React.useState(false);
     const history = useHistory();
+    const dispatch = useDispatch();
+    const intl = useIntl();
+
+    const apiKeys = useSelector(selectApiKeys);
+    const dataLoaded = useSelector(selectApiKeysDataLoaded);
+    const modal = useSelector(selectApiKeysModal);
+    const user = useSelector(selectUserInfo);
+    const pageIndex = useSelector(selectApiKeysPageIndex);
+    // const firstElemIndex = useSelector((state) => selectApiKeysFirstElemIndex(state, 4));
+    // const lastElemIndex = useSelector((state) => selectApiKeysLastElemIndex(state, 4));
+    const nextPageExists = useSelector(selectApiKeysNextPageExists);
+
+    const [state, setState] = React.useState(true);
+    const [otpCode, setOtpCode] = React.useState('');
+    const [showModalDelete, setShowModalDelete] = React.useState(false);
 
     const handleTwoFa = () => {
         setState(!state);
     };
 
-    const apiKeys = [
-        { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-        { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-        { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-        { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    ];
+    // const apiKeys = [
+    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
+    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
+    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
+    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
+    // ];
+
+    const translate = (key: string) => {
+        return intl.formatMessage({ id: key });
+    };
+
+    const copy = (id: string) => {
+        const copyText: HTMLInputElement | null = document.querySelector(`#${id}`);
+
+        if (copyText) {
+            copyText.select();
+
+            document.execCommand('copy');
+            (window.getSelection() as any).removeAllRanges(); // tslint:disable-line
+        }
+    };
+
+    React.useEffect(() => {
+        dispatch(apiKeysFetch({ pageIndex: 0, limit: 4 }));
+    }, []);
+
+    // const handleToggleStateKeyClick = (apiKey) => () => {
+    //     // const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
+    //     // this.props.toggleApiKeys2FAModal(payload);
+    // };
+
+    const handleDeleteApi = () => {
+        setShowModalDelete(false);
+        history.push('/api-key');
+    };
+
+    const handleHide2FAModal = () => {
+        const payload: ApiKeys2FAModal['payload'] = { active: false };
+        dispatch(apiKeys2FAModal(payload));
+        setOtpCode('');
+    };
+
+    const handleOtpCodeChange = (value: string) => {
+        setOtpCode(value);
+    };
+
+    const renderOnClick = () => {
+        switch (modal.action) {
+            case 'createKey':
+                handleCreateKey();
+                break;
+            case 'createSuccess':
+                handleCreateSuccess();
+                break;
+            case 'updateKey':
+                handleUpdateKey();
+                break;
+            case 'deleteKey':
+                handleDeleteKey();
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            renderOnClick();
+        }
+    };
+
+    const handleCreateKeyClick = () => {
+        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'createKey' };
+        apiKeys2FAModal(payload);
+    };
+
+    const handleCreateKey = () => {
+        const payload: ApiKeyCreateFetch['payload'] = { totp_code: otpCode };
+        dispatch(apiKeyCreateFetch(payload));
+        setOtpCode('');
+    };
+
+    const handleCreateSuccess = () => {
+        const payload: ApiKeys2FAModal['payload'] = { active: false };
+        dispatch(apiKeys2FAModal(payload));
+    };
+
+    const handleToggleStateKeyClick = (apiKey) => () => {
+        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
+        dispatch(apiKeys2FAModal(payload));
+    };
+
+    const handleUpdateKey = () => {
+        const apiKey: ApiKeyDataInterface = { ...modal.apiKey } as any;
+        apiKey.state = apiKey.state === 'active' ? 'disabled' : 'active';
+        const payload: ApiKeyUpdateFetch['payload'] = { totp_code: otpCode, apiKey: apiKey };
+        dispatch(apiKeyUpdateFetch(payload));
+        setOtpCode('');
+    };
+
+    const handleCopy = (id: string, type: string) => {
+        copy(id);
+        dispatch(alertPush({ message: [`success.api_keys.copied.${type}`], type: 'success' }));
+    };
+
+    const handleDeleteKeyClick = (apiKey) => {
+        const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'deleteKey', apiKey };
+        dispatch(apiKeys2FAModal(payload));
+    };
+
+    const handleDeleteKey = () => {
+        const payload: ApiKeyDeleteFetch['payload'] = {
+            kid: (modal.apiKey && modal.apiKey.kid) || '',
+            totp_code: otpCode,
+        };
+        dispatch(apiKeyDeleteFetch(payload));
+        setOtpCode('');
+    };
+
+    const onClickPrevPage = () => {
+        apiKeysFetch({ pageIndex: Number(pageIndex) - 1, limit: 4 });
+    };
+
+    const onClickNextPage = () => {
+        apiKeysFetch({ pageIndex: Number(pageIndex) + 1, limit: 4 });
+    };
+
+    const renderModal = () => (
+        <React.Fragment>
+            <div className="d-flex justify-content-center">
+                <ModalDanger />
+            </div>
+            <h5 className="text-md font-extrabold contrast-text text-center mb-3">Delete All API Address</h5>
+            <p className="text-center text-sm grey-text">
+                Are you sure you want to delete all the API addresses you have?
+            </p>
+            <button onClick={handleDeleteApi} className="btn btn-primary btn-mobile btn-block mb-3">
+                Continue
+            </button>
+            <button className="btn btn-success btn-mobile btn-outline w-100" onClick={() => setShowModalDelete(false)}>
+                Cancle
+            </button>
+        </React.Fragment>
+    );
+
+    const getTableHeaders = () => {
+        return ['KID', 'Algorythm', 'State', 'Status'];
+    };
 
     const getTableData = (data) => {
         return data.map((item) => [
@@ -42,38 +227,6 @@ const ApiListMobileScreen: React.FC = () => {
             </div>,
         ]);
     };
-
-    const getTableHeaders = () => {
-        return ['KID', 'Algorythm', 'State', 'Status'];
-    };
-
-    const handleToggleStateKeyClick = (apiKey) => () => {
-        // const payload: ApiKeys2FAModal['payload'] = { active: true, action: 'updateKey', apiKey };
-        // this.props.toggleApiKeys2FAModal(payload);
-    };
-
-    const handleDeleteApi = () => {
-        setShowModalDelete(false);
-        history.push('/api-key');
-    };
-
-    const renderModal = () => (
-        <React.Fragment>
-            <div className="d-flex justify-content-center">
-                <ModalDanger />
-            </div>
-            <h5 className="text-md font-extrabold contrast-text text-center mb-3">Delete All API Address</h5>
-            <p className="text-center text-sm grey-text">
-                Are you sure you want to delete all the API addresses you have?
-            </p>
-            <button onClick={handleDeleteApi} className="btn btn-primary btn-mobile btn-block mb-3">
-                Continue
-            </button>
-            <button className="btn btn-success btn-mobile btn-outline w-100" onClick={() => setShowModalDelete(false)}>
-                Cancle
-            </button>
-        </React.Fragment>
-    );
 
     return (
         <React.Fragment>
