@@ -61,6 +61,7 @@
         "react-select": "^4.0.2",
         "react-slick": "^0.29.0",
         "react-string-format": "^0.0.6",
+        "react-tradingview-embed": "1.0.2",
         "recharts": "^1.8.5",
         "redux": "^4.0.5",
         "redux-saga": "^1.1.3",
