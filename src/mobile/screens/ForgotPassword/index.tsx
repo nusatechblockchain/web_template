@@ -52,18 +52,12 @@ const ForgotPasswordMobileScreen: React.FC<CaptchaProps> = (props) => {
                 break;
         }
 
-        // if (errorForgotPassword) {
-        //     ('');
-        // }
-
-        // if (!errorForgotPassword) {
         history.push({
             pathname: '/reset-password',
             state: {
                 email: emailValue,
             },
         });
-        // }
 
         resetCaptchaState();
     };
