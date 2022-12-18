@@ -12,3 +12,5 @@ export * from './ApiList';
 export * from './ChangePhone';
 export * from './CreateApi';
 export * from './Referral';
+export * from './MarketDetail';
+export * from './MarketList';
