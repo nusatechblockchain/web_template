@@ -161,10 +161,6 @@ const SignUpMobileScreen: React.FC = () => {
         }
     };
 
-    const handleSignIn = () => {
-        history.push('/signin');
-    };
-
     const handleSignUp = () => {
         const payload = {
             email: emailValue,
@@ -294,7 +290,7 @@ const SignUpMobileScreen: React.FC = () => {
         if (requireVerification) {
             history.push('/email-verification', { email: emailValue });
         }
-    }, [emailValue]);
+    }, [requireVerification, history]);
 
     React.useEffect(() => {
         return () => {

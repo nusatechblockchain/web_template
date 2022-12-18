@@ -48,7 +48,7 @@ const EmailVerificationMobileScreen: React.FC = () => {
     const history = useHistory();
     const location = (useLocation() as unknown) as LocationProps;
     const email = location.state?.email;
-    console.log(location);
+    console.log(history);
 
     const captcha_response = useSelector(selectCaptchaResponse);
     const error = useSelector(selectSendEmailVerificationError);
