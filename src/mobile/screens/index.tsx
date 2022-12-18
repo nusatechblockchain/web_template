@@ -15,3 +15,5 @@ export * from './Referral';
 export * from './MarketDetail';
 export * from './MarketList';
 export * from './TwoFaAuthentication';
+export * from './WalletDetail';
+export * from './WalletList';
