@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { ArrowLeft } from '../../assets/Arrow';
-import Avatar from '../../assets/Images/avatar.png';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { selectUserInfo } from '../../../modules';
+import moment from 'moment';
 import {
     EmailProfileIcon,
     KycProfileIcon,
@@ -9,16 +10,22 @@ import {
     GoogleProfileIcon,
     ApiProfileIcon,
 } from '../../../assets/images/ProfileIcon';
+import { ArrowLeft } from '../../assets/Arrow';
+import Avatar from '../../assets/Images/avatar.png';
 import { CheckIcon } from '../../../assets/images/ProfileIcon';
 import { WarningIcon } from '../../assets/Nottification';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { ModalMobile } from '../../components';
 import { ModalResetPassword } from '../../assets/Modal';
-import { useHistory } from 'react-router';
+import { titleCase, dateTo12HFormat } from 'src/helpers';
 
 const ProfileMobileScreen: React.FC = () => {
     const [showModalEmail, setShowModalEmail] = React.useState(false);
+    const user = useSelector(selectUserInfo);
     const history = useHistory();
+
+    console.log(user);
+
     const handleResetPassword = () => {
         history.push('/change-email');
     };
@@ -52,19 +59,25 @@ const ProfileMobileScreen: React.FC = () => {
                 <div className="d-flex align-items-center mb-24">
                     <img src={Avatar} className="avatar-image" alt="ava" />
                     <div className="ml-3 d-flex align-items-center">
-                        <h1 className="gradient-text text-md font-bold mb-2 mr-3">Hi, Nusatech Dev</h1>
-                        <p className="badge badge-warning white-text mb-0 ml-3">Unverifed</p>
+                        <h1 className="gradient-text text-md font-bold mb-2 mr-3">
+                            Hi, {user && user.username !== null ? user.username : 'The Awesome Member'}
+                        </h1>
+                        <p className="badge badge-warning white-text mb-0 ml-3">
+                            {titleCase(user && user.labels && user.labels[0] && user.labels[0].value)}
+                        </p>
                     </div>
                 </div>
                 <div className="mb-5">
                     <div className="d-flex flex-column mb-12">
                         <h5 className="grey-text font-bold text-xs mb-0">User ID</h5>
-                        <h3 className="grey-text-accent font-bold text-sm">533221334</h3>
+                        <h3 className="grey-text-accent font-bold text-sm">{user && user.uid}</h3>
                     </div>
 
                     <div className="d-flex flex-column mb-12">
                         <h5 className="grey-text font-bold text-xs mb-0">Last Login</h5>
-                        <h3 className="grey-text-accent font-bold text-sm">2022-10-18 11:49:48 (GMT+7)</h3>
+                        <h3 className="grey-text-accent font-bold text-sm">
+                            {dateTo12HFormat(user && user.updated_at)}
+                        </h3>
                     </div>
 
                     <div className="d-flex flex-column mb-12">
@@ -93,10 +106,10 @@ const ProfileMobileScreen: React.FC = () => {
                         <div className="d-flex justify-content-between align-items-center w-100">
                             <div>
                                 <h4 className="mb-0 text-sm font-bold grey-text-accent">Email</h4>
-                                <p className="mb-0 text-xs grey-text">Nusatec***@example.com</p>
+                                <p className="mb-0 text-xs grey-text">{user && user.email}</p>
                             </div>
 
-                            <CheckIcon className="check-icon" />
+                            {user && user.email && <CheckIcon className="check-icon" />}
                         </div>
                     </div>
                     <div className=" d-flex align-items-center mb-4 cursor-pointer">
@@ -120,8 +133,14 @@ const ProfileMobileScreen: React.FC = () => {
                             <div className="d-flex justify-content-between align-items-center w-100">
                                 <div>
                                     <h4 className="mb-0 text-sm font-bold grey-text-accent">Phone</h4>
-                                    <p className="mb-0 text-xs grey-text-accent">Disable</p>
+                                    <p
+                                        className={`mb-0 text-xs ${
+                                            user && user.phones && user.phones[0] ? 'green-text' : 'danger-text'
+                                        }`}>
+                                        {user && user.phones && user.phones[0] ? 'Verified' : 'Unverified'}
+                                    </p>
                                 </div>
+                                {user && user.phones && user.phones[0] && <CheckIcon className="check-icon" />}
                             </div>
                         </div>
                     </Link>
@@ -132,10 +151,12 @@ const ProfileMobileScreen: React.FC = () => {
                         <div className="d-flex justify-content-between align-items-center w-100">
                             <div>
                                 <h4 className="mb-0 text-sm font-bold grey-text-accent">Google Authentication</h4>
-                                <p className="mb-0 text-xs green-text">Enable</p>
+                                <p className={`mb-0 text-xs ${user && user.otp ? 'green-text' : 'danger-text'}`}>
+                                    {user && user.otp ? 'Enable' : 'Disable'}
+                                </p>
                             </div>
 
-                            <CheckIcon className="check-icon" />
+                            {user && user.otp && <CheckIcon className="check-icon" />}
                         </div>
                     </div>
                     <div className=" d-flex align-items-center mb-4 cursor-pointer">

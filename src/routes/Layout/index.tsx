@@ -297,7 +297,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
                         <PublicRoute
                             loading={userLoading}
-                            isLogged={isLoggedIn}
+                            // isLogged={isLoggedIn}
                             path="/profile"
                             component={ProfileMobileScreen}
                         />
