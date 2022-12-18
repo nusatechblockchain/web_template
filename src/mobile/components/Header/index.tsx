@@ -22,7 +22,7 @@ import {
     Wallet,
 } from '../../assets/Sidebar';
 
-const noHeaderRoutes = ['/', '/dashboard'];
+const noHeaderRoutes = ['/'];
 
 const HeaderComponent: React.FC = () => {
     const userLoggedIn = useSelector(selectUserLoggedIn);
@@ -30,7 +30,7 @@ const HeaderComponent: React.FC = () => {
     const [showSidebar, setShowSidebar] = React.useState(false);
     const shouldRenderHeader = !noHeaderRoutes.some((r) => location.pathname.includes(r));
     const uid = '533221334';
-    if (!shouldRenderHeader) {
+    if (shouldRenderHeader) {
         return <React.Fragment />;
     }
 
