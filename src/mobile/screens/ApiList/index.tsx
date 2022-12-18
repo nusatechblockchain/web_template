@@ -32,8 +32,9 @@ import {
 import { ArrowLeft } from '../../assets/Arrow';
 import { Table } from '../../../components';
 import { Form } from 'react-bootstrap';
-import { ModalDanger } from '../../assets/Modal';
+import { ModalResetPassword, ModalDanger } from '../../assets/Modal';
 import { ModalMobile } from '../../components';
+import PinInput from 'react-pin-input';
 
 const ApiListMobileScreen: React.FC = () => {
     const history = useHistory();
@@ -51,18 +52,13 @@ const ApiListMobileScreen: React.FC = () => {
 
     const [state, setState] = React.useState(true);
     const [otpCode, setOtpCode] = React.useState('');
+    const [twoFaCode, settwoFaCode] = React.useState('');
     const [showModalDelete, setShowModalDelete] = React.useState(false);
+    const [showModalTwoFa, setShowModalTwoFa] = React.useState(true);
 
-    const handleTwoFa = () => {
-        setState(!state);
+    const handleChangeCode = (value: string) => {
+        settwoFaCode(value);
     };
-
-    // const apiKeys = [
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    //     { kid: 'fe69d2....', algorithm: 'HS256', state: 'active' },
-    // ];
 
     const translate = (key: string) => {
         return intl.formatMessage({ id: key });
@@ -203,6 +199,46 @@ const ApiListMobileScreen: React.FC = () => {
         </React.Fragment>
     );
 
+    const renderModalTwoFa = () => (
+        <React.Fragment>
+            <div className="d-flex justify-content-center">
+                <ModalResetPassword />
+            </div>
+            <h5 className="text-md font-extrabold contrast-text text-center mb-3">Two Factor-Authentication</h5>
+            <p className="text-center text-sm grey-text">
+                To ensure security, withdrawals, P2P transactions, and red envelopes will be temporarily unavailable for
+                24 hours after changing the security settings.
+            </p>
+            <div className="mb-4">
+                <PinInput
+                    length={6}
+                    onChange={handleChangeCode}
+                    onComplete={handleChangeCode}
+                    type="numeric"
+                    inputMode="number"
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '8px',
+                    }}
+                    inputStyle={{
+                        background: '#15191D',
+                        borderRadius: '4px',
+                        borderColor: '#15191D',
+                        fontSize: '20px',
+                        color: ' #DEDEDE',
+                    }}
+                    inputFocusStyle={{ fontSize: '20px', color: 'color: #23262F' }}
+                    autoSelect={true}
+                    regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+                />
+            </div>
+            <button className="btn btn-primary btn-mobile btn-block w-100" onClick={() => setShowModalTwoFa(false)}>
+                Submit
+            </button>
+        </React.Fragment>
+    );
+
     const getTableHeaders = () => {
         return ['KID', 'Algorythm', 'State', 'Status'];
     };
@@ -269,6 +305,7 @@ const ApiListMobileScreen: React.FC = () => {
                 </div>
             </div>
             <ModalMobile content={renderModal()} show={showModalDelete} />
+            <ModalMobile content={renderModalTwoFa()} show={showModalTwoFa} />
         </React.Fragment>
     );
 };
