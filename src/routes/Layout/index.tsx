@@ -404,13 +404,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
-                            path="/order"
+                            path="/market-order"
                             component={MarketOrderMobileScreen}
                         />
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
-                            path="/history-transaction"
+                            path="/history-trade"
                             component={HistoryTransactionMobileScreen}
                         />
                         <PrivateRoute

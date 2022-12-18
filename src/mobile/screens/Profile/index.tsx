@@ -54,7 +54,9 @@ const ProfileMobileScreen: React.FC = () => {
         <React.Fragment>
             <div className="mobile-container profile-screen no-header dark-bg-main">
                 <div className="mb-24">
-                    <ArrowLeft className={'cursorPointer'} />
+                    <Link to="/">
+                        <ArrowLeft className={'cursor-pointer'} />
+                    </Link>
                 </div>
                 <div className="d-flex align-items-center mb-24">
                     <img src={Avatar} className="avatar-image" alt="ava" />

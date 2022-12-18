@@ -108,7 +108,7 @@ const HomeMobileScreen: React.FC = () => {
 
     const sidebarMenu = [
         { icon: <Dashboard />, name: 'Dashborad', path: '/profile' },
-        { icon: <Wallet />, name: 'Wallet', path: '/wallet' },
+        { icon: <Wallet />, name: 'Wallet', path: '/wallets' },
         { icon: <MarketOrder />, name: 'MarketOrder', path: '/market-order' },
         { icon: <TradeHistory />, name: 'Trade History', path: '/history-trade' },
         { icon: <Security />, name: 'Security', path: '/security' },

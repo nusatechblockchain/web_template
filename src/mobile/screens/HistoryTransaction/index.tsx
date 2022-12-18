@@ -1,14 +1,14 @@
 import * as React from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { Table, Decimal } from '../../../components';
-import { EditIcon, CloseIcon } from '../../assets/Market';
-import { FilterIcon } from 'src/assets/images/FilterIcon';
+import { useDocumentTitle } from 'src/hooks';
+import { Table } from '../../../components';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { Link } from 'react-router-dom';
 
 const HistoryTransactionMobileScreen: React.FC = () => {
+    useDocumentTitle('History Trade');
     const [key, setKey] = React.useState('all');
 
     const dataAll = [
@@ -209,10 +209,10 @@ const HistoryTransactionMobileScreen: React.FC = () => {
             <div className="mobile-container pg-history-transaction no-header dark-bg-main">
                 <>
                     <div className="head-container position-relative">
-                        <Link to={'/wallets'} className="cursor-pointer position-absolute">
+                        <Link to={'/profile'} className="cursor-pointer position-absolute">
                             <ArrowLeft className={'back'} />
                         </Link>
-                        <h1 className="text-center text-md grey-text-accent font-bold">Transaction History</h1>
+                        <h1 className="text-center text-md grey-text-accent font-bold">History Trade</h1>
                     </div>
 
                     <Tabs
@@ -241,12 +241,6 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                                 <Table data={renderDataTable(dataTransferInternal)} header={renderTableHeader} />
                             </div>
                         </Tab>
-                        <div className="ml-auto">
-                            <div className="d-flex justify-content-start align-items-center cancel-all-container">
-                                <p className="p-0 m-0">Close All</p>
-                                <CloseIcon />
-                            </div>
-                        </div>
                     </Tabs>
                 </>
             </div>
