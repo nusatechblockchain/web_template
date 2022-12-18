@@ -41,6 +41,9 @@ import {
     TwoFaActivationMobileScreen,
     TwoFaMobileScreen,
     ChangePasswordMobileScreen,
+    ApiListMobileScreen,
+    ChangePhoneMobileScreen,
+    CreateApiMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -312,7 +315,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
                         <PublicRoute
                             loading={userLoading}
-                            // isLogged={isLoggedIn}
+                            isLogged={isLoggedIn}
                             path="/reset-password"
                             component={ResetPasswordMobileScreen}
                         />
@@ -335,6 +338,27 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/two-fa"
                             component={TwoFaMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/change-phone"
+                            component={ChangePhoneMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/api-key"
+                            component={ApiListMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/create-api"
+                            component={CreateApiMobileScreen}
                         />
 
                         <PublicRoute
@@ -455,13 +479,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/markets/:currency/detail"
                         component={MarketDetailScreen}
                     />
-
-                    <PublicRoute
-                        loading={userLoading}
-                        path="/markets/:currency/trading-future"
-                        component={TradingFutureScreen}
-                    />
-
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
@@ -484,6 +501,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         component={HistoryTrade}
                     />
 
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/trading-future"
+                        component={TradingFutureScreen}
+                    />
                     <PublicRoute loading={userLoading} path="/announcement" component={AnnouncementScreen} />
                     <PublicRoute loading={userLoading} path="/faq" component={FAQScreen} />
                     <PublicRoute

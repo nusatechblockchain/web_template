@@ -8,3 +8,6 @@ export * from './Profile';
 export * from './TwoFaActivation';
 export * from './TwoFa';
 export * from './ChangePassword';
+export * from './ApiList';
+export * from './ChangePhone';
+export * from './CreateApi';
