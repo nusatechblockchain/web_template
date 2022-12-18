@@ -17,11 +17,6 @@
         color: var(--text-secondary-color);
     }
 
-    #form-search {
-        display: none;
-        margin: 0 24px;
-    }
-
     .show {
         display: block !important;
     }
@@ -94,6 +89,8 @@
         background: transparent;
         border: 0;
         padding: 8px 0;
+        display: flex;
+        justify-content: space-between;
     }
 
     .nav-tabs .nav-link:hover {
@@ -106,11 +103,12 @@
         font-size: 14px;
         line-height: 16px;
         text-align: center;
-        color: var(--text-contrast-color);
+        background: var(--text-gradient-color) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
         padding: 8px 0;
-        background: none;
         border: none;
-        border-bottom: 1px solid var(--text-contrast-color);
+        /* border-bottom: 1px solid var(--text-contrast-color); */
     }
 
     .tab-content {
