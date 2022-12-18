@@ -402,7 +402,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
-                            path="/wallets/detail"
+                            path="/wallet/detail"
                             component={WalletDetailMobileScreen}
                         />
 
