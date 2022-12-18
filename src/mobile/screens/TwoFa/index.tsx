@@ -1,14 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import {
-    alertPush,
-    selectTwoFactorAuthBarcode,
-    selectTwoFactorAuthQR,
-    selectTwoFactorAuthSuccess,
-    toggle2faFetch,
-    generate2faQRFetch,
-} from '../../../modules';
+import { selectTwoFactorAuthSuccess, toggle2faFetch } from '../../../modules';
 import { ArrowLeft } from '../../assets/Arrow';
 import { CheckSuccess } from '../../assets/CheckIcon';
 import PinInput from 'react-pin-input';
