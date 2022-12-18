@@ -47,6 +47,7 @@ import {
     ReferralMobileScreen,
     MarketDetailMobileScreen,
     MarketListlMobileScreen,
+    TwoFaAuthenticationMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -383,6 +384,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/market-list"
                             component={MarketDetailMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/two-fa-authentication"
+                            component={TwoFaAuthenticationMobileScreen}
                         />
 
                         <PublicRoute
