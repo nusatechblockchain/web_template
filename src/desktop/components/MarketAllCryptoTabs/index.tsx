@@ -3,10 +3,8 @@ import { useSelector } from 'react-redux';
 import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
-import { Tabs, Tab } from 'react-bootstrap';
 import { Table, Decimal } from '../../../components';
 import './MarketAllCryptoTabs.pcss';
-import { BtcIcon, BnbIcon } from 'src/assets/images/CoinIcon';
 
 const defaultTicker = {
     amount: '0.0',
