@@ -1,34 +1,55 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { CustomInput, PasswordStrengthMeter } from '../../../desktop/components';
 import { ArrowLeft } from '../../assets/Arrow';
-import { useDispatch, useSelector } from 'react-redux';
 import { passwordMinEntropy } from '../../../api/config';
 import { useHistory } from 'react-router';
-import { entropyPasswordFetch, selectCurrentPasswordEntropy } from '../../../modules';
-import { passwordErrorFirstSolution, passwordErrorSecondSolution, passwordErrorThirdSolution } from '../../../helpers';
+import {
+    toggle2faFetch,
+    selectChangePasswordSuccess,
+    changePasswordFetch,
+    selectUserInfo,
+    User,
+    userFetch,
+    RootState,
+    entropyPasswordFetch,
+    selectCurrentPasswordEntropy,
+    sendCode,
+    verifyPhone,
+} from '../../../modules';
+import {
+    setDocumentTitle,
+    PASSWORD_REGEX,
+    passwordErrorFirstSolution,
+    passwordErrorSecondSolution,
+    passwordErrorThirdSolution,
+} from '../../../helpers';
 
 const ChangePasswordMobileScreen: React.FC = () => {
-    const [pinCodeValue, setPinCodevalue] = React.useState('');
-    const [passwordNewFocus, setPasswordNewFocus] = React.useState(false);
-    const [passwordValue, setPasswordvalue] = React.useState('');
-    const [oldPasswordValue, setOldPasswordvalue] = React.useState('');
-    const [confirmPasswordValue, setConfirmPasswordvalue] = React.useState('');
     const dispatch = useDispatch();
+    const intl = useIntl();
+    const history = useHistory();
+
+    const [oldPasswordValue, setOldPasswordValue] = React.useState('');
+    const [newPasswordValue, setNewPasswordValue] = React.useState('');
+    const [confirmPasswordValue, setConfirmPasswordValue] = React.useState('');
+
+    const [passwordNewFocus, setPasswordNewFocus] = React.useState(false);
+    const [confirmPasswordFocus, setConfirmPasswordFocus] = React.useState(false);
+
     const [passwordErrorFirstSolved, setPasswordErrorFirstSolved] = React.useState(false);
     const [passwordErrorSecondSolved, setPasswordErrorSecondSolved] = React.useState(false);
     const [passwordErrorThirdSolved, setPasswordErrorThirdSolved] = React.useState(false);
     const [passwordPopUp, setPasswordPopUp] = React.useState(false);
     const [passwordMatch, setPasswordMatch] = React.useState(true);
     const currentPasswordEntropy = useSelector(selectCurrentPasswordEntropy);
-    const intl = useIntl();
-    const history = useHistory();
 
     const translate = (key: string) => intl.formatMessage({ id: key });
-    const handleFocusNewPassword = () => {
-        setPasswordPopUp(!passwordPopUp);
-        setPasswordNewFocus(!passwordNewFocus);
+
+    const handleChangeOldPassword = (value: string) => {
+        setOldPasswordValue(value);
     };
 
     const handleChangeNewPassword = (value: string) => {
@@ -50,37 +71,65 @@ const ChangePasswordMobileScreen: React.FC = () => {
             setPasswordErrorThirdSolved(false);
         }
 
-        setPasswordvalue(value);
+        setNewPasswordValue(value);
         setTimeout(() => {
             dispatch(entropyPasswordFetch({ password: value }));
         }, 100);
     };
+
+    const handleChangeConfirmPassword = (value: string) => {
+        setConfirmPasswordValue(value);
+        setConfirmPasswordFocus(true);
+    };
+
+    const handleFocusNewPassword = () => {
+        setPasswordPopUp(!passwordPopUp);
+        setPasswordNewFocus(!passwordNewFocus);
+    };
+
+    const handleFocusConfirmPassword = () => {
+        setConfirmPasswordFocus(!confirmPasswordFocus);
+    };
+
     const isValidForm = () => {
         if (
             !passwordErrorFirstSolved ||
             !passwordErrorSecondSolved ||
             !passwordErrorThirdSolved ||
-            pinCodeValue.length < 6 ||
-            !passwordValue ||
-            passwordValue != confirmPasswordValue
+            !oldPasswordValue ||
+            !newPasswordValue ||
+            !confirmPasswordValue ||
+            !newPasswordValue.match(PASSWORD_REGEX) ||
+            newPasswordValue !== confirmPasswordValue
         ) {
             return true;
-        } else {
-            return false;
         }
     };
 
+    const handleChangePassword = () => {
+        dispatch(
+            changePasswordFetch({
+                old_password: oldPasswordValue,
+                new_password: newPasswordValue,
+                confirm_password: confirmPasswordValue,
+            })
+        );
+
+        history.push('/profile');
+    };
+
     React.useEffect(() => {
-        if (passwordValue == confirmPasswordValue) {
+        if (newPasswordValue == confirmPasswordValue) {
             setPasswordMatch(true);
         } else {
             setPasswordMatch(false);
         }
     }, [confirmPasswordValue]);
 
-    const handleChangePassword = () => {
-        history.push('/profile');
-    };
+    React.useEffect(() => {
+        setDocumentTitle('Change Password');
+    }, []);
+
     return (
         <React.Fragment>
             <div className="mobile-container change-password no-header home-screen dark-bg-main">
@@ -104,12 +153,11 @@ const ChangePasswordMobileScreen: React.FC = () => {
                             type="password"
                             classNameLabel="white-text text-sm"
                             classNameInput="text-ms input-mobile"
-                            handleChangeInput={(e) => setOldPasswordvalue(e)}
+                            handleChangeInput={handleChangeOldPassword}
                             labelVisible
                         />
                         <CustomInput
                             defaultLabel="Set New Password "
-                            inputValue={passwordValue}
                             label="Set New Password"
                             placeholder="Set New Password"
                             type="password"
@@ -122,6 +170,7 @@ const ChangePasswordMobileScreen: React.FC = () => {
                                     !passwordErrorThirdSolved) &&
                                 'error'
                             }`}
+                            inputValue={newPasswordValue}
                             autoFocus={false}
                             handleFocusInput={handleFocusNewPassword}
                             handleChangeInput={handleChangeNewPassword}
@@ -135,7 +184,7 @@ const ChangePasswordMobileScreen: React.FC = () => {
                             <PasswordStrengthMeter
                                 minPasswordEntropy={passwordMinEntropy()}
                                 currentPasswordEntropy={currentPasswordEntropy}
-                                passwordExist={passwordValue !== ''}
+                                passwordExist={newPasswordValue !== ''}
                                 passwordErrorFirstSolved={passwordErrorFirstSolved}
                                 passwordErrorSecondSolved={passwordErrorSecondSolved}
                                 passwordErrorThirdSolved={passwordErrorThirdSolved}
@@ -145,19 +194,27 @@ const ChangePasswordMobileScreen: React.FC = () => {
                         </div>
                         <CustomInput
                             defaultLabel="Confirm New Password"
-                            inputValue={confirmPasswordValue}
                             label="Confirm New Password"
                             placeholder="Confirm New password"
                             type="password"
                             classNameLabel="white-text text-sm"
-                            classNameInput="text-ms input-mobile"
-                            handleChangeInput={(e) => setConfirmPasswordvalue(e)}
+                            classNameInput={`text-ms input-mobile ${
+                                confirmPasswordFocus && confirmPasswordValue !== newPasswordValue && 'error'
+                            }`}
+                            autoFocus={false}
+                            inputValue={confirmPasswordValue}
+                            handleFocusInput={handleFocusConfirmPassword}
+                            handleChangeInput={handleChangeConfirmPassword}
                             labelVisible
                         />
-                        {!passwordMatch && <p className="danger-text font-normal text-xs">Password doesn't match</p>}
+
+                        {confirmPasswordFocus && confirmPasswordValue !== newPasswordValue && (
+                            <p className="text-xs danger-text m-0 mb-24">Password Confirmation doesn't match</p>
+                        )}
+
                         <button
                             type="button"
-                            className="btn-primary btn-block btn-mobile"
+                            className="btn-primary btn-block btn-mobile cursor-pointer"
                             onClick={handleChangePassword}
                             disabled={isValidForm()}>
                             Submit
