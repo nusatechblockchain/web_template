@@ -163,18 +163,16 @@ const ProfileMobileScreen: React.FC = () => {
                             </div>
                         </div>
                     </Link>
-                    <Link to={'/t'}>
+                    <Link to={'/change-password'}>
                         <div className=" d-flex align-items-center mb-4 cursor-pointer">
                             <div className="mr-3">
-                                <GoogleProfileIcon className="profile-icon" />
+                                <PasswordIcon className="profile-icon" />
                             </div>
                             <div className="d-flex justify-content-between align-items-center w-100">
                                 <div>
                                     <h4 className="mb-0 text-sm font-bold grey-text-accent">Password</h4>
                                     <p className={`mb-0 text-xs grey-text`}>Set or change your password</p>
                                 </div>
-
-                                {user && user.otp && <CheckIcon className="check-icon" />}
                             </div>
                         </div>
                     </Link>

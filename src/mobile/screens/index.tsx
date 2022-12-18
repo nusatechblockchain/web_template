@@ -7,3 +7,4 @@ export * from './HomeScreen';
 export * from './Profile';
 export * from './TwoFaActivation';
 export * from './TwoFa';
+export * from './ChangePassword';

@@ -40,6 +40,7 @@ import {
     ProfileMobileScreen,
     TwoFaActivationMobileScreen,
     TwoFaMobileScreen,
+    ChangePasswordMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -295,9 +296,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={EmailVerificationMobileScreen}
                         />
 
-                        <PublicRoute
+                        <PrivateRoute
                             loading={userLoading}
-                            // isLogged={isLoggedIn}
+                            isLogged={isLoggedIn}
                             path="/profile"
                             component={ProfileMobileScreen}
                         />
@@ -311,18 +312,25 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
                         <PublicRoute
                             loading={userLoading}
-                            isLogged={isLoggedIn}
+                            // isLogged={isLoggedIn}
                             path="/reset-password"
                             component={ResetPasswordMobileScreen}
                         />
 
                         <PublicRoute
                             loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/change-password"
+                            component={ChangePasswordMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
                             isLogged={isLoggedIn}
                             path="/two-fa-activation"
                             component={TwoFaActivationMobileScreen}
                         />
-                        <PublicRoute
+                        <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
                             path="/two-fa"
