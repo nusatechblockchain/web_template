@@ -188,13 +188,13 @@ const HomeMobileScreen: React.FC = () => {
                     </div>
                 </nav>
                 <div id="sidebar" className={`sidebar-offcanvas dark-bg-accent ${showSidebar ? 'show' : 'hide'}`}>
-                    <div className="sidebar d-flex justify-content-between align-items-start w-100">
+                    <div className="sidebar d-flex justify-content-between align-items-start w-100 pb-5">
                         <div className="sidebar-container w-100">
                             <div className="sidebar-head mb-24 px-24" onClick={() => setShowSidebar(false)}>
                                 <ArrowLeft className={'cursorPointer'} />
                             </div>
                             {userLoggedIn ? (
-                                <Link to={''}>
+                                <Link to={'/profile'}>
                                     <div className="card-user-info d-flex align-items-center px-24 mb-24">
                                         <img src={Avatar} className="avatar-image" alt="ava" />
                                         <div className="user-info d-flex justify-content-between align-items-center ml-2 w-100">
@@ -226,7 +226,7 @@ const HomeMobileScreen: React.FC = () => {
                                     </div>
                                 </Link>
                             ) : (
-                                <Link to={''}>
+                                <Link to={'/signin'}>
                                     <div className="card-user-info d-flex align-items-center px-24 mb-24">
                                         <div className="user-info d-flex justify-content-between align-items-center w-100">
                                             <div className="login-user d-flex flex-column">

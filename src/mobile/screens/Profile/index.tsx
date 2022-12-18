@@ -178,17 +178,19 @@ const ProfileMobileScreen: React.FC = () => {
                             </div>
                         </div>
                     </Link>
-                    <div className=" d-flex align-items-center mb-4 cursor-pointer">
-                        <div className="mr-3">
-                            <ApiProfileIcon className="profile-icon" />
-                        </div>
-                        <div className="d-flex justify-content-between align-items-center w-100">
-                            <div>
-                                <h4 className="mb-0 text-sm font-bold grey-text-accent">API</h4>
-                                <p className="mb-0 text-xs grey-text-accent">0 API Enable</p>
+                    <Link to={'/api-key'}>
+                        <div className=" d-flex align-items-center mb-4 cursor-pointer">
+                            <div className="mr-3">
+                                <ApiProfileIcon className="profile-icon" />
+                            </div>
+                            <div className="d-flex justify-content-between align-items-center w-100">
+                                <div>
+                                    <h4 className="mb-0 text-sm font-bold grey-text-accent">API</h4>
+                                    <p className="mb-0 text-xs grey-text-accent">0 API Enable</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
             <ModalMobile content={renderModal()} show={showModalEmail} />
