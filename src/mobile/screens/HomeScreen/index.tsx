@@ -3,7 +3,6 @@ import Background1 from '../../assets/Images/home/background-1.png';
 import Background2 from '../../assets/Images/home/background-2.png';
 import Background3 from '../../assets/Images/home/background-3.png';
 import Background4 from '../../assets/Images/home/background-4.png';
-import { ArrowRight } from '../../assets/Arrow';
 import ImgCard from '../../assets/Images/home/img-card.png';
 import { BgCardSmall } from '../../assets/BackgroundCard';
 import Slider from 'react-slick';
@@ -16,8 +15,33 @@ import { BnbIcon } from '../../../assets/images/CoinIcon';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import GrapUp from '../../assets/Images/home/grap-up.png';
 import GrapDown from '../../assets/Images/home/grapH-down.png';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { selectUserLoggedIn } from '../../../modules';
+import { LogoIcon } from '../../assets/Logo';
+import { ScanIcon } from '../../assets/ScanIcon';
+import { SearchIcon } from '../../assets/SearchIcon';
+import { UserIcon } from '../../assets/UserIcon';
+import { ArrowLeft, ArrowRight } from '../../assets/Arrow';
+import { CopyableTextField } from '../../../components';
+import Avatar from '../../assets/Images/avatar.png';
+import {
+    Announcement,
+    ApiManagement,
+    Dashboard,
+    Faq,
+    MarketOrder,
+    Referral,
+    Security,
+    TradeHistory,
+    Wallet,
+} from '../../assets/Sidebar';
+
+const noHeaderRoutes = ['/'];
 
 const HomeMobileScreen: React.FC = () => {
+    const userLoggedIn = useSelector(selectUserLoggedIn);
     const [key, setKey] = React.useState('trading');
     const [showSidebar, setShowSidebar] = React.useState(false);
     const shouldRenderHeader = !noHeaderRoutes.some((r) => location.pathname.includes(r));
