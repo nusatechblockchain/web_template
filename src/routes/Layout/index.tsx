@@ -44,6 +44,7 @@ import {
     ApiListMobileScreen,
     ChangePhoneMobileScreen,
     CreateApiMobileScreen,
+    ReferralMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -352,6 +353,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/api-key"
                             component={ApiListMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/referral"
+                            component={ReferralMobileScreen}
                         />
 
                         <PrivateRoute

@@ -507,16 +507,25 @@ const HomeMobileScreen: React.FC = () => {
                     </div>
                     <Tabs id="controlled-tab-example" activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
                         <Tab eventKey="tranding" title="Tranding">
-                            <Table data={renderDataTable(trading)} />
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(trading)} />
+                            </div>
                         </Tab>
                         <Tab eventKey="new-volume" title="New Volume">
-                            <Table data={renderDataTable(newVolume)} />
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(newVolume)} />
+                            </div>
                         </Tab>
                         <Tab eventKey="gainers" title="Gainers">
-                            <Table data={renderDataTable(Gainers)} />
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(Gainers)} />
+                            </div>
                         </Tab>
+
                         <Tab eventKey="loser" title="Loser">
-                            <Table data={renderDataTable(Losers)} />
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(Losers)} />
+                            </div>
                         </Tab>
                     </Tabs>
                 </div>

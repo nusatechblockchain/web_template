@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { ArrowLeft } from '../../assets/Arrow';
-import { Table } from '../../../components';
-import { ModalMobile } from '../../components';
 import { CopyableTextField } from '../../../components';
 
 const CreateApiMobileScreen: React.FC = () => {

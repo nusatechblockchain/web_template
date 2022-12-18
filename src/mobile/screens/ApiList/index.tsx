@@ -100,7 +100,9 @@ const ApiListMobileScreen: React.FC = () => {
                         </li>
                     </ul>
                 </div>
-                <Table header={getTableHeaders()} data={getTableData(apiKeys)} />
+                <div className="table-mobile-wrapper">
+                    <Table header={getTableHeaders()} data={getTableData(apiKeys)} />
+                </div>
                 <div className="mt-3 mb-4">
                     <Link to="/create-api" className="btn btn-primary btn-mobile btn-block">
                         Create Api
