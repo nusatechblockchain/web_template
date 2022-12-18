@@ -44,6 +44,9 @@ import {
     ApiListMobileScreen,
     ChangePhoneMobileScreen,
     CreateApiMobileScreen,
+    ReferralMobileScreen,
+    MarketDetailMobileScreen,
+    MarketListlMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -357,8 +360,29 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
+                            path="/referral"
+                            component={ReferralMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
                             path="/create-api"
                             component={CreateApiMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/markets"
+                            component={MarketListlMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/market-list"
+                            component={MarketDetailMobileScreen}
                         />
 
                         <PublicRoute

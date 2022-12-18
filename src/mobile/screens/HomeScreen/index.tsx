@@ -315,8 +315,11 @@ const HomeMobileScreen: React.FC = () => {
                         <Tab eventKey="gainers" title="Gainers">
                             <Table data={renderDataTable(dataGainers)} />
                         </Tab>
+
                         <Tab eventKey="loser" title="Loser">
-                            <Table data={renderDataTable(dataLosers)} />
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(dataLosers)} />
+                            </div>
                         </Tab>
                     </Tabs>
                 </div>
