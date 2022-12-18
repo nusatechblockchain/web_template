@@ -42,7 +42,7 @@ const noHeaderRoutes = ['/'];
 
 const HomeMobileScreen: React.FC = () => {
     const userLoggedIn = useSelector(selectUserLoggedIn);
-    const [key, setKey] = React.useState('trading');
+    const [key, setKey] = React.useState('tranding');
     const [showSidebar, setShowSidebar] = React.useState(false);
     const shouldRenderHeader = !noHeaderRoutes.some((r) => location.pathname.includes(r));
     const uid = '533221334';
@@ -506,7 +506,7 @@ const HomeMobileScreen: React.FC = () => {
                         </Slider>
                     </div>
                     <Tabs id="controlled-tab-example" activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
-                        <Tab eventKey="trading" title="Trading">
+                        <Tab eventKey="tranding" title="Tranding">
                             <Table data={renderDataTable(trading)} />
                         </Tab>
                         <Tab eventKey="new-volume" title="New Volume">
