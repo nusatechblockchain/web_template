@@ -79,9 +79,7 @@ const ProfileMobileScreen: React.FC = () => {
 
                     <div className="d-flex flex-column mb-12">
                         <h5 className="grey-text font-bold text-xs mb-0">Last Login</h5>
-                        <h3 className="grey-text-accent font-bold text-sm">
-                            {dateTo12HFormat(user && user.updated_at)}
-                        </h3>
+                        <h3 className="grey-text-accent font-bold text-sm">{user && user.updated_at}</h3>
                     </div>
 
                     <div className="d-flex flex-column mb-12">
@@ -165,7 +163,7 @@ const ProfileMobileScreen: React.FC = () => {
                             </div>
                         </div>
                     </Link>
-                    <Link to={'/two-fa-activation'}>
+                    <Link to={'/t'}>
                         <div className=" d-flex align-items-center mb-4 cursor-pointer">
                             <div className="mr-3">
                                 <GoogleProfileIcon className="profile-icon" />
