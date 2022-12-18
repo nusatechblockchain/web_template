@@ -1,4 +1,4 @@
-.market-order {
+.pg-market-order {
     .navbar-brand {
         font-weight: 700;
         font-size: 20px;
@@ -48,7 +48,7 @@
         line-height: 16px;
         color: var(--text-grey-color);
         background: transparent;
-        border: 0;
+        border: none;
         padding: 8px 0;
     }
 
@@ -66,7 +66,7 @@
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
         padding: 8px 0;
-        border: none;
+        border-bottom: 1px solid var(--text-contrast-color) !important;
     }
 
     .tab-content {
@@ -169,7 +169,7 @@
     }
 
     /* Off Canvas Cancel Start */
-    .off-canvas {
+    /* .off-canvas {
         max-width: 768px;
         width: 100%;
         height: 100%;
@@ -233,11 +233,11 @@
         font-size: 16px;
         line-height: 19px;
         color: var(--primary-text-color);
-    }
+    } */
     /* Off Canvas Cancel End */
 
     /* Modal Filter Start */
-    .modal-content {
+    /* .modal-content {
         gap: 16px;
         padding: 16px 24px;
         border-radius: 8px;
@@ -297,50 +297,7 @@
         border-image: var(--text-gradient-color);
         border-image-slice: 1;
         border-style: solid;
-    }
-
-    .btn-type {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 9px 8px;
-        gap: 8px;
-        width: 100%;
-        height: 34px;
-        background: var(--body-background-color);
-        border-radius: 2px;
-        font-weight: 500;
-        font-size: 10px;
-        line-height: 16px;
-        color: var(--text-secondary-color);
-    }
-
-    .btn-type.active {
-        justify-content: space-between;
-        color: var(--text-contrast-color);
-        background: none;
-        border-width: 1px;
-        border-radius: 2px;
-        border-image: var(--text-gradient-color);
-        border-image-slice: 1;
-        border-style: solid;
-    }
-
-    .btn-reset {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 8px 4px;
-        gap: 4px;
-        height: 34px;
-        background: var(--body-background-color);
-        border-radius: 4px;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 16px;
-        color: var(--text-secondary-color);
-    }
+    } */
 
     /* End Modal Filter */
 }

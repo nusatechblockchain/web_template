@@ -52,3 +52,21 @@ export const SearchIcon = () => {
         </svg>
     );
 };
+
+export const CloseIcon = () => {
+    return (
+        <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_470_6777)">
+                <path
+                    d="M12.666 4.273l-.94-.94L8 7.06 4.273 3.333l-.94.94L7.06 8l-3.727 3.727.94.94L8 8.94l3.726 3.727.94-.94L8.94 8l3.726-3.727z"
+                    fill="#6F6F6F"
+                />
+            </g>
+            <defs>
+                <clipPath id="clip0_470_6777">
+                    <path fill="#fff" d="M0 0H16V16H0z" />
+                </clipPath>
+            </defs>
+        </svg>
+    );
+};
