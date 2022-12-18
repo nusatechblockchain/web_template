@@ -65,3 +65,56 @@ export const TransferIcon = ({ className }) => {
         </svg>
     );
 };
+
+export const FilterIcon = ({ className }) => {
+    return (
+        <svg width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M2.28259 1.5C1.85054 1.5 1.5 1.85643 1.5 2.2952V2.76322C1.5 3.08824 1.62359 3.40079 1.84468 3.63588L4.26755 6.21216L4.26862 6.21054C4.73636 6.68939 4.99953 7.33671 4.99953 8.01166V10.2976C4.99953 10.4503 5.15935 10.5479 5.292 10.4758L6.67178 9.72394C6.88008 9.61018 7.01006 9.38918 7.01006 9.14921V8.0057C7.01006 7.33454 7.2695 6.68993 7.73298 6.21216L10.1559 3.63588C10.3764 3.40079 10.5 3.08824 10.5 2.76322V2.2952C10.5 1.85643 10.15 1.5 9.71795 1.5H2.28259Z"
+                stroke="#6F6F6F"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+};
+
+export const DocIcon = ({ className }) => {
+    return (
+        <svg width={116} height={116} viewBox="0 0 116 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M71.2296 13.8934H38.566C28.6093 13.8934 20.5425 21.9163 20.5425 31.8079V83.9276C20.6005 94.0114 28.8703 102.135 39.0155 102.073C39.2088 102.073 39.3973 102.068 39.5858 102.063H77.687C87.6823 101.962 95.7298 93.8673 95.7105 83.9276V39.2495L71.2296 13.8934Z"
+                stroke="#6F6F6F"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M69.9575 13.8372V27.8124C69.9575 34.6342 75.5062 40.1637 82.3695 40.1829H95.6854"
+                stroke="#6F6F6F"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M65.6176 70.9959L48.8652 54.3449"
+                stroke="#6F6F6F"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M48.8706 70.9959L65.6229 54.3449"
+                stroke="#6F6F6F"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+};
