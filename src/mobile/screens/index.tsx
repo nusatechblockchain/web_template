@@ -5,3 +5,5 @@ export * from './ForgotPassword';
 export * from './ResetPassword';
 export * from './HomeScreen';
 export * from './Profile';
+export * from './TwoFaActivation';
+export * from './TwoFa';

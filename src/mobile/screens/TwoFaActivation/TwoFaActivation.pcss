@@ -1,0 +1,25 @@
+.two-fa-mobile {
+    .custom-switch .custom-control-input ~ .custom-control-label::before {
+        border-width: 3px;
+        background-color: #1e1e1e;
+        width: 38px;
+        border-radius: 14px;
+        height: 20px;
+    }
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+        border-width: 3px;
+        background-color: #1e1e1e;
+        width: 38px;
+        border-radius: 14px;
+        height: 20px;
+    }
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+        top: calc(0.25rem + 3px);
+        left: -27px;
+    }
+
+    .custom-switch .custom-control-label::after {
+        top: calc(0.25rem + 4px);
+        left: -32px;
+    }
+}
