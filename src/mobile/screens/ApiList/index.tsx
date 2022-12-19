@@ -114,14 +114,14 @@ const ApiListMobileScreen: React.FC = () => {
         setOtpCreate('');
     };
 
-    // const success = modal.action === 'createSuccess';
+    const success = modal.action === 'createSuccess';
 
-    // React.useEffect(() => {
-    //     if (success) {
-    //         setShowModalTwoFaCreate(false);
-    //         history.push('/create-api', { kid: modal.apiKey.kid, secret: modal.apiKey.secret });
-    //     }
-    // }, [success]);
+    React.useEffect(() => {
+        if (success) {
+            setShowModalTwoFaCreate(false);
+            history.push('/create-api', { kid: modal.apiKey.kid, secret: modal.apiKey.secret });
+        }
+    }, [success]);
 
     const handleCreateSuccess = () => {
         setShowModalTwoFaCreate(false);

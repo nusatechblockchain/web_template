@@ -27,7 +27,14 @@ import EtherumIcon from '../../../assets/png/Etherium.png';
 import LiteIcon from '../../../assets/png/LiteCoin.png';
 import MoneroIcon from '../../../assets/png/Monero.png';
 import MarketAnalysisImage from '../../../assets/png/image-blog.png';
+import MarketAnalysisImage2 from '../../../assets/png/image-blog2.png';
 import LandingAplicationImage from '../../../assets/png/application.png';
+import features1 from '../../../assets/png/features.png';
+import features2 from '../../../assets/png/features2.png';
+import features3 from '../../../assets/png/features3.png';
+import features4 from '../../../assets/png/features4.png';
+import features5 from '../../../assets/png/features5.png';
+import features6 from '../../../assets/png/features6.png';
 
 interface ReduxProps {
     isLoggedIn: boolean;
@@ -67,13 +74,11 @@ class Landing extends React.Component<Props> {
                         <div className="wrapper d-flex justify-content-around align-items-center flex-column index-2">
                             <div className="my-5">
                                 <h1 className="text-main-title white-text text-center mb-24">
-                                    The World’s <span className="gradient-text">Fastest Growing</span> <br />
-                                    Crypto Web App
+                                    Crypto Grows, Money Saved, Life <br /> is Better with{' '}
+                                    <span className="gradient-text">HEX Exchange</span>
                                 </h1>
                                 <p className="text-md grey-text-accent text-center mb-24">
-                                    Discover the largest and fastest crypto exchange with
-                                    <br />
-                                    Heaven Exchange and Enjoy
+                                    Enjoy your arbitrage on the HEX platform
                                 </p>
                                 <div className="d-flex justify-content-center">
                                     <Link to={'/market'} className="btn btn-rounded btn-primary mx-3">
@@ -122,61 +127,62 @@ class Landing extends React.Component<Props> {
                         <div className="container index-2">
                             <h2 className="text-title-1 white-text text-center font-extrabold ">Attractive Features</h2>
                             <p className=" mb-24 text-md font-normal grey-text-accent text-center mb-36">
-                                Windaful makes playing the UK's best raffles easy and fun.
+                                Trade will be enjoyfull and cheerfull
                             </p>
                             <div className="row">
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <FeatureIcon1 />
-                                        <p className="mb-0 ml-2 text-ms white-text">Weekly Trading Contest</p>
+                                        <img src={features1} alt="icon" width={65} height={65} />
+                                        <p className="mb-0 ml-2 text-ms white-text">Up to Date Notification</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
-                                        Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare risus.
+                                        We provide the most updated information about latest markets
                                     </p>
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <FeatureIcon2 />
-                                        <p className="mb-0 ml-2 text-ms white-text">Less Commission On Trade</p>
+                                        <img src={features2} alt="icon" width={65} height={65} />
+                                        <p className="mb-0 ml-2 text-ms white-text">Safe & Secure Trading Platform</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
-                                        Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare risus.
+                                        Buy & Sell Assets with no worries with Heaven Exchange
                                     </p>
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <FeatureIcon3 />
-                                        <p className="mb-0 ml-2 text-ms white-text">Safe And Secure Trading platform</p>
+                                        <img src={features3} alt="icon" width={65} height={65} />
+                                        <p className="mb-0 ml-2 text-ms white-text">Easy to Use</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
-                                        Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare risus.
+                                        With a simple interface, crypto investing is easy for everyone
                                     </p>
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <FeatureIcon4 />
-                                        <p className="mb-0 ml-2 text-ms white-text">Instant Withdraw Process</p>
+                                        <img src={features4} alt="icon" width={65} height={65} />
+                                        <p className="mb-0 ml-2 text-ms white-text">Withdraw Anytime & Anywhere</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
-                                        Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare risus.
+                                        In anytime & anywhere you can withdraw your assets just one click away
                                     </p>
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <FeatureIcon5 />
-                                        <p className="mb-0 ml-2 text-ms white-text">Monthly Commition</p>
+                                        <img src={features5} alt="icon" width={65} height={65} />
+                                        <p className="mb-0 ml-2 text-ms white-text">Transaparent Transactions</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
-                                        Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare risus.
+                                        With HEX Exchange you can track your transaction easily
                                     </p>
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <FeatureIcon6 />
-                                        <p className="mb-0 ml-2 text-ms white-text">24/7 Support Team</p>
+                                        <img src={features6} alt="icon" width={65} height={65} />
+                                        <p className="mb-0 ml-2 text-ms white-text">Stand by Support Team</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
-                                        Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare risus.
+                                        Connect Through chat support with our customer service for your better
+                                        experience
                                     </p>
                                 </div>
                             </div>
@@ -242,72 +248,69 @@ class Landing extends React.Component<Props> {
                                 Crypto Market Analysis
                             </h2>
                             <p className=" mb-24 text-md font-normal grey-text-accent text-center mb-36">
-                                Tincidunt id nibh orci nibh justo. Purus et turpis nulla elementum, sed vel.
+                                Analysis news about crypto market
                             </p>
                             <div className="row mt-5">
                                 <div className="col-lg-6 mb-4">
-                                    <div className="d-flex">
+                                    <div className="d-flex align-items-start">
                                         <img src={MarketAnalysisImage} className="image-analysis" alt="image" />
                                         <div className="ml-4">
-                                            <p className="mb-8 text-lg white-text font-bold">Gain the best exchange</p>
-                                            <p className="mb-36 text-sm grey-text-accent">
-                                                Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare
-                                                risus.
+                                            <p className="mb-8 text-lg white-text font-bold">
+                                                New Exchange Website Heaven Its Coming!
                                             </p>
-                                            <a
-                                                href="./Screen/Announcement/index.html"
-                                                className="gradient-text text-ms ">
+                                            <p className="mb-36 text-sm grey-text-accent">
+                                                Lest trade and get rich with heaven exchange
+                                            </p>
+                                            <a href="#" className="gradient-text text-ms ">
                                                 Learn more
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-lg-6 mb-4">
-                                    <div className="d-flex">
+                                    <div className="d-flex align-items-start">
                                         <img src={MarketAnalysisImage} className="image-analysis" alt="image" />
                                         <div className="ml-4">
-                                            <p className="mb-8 text-lg white-text font-bold">Gain the best exchange</p>
-                                            <p className="mb-36 text-sm grey-text-accent">
-                                                Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare
-                                                risus.
+                                            <p className="mb-8 text-lg white-text font-bold">
+                                                Tips for Cut Loss in Crypto Trading
                                             </p>
-                                            <a
-                                                href="./Screen/Announcement/index.html"
-                                                className="gradient-text text-ms ">
+                                            <p className="mb-36 text-sm grey-text-accent">
+                                                HEX Exchange members who are beginners in the crypto world, at least
+                                                they have heard of the term cut loss.
+                                            </p>
+                                            <a href="#" className="gradient-text text-ms ">
                                                 Learn more
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-lg-6 mb-4">
-                                    <div className="d-flex">
-                                        <img src={MarketAnalysisImage} className="image-analysis" alt="image" />
+                                    <div className="d-flex align-items-start">
+                                        <img src={MarketAnalysisImage2} className="image-analysis" alt="image" />
                                         <div className="ml-4">
-                                            <p className="mb-8 text-lg white-text font-bold">Gain the best exchange</p>
-                                            <p className="mb-36 text-sm grey-text-accent">
-                                                Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare
-                                                risus.
+                                            <p className="mb-8 text-lg white-text font-bold">
+                                                Bitcoin Price Crosses $20K as US Dollar Strength Falls
                                             </p>
-                                            <a
-                                                href="./Screen/Announcement/index.html"
-                                                className="gradient-text text-ms ">
+                                            <p className="mb-36 text-sm grey-text-accent">
+                                                Lest trade and get rich with heaven exchange
+                                            </p>
+                                            <a href="#" className="gradient-text text-ms ">
                                                 Learn more
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-lg-6 mb-4">
-                                    <div className="d-flex">
-                                        <img src={MarketAnalysisImage} className="image-analysis" alt="image" />
+                                    <div className="d-flex align-items-start">
+                                        <img src={MarketAnalysisImage2} className="image-analysis" alt="image" />
                                         <div className="ml-4">
-                                            <p className="mb-8 text-lg white-text font-bold">Gain the best exchange</p>
-                                            <p className="mb-36 text-sm grey-text-accent">
-                                                Eu tellus quam id sed ultrices. Integer nunc lectus nisi, erat et ornare
-                                                risus.
+                                            <p className="mb-8 text-lg white-text font-bold">
+                                                New Exchange Website Heaven Its Coming!
                                             </p>
-                                            <a
-                                                href="./Screen/Announcement/index.html"
-                                                className="gradient-text text-ms ">
+                                            <p className="mb-36 text-sm grey-text-accent">
+                                                Lest trade and get rich with heaven exchange
+                                            </p>
+                                            <a href="#" className="gradient-text text-ms ">
                                                 Learn more
                                             </a>
                                         </div>

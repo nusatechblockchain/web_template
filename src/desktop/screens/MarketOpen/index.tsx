@@ -15,99 +15,99 @@ export const MarketOpen: FC = (): ReactElement => {
     useWalletsFetch();
 
     const dataOpen = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Buy',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Buy',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Buy',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Buy',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Buy',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Buy',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
     ];
 
     const dataClose = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            market: 'Limit Order',
-            type: 'Sell',
-            price: '$ 252.125.536',
-            volume: '1 TRX',
-            executed: '0.8 TRX',
-            unexecuted: '0.2 TRX',
-        },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Sell',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Sell',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Sell',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Sell',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
+        // {
+        //     date: '24-10-2022 - 13:22:03',
+        //     market: 'Limit Order',
+        //     type: 'Sell',
+        //     price: '$ 252.125.536',
+        //     volume: '1 TRX',
+        //     executed: '0.8 TRX',
+        //     unexecuted: '0.2 TRX',
+        // },
     ];
 
     const getTableHeaders = () => {
@@ -123,7 +123,7 @@ export const MarketOpen: FC = (): ReactElement => {
             <p className="m-0 text-sm white-text text-italic">{item.volume}</p>,
             <p className="m-0 text-sm white-text text-italic">{item.executed}</p>,
             <p className="m-0 text-sm white-text text-italic">{item.unexecuted}</p>,
-            <button className="btn btn-sm btn-danger text-sm font-normal">Cancle Button</button>,
+            <button className="btn btn-sm btn-danger text-sm font-normal">Cancel Button</button>,
         ]);
     };
 
@@ -162,9 +162,9 @@ export const MarketOpen: FC = (): ReactElement => {
                 <div className="w-20 mr-24">
                     <p className="m-0 white-text text-sm mb-8">Time</p>
                     <Select
-                        value={optionTime.filter(function (option) {
-                            return option.value === '7';
-                        })}
+                        // value={optionTime.filter(function (option) {
+                        //     return option.value === '7';
+                        // })}
                         styles={CustomStylesSelect}
                         options={optionTime}
                     />
@@ -173,9 +173,9 @@ export const MarketOpen: FC = (): ReactElement => {
                 <div className="w-20 mr-24">
                     <p className="m-0 white-text text-sm mb-8">Assets</p>
                     <Select
-                        value={optionAssets.filter(function (option) {
-                            return option.value === 'bnb';
-                        })}
+                        // value={optionAssets.filter(function (option) {
+                        //     return option.value === 'bnb';
+                        // })}
                         styles={CustomStylesSelect}
                         options={optionAssets}
                     />
@@ -184,9 +184,9 @@ export const MarketOpen: FC = (): ReactElement => {
                 <div className="w-20 mr-24">
                     <p className="m-0 white-text text-sm mb-8">Status</p>
                     <Select
-                        value={optionStatus.filter(function (option) {
-                            return option.value === 'pending';
-                        })}
+                        // value={optionStatus.filter(function (option) {
+                        //     return option.value === 'pending';
+                        // })}
                         styles={CustomStylesSelect}
                         options={optionStatus}
                     />
