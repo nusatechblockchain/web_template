@@ -169,17 +169,21 @@
     }
 
     /* Off Canvas Cancel Start */
-    /* .off-canvas {
+    .off-canvas {
         max-width: 768px;
         width: 100%;
         height: 100%;
-        background: rgba(10, 13, 15, 0.5);
+        background: var(--modal-background-color);
         z-index: 10000;
-        display: none;
-        transition: 0.3s ease-out;
-        -webkit-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
-        -moz-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
-        -o-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+        top: 0;
+        left: 0;
+        right: 0;
+        transform: translateY(100%);
+        transition: 0.5s;
+
+        &.show {
+            transform: translateY(0%);
+        }
     }
 
     .off-canvas-content-container {
@@ -232,8 +236,8 @@
         font-weight: 700;
         font-size: 16px;
         line-height: 19px;
-        color: var(--primary-text-color);
-    } */
+        color: var(--text-primary-color);
+    }
     /* Off Canvas Cancel End */
 
     /* Modal Filter Start */
