@@ -10,18 +10,7 @@ import { MarketsTable } from '../../containers';
 import { toggleColorTheme } from '../../../helpers';
 import { RootState, selectCurrentColorTheme, selectUserLoggedIn } from '../../../modules';
 import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';
-import { ArrowDownLarge } from '../../../assets/images/ArrowDownIcon';
-import {
-    FeatureIcon1,
-    FeatureIcon2,
-    FeatureIcon3,
-    FeatureIcon4,
-    FeatureIcon5,
-    FeatureIcon6,
-} from '../../../assets/images/LandingFeatureIcon';
 import { AndroidIcon, AppleStoreIcon, GooglePlayIcon, MacOsIcon, WindowsIcon } from '../../../assets/images/DeviceIcon';
-import AnouncementIcon from '../../../assets/png/landing-announcement.png';
-import SliderBgImage from '../../../assets/png/bg-slider-item.png';
 import BitcoinIcon from '../../../assets/png/Bitcoin.png';
 import EtherumIcon from '../../../assets/png/Etherium.png';
 import LiteIcon from '../../../assets/png/LiteCoin.png';
@@ -74,7 +63,7 @@ class Landing extends React.Component<Props> {
                         <div className="wrapper d-flex justify-content-around align-items-center flex-column index-2">
                             <div className="my-5">
                                 <h1 className="text-main-title white-text text-center mb-24">
-                                    Crypto Grows, Money Saved, Life <br /> is Better with{' '}
+                                    Crypto Increases, Money Saved For Better Life <br /> with{' '}
                                     <span className="gradient-text">HEX Exchange</span>
                                 </h1>
                                 <p className="text-md grey-text-accent text-center mb-24">
