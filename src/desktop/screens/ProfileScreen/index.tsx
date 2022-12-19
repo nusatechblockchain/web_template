@@ -35,6 +35,7 @@ import {
     verifyPhone,
 } from '../../../modules';
 import { Modal, CustomInput } from '../../components';
+// import { ModalComingSoon } from 'src/components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 
 export const ProfileScreen: FC = (): ReactElement => {

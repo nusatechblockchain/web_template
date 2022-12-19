@@ -3,7 +3,9 @@ import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps } from 'react-router';
 import { withRouter, Link } from 'react-router-dom';
+import { History } from 'history';
 import { compose } from 'redux';
+import { ModalComingSoon } from '../../../components';
 import { IntlProps } from '../../../';
 import {
     Market,
@@ -48,11 +50,13 @@ interface LocationProps extends RouterProps {
     location?: {
         pathname: string;
     };
+    history: History;
 }
 
 export interface SidebarState {
     menuProfileActive: string;
     dataProfile: any;
+    showModalComingSoon: boolean;
 }
 
 const sidebarProfile = [
@@ -76,6 +80,7 @@ class Side extends React.Component<Props, SidebarState> {
         this.state = {
             menuProfileActive: 'Wallet',
             dataProfile: [],
+            showModalComingSoon: false,
         };
     }
 
@@ -94,6 +99,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/profile',
+                    comingsoon: false,
                 },
                 {
                     name: 'Wallet',
@@ -107,6 +113,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/wallets',
+                    comingsoon: false,
                 },
                 {
                     name: 'Market Order',
@@ -120,6 +127,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/markets-open',
+                    comingsoon: false,
                 },
                 {
                     name: 'Trade History',
@@ -133,6 +141,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/trade-history',
+                    comingsoon: false,
                 },
                 {
                     name: 'Security',
@@ -146,6 +155,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/profile/security',
+                    comingsoon: false,
                 },
                 {
                     name: 'Referral',
@@ -159,6 +169,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/profile/referral',
+                    comingsoon: false,
                 },
                 {
                     name: 'API Management',
@@ -172,6 +183,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/profile/api-key',
+                    comingsoon: false,
                 },
                 {
                     name: 'Announcement',
@@ -185,6 +197,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/announcement',
+                    comingsoon: true,
                 },
                 {
                     name: 'FAQ',
@@ -198,6 +211,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/faq',
+                    comingsoon: true,
                 },
             ],
         });
@@ -218,131 +232,145 @@ class Side extends React.Component<Props, SidebarState> {
                         <div className="mb-36"></div>
                         <ul>
                             {this.state.dataProfile.slice(0, 4).map((el, i) => (
-                                <Link key={i} to={`${el.path}`}>
-                                    <li
-                                        onClick={() => this.setState({ menuProfileActive: el.name })}
-                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                        <div className="mr-8">
-                                            {el.name === 'Dashboard' ? (
-                                                <UserIcon
-                                                    strokeColor={
-                                                        this.state.menuProfileActive === 'Dashboard'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'Wallet' ? (
-                                                <WalletIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Wallet'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'Market Order' ? (
-                                                <AnalysIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Market Order'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'Trade History' ? (
-                                                <CalendarIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Trade History'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : (
-                                                ''
-                                            )}
-                                        </div>
-                                        <p
-                                            className={`font-bold text-sm mb-0 ${
-                                                this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
-                                            }`}>
-                                            {el.name}
-                                        </p>
-                                    </li>
-                                </Link>
+                                <li
+                                    key={i}
+                                    onClick={() => {
+                                        if (el.comingsoon) {
+                                            this.setState({ showModalComingSoon: !this.state.showModalComingSoon });
+                                        } else {
+                                            this.setState({ menuProfileActive: el.name });
+                                            this.props.history.push(el.path);
+                                        }
+                                    }}
+                                    className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
+                                    <div className="mr-8">
+                                        {el.name === 'Dashboard' ? (
+                                            <UserIcon
+                                                strokeColor={
+                                                    this.state.menuProfileActive === 'Dashboard'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Wallet' ? (
+                                            <WalletIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Wallet'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Market Order' ? (
+                                            <AnalysIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Market Order'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Trade History' ? (
+                                            <CalendarIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Trade History'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
+                                    <p
+                                        className={`font-bold text-sm mb-0 ${
+                                            this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
+                                        }`}>
+                                        {el.name}
+                                    </p>
+                                </li>
                             ))}
                         </ul>
                         <div className="devider"></div>
                         <ul>
                             {this.state.dataProfile.slice(4).map((el, i) => (
-                                <Link key={i} to={`${el.path}`}>
-                                    <li
-                                        onClick={() => this.setState({ menuProfileActive: el.name })}
-                                        className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
-                                        <div className="mr-8">
-                                            {el.name === 'Profile Setting' ? (
-                                                <SettingIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Profile Setting'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'Security' ? (
-                                                <SecurityIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Security'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'Referral' ? (
-                                                <AddUserIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Referral'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'API Management' ? (
-                                                <ApiIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'API Management'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'Announcement' ? (
-                                                <AnnouncementIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'Announcement'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : el.name === 'FAQ' ? (
-                                                <FaqIcon
-                                                    fillColor={
-                                                        this.state.menuProfileActive === 'FAQ'
-                                                            ? 'var(--text-primary-color)'
-                                                            : 'var(--text-secondary-color)'
-                                                    }
-                                                />
-                                            ) : (
-                                                ''
-                                            )}
-                                        </div>
-                                        <p
-                                            className={`font-bold text-sm mb-0 ${
-                                                this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
-                                            }`}>
-                                            {el.name}
-                                        </p>
-                                    </li>
-                                </Link>
+                                <li
+                                    key={i}
+                                    onClick={() => {
+                                        if (el.comingsoon) {
+                                            this.setState({ showModalComingSoon: !this.state.showModalComingSoon });
+                                        } else {
+                                            this.setState({ menuProfileActive: el.name });
+                                            this.props.history.push(el.path);
+                                        }
+                                    }}
+                                    className="d-flex align-items-center cursor-pointer ml-20 mt-8 mb-8">
+                                    <div className="mr-8">
+                                        {el.name === 'Profile Setting' ? (
+                                            <SettingIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Profile Setting'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Security' ? (
+                                            <SecurityIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Security'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Referral' ? (
+                                            <AddUserIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Referral'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'API Management' ? (
+                                            <ApiIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'API Management'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Announcement' ? (
+                                            <AnnouncementIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'Announcement'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'FAQ' ? (
+                                            <FaqIcon
+                                                fillColor={
+                                                    this.state.menuProfileActive === 'FAQ'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
+                                    <p
+                                        className={`font-bold text-sm mb-0 ${
+                                            this.state.menuProfileActive === el.name ? 'white-text' : 'grey-text'
+                                        }`}>
+                                        {el.name}
+                                    </p>
+                                </li>
                             ))}
                         </ul>
                     </div>
                 )}
 
                 {!thisSidebarProfile && <React.Fragment />}
+
+                {this.state.showModalComingSoon && <ModalComingSoon show={this.state.showModalComingSoon} />}
             </React.Fragment>
         );
     }
