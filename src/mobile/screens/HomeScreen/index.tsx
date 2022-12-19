@@ -237,7 +237,9 @@ const HomeMobileScreen: React.FC = () => {
                                         <div className="user-info d-flex justify-content-between align-items-center w-100">
                                             <div className="login-user d-flex flex-column">
                                                 <h1 className="gradient-text text-md font-bold">Login</h1>
-                                                <h3 className="grey-text text-sm font-normal">Welcome to Digicoins</h3>
+                                                <h3 className="grey-text text-sm font-normal">
+                                                    Welcome to Heaven Exchange
+                                                </h3>
                                             </div>
                                             <ArrowRight className={'cursor-pointer'} />
                                         </div>

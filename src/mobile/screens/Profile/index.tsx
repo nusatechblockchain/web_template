@@ -95,7 +95,7 @@ const ProfileMobileScreen: React.FC = () => {
                 <div className="alert-mobile-warning px-2 py-3 alert d-flex align-items-center justify-content-between show text-xs warning-text font-normal position-relative mb-24">
                     <WarningIcon className="mr-2" />
                     <span className="text-xxs warning-text font-normal">
-                        Complete your identity verify to start trading with digicoins
+                        Complete your identity verify to start trading with heaven exchange
                     </span>
                     <div className="close-icon">
                         <CloseIcon fill="#FF9533" className="ml-2" />

@@ -21,6 +21,8 @@ const CreateApiMobileScreen: React.FC = () => {
     const kid = location.state?.kid;
     const secret = location.state?.secret;
 
+    console.log(location);
+
     const doCopyKid = () => {
         copy('kid-code');
         dispatch(alertPush({ message: ['Key ID copied'], type: 'success' }));
