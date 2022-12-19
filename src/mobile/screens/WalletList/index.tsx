@@ -186,6 +186,8 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
         [nonZeroSelected, setNonZeroSelected]
     );
 
+    console.log('');
+
     return (
         <React.Fragment>
             <div className="mobile-container wallet-list no-header dark-bg-main pt-4 ">
