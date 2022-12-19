@@ -239,7 +239,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             onFilter={handleFilter}
                             filter={searchFilter}
                             placeholder={formatMessage({ id: 'page.body.wallets.overview.seach' })}
-                            className="w-100"
+                            className="search-wallet"
                         />
                     </div>
                 </div>
