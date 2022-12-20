@@ -62,7 +62,7 @@ class Landing extends React.Component<Props> {
                         <img src={MoneroIcon} className="image-coin monero" alt="" />
                         <div className="wrapper d-flex justify-content-around align-items-center flex-column index-2">
                             <div className="my-5">
-                                <h1 className="text-main-title white-text text-center mb-24">
+                                <h1 className="text-main-title white-text text-center mb-24 max-w-lg">
                                     Crypto Increases, Money Saved For
                                     <br /> Better Life with <span className="gradient-text">HEX Exchange</span>
                                 </h1>
