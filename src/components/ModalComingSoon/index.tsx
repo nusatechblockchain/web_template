@@ -5,13 +5,13 @@ import coming from '../../assets/png/coming.png';
 
 export interface ModalProps {
     show: boolean;
+    onClose: () => void;
 }
 
 export const ModalComingSoon: React.FC<ModalProps> = (props): React.ReactElement => {
-    const [show, setShow] = React.useState(props.show);
     return (
         <React.Fragment>
-            <Modal centered show={show} className="modal-coming-soon">
+            <Modal centered show={props.show} className="modal-coming-soon">
                 <Modal.Header className="p-0 mb-24">
                     <Modal.Title className="p-0">
                         <img src={coming} alt="comingsoon" />
@@ -29,7 +29,7 @@ export const ModalComingSoon: React.FC<ModalProps> = (props): React.ReactElement
                     <Button
                         variant="primary"
                         className="btn-primary btn-close white-text text-ms"
-                        onClick={() => setShow(!show)}>
+                        onClick={props.onClose}>
                         Close
                     </Button>
                 </Modal.Footer>
