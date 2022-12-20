@@ -53,8 +53,6 @@ const MarketDetailMobileScreen: React.FC = () => {
         return obj.base_unit === currency;
     });
 
-    console.log(detail);
-
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">USD</p>, value: 'usd' },
         { label: <p className="m-0 text-sm grey-text-accent">IDR</p>, value: 'idr' },

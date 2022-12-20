@@ -48,12 +48,6 @@ const ApiListMobileScreen: React.FC = () => {
     const [showModalTwoFaDelete, setShowModalTwoFaDelete] = React.useState(false);
     const [showModalDelete, setShowModalDelete] = React.useState(false);
 
-    console.log(apiKeys, 'INI API KEYS CUY');
-
-    React.useEffect(() => {
-        console.log(apiKeyCreates);
-    }, [apiKeyCreates]);
-
     const translate = (key: string) => {
         return intl.formatMessage({ id: key });
     };

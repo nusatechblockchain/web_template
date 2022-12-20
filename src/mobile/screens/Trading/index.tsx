@@ -40,8 +40,6 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const [key, setKey] = React.useState('USDT');
     useDocumentTitle('Trading');
 
-    console.log(showSidebar);
-
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">Limit Order</p>, value: 'limit-order' },
         { label: <p className="m-0 text-sm grey-text-accent">Market</p>, value: 'market' },

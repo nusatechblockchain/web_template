@@ -42,7 +42,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
         }));
 
     const getTableHeaders = () => {
-        return ['Name', 'Price', '24 Change', 'Market Cap', '', ''];
+        return ['Name', 'Price', '24 Change', 'Market Cap', ''];
     };
 
     const getTableData = (data) => {
@@ -57,12 +57,18 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
             <p className="m-0 text-sm white-text">{item.currency && item.currency.price}</p>,
             <p className={`text-sm m-0 ${item.change.includes('-') ? 'danger-text' : 'green-text'}`}>{item.change}</p>,
             <p className="m-0 text-sm white-text">{item.cap}</p>,
-            <Link to={`/markets/${item.base_unit}/detail`}>
-                <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Detail</p>
-            </Link>,
-            <Link to={`/markets/${item.base_unit}/trading-future`}>
-                <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
-            </Link>,
+            <div className="d-flex">
+                <div className="mr-3">
+                    <Link to={`/markets/${item.base_unit}/detail`}>
+                        <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Detail</p>
+                    </Link>
+                </div>
+                <div>
+                    <Link to={`/markets/${item.base_unit}/trading-future`}>
+                        <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
+                    </Link>
+                </div>
+            </div>,
         ]);
     };
 

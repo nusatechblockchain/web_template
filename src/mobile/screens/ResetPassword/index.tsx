@@ -92,8 +92,6 @@ const ResetPasswordMobileScreen: React.FC = () => {
         history.push('/signin');
     };
 
-    console.log(passwordMatch);
-
     const renderModal = () => (
         <React.Fragment>
             <div className="d-flex justify-content-center">
