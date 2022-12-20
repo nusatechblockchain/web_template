@@ -103,6 +103,8 @@ export const SignInScreen: React.FC = () => {
                 ...(captchaType() !== 'none' && captchaLogin() && { captcha_response }),
             })
         );
+
+        localStorage.setItem("sidebar", "Wallet")
     }, [dispatch, email, password, captcha_response, captchaType()]);
 
     const handle2FASignIn = useCallback(() => {
