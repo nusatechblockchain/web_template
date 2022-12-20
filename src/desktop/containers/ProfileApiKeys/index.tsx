@@ -113,12 +113,6 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                                             onClick={this.handleCreateKeyClick}>
                                             {this.t('page.body.profile.apiKeys.header.create')}
                                         </div>
-
-                                        <div
-                                            className="btn btn-transparent w-auto gradient-text font-bold text-ms"
-                                            onClick={this.handleDeleteKeyClick}>
-                                            Delete All
-                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -192,6 +186,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
             this.t('page.body.profile.apiKeys.table.header.created'),
             this.t('page.body.profile.apiKeys.table.header.updated'),
             'Action',
+            '',
         ];
     };
 
@@ -207,6 +202,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
             <div>
                 <Form>
                     <Form.Check
+                        className="cursor-pointer"
                         type="switch"
                         id={`apiKeyCheck-${item.kid}`}
                         label=""
@@ -215,6 +211,9 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                     />
                 </Form>
             </div>,
+            <p className="danger-text text-sm cursor-pointer" onClick={() => this.handleDeleteKeyClick(item)}>
+                Delete
+            </p>,
         ]);
     }
 
@@ -348,7 +347,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                         onSubmit={this.handleEnterPress}
                         codeLength={6}
                         type="text"
-                        placeholder="X"
+                        placeholder="______"
                         inputMode="decimal"
                         showPaste2FA={false}
                         isMobile={isMobile}
