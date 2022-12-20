@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CurrencyInfo } from '../';
 import { DepositCrypto } from '../DepositCrypto';
 import { selectUserInfo } from '../../../modules/user/profile';
-import { alertPush, Currency, selectCurrencies, walletsAddressFetch } from '../../../modules';
+import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWallets, Wallet } from '../../../modules';
+import { DEFAULT_WALLET } from 'src/constants';
 import './WalletDepositBody.pcss';
+import { useWalletsFetch } from 'src/hooks';
 import { QRCode, Tooltip, Decimal, Table } from '../../../components';
 import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
@@ -14,30 +16,31 @@ import Select from 'react-select';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { TipIcon } from 'src/assets/images/TipIcon';
 
-const WalletDepositBody = (props) => {
-    const [networks, setNetworks] = useState([]);
-    const [addressDeposit, setAddressDeposit] = useState({});
-    const [address, setAddress] = useState('');
-    const [block, setBlock] = useState({});
-    const [blockchainNetwork, setBlockchainNetwork] = useState(null);
+const WalletDepositBody = () => {
+    useWalletsFetch();
+    const [blockchainNetwork, setBlockchainNetwork] = useState('');
     const [show, setShow] = useState(false);
-
-    const { wallet } = props;
-    const intl = useIntl();
-    const { currency = '' } = useParams<{ currency?: string }>();
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const user = useSelector(selectUserInfo);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const intl = useIntl();
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const user = useSelector(selectUserInfo);
+    const wallets = useSelector(selectWallets) || [];
+
+    const { currency = '' } = useParams<{ currency?: string }>();
+    const [showModalTransfer, setShowModalTransfer] = React.useState(false);
+
+    const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
     const label = React.useMemo(
         () => intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.address' }),
         [intl]
     );
 
-    const doCopy = (text) => {
+    const doCopy = (text: string) => {
         copy(text);
         dispatch(alertPush({ message: ['Link has been copied'], type: 'success' }));
     };
@@ -54,13 +57,9 @@ const WalletDepositBody = (props) => {
         blockchain_key: null,
     };
 
-    // useEffect(() => {
-    //     if (blockchain && blockchain.blockchain_key !== null) {
-    //         setBlock(blockchain);
-    //     }
-    // }, [blockchain]);
-
     const blockchainKey = blockchain && blockchain.blockchain_key;
+
+    const minDepositAmount = (blockchain && blockchain.min_deposit_amount) || '0';
 
     const depositAddress =
         (wallet &&
@@ -69,6 +68,8 @@ const WalletDepositBody = (props) => {
         null;
 
     const handleGenerateAddress = useEffect(() => {
+        console.log('test handle generate');
+
         if (!depositAddress && blockchainKey) {
             dispatch(walletsAddressFetch({ currency: wallet.currency, blockchain_key: blockchainKey }));
         }
@@ -85,21 +86,21 @@ const WalletDepositBody = (props) => {
         { id: 'page.body.wallets.tabs.deposit.ccy.message.submit' },
         { confirmations: currencyItem.min_confirmations }
     );
+
     const handleOnCopy = () => ({});
 
-    const minDepositAmount = (blockchain && blockchain.min_deposit_amount) || '0';
-
     const optionCurrency = currencies.map((item) => {
+        const handleChangeCurrency = () => {
+            history.push(`/wallets/${item.id}/deposit`);
+        };
         const customLabel = (
-            <Link key={item.id} to={`/wallets/${item.id}/deposit`}>
-                <div className="d-flex align-items-center">
-                    <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                    <div>
-                        <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                        <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                    </div>
+            <div onClick={handleChangeCurrency} className="d-flex align-items-center">
+                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
+                <div>
+                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
+                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
                 </div>
-            </Link>
+            </div>
         );
         return {
             label: customLabel,
@@ -142,21 +143,16 @@ const WalletDepositBody = (props) => {
     };
 
     useEffect(() => {
-        if (depositAddress !== null) {
-            setAddressDeposit(depositAddress);
-            setAddress(depositAddress.address);
-        }
-
-        if (currencyItem && currencyItem.networks !== undefined) {
-            setNetworks(currencyItem && currencyItem.networks);
-        }
-
         if (!blockchainNetwork && currencyItem.networks && currencyItem.type !== 'fiat') {
             setBlockchainNetwork(
                 currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
             );
         }
-    }, [depositAddress, currencyItem, blockchainNetwork]);
+
+        console.log(currencyItem, 'INI CURRENCY');
+        console.log(depositAddress, 'INI DEPOSIT ADDRESS');
+        console.log(wallet, 'WALLET');
+    }, [depositAddress, currencyItem, blockchainNetwork, wallet]);
 
     const renderDeposit = useMemo(() => {
         return (
@@ -192,7 +188,10 @@ const WalletDepositBody = (props) => {
                                 <div>
                                     <p className="mb-2 text-xs white-text">Minimum Deposit</p>
                                     <p className="mb-2 text-sm white-text font-bold">
-                                        {minDepositAmount} {currency.toUpperCase()}
+                                        <Decimal fixed={wallet.fixed} thousSep=",">
+                                            {minDepositAmount?.toString()}
+                                        </Decimal>
+                                        &nbsp;{wallet.currency?.toUpperCase()}
                                     </p>
                                 </div>
                             </div>
@@ -206,7 +205,7 @@ const WalletDepositBody = (props) => {
                                 <li className="white-text text-sm mb-8">Do not send NFTs to this address.</li>
                             </ul>
 
-                            {/* {depositAddress && (
+                            {depositAddress && (
                                 <DepositCrypto
                                     buttonLabel={buttonLabel}
                                     copiableTextFieldText={`${wallet.currency.toUpperCase()} ${label}`}
@@ -221,23 +220,27 @@ const WalletDepositBody = (props) => {
                                     network={blockchainKey}
                                     minDepositAmount={minDepositAmount}
                                 />
-                            )} */}
+                            )}
                         </div>
 
                         <div className="network-container w-50">
-                            <h1 className="white-text text-ms font-extrabold mb-16">{address && 'Select Network :'}</h1>
-                            {!addressDeposit ? (
+                            <h1 className="white-text text-ms font-extrabold mb-16">
+                                {depositAddress && depositAddress.address && 'Select Network :'}
+                            </h1>
+                            {depositAddress && depositAddress.address === null && (
                                 <button
                                     onClick={() => handleGenerateAddress}
                                     className="w-100 btn-primary"
                                     type="button">
-                                    Generate Address
+                                    {buttonLabel ? buttonLabel : 'Generate deposit address'}
                                 </button>
-                            ) : (
-                                <div className="navbar position-relative navbar-expand-lg mb-24">
-                                    <div className="collapse navbar-collapse">
-                                        <ul className="navbar-nav">
-                                            {networks.map((network) => (
+                            )}
+                            <div className="navbar position-relative navbar-expand-lg mb-24">
+                                <div className="collapse navbar-collapse">
+                                    <ul className="navbar-nav">
+                                        {currencyItem &&
+                                            currencyItem.networks &&
+                                            currencyItem.networks.map((network) => (
                                                 <li
                                                     className={`nav-item ${
                                                         blockchainNetwork === network.protocol ? 'active' : ''
@@ -247,30 +250,37 @@ const WalletDepositBody = (props) => {
                                                     <div className="nav-link">{network.protocol}</div>
                                                 </li>
                                             ))}
-                                        </ul>
-                                    </div>
+                                    </ul>
                                 </div>
-                            )}
+                            </div>
 
-                            {address && (
+                            {depositAddress && depositAddress.address && (
                                 <React.Fragment>
                                     <h3 className="white-text text-sm font-bold">Address</h3>
                                     <input
                                         id="address"
                                         className="text-ms blue-text font-extrabold mb-24 address"
-                                        defaultValue={address}
+                                        defaultValue={depositAddress && depositAddress.address}
                                     />
                                     <div className="d-flex">
                                         <button
                                             className="btn-primary mr-12"
                                             type="button"
-                                            disabled={!address}
+                                            disabled={
+                                                depositAddress &&
+                                                depositAddress.address &&
+                                                depositAddress.address === null
+                                            }
                                             onClick={() => doCopy('address')}>
                                             Copy Address
                                         </button>
                                         <button
                                             type="button"
-                                            disabled={!address}
+                                            disabled={
+                                                depositAddress &&
+                                                depositAddress.address &&
+                                                depositAddress.address === null
+                                            }
                                             className="btn-primary"
                                             onClick={handleShow}>
                                             Show Barcode
@@ -289,14 +299,14 @@ const WalletDepositBody = (props) => {
                     <Modal show={show} onHide={handleClose} centered>
                         <Modal.Body>
                             <div className="text-center">
-                                <QRCode dimensions={255} data={address} />
+                                <QRCode dimensions={255} data={depositAddress && depositAddress.address} />
                             </div>
                         </Modal.Body>
                         <Modal.Footer className="border-none d-flex flex-column justify-content-center align-items-center">
                             <input
                                 id="address-modal"
                                 className="text-ms blue-text text-center font-extrabold mb-24 address"
-                                defaultValue={address}
+                                defaultValue={depositAddress && depositAddress.address}
                             />
                             <button className="btn-primary mr-12" type="button" onClick={() => doCopy('address-modal')}>
                                 Copy Address
@@ -313,18 +323,12 @@ const WalletDepositBody = (props) => {
         CustomStylesSelect,
         minDepositAmount,
         depositAddress,
-        addressDeposit,
-        setAddressDeposit,
-        networks,
-        setNetworks,
         handleGenerateAddress,
         currencyItem,
         blockchainNetwork,
         blockchain,
         blockchainKey,
         setBlockchainNetwork,
-        block,
-        setBlock,
         doCopy,
         handleClose,
         handleShow,

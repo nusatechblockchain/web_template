@@ -50,7 +50,7 @@ const WalletDeposit: React.FC = () => {
                 <div className="dark-bg-accent body-deposit">
                     <HowToDeposit />
                     {/* <WalletHeader currency={wallet.currency} name={wallet.name} /> */}
-                    <WalletDepositBody wallet={wallet} />
+                    <WalletDepositBody />
                 </div>
             </div>
 

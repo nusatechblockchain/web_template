@@ -31,6 +31,7 @@ import {
     sendPhoneCode,
     selectVerifyPhoneSuccess,
     sendCode,
+    resendCode,
     changeUserLevel,
     verifyPhone,
 } from '../../../modules';
@@ -53,19 +54,28 @@ export const ProfileScreen: FC = (): ReactElement => {
     const [twoFaGoogleValue, settwoFaGoogleValue] = useState('');
     const [newPhoneValue, setNewPhoneValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
+    const [isChangeNumber, setIsChangeNumber] = useState(false);
 
-    const phone = user.phones && user.phones.reverse();
+    const phone = user.phones.slice(-1);
 
     const handleFetchTwoFaPhone = async () => {
         user.otp ? setShowModalChangePhone(!showModalChangePhone) : history.push('/two-fa-activation');
     };
 
     const handleSendCodePhone = () => {
-        dispatch(sendCode({ phone_number: newPhoneValue }));
+        if (user.phones[0] && !isChangeNumber) {
+            dispatch(resendCode({ phone_number: `+${phone[0].number}` }));
+        } else {
+            dispatch(sendCode({ phone_number: newPhoneValue }));
+        }
     };
 
     const handleChangePhone = () => {
-        dispatch(verifyPhone({ phone_number: newPhoneValue, verification_code: verificationCode }));
+        if (user.phones[0] && !isChangeNumber) {
+            dispatch(verifyPhone({ phone_number: `+${phone[0].number}`, verification_code: verificationCode }));
+        } else {
+            dispatch(verifyPhone({ phone_number: newPhoneValue, verification_code: verificationCode }));
+        }
     };
 
     const handleFetchTwoFaGoogle = () => {
@@ -77,26 +87,53 @@ export const ProfileScreen: FC = (): ReactElement => {
         setShowModal2FAGoogle(!showModal2FaGoogle);
     };
 
+    const disabledButton = () => {
+        if (phone[0] && !isChangeNumber) {
+            return false;
+        }
+
+        if (newPhoneValue === '') {
+            return true;
+        }
+    };
+
     // Render phone modal
     const modalPhoneContent = () => {
         return (
             <React.Fragment>
-                <p className="text-sm grey-text mb-24">
-                    Set Your {!user.phones[0] ? '' : 'New'} Phone Number And Verifed
+                <p className="text-sm grey-text mb-8">
+                    {!user.phones[0] ? (
+                        'Set Your Phone Number And Verified'
+                    ) : user.phones[0].validated_at === null && !isChangeNumber ? (
+                        'You already add phone number, please verify by click send code button to get OTP number'
+                    ) : user.phones[0] && isChangeNumber ? (
+                        <p className="danger-text">
+                            You only have {5 - user.phones.length} chances to change your phone number
+                        </p>
+                    ) : (
+                        'Set Your New Phone Number And Verified'
+                    )}
                 </p>
+                {user.phones[0] && !isChangeNumber && (
+                    <p className="text-sm grey-text mb-24">{phone[0] && phone[0].number && `+ ${phone[0].number}`}</p>
+                )}
+
                 <div className="form">
-                    <div className="form-group mb-24">
-                        <CustomInput
-                            defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
-                            inputValue={newPhoneValue}
-                            label={`${!user.phones[0] ? '' : 'New'} Phone Number`}
-                            placeholder="+6281902912921"
-                            type="text"
-                            labelVisible
-                            classNameLabel="white-text text-sm"
-                            handleChangeInput={(e) => setNewPhoneValue(e)}
-                        />
-                    </div>
+                    {(isChangeNumber || !user.phones[0]) && (
+                        <div className="form-group mb-24">
+                            <CustomInput
+                                defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                inputValue={newPhoneValue}
+                                label={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                placeholder="+6281902912921"
+                                type="text"
+                                labelVisible
+                                classNameLabel="white-text text-sm"
+                                handleChangeInput={(e) => setNewPhoneValue(e)}
+                            />
+                        </div>
+                    )}
+
                     <div className="form-group mb-24">
                         <label className="white-text text-sm">Verification Code</label>
                         <div className="d-flex align-items-center">
@@ -113,12 +150,21 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 handleChangeInput={(e) => setVerificationCode(e)}
                             />
                             <button
-                                disabled={newPhoneValue === '' ? true : false}
+                                disabled={disabledButton()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
                                 Send Code
                             </button>
                         </div>
+                        {(!isChangeNumber || !user.phones[0]) && (
+                            <p
+                                onClick={() => {
+                                    setIsChangeNumber(true);
+                                }}
+                                className="text-right white-text text-xs cursor-pointer">
+                                Change Phone
+                            </p>
+                        )}
                     </div>
                     <button
                         type="submit"
@@ -137,7 +183,15 @@ export const ProfileScreen: FC = (): ReactElement => {
     const modalPhoneHeader = () => {
         return (
             <React.Fragment>
-                <h6 className="text-xl font-bold white-text mb-0">{!user.phones[0] ? 'Add' : 'Change'} Phone Number</h6>
+                <h6 className="text-xl font-bold white-text mb-0">
+                    {!user.phones[0]
+                        ? 'Add Phone Number'
+                        : user.phones[0].validated_at === null && !isChangeNumber
+                        ? 'Veirify Phone Number'
+                        : user.phones[0] && isChangeNumber
+                        ? 'Change Phone Number'
+                        : ''}
+                </h6>
                 <ModalCloseIcon className="cursor-pointer ml-4" onClick={() => setShowModalChangePhone(false)} />
             </React.Fragment>
         );

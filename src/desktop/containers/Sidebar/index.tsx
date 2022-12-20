@@ -197,7 +197,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/announcement',
-                    comingsoon: true,
+                    comingsoon: false,
                 },
                 {
                     name: 'FAQ',
@@ -211,7 +211,7 @@ class Side extends React.Component<Props, SidebarState> {
                         />
                     ),
                     path: '/faq',
-                    comingsoon: true,
+                    comingsoon: false,
                 },
             ],
         });
@@ -370,7 +370,12 @@ class Side extends React.Component<Props, SidebarState> {
 
                 {!thisSidebarProfile && <React.Fragment />}
 
-                {this.state.showModalComingSoon && <ModalComingSoon show={this.state.showModalComingSoon} />}
+                {this.state.showModalComingSoon && (
+                    <ModalComingSoon
+                        onClose={() => this.setState({ showModalComingSoon: false })}
+                        show={this.state.showModalComingSoon}
+                    />
+                )}
             </React.Fragment>
         );
     }
