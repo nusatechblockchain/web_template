@@ -27,8 +27,6 @@ export const WalletWithdrawalForm: React.FC = () => {
     const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
 
-    console.log(beneficiaries, 'INI VALUE');
-
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
             <Link key={item.id} to={`/wallets/${item.id}/withdraw`}>
@@ -124,7 +122,12 @@ export const WalletWithdrawalForm: React.FC = () => {
                 <div className="d-flex justify-content-between align-items-start select-container mb-24">
                     <p className="text-ms font-extrabold white-text">Select Address</p>
                     <div className="w-70 position-relative input-add-address">
-                        <div onClick={() => setShowModalBeneficiaryList(!showModalBeneficiaryList)}>
+                        <div
+                            onClick={() =>
+                                beneficiaries[0]
+                                    ? setShowModalBeneficiaryList(!showModalBeneficiaryList)
+                                    : setShowModalModalAddBeneficiary(!showModalAddBeneficiary)
+                            }>
                             <CustomInput
                                 type="text"
                                 isDisabled={true}
