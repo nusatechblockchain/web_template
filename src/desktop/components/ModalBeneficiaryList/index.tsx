@@ -5,12 +5,14 @@ import { useHistory, useParams } from 'react-router';
 import { Modal, ModalAddBeneficiary } from '../../components';
 import { Link } from 'react-router-dom';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
+import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
 import './ModalBeneficiaryList.pcss';
 import { TrashIcon } from 'src/assets/images/TrashIcon';
 
 export interface ModalBeneficiaryListProps {
     showModalBeneficiaryList: boolean;
     showModalAddBeneficiary: boolean;
+    blockchainKey: string;
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
@@ -19,6 +21,16 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalBeneficiaryList);
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
     const { currency = '' } = useParams<{ currency?: string }>();
+
+    const currencies = useSelector(selectCurrencies);
+    const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
+    const currencyItem: Currency = currencies.find((item) => item.id === currency);
+    const blockchainItem: BlockchainCurrencies = currencyItem?.networks.find(
+        (item) => item.blockchain_key === props.blockchainKey
+    );
+    const estimatedValueFee = +currencyItem?.price * +blockchainItem?.withdraw_fee;
+
+    console.log(blockchainItem, 'ESTIMATED');
 
     const renderHeaderBeneficiaryList = () => {
         return (

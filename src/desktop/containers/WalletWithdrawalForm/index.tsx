@@ -5,9 +5,10 @@ import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import './WalletWithdrawalForm.pcss';
 import Select from 'react-select';
-import { CustomStylesSelect, CustomInput } from '../../components';
-import { Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
-import { selectCurrencies, Currency, beneficiariesCreate } from '../../../modules';
+import { CustomStylesSelect, CustomInput, Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
+import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
+import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
+import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 
 export const WalletWithdrawalForm: React.FC = () => {
@@ -21,6 +22,12 @@ export const WalletWithdrawalForm: React.FC = () => {
     const { currency = '' } = useParams<{ currency?: string }>();
 
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
+
+    const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
+    const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
+
+    console.log(beneficiaries, 'INI VALUE');
 
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
@@ -194,6 +201,7 @@ export const WalletWithdrawalForm: React.FC = () => {
 
             {showModalBeneficiaryList && (
                 <ModalBeneficiaryList
+                    blockchainKey={''}
                     showModalBeneficiaryList={showModalBeneficiaryList}
                     showModalAddBeneficiary={showModalAddBeneficiary}
                 />
