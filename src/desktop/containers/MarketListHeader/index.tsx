@@ -35,7 +35,10 @@ export const MarketListHeader: FC = (): ReactElement => {
 
     const dataVolumes = marketList && marketList.sort((a, b) => +b.volume - +a.volume);
     const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);
-    // const dataHighlight = marketList.sort((a, b) => +b.currency.price - +a.currency.price);
+    const dataHighlight = marketList.sort(
+        (a, b) => +b.currency && +b.currency.price - +a.currency && +a.currency.price
+    );
+    console.log(marketList);
 
     return (
         <React.Fragment>
@@ -43,7 +46,7 @@ export const MarketListHeader: FC = (): ReactElement => {
 
             <div className="cr-market-list-header__card-container">
                 <CardMarket title="Top Volume Coins" data={dataVolumes} />
-                <CardMarket title="Highlight Coins" data={dataGainers} />
+                <CardMarket title="Highlight Coins" data={dataHighlight} />
                 <CardMarket title="New Listing" data={dataGainers} />
                 <CardMarket title="Top Gainers" data={dataGainers} />
             </div>

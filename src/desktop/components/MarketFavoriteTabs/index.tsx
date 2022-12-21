@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
+import { selectCurrencies, selectMarkets, selectMarketTickers, selectUserLoggedIn } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
@@ -23,6 +23,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
+    const isLogin = useSelector(selectUserLoggedIn);
     const [favorite, setFavorite] = useState(false);
     const [favoriteMarket, setFavoriteMarket] = React.useState([]);
 
@@ -56,16 +57,18 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     );
 
     const handleFavorite = (data) => {
-        const isFavorite = favoriteMarket.includes(data);
+        if (!isLogin) {
+            const isFavorite = favoriteMarket.includes(data);
 
-        if (!isFavorite) {
-            const newStorageItem = [...favoriteMarket, data];
-            setFavoriteMarket(newStorageItem);
-            localStorage.setItem('favourites', JSON.stringify(newStorageItem));
-        } else {
-            const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
-            setFavoriteMarket(newStorageItem);
-            localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+            if (!isFavorite) {
+                const newStorageItem = [...favoriteMarket, data];
+                setFavoriteMarket(newStorageItem);
+                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+            } else {
+                const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
+                setFavoriteMarket(newStorageItem);
+                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+            }
         }
     };
 
