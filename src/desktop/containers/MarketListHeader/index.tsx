@@ -35,7 +35,10 @@ export const MarketListHeader: FC = (): ReactElement => {
 
     const dataVolumes = marketList && marketList.sort((a, b) => +b.volume - +a.volume);
     const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);
-    const dataHighlight = marketList.sort((a, b) => +b.currency.price - +a.currency.price);
+    const dataHighlight = marketList.sort(
+        (a, b) => +b.currency && +b.currency.price - +a.currency && +a.currency.price
+    );
+    console.log(marketList);
 
     return (
         <React.Fragment>

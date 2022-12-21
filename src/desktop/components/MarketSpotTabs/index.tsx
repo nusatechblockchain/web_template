@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
+import { selectCurrencies, selectMarkets, selectMarketTickers, selectUserLoggedIn } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
@@ -23,7 +23,11 @@ export const MarketSpotTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
+    const isLogin = useSelector(selectUserLoggedIn);
     const [favorite, setFavorite] = useState(false);
+    const [favoriteMarket, setFavoriteMarket] = React.useState(() =>
+        JSON.parse(localStorage.getItem('favourites') || '[]')
+    );
 
     const marketList = markets
         .map((market) => ({
@@ -51,14 +55,30 @@ export const MarketSpotTabs: FC = (): ReactElement => {
         return ['Name', 'Price', '24 Change', 'Volume', 'Market Cap', ''];
     };
 
+    const handleFavorite = (data) => {
+        if (!isLogin) {
+            const isFavorite = favoriteMarket.includes(data);
+
+            if (!isFavorite) {
+                const newStorageItem = [...favoriteMarket, data];
+                setFavoriteMarket(newStorageItem);
+                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+            } else {
+                const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
+                setFavoriteMarket(newStorageItem);
+                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+            }
+        }
+    };
+
     const getTableData = (data) => {
         return data.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
-                <div className="mr-2">
+                <div className="mr-2 cursor-pointer">
                     <Favorite
-                        fillColor={favorite ? '#EF8943' : '#23262F'}
-                        strokeColor={favorite ? '#EF8943' : '#B5B3BC'}
-                        onClick={() => setFavorite(!favorite)}
+                        fillColor={favoriteMarket.includes(item.name) ? '#EF8943' : '#23262F'}
+                        strokeColor={favoriteMarket.includes(item.name) ? '#EF8943' : '#B5B3BC'}
+                        onClick={() => handleFavorite(item.name)}
                     />
                 </div>
                 <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
