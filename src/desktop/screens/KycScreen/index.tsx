@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps, withRouter } from 'react-router';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
@@ -9,12 +9,25 @@ import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { CustomInput, Modal } from '../../components';
 import { KycDrivingLicense, KycNationalCard, KycPasport } from '../../containers';
 import { PasportIcon, DrivingLlicenseIcon, NationalIDIcon } from '../../../assets/images/KycIcon';
+import { accountUploadSizeMaxRange, accountUploadSizeMinRange, languages } from '../../../api/config';
+import { formatDate, isDateInFuture, randomSecureHex } from '../../../helpers';
+import { sendDocuments, selectSendDocumentsSuccess, alertPush, RootState } from '../../../modules';
 
 interface KycScreenState {
-    docType: string;
+    documentsType: string;
     idNumber: string;
-    date: string;
+    issuedDate: string;
     showModal: boolean;
+    issuedDateFocused: boolean;
+    expireDate: string;
+    expireDateFocused: boolean;
+    idNumberFocused: boolean;
+    fileFront: File[];
+    fileBack: File[];
+    fileSelfie: File[];
+    frontFileSizeErrorMessage: string;
+    backFileSizeErrorMessage: string;
+    selfieFileSizeErrorMessage: string;
 }
 
 interface HistoryProps {
@@ -28,28 +41,78 @@ interface HistoryProps {
     };
 }
 
-type Props = RouterProps & HistoryProps & IntlProps;
+interface OnChangeEvent {
+    target: {
+        value: string;
+    };
+}
+
+interface ReduxProps {
+    success?: string;
+}
+
+interface DispatchProps {
+    sendDocuments: typeof sendDocuments;
+    fetchAlert: typeof alertPush;
+}
+
+type Props = ReduxProps & DispatchProps & RouterProps & HistoryProps & IntlProps & KycScreenState;
 
 class KycComponent extends React.Component<Props, KycScreenState> {
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            docType: '',
+            documentsType: '',
             idNumber: '',
-            date: '',
+            issuedDate: '',
             showModal: false,
+            issuedDateFocused: false,
+            expireDate: '',
+            expireDateFocused: false,
+            idNumberFocused: false,
+            fileFront: [],
+            fileBack: [],
+            fileSelfie: [],
+            frontFileSizeErrorMessage: '',
+            backFileSizeErrorMessage: '',
+            selfieFileSizeErrorMessage: '',
         };
     }
 
+    public translate = (key: string, value?: string, min?: string) =>
+        this.props.intl.formatMessage({ id: key }, { value, min });
+
+    public data = [
+        this.translate('page.body.kyc.documents.select.passport'),
+        this.translate('page.body.kyc.documents.select.identityCard'),
+        this.translate('page.body.kyc.documents.select.driverLicense'),
+    ];
+
     public componentDidMount() {
         setDocumentTitle('Kyc Screen');
+        this.setState({ documentsType: 'Passport' });
     }
 
     public render() {
-        const { docType, date, idNumber, showModal } = this.state;
+        const {
+            documentsType,
+            issuedDate,
+            idNumber,
+            showModal,
+            issuedDateFocused,
+            expireDate,
+            expireDateFocused,
+            idNumberFocused,
+            fileFront,
+            fileBack,
+            fileSelfie,
+            frontFileSizeErrorMessage,
+            backFileSizeErrorMessage,
+            selfieFileSizeErrorMessage,
+        } = this.state;
 
-        const checkForm = docType != '' && date != '' && idNumber != '';
+        const checkForm = documentsType != '' && issuedDate != '' && idNumber != '';
 
         return (
             <React.Fragment>
@@ -69,33 +132,41 @@ class KycComponent extends React.Component<Props, KycScreenState> {
                                 </div>
                                 <form action="">
                                     <ul className="nav nav-tabs" id="myTab" role="tablist">
-                                        <li className="nav-item" onClick={() => this.setState({ docType: 'pasport' })}>
-                                            <a className={`nav-link ${docType == 'pasport' ? 'active' : ''}`}>
+                                        <li
+                                            className="nav-item"
+                                            onClick={() => this.handleChangeDocumentsType('Passport')}>
+                                            <a className={`nav-link ${documentsType == 'Passport' ? 'active' : ''}`}>
                                                 <PasportIcon
                                                     className="mr-2"
-                                                    fill={docType == 'pasport' ? '#fff' : '#B5B3BC'}
+                                                    fill={documentsType == 'Passport' ? '#fff' : '#B5B3BC'}
                                                 />
-                                                Pasport
+                                                Passport
                                             </a>
                                         </li>
                                         <li
                                             className="nav-item"
-                                            onClick={() => this.setState({ docType: 'national-id' })}>
-                                            <a className={`nav-link ${docType == 'national-id' ? 'active' : ''}`}>
+                                            onClick={() => this.handleChangeDocumentsType('Identity card')}>
+                                            <a
+                                                className={`nav-link ${
+                                                    documentsType == 'Identity card' ? 'active' : ''
+                                                }`}>
                                                 <NationalIDIcon
                                                     className="mr-2"
-                                                    fill={docType == 'national-id' ? '#fff' : '#B5B3BC'}
+                                                    fill={documentsType == 'Identity card' ? '#fff' : '#B5B3BC'}
                                                 />
                                                 National
                                             </a>
                                         </li>
                                         <li
                                             className="nav-item"
-                                            onClick={() => this.setState({ docType: 'driving-license' })}>
-                                            <a className={`nav-link ${docType == 'driving-license' ? 'active' : ''}`}>
+                                            onClick={() => this.handleChangeDocumentsType('Driver license')}>
+                                            <a
+                                                className={`nav-link ${
+                                                    documentsType == 'Driver license' ? 'active' : ''
+                                                }`}>
                                                 <DrivingLlicenseIcon
                                                     className="mr-2"
-                                                    fill={docType == 'driving-license' ? '#fff' : '#B5B3BC'}
+                                                    fill={documentsType == 'Driver license' ? '#fff' : '#B5B3BC'}
                                                 />
                                                 Driving License
                                             </a>
@@ -120,35 +191,67 @@ class KycComponent extends React.Component<Props, KycScreenState> {
                                             <div className="col-lg-5 col-6">
                                                 <CustomInput
                                                     defaultLabel="ID Number"
-                                                    inputValue={this.state.idNumber}
                                                     label="ID Number"
                                                     placeholder="ID Number"
                                                     type="text"
                                                     labelVisible
                                                     classNameLabel="white-text text-sm"
-                                                    handleChangeInput={(e) => this.setState({ idNumber: e })}
+                                                    inputValue={idNumber}
+                                                    handleChangeInput={this.handleChangeIdNumber}
+                                                    handleFocusInput={this.handleFieldFocus('idNumber')}
                                                 />
                                             </div>
                                             <div className="col-lg-5 col-6">
                                                 <CustomInput
                                                     defaultLabel="Issued Date"
-                                                    inputValue={this.state.date}
                                                     label="Issued Date"
                                                     placeholder="Issued Date"
                                                     type="date"
                                                     labelVisible
                                                     classNameLabel="white-text text-sm"
-                                                    handleChangeInput={(e) => this.setState({ date: e })}
+                                                    handleChangeInput={() => this.handleChangeIssuedDate}
+                                                    handleFocusInput={this.handleFieldFocus('issuedDate')}
+                                                    inputValue={issuedDate}
                                                 />
                                             </div>
                                         </div>
                                     </div>
-                                    {docType == 'pasport' ? (
-                                        <KycPasport />
-                                    ) : docType == 'national-id' ? (
-                                        <KycNationalCard />
-                                    ) : docType == 'driving-license' ? (
-                                        <KycDrivingLicense />
+                                    {documentsType == 'Passport' ? (
+                                        <KycPasport
+                                            handleUploadScanFront={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'front')
+                                            }
+                                            // handleUploadScanBack={(uploadEvent) =>
+                                            //     this.handleUploadScan(uploadEvent, 'back')
+                                            // }
+                                            handleUploadScanSelfie={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'selfie')
+                                            }
+                                        />
+                                    ) : documentsType == 'Identity card' ? (
+                                        <KycNationalCard
+                                            handleUploadScanFront={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'front')
+                                            }
+                                            handleUploadScanBack={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'back')
+                                            }
+                                            handleUploadScanSelfie={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'selfie')
+                                            }
+                                        />
+                                    ) : documentsType == 'Driver license' ? (
+                                        <KycDrivingLicense
+                                            handleUploadScanFront={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'front')
+                                            }
+                                            handleUploadScanBack={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'back')
+                                            }
+                                            handleUploadScanSelfie={(uploadEvent) =>
+                                                this.handleUploadScan(uploadEvent, 'selfie')
+                                            }
+                                        />
                                     ) : (
                                         ''
                                     )}
@@ -198,6 +301,241 @@ class KycComponent extends React.Component<Props, KycScreenState> {
             </button>
         );
     }
+
+    private uploadFileSizeGuide = () => {
+        if (accountUploadSizeMinRange) {
+            return this.translate(
+                'page.body.kyc.address.uploadFile.sizeMinMax',
+                accountUploadSizeMaxRange.toString(),
+                accountUploadSizeMinRange.toString()
+            );
+        }
+
+        return this.translate('page.body.kyc.address.uploadFile.sizeMax', accountUploadSizeMaxRange.toString());
+    };
+
+    private handleChangeDocumentsType = (value: string) => {
+        this.setState({
+            documentsType: value,
+        });
+    };
+
+    private handleChangeIdNumber = (value: string) => {
+        this.setState({
+            idNumber: value,
+        });
+    };
+
+    private handleFieldFocus = (field: string) => {
+        return () => {
+            switch (field) {
+                case 'issuedDate':
+                    this.setState({
+                        issuedDateFocused: !this.state.issuedDateFocused,
+                    });
+                    break;
+                case 'expireDate':
+                    this.setState({
+                        expireDateFocused: !this.state.expireDateFocused,
+                    });
+                    break;
+                case 'idNumber':
+                    this.setState({
+                        idNumberFocused: !this.state.idNumberFocused,
+                    });
+                    break;
+                default:
+                    break;
+            }
+        };
+    };
+
+    private handleChangeIssuedDate = (e: OnChangeEvent) => {
+        this.setState({
+            issuedDate: formatDate(e.target.value),
+        });
+    };
+
+    private handleChangeExpiration = (e: OnChangeEvent) => {
+        this.setState({
+            expireDate: formatDate(e.target.value),
+        });
+    };
+
+    private handleUploadScan = (uploadEvent, id) => {
+        const allFiles: File[] = uploadEvent.target.files;
+        const maxDocsCount = 1;
+        const additionalFileList =
+            Array.from(allFiles).length > maxDocsCount
+                ? Array.from(allFiles).slice(0, maxDocsCount)
+                : Array.from(allFiles);
+
+        if (!additionalFileList.length) {
+            return;
+        }
+
+        const sizeKB = (additionalFileList[0].size / 1024).toFixed(1);
+
+        switch (id) {
+            case 'front':
+                if (additionalFileList[0].size > accountUploadSizeMaxRange * 1024 * 1024) {
+                    this.setState({
+                        frontFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooBig', sizeKB),
+                    });
+                } else if (additionalFileList[0].size < accountUploadSizeMinRange * 1024 * 1024) {
+                    this.setState({
+                        frontFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooSmall', sizeKB),
+                    });
+                } else {
+                    this.setState({ frontFileSizeErrorMessage: '' });
+                }
+
+                this.setState({ fileFront: additionalFileList });
+                break;
+            case 'back':
+                if (additionalFileList[0].size > accountUploadSizeMaxRange * 1024 * 1024) {
+                    this.setState({
+                        backFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooBig', sizeKB),
+                    });
+                } else if (additionalFileList[0].size < accountUploadSizeMinRange * 1024 * 1024) {
+                    this.setState({
+                        backFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooSmall', sizeKB),
+                    });
+                } else {
+                    this.setState({ backFileSizeErrorMessage: '' });
+                }
+
+                this.setState({ fileBack: additionalFileList });
+                break;
+            case 'selfie':
+                if (additionalFileList[0].size > accountUploadSizeMaxRange * 1024 * 1024) {
+                    this.setState({
+                        selfieFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooBig', sizeKB),
+                    });
+                } else if (additionalFileList[0].size < accountUploadSizeMinRange * 1024 * 1024) {
+                    this.setState({
+                        selfieFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooSmall', sizeKB),
+                    });
+                } else {
+                    this.setState({ selfieFileSizeErrorMessage: '' });
+                }
+
+                this.setState({ fileSelfie: additionalFileList });
+                break;
+            default:
+                break;
+        }
+    };
+
+    private handleValidateInput = (field: string, value: string): boolean => {
+        switch (field) {
+            case 'issuedDate':
+                return !isDateInFuture(value);
+            case 'expireDate':
+                return isDateInFuture(value);
+            case 'idNumber':
+                const cityRegex = new RegExp(`^[a-zA-Z0-9]{1,255}$`);
+
+                return Boolean(value.match(cityRegex));
+            default:
+                return true;
+        }
+    };
+
+    private handleCheckButtonDisabled = () => {
+        const {
+            documentsType,
+            issuedDate,
+            expireDate,
+            fileBack,
+            fileFront,
+            fileSelfie,
+            idNumber,
+            frontFileSizeErrorMessage,
+            backFileSizeErrorMessage,
+            selfieFileSizeErrorMessage,
+        } = this.state;
+
+        const typeOfDocuments = this.getDocumentsType(documentsType);
+        const filesValid =
+            typeOfDocuments === 'Passport'
+                ? fileFront.length &&
+                  fileSelfie.length &&
+                  frontFileSizeErrorMessage === '' &&
+                  selfieFileSizeErrorMessage === ''
+                : fileSelfie.length &&
+                  fileFront.length &&
+                  fileBack.length &&
+                  frontFileSizeErrorMessage === '' &&
+                  backFileSizeErrorMessage === '' &&
+                  selfieFileSizeErrorMessage === '';
+
+        return (
+            !this.handleValidateInput('idNumber', idNumber) ||
+            !this.handleValidateInput('issuedDate', issuedDate) ||
+            (expireDate && !this.handleValidateInput('expireDate', expireDate)) ||
+            !filesValid
+        );
+    };
+
+    private sendDocuments = () => {
+        const { documentsType, fileBack, fileFront, fileSelfie } = this.state;
+        const identificator = randomSecureHex(32);
+
+        if (this.handleCheckButtonDisabled()) {
+            return;
+        }
+
+        this.props.sendDocuments(this.createFormData('front_side', fileFront, identificator));
+
+        if (documentsType !== 'Passport') {
+            this.props.sendDocuments(this.createFormData('back_side', fileBack, identificator));
+        }
+
+        this.props.sendDocuments(this.createFormData('selfie', fileSelfie, identificator));
+    };
+
+    private createFormData = (docCategory: string, upload: File[], identificator: string) => {
+        const { documentsType, expireDate, issuedDate, idNumber }: KycScreenState = this.state;
+        const typeOfDocuments = this.getDocumentsType(documentsType);
+
+        const request = new FormData();
+
+        if (expireDate) {
+            request.append('doc_expire', expireDate);
+        }
+
+        request.append('doc_issue', issuedDate);
+        request.append('doc_type', typeOfDocuments);
+        request.append('doc_number', idNumber);
+        request.append('identificator', identificator);
+        request.append('doc_category', docCategory);
+        request.append('upload[]', upload[0]);
+
+        return request;
+    };
+
+    private getDocumentsType = (value: string) => {
+        switch (value) {
+            case this.data[0]:
+                return 'Passport';
+            case this.data[1]:
+                return 'Identity card';
+            case this.data[2]:
+                return 'Driver license';
+            default:
+                return value;
+        }
+    };
 }
+
+const mapStateToProps = (state: RootState): ReduxProps => ({
+    success: selectSendDocumentsSuccess(state),
+});
+
+const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
+    fetchAlert: (payload) => dispatch(alertPush(payload)),
+    sendDocuments: (payload) => dispatch(sendDocuments(payload)),
+});
 
 export const KycScreen = compose(injectIntl, withRouter, connect())(KycComponent) as React.ComponentClass;
