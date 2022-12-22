@@ -58,9 +58,6 @@ export const MarketSpotTabs: FC = (): ReactElement => {
     const favoriteSpot = marketList.filter((market) =>
         JSON.parse(localStorage.getItem('favourites') || '[]').some((name) => name == market.name)
     );
-    console.log(favoriteSpot);
-
-    // console.log(favoriteSpot, 'FAVORITE SPOT');
 
     const handleFavorite = (data) => {
         if (!isLogin) {

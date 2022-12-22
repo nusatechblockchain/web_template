@@ -81,7 +81,6 @@ const WalletDepositBody = () => {
             active?.toLowerCase() === blockchain?.blockchain_key?.toLowerCase()
         ) {
             dispatch(walletsAddressFetch({ currency: 'eth', blockchain_key: tab }));
-            //     console.log('test');
         }
         // else {
         //     console.log('test lagi');
@@ -168,10 +167,6 @@ const WalletDepositBody = () => {
                     currencyItem.networks[0].blockchain_key
             );
         }
-
-        // console.log(currencyItem, 'INI CURRENCY');
-        console.log(depositAddress, 'INI DEPOSIT ADDRESS');
-        // console.log(wallet, 'WALLET');
     }, [depositAddress, currencyItem, active, wallet]);
 
     const renderDeposit = useMemo(() => {

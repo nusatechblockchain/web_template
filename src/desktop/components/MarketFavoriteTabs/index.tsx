@@ -1,6 +1,13 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies, selectMarkets, selectMarketTickers, selectUserLoggedIn } from 'src/modules';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    selectCurrencies,
+    selectMarkets,
+    selectMarketTickers,
+    selectUserLoggedIn,
+    selectUserInfo,
+    changeUserDataFetch,
+} from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
@@ -23,9 +30,13 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    const isLogin = useSelector(selectUserLoggedIn);
+    const isLoggedin = useSelector(selectUserLoggedIn);
+    const user = useSelector(selectUserInfo);
+    const dispatch = useDispatch();
     const [favorite, setFavorite] = useState(false);
     const [favoriteMarket, setFavoriteMarket] = React.useState(JSON.parse(localStorage.getItem('favourites') || '[]'));
+
+    console.log(isLoggedin);
 
     useEffect(() => {
         setFavoriteMarket(JSON.parse(localStorage.getItem('favourites') || '[]'));
@@ -56,20 +67,30 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
         JSON.parse(localStorage.getItem('favourites') || '[]').some((name) => name == market.name)
     );
 
-    // console.log(spotMarket, 'FAVORITE SPOT MARKET');
-
-    const handleFavorite = (data) => {
-        if (!isLogin) {
-            const isFavorite = favoriteMarket.includes(data);
+    const handleFavorite = (dataMarket: string) => {
+        if (!isLoggedin) {
+            const isFavorite = favoriteMarket.includes(dataMarket);
 
             if (!isFavorite) {
-                const newStorageItem = [...favoriteMarket, data];
+                const newStorageItem = [...favoriteMarket, dataMarket];
                 setFavoriteMarket(newStorageItem);
                 localStorage.setItem('favourites', JSON.stringify(newStorageItem));
             } else {
-                const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
+                const newStorageItem = favoriteMarket.filter((savedId) => savedId !== dataMarket);
                 setFavoriteMarket(newStorageItem);
                 localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+            }
+        } else {
+            const dataUser = user.data && JSON.parse(user.data);
+            if (dataUser) {
+                const payload = {
+                    ...user,
+                    data: JSON.stringify({
+                        ...dataUser,
+                        favorite: [...dataMarket, { dataMarket }],
+                    }),
+                };
+                dispatch(changeUserDataFetch({ user: payload }));
             }
         }
     };

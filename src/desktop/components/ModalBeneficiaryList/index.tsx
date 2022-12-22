@@ -30,8 +30,6 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
     );
     const estimatedValueFee = +currencyItem?.price * +blockchainItem?.withdraw_fee;
 
-    console.log(blockchainItem, 'ESTIMATED');
-
     const renderHeaderBeneficiaryList = () => {
         return (
             <React.Fragment>
