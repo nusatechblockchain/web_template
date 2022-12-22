@@ -386,8 +386,14 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
                         <PublicRoute
                             loading={userLoading}
-                            path="/markets/:currency/trading-future"
+                            path="/markets/trading-future/:currency"
                             component={TradingFutureMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/markets/trading/:currency"
+                            component={TradingMobileScreen}
                         />
 
                         <PrivateRoute
@@ -540,15 +546,16 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                     />
                     <PublicRoute
                         loading={userLoading}
-                        path="/markets/:currency/detail"
+                        path="/markets/detail/:currency"
                         component={MarketDetailScreen}
                     />
 
                     <PublicRoute
                         loading={userLoading}
-                        path="/markets/:currency/trading-future"
+                        path="/markets/trading-future/:currency"
                         component={TradingFutureScreen}
                     />
+                    <PublicRoute loading={userLoading} path="/markets/trading/:currency" component={TradingScreen} />
 
                     <PrivateRoute
                         loading={userLoading}

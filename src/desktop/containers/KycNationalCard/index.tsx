@@ -12,7 +12,7 @@ export const KycNationalCard = (props) => {
                 <div className="col-6">
                     <KycInputFileComponent
                         id="national-front"
-                        label="Upload Your Front of Passport"
+                        label="Upload Your Front of National Card"
                         inputValue={inputFrontValue}
                         handleChangeInput={(e) => setInputFrontValue(e)}
                     />
@@ -20,7 +20,7 @@ export const KycNationalCard = (props) => {
                 <div className="col-6">
                     <KycInputFileComponent
                         id="national-back"
-                        label="Upload Your Back of ID card"
+                        label="Upload Your Back of National card"
                         inputValue={inputBackValue}
                         handleChangeInput={(e) => setInputBackValue(e)}
                     />
@@ -28,7 +28,7 @@ export const KycNationalCard = (props) => {
                 <div className="col-6">
                     <KycInputFileComponent
                         id="national-selfie"
-                        label="Upload Your Selfie With ID card"
+                        label="Upload Your Selfie With National card"
                         inputValue={inputSelfieValue}
                         handleChangeInput={(e) => setInputSelfieValue(e)}
                     />

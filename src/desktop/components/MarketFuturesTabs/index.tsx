@@ -68,12 +68,12 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
             <p className="m-0 text-sm white-text">{item.cap}</p>,
             <div className="d-flex">
                 <div className="mr-3">
-                    <Link to={`/markets/${item.base_unit}/detail`}>
+                    <Link to={`/markets/detail/${item.base_unit}`}>
                         <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Detail</p>
                     </Link>
                 </div>
                 <div>
-                    <Link to={`/markets/${item.base_unit}/trading-future`}>
+                    <Link to={`/markets/${item.type == 'spot' ? 'trading/' : '/trading-future/'}${item.id}`}>
                         <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
                     </Link>
                 </div>

@@ -45,4 +45,21 @@
         border-radius: 6px;
         padding: 32px;
     }
+
+    .input-date-document {
+        input {
+            width: 100%;
+            background: var(--main-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            height: 48px;
+            color: var(--text-secondary-color);
+            padding: 16px;
+            &:focus-visible {
+                border-color: var(--input-focus-border-color);
+                outline: 0;
+                box-shadow: 0 0 0 0;
+            }
+        }
+    }
 }

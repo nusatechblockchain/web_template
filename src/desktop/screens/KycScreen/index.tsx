@@ -5,6 +5,7 @@ import { RouterProps, withRouter } from 'react-router';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
 import { setDocumentTitle } from '../../../helpers';
+import MaskInput from 'react-maskinput';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { CustomInput, Modal } from '../../components';
 import { KycDrivingLicense, KycNationalCard, KycPasport } from '../../containers';
@@ -98,11 +99,8 @@ class KycComponent extends React.Component<Props, KycScreenState> {
         const {
             documentsType,
             issuedDate,
-            idNumber,
-            showModal,
             issuedDateFocused,
-            expireDate,
-            expireDateFocused,
+            idNumber,
             idNumberFocused,
             fileFront,
             fileBack,
@@ -110,6 +108,7 @@ class KycComponent extends React.Component<Props, KycScreenState> {
             frontFileSizeErrorMessage,
             backFileSizeErrorMessage,
             selfieFileSizeErrorMessage,
+            showModal,
         } = this.state;
 
         const checkForm = documentsType != '' && issuedDate != '' && idNumber != '';
@@ -198,21 +197,18 @@ class KycComponent extends React.Component<Props, KycScreenState> {
                                                     classNameLabel="white-text text-sm"
                                                     inputValue={idNumber}
                                                     handleChangeInput={this.handleChangeIdNumber}
-                                                    handleFocusInput={this.handleFieldFocus('idNumber')}
                                                 />
                                             </div>
                                             <div className="col-lg-5 col-6">
-                                                <CustomInput
-                                                    defaultLabel="Issued Date"
-                                                    label="Issued Date"
-                                                    placeholder="Issued Date"
-                                                    type="date"
-                                                    labelVisible
-                                                    classNameLabel="white-text text-sm"
-                                                    handleChangeInput={() => this.handleChangeIssuedDate}
-                                                    handleFocusInput={this.handleFieldFocus('issuedDate')}
-                                                    inputValue={issuedDate}
-                                                />
+                                                <div className="input-date-document">
+                                                    <label className="text-sm mb-8 white-text">Issued Date</label>
+                                                    <MaskInput
+                                                        maskString="00/00/0000"
+                                                        mask="00/00/0000"
+                                                        onChange={(value) => this.handleChangeIssuedDate(value)}
+                                                        value={issuedDate}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -221,9 +217,6 @@ class KycComponent extends React.Component<Props, KycScreenState> {
                                             handleUploadScanFront={(uploadEvent) =>
                                                 this.handleUploadScan(uploadEvent, 'front')
                                             }
-                                            // handleUploadScanBack={(uploadEvent) =>
-                                            //     this.handleUploadScan(uploadEvent, 'back')
-                                            // }
                                             handleUploadScanSelfie={(uploadEvent) =>
                                                 this.handleUploadScan(uploadEvent, 'selfie')
                                             }
@@ -326,39 +319,9 @@ class KycComponent extends React.Component<Props, KycScreenState> {
         });
     };
 
-    private handleFieldFocus = (field: string) => {
-        return () => {
-            switch (field) {
-                case 'issuedDate':
-                    this.setState({
-                        issuedDateFocused: !this.state.issuedDateFocused,
-                    });
-                    break;
-                case 'expireDate':
-                    this.setState({
-                        expireDateFocused: !this.state.expireDateFocused,
-                    });
-                    break;
-                case 'idNumber':
-                    this.setState({
-                        idNumberFocused: !this.state.idNumberFocused,
-                    });
-                    break;
-                default:
-                    break;
-            }
-        };
-    };
-
-    private handleChangeIssuedDate = (e: OnChangeEvent) => {
+    private handleChangeIssuedDate = (e) => {
         this.setState({
             issuedDate: formatDate(e.target.value),
-        });
-    };
-
-    private handleChangeExpiration = (e: OnChangeEvent) => {
-        this.setState({
-            expireDate: formatDate(e.target.value),
         });
     };
 

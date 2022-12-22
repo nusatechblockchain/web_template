@@ -13,7 +13,7 @@ export const KycDrivingLicense = (props) => {
                 <div className="col-6">
                     <KycInputFileComponent
                         id="driving-front"
-                        label="Upload Your Front of Passport"
+                        label="Upload Your Front of Driving License"
                         inputValue={inputFrontValue}
                         handleChangeInput={(e) => setInputFrontValue(e)}
                     />
@@ -21,7 +21,7 @@ export const KycDrivingLicense = (props) => {
                 <div className="col-6">
                     <KycInputFileComponent
                         id="driving-back"
-                        label="Upload Your Back of ID card"
+                        label="Upload Your Back of Driving License"
                         inputValue={inputBackValue}
                         handleChangeInput={(e) => setInputBackValue(e)}
                     />
@@ -29,7 +29,7 @@ export const KycDrivingLicense = (props) => {
                 <div className="col-6">
                     <KycInputFileComponent
                         id="driving-selfie"
-                        label="Upload Your Selfie With ID card"
+                        label="Upload Your Selfie With Driving License"
                         inputValue={inputSelfieValue}
                         handleChangeInput={(e) => setInputSelfieValue(e)}
                     />
