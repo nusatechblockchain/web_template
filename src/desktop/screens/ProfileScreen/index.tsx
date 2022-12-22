@@ -38,6 +38,7 @@ import {
 import { Modal, CustomInput } from '../../components';
 // import { ModalComingSoon } from 'src/components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
+import moment from 'moment';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
@@ -47,14 +48,33 @@ export const ProfileScreen: FC = (): ReactElement => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const [showModal2Fa, setShowModal2FA] = useState(false);
     const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
     const [showModalChangePhone, setShowModalChangePhone] = useState(false);
-    const [twoFaPhoneValue, settwoFaPhoneValue] = useState('');
     const [twoFaGoogleValue, settwoFaGoogleValue] = useState('');
     const [newPhoneValue, setNewPhoneValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [isChangeNumber, setIsChangeNumber] = useState(false);
+    const [resendCodeActive, setResendCodeActive] = useState(false);
+
+    const [seconds, setSeconds] = useState(30000);
+    const [timerActive, setTimerActive] = useState(false);
+
+    useEffect(() => {
+        let timer = null;
+        if (timerActive) {
+            timer = setInterval(() => {
+                setSeconds((seconds) => seconds - 1000);
+
+                if (seconds === 0) {
+                    setTimerActive(false);
+                    setSeconds(30000);
+                }
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    });
 
     const phone = user.phones.slice(-1);
 
@@ -65,8 +85,12 @@ export const ProfileScreen: FC = (): ReactElement => {
     const handleSendCodePhone = () => {
         if (user.phones[0] && !isChangeNumber) {
             dispatch(resendCode({ phone_number: `+${phone[0].number}` }));
+            setTimerActive(true);
+            setResendCodeActive(true);
         } else {
             dispatch(sendCode({ phone_number: newPhoneValue }));
+            setTimerActive(true);
+            setResendCodeActive(true);
         }
     };
 
@@ -93,6 +117,10 @@ export const ProfileScreen: FC = (): ReactElement => {
         }
 
         if (newPhoneValue === '') {
+            return true;
+        }
+
+        if (timerActive) {
             return true;
         }
     };
@@ -153,13 +181,19 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 disabled={disabledButton()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
-                                Send Code
+                                {(!isChangeNumber && phone[0]) || resendCodeActive ? 'Resend Code' : 'Send Code'}
                             </button>
                         </div>
+
+                        <p className={`text-right text-xs cursor-pointer ${timerActive ? 'white-text' : 'grey-text'}`}>
+                            {moment(seconds).format('mm:ss')}
+                        </p>
+
                         {(!isChangeNumber || !user.phones[0]) && (
                             <p
                                 onClick={() => {
                                     setIsChangeNumber(true);
+                                    setTimerActive(false);
                                 }}
                                 className="text-right white-text text-xs cursor-pointer">
                                 Change Phone
@@ -168,6 +202,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                     </div>
                     <button
                         type="submit"
+                        disabled={newPhoneValue === '' && verificationCode === '' ? true : false}
                         onClick={handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
@@ -192,7 +227,13 @@ export const ProfileScreen: FC = (): ReactElement => {
                         ? 'Change Phone Number'
                         : ''}
                 </h6>
-                <ModalCloseIcon className="cursor-pointer ml-4" onClick={() => setShowModalChangePhone(false)} />
+                <ModalCloseIcon
+                    className="cursor-pointer ml-4"
+                    onClick={() => {
+                        setShowModalChangePhone(false);
+                        setIsChangeNumber(false);
+                    }}
+                />
             </React.Fragment>
         );
     };
