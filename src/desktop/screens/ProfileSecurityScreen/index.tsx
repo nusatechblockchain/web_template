@@ -25,12 +25,14 @@ import {
     entropyPasswordFetch,
     selectCurrentPasswordEntropy,
     sendCode,
+    resendCode,
     verifyPhone,
 } from '../../../modules';
 import { ModalTwoFa, Modal, CustomInput, PasswordStrengthMeter } from '../../components';
 import { CheckIcon, GoogleIcon, KeyIcon, MailIcon, PhoneIcon } from '../../../assets/images/ProfileSecurityIcon';
 import { Notification } from '../../../assets/images/Notification';
 import { CloseIcon, ModalCloseIcon } from '../../../assets/images/CloseIcon';
+import moment from 'moment';
 interface ProfileSecurityState {
     showTwoFaModal: boolean;
     showTwoFaPhoneModal: boolean;
@@ -53,6 +55,12 @@ interface ProfileSecurityState {
     passwordErrorFirstSolved: boolean;
     passwordErrorSecondSolved: boolean;
     passwordErrorThirdSolved: boolean;
+    isChangeNumber: boolean;
+    resendCodeActive: boolean;
+    seconds: number;
+    timerActive: boolean;
+    phone: any;
+    timer: any;
 }
 
 interface OwnProps {
@@ -68,6 +76,9 @@ interface DispatchProps {
     changePasswordFetch: typeof changePasswordFetch;
     fetchCurrentPasswordEntropy: typeof entropyPasswordFetch;
     toggle2faFetch: typeof toggle2faFetch;
+    verifyPhone: typeof verifyPhone;
+    sendCode: typeof sendCode;
+    resendCode: typeof resendCode;
 }
 
 type Props = RouterProps & IntlProps & OwnProps & DispatchProps & ReduxProps;
@@ -98,6 +109,12 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             passwordErrorFirstSolved: false,
             passwordErrorSecondSolved: false,
             passwordErrorThirdSolved: false,
+            isChangeNumber: false,
+            resendCodeActive: false,
+            seconds: 30000,
+            timerActive: false,
+            phone: this.props.user.phones.slice(-1),
+            timer: null,
         };
     }
 
@@ -105,45 +122,45 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
         setDocumentTitle('Profile Security');
     }
 
-    public componentDidUpdate() {
-        // if (this.state.passwordNew !== this.state.passwordConfirm) {
-        //     this.setState({ passwordMatches: false });
-        // }
+    public componentDidUpdate(previousProps, previousState) {
+        let time = null;
+        if (previousState === this.state.timerActive) {
+            time = setInterval(() => {
+                this.setState({ seconds: this.state.seconds - 1000 });
+
+                if (this.state.seconds === 0) {
+                    this.setState({ timerActive: false, seconds: 3000 });
+                }
+            }, 1000);
+            this.setState({ timer: time });
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.timer);
     }
 
     public render() {
-        const {
-            twoFaCode,
-            twoFaPasswordCode,
-            showPhoneModal,
-            showPasswordModal,
-            twoFaStatus,
-            passwordConfirm,
-            passwordNew,
-            passwordOld,
-            passwordErrorFirstSolved,
-            passwordErrorSecondSolved,
-            passwordErrorThirdSolved,
-        } = this.state;
+        const { twoFaCode, showPhoneModal, showPasswordModal, twoFaStatus } = this.state;
 
         // handle click menu google authenticator
         const handleClickPassword = () => {
             this.props.user.otp
-                ? this.setState({ showPasswordModal: true })
+                ? this.setState({ showPasswordModal: !this.state.showPasswordModal })
                 : this.props.history.push('/two-fa-activation');
         };
 
         // handle click menu google authenticator
         const handleClickGoogleAuth = () => {
             this.props.user.otp
-                ? this.setState({ showTwoFaModal: true })
+                ? this.setState({ showTwoFaModal: !this.state.showTwoFaModal })
                 : this.props.history.push('/two-fa-activation');
         };
 
         // handle click menu google authenticator
         const handleClickPhone = () => {
             this.props.user.otp
-                ? this.setState({ showPhoneModal: true })
+                ? this.setState({ showPhoneModal: !this.state.showPhoneModal })
                 : this.props.history.push('/two-fa-activation');
         };
 
@@ -312,27 +329,49 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
     public modalPhoneContent = () => {
         return (
             <React.Fragment>
-                <p className="text-sm grey-text mb-24">Set your new Phone number and verifed</p>
+                <p className="text-sm grey-text mb-24">
+                    {!this.props.user.phones[0] ? (
+                        'Set Your Phone Number And Verified'
+                    ) : this.props.user.phones[0].validated_at === null && !this.state.isChangeNumber ? (
+                        'You already add phone number, please verify by click send code button to get OTP number'
+                    ) : this.props.user.phones[0] && this.state.isChangeNumber ? (
+                        <p className="danger-text">
+                            You only have {5 - this.props.user.phones.length} chances to change your phone number
+                        </p>
+                    ) : (
+                        'Set Your New Phone Number And Verified'
+                    )}
+                </p>
+
+                {this.props.user.phones[0] && !this.state.isChangeNumber && (
+                    <p className="text-sm grey-text mb-24">
+                        {this.state.phone[0] && this.state.phone[0].number && `+ ${this.state.phone[0].number}`}
+                    </p>
+                )}
+
                 <div className="form">
-                    <div className="form-group mb-24">
-                        <CustomInput
-                            defaultLabel="New Phone Number"
-                            inputValue={this.state.newPhone}
-                            label="New Phone Number"
-                            placeholder="+6281902912921"
-                            type="text"
-                            labelVisible
-                            classNameLabel="white-text text-sm"
-                            handleChangeInput={(e) => this.setState({ newPhone: e })}
-                        />
-                    </div>
+                    {(this.state.isChangeNumber || !this.props.user.phones[0]) && (
+                        <div className="form-group mb-24">
+                            <CustomInput
+                                defaultLabel={`${!this.props.user.phones[0] ? '' : 'New'} Phone Number`}
+                                inputValue={this.state.newPhone}
+                                label={`${!this.props.user.phones[0] ? '' : 'New'} Phone Number`}
+                                placeholder="+6281902912921"
+                                type="text"
+                                labelVisible
+                                classNameLabel="white-text text-sm"
+                                handleChangeInput={(e) => this.setState({ newPhone: e })}
+                            />
+                        </div>
+                    )}
+
                     <div className="form-group mb-24">
                         <label className="white-text text-sm ">Verification Code</label>
                         <div className="d-flex align-items-center">
                             <CustomInput
-                                defaultLabel=""
                                 inputValue={this.state.confirmationCode}
                                 label=""
+                                defaultLabel=""
                                 placeholder="_____"
                                 type="text"
                                 labelVisible={false}
@@ -341,16 +380,47 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                 classNameGroup="mb-0 w-100"
                                 handleChangeInput={(e) => this.setState({ confirmationCode: e })}
                             />
-                            <button className="btn btn-primary ml-2 text-nowrap">Send Code</button>
+                            <button
+                                type="submit"
+                                disabled={this.disabledButton()}
+                                onClick={this.handleSendCodePhone}
+                                className="btn btn-primary ml-2 text-nowrap">
+                                {(!this.state.isChangeNumber && this.state.phone[0]) || this.state.resendCodeActive
+                                    ? 'Resend Code'
+                                    : 'Send Code'}
+                            </button>
                         </div>
+
+                        <p
+                            className={`text-right text-xs cursor-pointer ${
+                                this.state.timerActive ? 'white-text' : 'grey-text'
+                            }`}>
+                            {moment(this.state.seconds).format('mm:ss')}
+                        </p>
+
+                        {(!this.state.isChangeNumber || !this.props.user.phones[0]) && (
+                            <p
+                                onClick={() => {
+                                    this.setState({
+                                        isChangeNumber: !this.state.isChangeNumber,
+                                        timerActive: false,
+                                    });
+                                }}
+                                className="text-right white-text text-xs cursor-pointer">
+                                Change Phone
+                            </p>
+                        )}
                     </div>
+
                     <button
-                        type="submit"
+                        // type="submit"
+                        disabled={this.state.confirmationCode === '' && this.state.newPhone === '' ? true : false}
+                        onClick={this.handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
                         data-target="#change-phone"
                         data-dismiss="modal">
-                        Change
+                        {!this.props.user.phones[0] ? 'Add' : 'Change'}
                     </button>
                 </div>
             </React.Fragment>
@@ -360,13 +430,58 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
     public modalPhoneHeader = () => {
         return (
             <React.Fragment>
-                <h6 className="text-xl font-bold white-text mb-0">Change Phone Number</h6>
+                <h6 className="text-xl font-bold white-text mb-0">
+                    {!this.props.user.phones[0]
+                        ? 'Add Phone Number'
+                        : this.props.user.phones[0].validated_at === null && !this.state.isChangeNumber
+                        ? 'Veirify Phone Number'
+                        : this.props.user.phones[0] && this.state.isChangeNumber
+                        ? 'Change Phone Number'
+                        : ''}
+                </h6>
                 <ModalCloseIcon
                     className="cursor-pointer ml-4"
-                    onClick={() => this.setState({ showPhoneModal: false })}
+                    onClick={() => this.setState({ showPhoneModal: false, isChangeNumber: false })}
                 />
             </React.Fragment>
         );
+    };
+
+    // handle sendCode (POST)
+    public handleSendCodePhone = () => {
+        if (this.props.user.phones[0] && !this.state.isChangeNumber) {
+            this.props.resendCode({ phone_number: `+${this.state.phone[0].number}` });
+            this.setState({ timerActive: true, resendCodeActive: true });
+        } else {
+            this.props.sendCode({ phone_number: this.state.newPhone });
+            this.setState({ timerActive: true, resendCodeActive: true });
+        }
+    };
+
+    // handle submit change  add phone
+    public handleChangePhone = () => {
+        if (this.props.user.phones[0] && !this.state.isChangeNumber) {
+            verifyPhone({
+                phone_number: `+${this.state.phone[0].number}`,
+                verification_code: this.state.confirmationCode,
+            });
+        } else {
+            verifyPhone({ phone_number: this.state.newPhone, verification_code: this.state.confirmationCode });
+        }
+    };
+
+    public disabledButton = () => {
+        if (this.state.phone[0] && !this.state.isChangeNumber) {
+            return false;
+        }
+
+        if (this.state.timerActive) {
+            return true;
+        }
+
+        if (this.state.newPhone === '') {
+            return true;
+        }
     };
     // **END PHONE NUMBER PUBLIC FUNCTION
 
@@ -561,6 +676,9 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispa
     changePasswordFetch: (credentials) => dispatch(changePasswordFetch(credentials)),
     fetchCurrentPasswordEntropy: (payload) => dispatch(entropyPasswordFetch(payload)),
     toggle2faFetch: (payload) => dispatch(toggle2faFetch(payload)),
+    sendCode: (payload) => dispatch(sendCode(payload)),
+    verifyPhone: (payload) => dispatch(verifyPhone(payload)),
+    resendCode: (payload) => dispatch(resendCode(payload)),
 });
 
 export const Security = compose(

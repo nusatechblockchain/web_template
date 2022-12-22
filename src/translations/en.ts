@@ -899,6 +899,7 @@ export const en = {
     'resource.phone.exists': 'Phone number was not verified. Verification code was resent.',
     'resource.phone.number_exist': 'Phone number already exists',
     'resource.phone.verification_invalid': 'Phone is not found or verification code is invalid',
+    'resource.phone.too_many_unverified': 'Too many unverified phone numbers',
     'resource.documents.limit_reached': 'Maximum number of documents already reached',
     'resource.documents.limit_will_be_reached': 'Documents amount will reach limit by this upload',
     'resource.otp.already_enabled': '2FA has been already enabled for this account',

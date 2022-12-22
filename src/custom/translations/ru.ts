@@ -908,6 +908,7 @@ export const ru: LangType = {
     'resource.phone.exists': 'Номер телефона уже существует',
     'resource.phone.number_exist': 'Номер телефона уже существует',
     'resource.phone.verification_invalid': 'Телефон не найден или код подтверждения недействителен',
+    'resource.phone.too_many_unverified': 'Слишком много неподтвержденных номеров телефонов',
     'resource.documents.limit_reached': 'Достигнуто максимальное количество документов',
     'resource.documents.limit_will_be_reached': 'Количество документов достигнет предела при этой загрузке',
     'resource.otp.already_enabled': '2FA уже включен для этого аккаунта',
