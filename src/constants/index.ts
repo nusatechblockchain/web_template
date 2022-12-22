@@ -1,7 +1,7 @@
 import { AbilitiesInterface, Wallet } from 'src/modules';
 import { API_URL } from '../config';
 
-export const PG_TITLE_PREFIX = 'Crypto Exchange';
+export const PG_TITLE_PREFIX = 'Heaven Exchange';
 
 export const pgRoutes = (isLoggedIn: boolean, abilities: AbilitiesInterface, isLight?: boolean): string[][] => {
     const routes = [
@@ -20,7 +20,7 @@ export const pgRoutes = (isLoggedIn: boolean, abilities: AbilitiesInterface, isL
         ['page.header.navbar.api', '/docs', `api${isLight ? 'Light' : ''}`],
     ];
 
-    return isLoggedIn ? routes.filter(i => Boolean(i)) : routesUnloggedIn;
+    return isLoggedIn ? routes.filter((i) => Boolean(i)) : routesUnloggedIn;
 };
 
 export const DEFAULT_WALLET: Wallet = {
@@ -29,7 +29,7 @@ export const DEFAULT_WALLET: Wallet = {
     balance: '',
     type: 'coin',
     fixed: 0,
-    networks: [{blockchain_key: '', fee: 0, protocol: ''}],
+    networks: [{ blockchain_key: '', fee: 0, protocol: '' }],
     account_type: '',
 };
 

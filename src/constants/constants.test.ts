@@ -18,7 +18,7 @@ describe('Constants', () => {
     ];
 
     it('Rendering correct title prefix', () => {
-        expect(PG_TITLE_PREFIX).toBe('Crypto Exchange');
+        expect(PG_TITLE_PREFIX).toBe('Heaven Exchange');
     });
 
     it('Rendering correct correct routes if user is not logged in', () => {

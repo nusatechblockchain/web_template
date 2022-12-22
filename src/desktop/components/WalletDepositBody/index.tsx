@@ -8,21 +8,16 @@ import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWalle
 import { DEFAULT_WALLET } from 'src/constants';
 import './WalletDepositBody.pcss';
 import { useWalletsFetch } from 'src/hooks';
-import { QRCode, Tooltip, Decimal, Table } from '../../../components';
+import { QRCode, Decimal, Table } from '../../../components';
 import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
-import { Modal, OverlayTrigger } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { TipIcon } from 'src/assets/images/TipIcon';
 
 const WalletDepositBody = () => {
     useWalletsFetch();
-    const [active, setActive] = useState('');
-    const [tab, setTab] = useState('');
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
     const intl = useIntl();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -32,6 +27,20 @@ const WalletDepositBody = () => {
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
+    const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencyItem: Currency | any = (currencies && currencies.find((item) => item.id === wallet.currency)) || {
+        min_confirmations: 6,
+        deposit_enabled: false,
+    };
+
+    const [active, setActive] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.protocol : '');
+    const [tab, setTab] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.blockchain_key : '');
+    const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const label = React.useMemo(
         () => intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.address' }),
         [intl]
@@ -40,12 +49,6 @@ const WalletDepositBody = () => {
     const doCopy = (text: string) => {
         copy(text);
         dispatch(alertPush({ message: ['Link has been copied'], type: 'success' }));
-    };
-
-    const currencies: Currency[] = useSelector(selectCurrencies);
-    const currencyItem: Currency | any = (currencies && currencies.find((item) => item.id === wallet.currency)) || {
-        min_confirmations: 6,
-        deposit_enabled: false,
     };
 
     const blockchain = (active && currencyItem && currencyItem.networks.find((n) => n.protocol === active)) || {
@@ -61,11 +64,28 @@ const WalletDepositBody = () => {
             wallet.deposit_addresses.find((w) => w.blockchain_key.toLowerCase() === blockchainKey.toLowerCase())) ||
         null;
 
+    useEffect(() => {
+        setActive(currencyItem?.networks ? currencyItem?.networks[0]?.blockchain_key?.toUpperCase() : '');
+        setCurrentTabIndex(0);
+    }, [wallet.currency]);
+
     const handleGenerateAddress = (e) => {
         e.preventDefault();
-        console.log('test handle generate');
-
-        dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
+        if (
+            depositAddress &&
+            depositAddress.address === null &&
+            wallets.length &&
+            wallet.type !== 'fiat' &&
+            currencyItem?.networks &&
+            blockchain?.status !== ' disabled' &&
+            active?.toLowerCase() === blockchain?.blockchain_key?.toLowerCase()
+        ) {
+            dispatch(walletsAddressFetch({ currency: 'eth', blockchain_key: tab }));
+            //     console.log('test');
+        }
+        // else {
+        //     console.log('test lagi');
+        // }
     };
 
     const buttonLabel = `${intl.formatMessage({
@@ -140,6 +160,7 @@ const WalletDepositBody = () => {
             setActive(
                 currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
             );
+
             setTab(
                 currencyItem &&
                     currencyItem.networks &&
@@ -148,7 +169,7 @@ const WalletDepositBody = () => {
             );
         }
 
-        console.log(currencyItem, 'INI CURRENCY');
+        // console.log(currencyItem, 'INI CURRENCY');
         console.log(depositAddress, 'INI DEPOSIT ADDRESS');
         // console.log(wallet, 'WALLET');
     }, [depositAddress, currencyItem, active, wallet]);
@@ -251,12 +272,12 @@ const WalletDepositBody = () => {
 
                             {depositAddress && depositAddress.address === null && (
                                 <button
-                                    onClick={handleGenerateAddress}
+                                    onClick={(e) => handleGenerateAddress(e)}
+                                    className="w-100 btn-primary cursor-pointer"
                                     disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
-                                    className="w-100 btn-primary"
                                     type="button">
                                     {depositAddress && depositAddress.state === 'pending'
-                                        ? 'Waiting Confirmation'
+                                        ? 'Waiting Confitmation'
                                         : buttonLabel
                                         ? buttonLabel
                                         : 'Generate deposit address'}

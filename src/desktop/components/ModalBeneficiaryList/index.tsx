@@ -5,12 +5,14 @@ import { useHistory, useParams } from 'react-router';
 import { Modal, ModalAddBeneficiary } from '../../components';
 import { Link } from 'react-router-dom';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
+import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
 import './ModalBeneficiaryList.pcss';
 import { TrashIcon } from 'src/assets/images/TrashIcon';
 
 export interface ModalBeneficiaryListProps {
     showModalBeneficiaryList: boolean;
     showModalAddBeneficiary: boolean;
+    blockchainKey: string;
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
@@ -19,6 +21,16 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalBeneficiaryList);
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
     const { currency = '' } = useParams<{ currency?: string }>();
+
+    const currencies = useSelector(selectCurrencies);
+    const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
+    const currencyItem: Currency = currencies.find((item) => item.id === currency);
+    const blockchainItem: BlockchainCurrencies = currencyItem?.networks.find(
+        (item) => item.blockchain_key === props.blockchainKey
+    );
+    const estimatedValueFee = +currencyItem?.price * +blockchainItem?.withdraw_fee;
+
+    console.log(blockchainItem, 'ESTIMATED');
 
     const renderHeaderBeneficiaryList = () => {
         return (
@@ -49,23 +61,35 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                             <p className="mb-2 text-sm grey-text-accent text-right">$10,095.35</p>
                         </div>
                     </div>
-                    <div className="d-flex justify-content-between">
-                        <div className="beneficery-address pr-2">
-                            <p className="text-ms white-text mb-1">My Address</p>
-                            <p className="text-sm grey-text-accent">0x3bb112e9ae6235ccfd67697ee6ad47c428ff75e0</p>
-                        </div>
-                        <div className="beneficery-name pr-2">
-                            <p className="text-ms white-text mb-1">Beneficiary Name</p>
-                            <p className="text-sm grey-text-accent">Addesskuuu</p>
-                        </div>
-                        <div className="beneficery-name pr-2">
-                            <p className="text-ms white-text mb-1">Full name</p>
-                            <p className="text-sm grey-text-accent">Ini Addresku</p>
-                        </div>
-                        <button className="btn btn-transparent w-auto cursor-pointer">
-                            <TrashIcon />
-                        </button>
-                    </div>
+
+                    <table>
+                        <thead>
+                            <th className="text-ms white-text mb-1 pr-2">My address</th>
+                            <th className="text-ms white-text mb-1 pr-2">Beneficiary Name</th>
+                            <th className="text-ms white-text mb-1 pr-2">Full Name</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            {!beneficiaries[0] ? (
+                                <tr>
+                                    <td rowSpan={4}>No address yet</td>
+                                </tr>
+                            ) : (
+                                beneficiaries.map((el, i) => (
+                                    <tr key={i}>
+                                        <td className="text-sm grey-text-accent pr-2">
+                                            {el && el.data && el.data.address}
+                                        </td>
+                                        <td className="text-sm grey-text-accent pr-2">{el && el.name}</td>
+                                        <td className="text-sm grey-text-accent pr-2">{el && el.name}</td>
+                                        <button className="btn btn-transparent w-auto cursor-pointer">
+                                            <TrashIcon />
+                                        </button>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                     <div className="d-flex justify-content-center">
                         <button
                             onClick={() => {
