@@ -129,8 +129,6 @@ const MarketsTableComponent = (props) => {
               }))
         : [];
 
-    console.log(formattedMarkets);
-
     const popularMarket = [...formattedMarkets].sort((a, b) => b.price - a.price);
     const topPopular = popularMarket.slice(0, 10);
 

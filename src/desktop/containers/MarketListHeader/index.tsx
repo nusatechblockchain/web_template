@@ -38,7 +38,6 @@ export const MarketListHeader: FC = (): ReactElement => {
     const dataHighlight = marketList.sort(
         (a, b) => +b.currency && +b.currency.price - +a.currency && +a.currency.price
     );
-    console.log(marketList);
 
     return (
         <React.Fragment>

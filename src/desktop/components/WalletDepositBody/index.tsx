@@ -23,10 +23,8 @@ const WalletDepositBody = () => {
     const history = useHistory();
     const user = useSelector(selectUserInfo);
     const wallets = useSelector(selectWallets) || [];
-
     const { currency = '' } = useParams<{ currency?: string }>();
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
-
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -58,7 +56,6 @@ const WalletDepositBody = () => {
     };
 
     const blockchainKey = blockchain && blockchain.blockchain_key;
-
     const minDepositAmount = (blockchain && blockchain.min_deposit_amount) || '0';
 
     const depositAddress =
@@ -236,7 +233,7 @@ const WalletDepositBody = () => {
                                         id: 'page.body.wallets.tabs.deposit.ccy.message.button',
                                     })}
                                     error={error}
-                                    handleGenerateAddress={() => handleGenerateAddress}
+                                    handleGenerateAddress={(e) => handleGenerateAddress(e)}
                                     handleOnCopy={handleOnCopy}
                                     text={text}
                                     wallet={wallet}
@@ -262,7 +259,10 @@ const WalletDepositBody = () => {
                                                         active === network.protocol ? 'active' : ''
                                                     }`}
                                                     key={network.blockchain_key}
-                                                    onClick={() => setActive(network.protocol)}>
+                                                    onClick={() => {
+                                                        setActive(network.protocol);
+                                                        setTab(network.blockchain_key);
+                                                    }}>
                                                     <div className="nav-link">{network.protocol}</div>
                                                 </li>
                                             ))}
