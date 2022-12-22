@@ -25,7 +25,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     const marketTickers = useSelector(selectMarketTickers);
     const isLogin = useSelector(selectUserLoggedIn);
     const [favorite, setFavorite] = useState(false);
-    const [favoriteMarket, setFavoriteMarket] = React.useState([]);
+    const [favoriteMarket, setFavoriteMarket] = React.useState(JSON.parse(localStorage.getItem('favourites') || '[]'));
 
     useEffect(() => {
         setFavoriteMarket(JSON.parse(localStorage.getItem('favourites') || '[]'));
