@@ -6,14 +6,19 @@ import { Link } from 'react-router-dom';
 import './ModalAddBeneficiary.pcss';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
+import { DEFAULT_WALLET } from '../../../constants';
 import { Modal, CustomInput } from '..';
-import { CustomStylesSelect } from '../../components';
+import { CustomStylesSelect, ModalBeneficiaryList } from '../../components';
+import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
-import { beneficiariesCreate, BeneficiaryBank, selectCurrencies } from '../../../modules';
+import { useWalletsFetch } from '../../../hooks';
+import { beneficiariesCreate, BeneficiaryBank, selectCurrencies, selectWallets, Wallet } from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
     showModalAddBeneficiary: boolean;
+    showModalBeneficiaryList?: boolean;
+    onClose: () => void;
 }
 
 const defaultSelected = {
@@ -26,17 +31,20 @@ const defaultSelected = {
 };
 
 export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryProps> = (props) => {
+    useWalletsFetch();
     const intl = useIntl();
     const history = useHistory();
     const dispatch = useDispatch();
-
     const { formatMessage } = useIntl();
     const { currency = '' } = useParams<{ currency?: string }>();
+
     const currencies = useSelector(selectCurrencies);
+    const wallets = useSelector(selectWallets);
     const currencyItem = currencies.find((item) => item.id === currency);
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
+    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalAddBeneficiary);
     const [coinAddress, setCoinAddress] = React.useState('');
     const [coinAddressValid, setCoinAddressValid] = React.useState(false);
     const [coinBlockchainName, setCoinBlockchainName] = React.useState(defaultSelected);
@@ -62,6 +70,11 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
     const [fiatBankSwiftCodeFocused, setFiatBankSwiftCodeFocused] = React.useState(false);
     const [fiatIntermediaryBankNameFocused, setFiatIntermediaryBankNameFocused] = React.useState(false);
     const [fiatIntermediaryBankSwiftCodeFocused, setFiatIntermediaryBankSwiftCodeFocused] = React.useState(false);
+
+    const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
+
+    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
     const handleClearModalsInputs = React.useCallback(() => {
         setCoinAddress('');
@@ -217,8 +230,15 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
         dispatch(beneficiariesCreate(payload));
         handleClearModalsInputs();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setShowModalAddBeneficiary(!showModalAddBeneficiary);
+        setShowModalBeneficiaryList(!showModalBeneficiaryList);
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
+
+    const disabledButton = () => {
+        if (coinAddress && coinBeneficiaryName === '' && !currency) {
+            return true;
+        }
+    };
 
     const optionNetworks =
         currencyItem &&
@@ -242,9 +262,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                     className="com-modal-add-beneficiary-header
                  d-flex justify-content-between align-items-center w-100">
                     <h6 className="text-xl font-bold white-text mb-0">Withdraw Crypto</h6>
-                    <span
-                        onClick={() => setShowModalAddBeneficiary(!showModalAddBeneficiary)}
-                        className="cursor-pointer">
+                    <span onClick={props.onClose} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>
@@ -264,7 +282,12 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                             </div>
                             <div className="ml-2">
                                 <p className="mb-2 text-sm grey-text text-right">10075.56213968 USDT</p>
-                                <p className="mb-2 text-sm grey-text-accent text-right">$10,095.35</p>
+                                <p className="mb-2 text-sm grey-text-accent text-right">
+                                    ${' '}
+                                    <Decimal fixed={selectedFixed} thousSep=",">
+                                        {balance}
+                                    </Decimal>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -333,6 +356,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                         </div>
 
                         <button
+                            disabled={disabledButton()}
                             onClick={handleSubmitAddAddressCoinModal}
                             type="button"
                             className="btn btn-primary btn-block">
@@ -351,6 +375,13 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                     show={showModalAddBeneficiary}
                     header={renderHeaderModalAddBeneficiary()}
                     content={renderContentModalAddBeneficiary()}
+                />
+            )}
+
+            {showModalBeneficiaryList && (
+                <ModalBeneficiaryList
+                    showModalBeneficiaryList={showModalBeneficiaryList}
+                    onClose={() => setShowModalBeneficiaryList(false)}
                 />
             )}
         </React.Fragment>

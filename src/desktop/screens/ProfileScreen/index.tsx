@@ -351,16 +351,22 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                     </span>
                                                     <span
                                                         className={`d-block text-left text-xs  font-normal ${
-                                                            !user.phones[0] || user.phones[0].validated_at === null
+                                                            !user.phones[0] ||
+                                                            (user.phones &&
+                                                                user.phones[0] &&
+                                                                user.phones[0].validated_at === null)
                                                                 ? 'danger-text'
                                                                 : 'contrast-text'
                                                         }`}>
-                                                        {!user.phones[0] || user.phones[0].validated_at === null
+                                                        {!user.phones[0] ||
+                                                        (user.phones &&
+                                                            user.phones[0] &&
+                                                            user.phones[0].validated_at === null)
                                                             ? 'Unverified'
                                                             : 'Verified'}
                                                     </span>
                                                 </div>
-                                                {user.phones && user.phones[0] && (
+                                                {user.phones && user.phones[0] && user.phones[0].validated_at !== null && (
                                                     <div className="check">
                                                         <CheckIcon />
                                                     </div>

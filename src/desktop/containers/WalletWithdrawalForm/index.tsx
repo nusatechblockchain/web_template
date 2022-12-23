@@ -9,9 +9,11 @@ import { CustomStylesSelect, CustomInput, Modal, ModalAddBeneficiary, ModalBenef
 import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
-import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
+import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
+import { useBeneficiariesFetch } from '../../../hooks';
 
 export const WalletWithdrawalForm: React.FC = () => {
+    useBeneficiariesFetch();
     const intl = useIntl();
     const history = useHistory();
     const [showModalWithdrawalConfirmation, setShowModalWithdrawalConfirmation] = React.useState(false);
@@ -104,6 +106,8 @@ export const WalletWithdrawalForm: React.FC = () => {
         );
     };
 
+    console.log(beneficiaries, 'INI BENE');
+
     return (
         <React.Fragment>
             <div>
@@ -124,7 +128,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                     <div className="w-70 position-relative input-add-address">
                         <div
                             onClick={() =>
-                                beneficiaries[0]
+                                beneficiaries && beneficiaries[0]
                                     ? setShowModalBeneficiaryList(!showModalBeneficiaryList)
                                     : setShowModalModalAddBeneficiary(!showModalAddBeneficiary)
                             }>
@@ -204,12 +208,18 @@ export const WalletWithdrawalForm: React.FC = () => {
 
             {showModalBeneficiaryList && (
                 <ModalBeneficiaryList
+                    onClose={() => setShowModalBeneficiaryList(false)}
                     blockchainKey={''}
                     showModalBeneficiaryList={showModalBeneficiaryList}
                     showModalAddBeneficiary={showModalAddBeneficiary}
                 />
             )}
-            {showModalAddBeneficiary && <ModalAddBeneficiary showModalAddBeneficiary={showModalAddBeneficiary} />}
+            {showModalAddBeneficiary && (
+                <ModalAddBeneficiary
+                    onClose={() => setShowModalModalAddBeneficiary(false)}
+                    showModalAddBeneficiary={showModalAddBeneficiary}
+                />
+            )}
         </React.Fragment>
     );
 };

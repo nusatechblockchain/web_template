@@ -1,12 +1,20 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import './ModalInternalTransfer.pcss';
 import { Modal, CustomStylesSelect, CustomInput } from '../../components';
+import { Decimal } from '../../../components';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
-import { selectCurrencies, Currency } from '../../../modules';
+import {
+    selectCurrencies,
+    Currency,
+    createInternalTransfersFetch,
+    selectInternalTransfersCreateSuccess,
+    selectWallets,
+    selectUserInfo,
+} from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalTransferShowProps {
@@ -16,16 +24,57 @@ export interface ModalTransferShowProps {
 export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowProps> = (props) => {
     const intl = useIntl();
     const history = useHistory();
+    const dispatch = useDispatch();
+    const { currency = '' } = useParams<{ currency?: string }>();
+
+    const wallets = useSelector(selectWallets);
+    const user = useSelector(selectUserInfo);
+    const transferSuccess = useSelector(selectInternalTransfersCreateSuccess);
+
     const [showModalTransfer, setShowModalTransfer] = React.useState(props.showModalTransfer);
     const [showModalTransferConfirmation, setShowModalTransferConfirmation] = React.useState(false);
     const [showModalTransferSuccessfully, setShowModalTransferSuccessfully] = React.useState(false);
-    const [cur, setCur] = React.useState('');
+
     const [amount, setAmount] = React.useState('');
     const [uid, setUid] = React.useState('');
     const [otp, setOtp] = React.useState('');
-    const { currency = '' } = useParams<{ currency?: string }>();
 
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const wallet = wallets.length && wallets.find((item) => item.currency.toLowerCase() === currency.toLowerCase());
+    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const selectedFixed = (wallet || { fixed: 0 }).fixed;
+
+    console.log(wallet, 'ini wallet');
+
+    const handleChangeAmount = (value) => {
+        setAmount(value);
+    };
+
+    const handleChangeOtp = (value) => {
+        setOtp(value);
+    };
+
+    const handleChangeUid = (value) => {
+        setUid(value);
+    };
+
+    const handleCreateTransfer = () => {
+        const payload = {
+            currency: currency.toLowerCase(),
+            username_or_uid: uid,
+            amount,
+            otp,
+        };
+
+        dispatch(createInternalTransfersFetch(payload));
+    };
+
+    React.useEffect(() => {
+        if (transferSuccess) {
+            setShowModalTransferConfirmation(!showModalTransferConfirmation);
+            setShowModalTransferSuccessfully(!showModalTransferSuccessfully);
+        }
+    }, [transferSuccess]);
 
     const optionCurrency = currencies.map((item) => {
         const customLabel = (
@@ -70,8 +119,8 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 label={'Enter a valid UID of a user you want to transfer money'}
                                 placeholder={'Enter UID'}
                                 defaultLabel={'Enter a valid UID of a user you want to transfer money'}
-                                // handleChangeInput={handleChangeNewPassword}
-                                inputValue={''}
+                                handleChangeInput={handleChangeUid}
+                                inputValue={uid}
                                 // handleFocusInput={}
                                 classNameLabel="text-ms white-text mb-8"
                                 classNameInput={`dark-bg-accent`}
@@ -90,7 +139,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                     })}
                                     styles={CustomStylesSelect}
                                     options={optionCurrency}
-                                    onChange={(e) => setCur(e.value)}
                                 />
                             </div>
                         </div>
@@ -101,8 +149,8 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 label={'Input Ammount to send'}
                                 placeholder={'Input Amount'}
                                 defaultLabel={'Input Ammount to send'}
-                                // handleChangeInput={handleChangeNewPassword}
-                                inputValue={''}
+                                handleChangeInput={handleChangeAmount}
+                                inputValue={amount}
                                 // handleFocusInput={}
                                 classNameLabel="text-ms white-text mb-8"
                                 classNameInput={`dark-bg-accent`}
@@ -117,7 +165,13 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 <p className="mb-2 text-sm white-text">Balance</p>
                             </div>
                             <div className="ml-2">
-                                <p className="mb-2 text-sm grey-text">0 BTC</p>
+                                <p className="mb-2 text-sm grey-text">
+                                    {' '}
+                                    <Decimal fixed={selectedFixed} thousSep=",">
+                                        {balance}
+                                    </Decimal>{' '}
+                                    {currency.toUpperCase()}
+                                </p>
                                 <p className="mb-2 text-sm grey-text-accent">$ 0</p>
                             </div>
                         </div>
@@ -128,8 +182,8 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 label={'Enter 2FA Code'}
                                 placeholder={'2FA Code'}
                                 defaultLabel={'Enter 2FA Code'}
-                                // handleChangeInput={handleChangeNewPassword}
-                                inputValue={''}
+                                handleChangeInput={handleChangeOtp}
+                                inputValue={otp}
                                 // handleFocusInput={}
                                 classNameLabel="text-ms white-text mb-8"
                                 classNameInput={`dark-bg-accent`}
@@ -165,7 +219,8 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
         return (
             <React.Fragment>
                 <p className="text-ms grey-text-accent font-semibold mb-24">
-                    Are you sure to transfer 0.002 BTC to another User? Please check UID of user you want to transfer
+                    Are you sure to transfer {amount} {currency.toUpperCase()} to another User? Please check UID of user
+                    you want to transfer
                 </p>
                 <div className="d-flex">
                     <button
@@ -173,12 +228,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                         onClick={() => setShowModalTransferConfirmation(!showModalTransferConfirmation)}>
                         Cancel
                     </button>
-                    <button
-                        className="btn btn-success sm px-5"
-                        onClick={() => {
-                            setShowModalTransferConfirmation(!showModalTransferConfirmation);
-                            setShowModalTransferSuccessfully(!showModalTransferSuccessfully);
-                        }}>
+                    <button className="btn btn-success sm px-5" onClick={handleCreateTransfer}>
                         Continue
                     </button>
                 </div>
@@ -198,7 +248,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
         return (
             <React.Fragment>
                 <p className="text-ms grey-text-accent font-semibold mb-24">
-                    You success to transfer 0.002 BTC to UID A2135123
+                    You success to transfer {amount} {currency.toUpperCase()} to UID {uid}
                 </p>
                 <div className="d-flex">
                     <button

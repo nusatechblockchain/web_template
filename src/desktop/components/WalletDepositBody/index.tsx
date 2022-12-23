@@ -71,19 +71,16 @@ const WalletDepositBody = () => {
 
     const handleGenerateAddress = (e) => {
         e.preventDefault();
-        if (
-            depositAddress &&
-            depositAddress.address === null &&
-            wallets.length &&
-            wallet.type !== 'fiat' &&
-            currencyItem?.networks &&
-            blockchain?.status !== ' disabled' &&
-            active?.toLowerCase() === blockchain?.blockchain_key?.toLowerCase()
-        ) {
-            dispatch(walletsAddressFetch({ currency: 'eth', blockchain_key: tab }));
-        }
-        // else {
-        //     console.log('test lagi');
+        // if (
+        //     depositAddress &&
+        //     depositAddress.address === null &&
+        //     wallets.length &&
+        //     wallet.type !== 'fiat' &&
+        //     currencyItem?.networks &&
+        //     blockchain?.status !== ' disabled' &&
+        //     active?.toLowerCase() === blockchain?.blockchain_key?.toLowerCase()
+        // ) {
+        dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
         // }
     };
 
@@ -167,6 +164,10 @@ const WalletDepositBody = () => {
                     currencyItem.networks[0].blockchain_key
             );
         }
+
+        console.log(depositAddress, 'DEPOSIT ADDRESS');
+        console.log(currencyItem, 'CURRENCY ITEM');
+        console.log(wallet, 'WALLET');
     }, [depositAddress, currencyItem, active, wallet]);
 
     const renderDeposit = useMemo(() => {
@@ -265,7 +266,7 @@ const WalletDepositBody = () => {
                                 </div>
                             </div>
 
-                            {depositAddress && depositAddress.address === null && (
+                            {(depositAddress || (depositAddress && depositAddress.address === null)) && (
                                 <button
                                     onClick={(e) => handleGenerateAddress(e)}
                                     className="w-100 btn-primary cursor-pointer"

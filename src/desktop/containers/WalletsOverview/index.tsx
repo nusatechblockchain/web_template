@@ -164,6 +164,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
               });
     }, [filteredWallets, nonZeroSelected, abilities, currencies, markets, tickers]);
 
+    console.log(filteredWallets, 'Ini filterred wallet');
+
     const renderHeaderModalLocked = () => {
         return (
             <React.Fragment>
