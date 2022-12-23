@@ -5,7 +5,7 @@ const OpenOrdersComponent = (props) => {
     return (
         <React.Fragment>
             <div className="max-400">
-                <div className="d-flex justify-content-between dark-bg-main sort-filter">
+                <div className="d-flex justify-content-between dark-bg-accent sort-filter">
                     <p className="white-text font-bold text-sm">Open orders</p>
                     <div className="filter">
                         <div className="d-flex align-items-center">
@@ -33,14 +33,14 @@ const OpenOrdersComponent = (props) => {
                     style={{ width: '100%' }}>
                     <thead className="open-order-table">
                         <tr>
-                            <th className="grey-text-accent">Date</th>
-                            <th className="grey-text-accent">Market</th>
-                            <th className="grey-text-accent">Type</th>
-                            <th className="grey-text-accent">Price</th>
-                            <th className="grey-text-accent">Volume</th>
-                            <th className="grey-text-accent">Exceute</th>
-                            <th className="grey-text-accent">Unexceute</th>
-                            <th className="grey-text-accent content-right">Status</th>
+                            <th className="grey-text-accent dark-bg-accent">Date</th>
+                            <th className="grey-text-accent dark-bg-accent">Market</th>
+                            <th className="grey-text-accent dark-bg-accent">Type</th>
+                            <th className="grey-text-accent dark-bg-accent">Price</th>
+                            <th className="grey-text-accent dark-bg-accent">Volume</th>
+                            <th className="grey-text-accent dark-bg-accent">Exceute</th>
+                            <th className="grey-text-accent dark-bg-accent">Unexceute</th>
+                            <th className="grey-text-accent dark-bg-accent content-right">Status</th>
                         </tr>
                     </thead>
                     <tbody>

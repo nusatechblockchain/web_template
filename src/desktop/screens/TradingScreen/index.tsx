@@ -5,7 +5,7 @@ export const TradingScreen: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="market-trade-screen">
-                <div className="content-wrapper no-sidebar dark-bg-main pb-5">
+                <div className="content-wrapper no-sidebar dark-bg-accent pb-5">
                     <div className="px-24 pt-1">
                         <div className="grid-wrapper">
                             <div className="grid-item order-book">

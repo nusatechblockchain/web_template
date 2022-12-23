@@ -48,7 +48,7 @@ class FooterContainer extends React.Component<Props, State> {
         const { isLoggedIn, lang } = this.props;
         return (
             <React.Fragment>
-                <footer className="dark-bg-main pt-5">
+                <footer className=" pt-5">
                     <div className="container pb-5">
                         <div className="d-flex justify-content-between flex-wrap">
                             <div className="name px-3">

@@ -85,10 +85,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
             if (dataUser) {
                 const payload = {
                     ...user,
-                    data: JSON.stringify({
-                        ...dataUser,
-                        favorite: [...dataMarket, { dataMarket }],
-                    }),
+                    data: JSON.stringify({ ...dataUser, dataMarket }),
                 };
                 dispatch(changeUserDataFetch({ user: payload }));
             }
