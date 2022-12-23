@@ -1,15 +1,10 @@
-import cx from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { useReduxSelector } from '../../../hooks';
-import { selectMobileDeviceState } from '../../../modules';
 import './Lost2FAStep.pcss';
-import bgImage from '../../../assets/png/background.png';
-import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
 import { InputFile } from '../../components';
-import lostImg from '../../../assets/png/lost-two-fa.svg';
+import lostImg from '../../../../public/img/lost-two-fa.svg';
 
 interface StepElement {
     stepOne: boolean;
@@ -22,9 +17,6 @@ interface StepElement {
 type Props = StepElement;
 
 export const Lost2FAStep: React.FC<Props> = (props: Props): React.ReactElement => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const { formatMessage } = useIntl();
     const { stepOne, stepTwo, stepThree, handleNextStep, handleSubmit } = props;
 
     return (

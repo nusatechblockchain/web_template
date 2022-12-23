@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { CloseButton } from 'react-bootstrap';
 
 export interface ModalProps {
     /**

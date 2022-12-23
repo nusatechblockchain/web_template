@@ -1,8 +1,6 @@
-import React, { FC, ReactElement, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies, Currency } from 'src/modules';
+import React, { useState } from 'react';
+import { Currency } from 'src/modules';
 import { Link } from 'react-router-dom';
-import { BtcIcon } from 'src/assets/images/CoinIcon';
 import { CustomInput } from 'src/desktop/components';
 import './MarketDetailCalculator.pcss';
 

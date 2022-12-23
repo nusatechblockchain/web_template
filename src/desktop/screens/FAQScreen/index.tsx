@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { useDocumentTitle } from 'src/hooks';
-import Background from '../../../assets/png/background.png';
+import Background from '../../../../public/img/background.png';
 import { Logo } from '../../../assets/images/Logo';
 
 export const FAQScreen: FC = (): ReactElement => {

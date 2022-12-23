@@ -19,7 +19,7 @@ import {
     logoutFetch,
 } from '../../../modules';
 import { Logo } from '../../../assets/images/Logo';
-import ProfileAvatar from '../../../assets/png/avatar.png';
+import ProfileAvatar from '../../../../public/img/avatar.png';
 import { IndonesianFlag, AmericanFlag, ChinaFlag, KoreaFlag } from '../../../assets/images/Flags';
 import { Api, Dashboard, Logout, Referral, Security, Setting, Wallet } from '../../../assets/images/ProfileDropdown';
 import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';
@@ -181,7 +181,10 @@ class Head extends React.Component<Props, HeaderState> {
 
         return (
             <React.Fragment>
-                <nav className="navbar navbar-expand-lg dark-bg-main py-2 px-24">
+                <nav
+                    className={`navbar navbar-expand-lg py-2 px-24 ${
+                        thisTradingHeader ? 'dark-bg-accent' : 'dark-bg-main'
+                    }`}>
                     <Link to="/" className="navbar-brand">
                         <Logo />
                     </Link>
@@ -369,7 +372,6 @@ class Head extends React.Component<Props, HeaderState> {
                                     )}
                                 </li>
                             ) : (
-                                // Sign In and Sign Up
                                 <React.Fragment>
                                     <li className="nav-item dropdown avatar px-3">
                                         <Link to={'/signin'} className="gradient-text text-sm font-bold mr-3">

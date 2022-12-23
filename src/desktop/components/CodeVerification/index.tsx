@@ -1,5 +1,4 @@
-import classnames from 'classnames';
-import React, { FC, ReactElement, useCallback } from 'react';
+import React, { FC, ReactElement } from 'react';
 
 export interface CodeVerificationProps {
     placeholder: string;

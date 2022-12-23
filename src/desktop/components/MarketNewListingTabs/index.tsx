@@ -12,7 +12,6 @@ const defaultTicker = {
     high: '0.0',
     open: '0.0',
     low: '0.0',
-    // price_change_percent: '+0.00%',
     volume: '0.0',
 };
 
@@ -28,7 +27,6 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
             ...market,
             last: Decimal.format(Number((marketTickers[market.id] || defaultTicker).last), market.amount_precision),
             open: Decimal.format(Number((marketTickers[market.id] || defaultTicker).open), market.price_precision),
-            // price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
             high: Decimal.format(Number((marketTickers[market.id] || defaultTicker).high), market.amount_precision),
             currency: currencies.find((cur) => cur.id == market.base_unit),
             volume: Decimal.format(Number((marketTickers[market.id] || defaultTicker).volume), market.price_precision),

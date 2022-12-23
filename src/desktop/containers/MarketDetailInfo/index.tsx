@@ -1,10 +1,8 @@
-import React, { FC, ReactElement } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { selectCurrencies, Currency } from 'src/modules';
 import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
-import { Link } from 'react-router-dom';
-import { BtcIcon } from 'src/assets/images/CoinIcon';
 import { InfoIcon } from 'src/assets/images/InfoIcon';
 import Select from 'react-select';
 import { CustomStylesSelect } from 'src/desktop/components';

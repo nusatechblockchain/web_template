@@ -1,5 +1,4 @@
-import cr from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { CustomInput, PasswordStrengthMeter } from '../';
@@ -16,9 +15,7 @@ import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
 import { ArrowDownIcon } from 'src/assets/images/ArrowDownIcon';
 import { ArrowUpIcon } from 'src/assets/images/ArrowUpIcon';
-import { ModalAddBeneficiary, ModalBeneficiaryList } from '../';
 import './SignUp.pcss';
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
 export interface SignUpFormProps {

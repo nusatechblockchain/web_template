@@ -38,7 +38,7 @@ import {
     signUp,
 } from '../../../modules';
 import './SignUpScreen.pcss';
-import bgAuth from '../../../assets/png/bg-auth2.png';
+import bgAuth from '../../../../public/img/bg-auth2.png';
 
 interface ReduxProps {
     requireVerification?: boolean;

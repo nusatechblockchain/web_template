@@ -1,9 +1,8 @@
-import React, { FC, ReactElement, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { FC, ReactElement } from 'react';
+import { useSelector } from 'react-redux';
 import { Decimal } from 'src/components';
-import { selectCurrencies, Market, selectMarkets, selectMarketTickers, setCurrentMarket } from 'src/modules';
+import { selectCurrencies, Market, selectMarkets, selectMarketTickers } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
-import { Link } from 'react-router-dom';
 import { CardMarket } from '../../components';
 import './MarketListHeader.pcss';
 

@@ -16,7 +16,7 @@ import {
     selectCurrentPasswordEntropy,
     selectMobileDeviceState,
 } from '../../../modules';
-import bgAuth from '../../../assets/png/bg-auth1.png';
+import bgAuth from '../../../../public/img/bg-auth1.png';
 
 interface ChangeForgottenPasswordState {
     confirmToken: string;

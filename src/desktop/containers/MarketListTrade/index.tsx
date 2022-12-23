@@ -3,14 +3,7 @@ import { useSelector } from 'react-redux';
 import { SearchIcon } from '../../../assets/images/ProfileIcon';
 import { Decimal } from '../../../components';
 import { useMarketsFetch, useMarketsTickersFetch } from '../../../hooks';
-import {
-    selectCurrencies,
-    selectMarketTickers,
-    MarketsTickersData,
-    Currency,
-    selectMarkets,
-    Market,
-} from '../../../modules';
+import { selectCurrencies, selectMarketTickers, selectMarkets } from '../../../modules';
 
 const defaultTicker = {
     amount: '0.0',

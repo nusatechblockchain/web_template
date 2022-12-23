@@ -23,7 +23,7 @@ import {
     selectRecaptchaSuccess,
 } from '../../../modules';
 import { CommonError } from '../../../modules/types';
-import bgAuth from '../../../assets/png/bg-auth1.png';
+import bgAuth from '../../../../public/img/bg-auth1.png';
 
 interface ReduxProps {
     success: boolean;

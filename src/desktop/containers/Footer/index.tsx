@@ -2,7 +2,7 @@ import { History } from 'history';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
-import { Link, RouteProps, withRouter } from 'react-router-dom';
+import { RouteProps, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import {
     changeLanguage,
@@ -48,7 +48,7 @@ class FooterContainer extends React.Component<Props, State> {
         const { isLoggedIn, lang } = this.props;
         return (
             <React.Fragment>
-                <footer className="dark-bg-main pt-5">
+                <footer className=" pt-5">
                     <div className="container pb-5">
                         <div className="d-flex justify-content-between flex-wrap">
                             <div className="name px-3">

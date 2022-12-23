@@ -2,11 +2,10 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps } from 'react-router';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { History } from 'history';
 import { compose } from 'redux';
 import { ModalComingSoon } from '../../../components';
-import { IntlProps } from '../../../';
 import {
     Market,
     RootState,
@@ -90,7 +89,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <UserIcon
                             strokeColor={
-                                localStorage.getItem("sidebar") === 'Dashboard'
+                                localStorage.getItem('sidebar') === 'Dashboard'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -104,7 +103,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <WalletIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'Wallet'
+                                localStorage.getItem('sidebar') === 'Wallet'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -118,7 +117,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <AnalysIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'Market Order'
+                                localStorage.getItem('sidebar') === 'Market Order'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -132,7 +131,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <CalendarIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'Trade History'
+                                localStorage.getItem('sidebar') === 'Trade History'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -146,7 +145,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <SecurityIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'Security'
+                                localStorage.getItem('sidebar') === 'Security'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -160,7 +159,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <AddUserIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'Referral'
+                                localStorage.getItem('sidebar') === 'Referral'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -174,7 +173,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <ApiIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'API Management'
+                                localStorage.getItem('sidebar') === 'API Management'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -188,7 +187,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <AnnouncementIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'Announcement'
+                                localStorage.getItem('sidebar') === 'Announcement'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -202,7 +201,7 @@ class Side extends React.Component<Props, SidebarState> {
                     icon: (
                         <FaqIcon
                             fillColor={
-                                localStorage.getItem("sidebar") === 'FAQ'
+                                localStorage.getItem('sidebar') === 'FAQ'
                                     ? 'var(--text-primary-color)'
                                     : 'var(--text-secondary-color)'
                             }
@@ -236,7 +235,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         if (el.comingsoon) {
                                             this.setState({ showModalComingSoon: !this.state.showModalComingSoon });
                                         } else {
-                                            localStorage.setItem("sidebar", el.name)
+                                            localStorage.setItem('sidebar', el.name);
                                             this.props.history.push(el.path);
                                         }
                                     }}
@@ -245,7 +244,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         {el.name === 'Dashboard' ? (
                                             <UserIcon
                                                 strokeColor={
-                                                    localStorage.getItem("sidebar") === 'Dashboard'
+                                                    localStorage.getItem('sidebar') === 'Dashboard'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -253,7 +252,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Wallet' ? (
                                             <WalletIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Wallet'
+                                                    localStorage.getItem('sidebar') === 'Wallet'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -261,7 +260,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Market Order' ? (
                                             <AnalysIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Market Order'
+                                                    localStorage.getItem('sidebar') === 'Market Order'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -269,7 +268,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Trade History' ? (
                                             <CalendarIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Trade History'
+                                                    localStorage.getItem('sidebar') === 'Trade History'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -280,7 +279,7 @@ class Side extends React.Component<Props, SidebarState> {
                                     </div>
                                     <p
                                         className={`font-bold text-sm mb-0 ${
-                                            localStorage.getItem("sidebar") === el.name ? 'white-text' : 'grey-text'
+                                            localStorage.getItem('sidebar') === el.name ? 'white-text' : 'grey-text'
                                         }`}>
                                         {el.name}
                                     </p>
@@ -296,7 +295,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         if (el.comingsoon) {
                                             this.setState({ showModalComingSoon: !this.state.showModalComingSoon });
                                         } else {
-                                            localStorage.setItem("sidebar", el.name)
+                                            localStorage.setItem('sidebar', el.name);
                                             this.props.history.push(el.path);
                                         }
                                     }}
@@ -305,7 +304,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         {el.name === 'Profile Setting' ? (
                                             <SettingIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Profile Setting'
+                                                    localStorage.getItem('sidebar') === 'Profile Setting'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -313,7 +312,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Security' ? (
                                             <SecurityIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Security'
+                                                    localStorage.getItem('sidebar') === 'Security'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -321,7 +320,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Referral' ? (
                                             <AddUserIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Referral'
+                                                    localStorage.getItem('sidebar') === 'Referral'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -329,7 +328,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'API Management' ? (
                                             <ApiIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'API Management'
+                                                    localStorage.getItem('sidebar') === 'API Management'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -337,7 +336,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Announcement' ? (
                                             <AnnouncementIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'Announcement'
+                                                    localStorage.getItem('sidebar') === 'Announcement'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -345,7 +344,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'FAQ' ? (
                                             <FaqIcon
                                                 fillColor={
-                                                    localStorage.getItem("sidebar") === 'FAQ'
+                                                    localStorage.getItem('sidebar') === 'FAQ'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -356,7 +355,7 @@ class Side extends React.Component<Props, SidebarState> {
                                     </div>
                                     <p
                                         className={`font-bold text-sm mb-0 ${
-                                            localStorage.getItem("sidebar") === el.name ? 'white-text' : 'grey-text'
+                                            localStorage.getItem('sidebar') === el.name ? 'white-text' : 'grey-text'
                                         }`}>
                                         {el.name}
                                     </p>

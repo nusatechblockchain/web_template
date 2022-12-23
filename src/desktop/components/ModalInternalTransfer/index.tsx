@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import './ModalInternalTransfer.pcss';
 import { Modal, CustomStylesSelect, CustomInput } from '../../components';
 import { Decimal } from '../../../components';

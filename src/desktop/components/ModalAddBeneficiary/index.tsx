@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import './ModalAddBeneficiary.pcss';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
@@ -12,7 +11,7 @@ import { CustomStylesSelect, ModalBeneficiaryList } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
-import { beneficiariesCreate, BeneficiaryBank, selectCurrencies, selectWallets, Wallet } from '../../../modules';
+import { beneficiariesCreate, selectCurrencies, selectWallets, Wallet } from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
@@ -102,7 +101,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setFiatBankSwiftCodeFocused(false);
         setFiatIntermediaryBankNameFocused(false);
         setFiatIntermediaryBankSwiftCodeFocused(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getState = React.useCallback(

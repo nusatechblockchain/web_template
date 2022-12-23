@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Form, InputGroup, Button } from 'react-bootstrap';
 import './InputFile.pcss';
 
 export interface InputFileProps {

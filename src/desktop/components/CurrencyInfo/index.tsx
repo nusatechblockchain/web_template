@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { Wallet } from '../../../modules';
 import { Decimal } from '../../../components';
 
@@ -16,7 +14,7 @@ interface CurrencyIconProps {
 }
 
 export const CurrencyIcon: React.FunctionComponent<CurrencyIconProps> = (props: CurrencyIconProps) => {
-    return <img alt={props.currency} className="img-thumbnail" src={props.icon} />
+    return <img alt={props.currency} className="img-thumbnail" src={props.icon} />;
 };
 
 const CurrencyInfo: React.FunctionComponent<CurrencyInfoProps> = (props: CurrencyInfoProps) => {
@@ -28,29 +26,38 @@ const CurrencyInfo: React.FunctionComponent<CurrencyInfoProps> = (props: Currenc
     const stringLocked = lockedAmount ? lockedAmount.toString() : undefined;
     const iconUrl = props.wallet ? props.wallet.iconUrl : null;
 
-
     return (
         <div>
-            <CurrencyIcon icon={iconUrl} currency={currency}/>
+            <CurrencyIcon icon={iconUrl} currency={currency} />
             <div>
-                <FormattedMessage id="page.body.wallets.balance.spot"/> 
-                <span><Decimal fixed={selectedFixed} thousSep=",">{balance}</Decimal></span>
+                <FormattedMessage id="page.body.wallets.balance.spot" />
+                <span>
+                    <Decimal fixed={selectedFixed} thousSep=",">
+                        {balance}
+                    </Decimal>
+                </span>
                 {currency}
             </div>
             <div>
-                <FormattedMessage id="page.body.wallets.balance.available"/>
-                <span><Decimal fixed={selectedFixed} thousSep=",">{balance}</Decimal></span>
+                <FormattedMessage id="page.body.wallets.balance.available" />
+                <span>
+                    <Decimal fixed={selectedFixed} thousSep=",">
+                        {balance}
+                    </Decimal>
+                </span>
                 {currency}
             </div>
             <div>
                 <FormattedMessage id="page.body.wallets.locked" />
-                <span><Decimal fixed={selectedFixed} thousSep=",">{stringLocked}</Decimal></span>
+                <span>
+                    <Decimal fixed={selectedFixed} thousSep=",">
+                        {stringLocked}
+                    </Decimal>
+                </span>
                 {currency}
             </div>
         </div>
     );
 };
 
-export {
-    CurrencyInfo,
-};
+export { CurrencyInfo };

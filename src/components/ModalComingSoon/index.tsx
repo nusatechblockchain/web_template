@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import coming from '../../assets/png/coming.png';
+import coming from '../../../public/img/coming.png';
 
 export interface ModalProps {
     show: boolean;

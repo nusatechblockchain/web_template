@@ -12,7 +12,7 @@ import {
     toggle2faFetch,
     changePasswordReset,
 } from '../../../modules/user/profile';
-import Avatar from '../../../assets/png/avatar.png';
+import Avatar from '../../../../public/img/avatar.png';
 import { ArrowDownIcon } from '../../../assets/images/ArrowDownIcon';
 
 interface ReduxProps {

@@ -12,9 +12,9 @@ const RecentTradesComponent = (props) => {
                     <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
                         <thead>
                             <tr>
-                                <th className="text-left grey-text">Price</th>
-                                <th className="text-right grey-text">Amount</th>
-                                <th className="text-right grey-text">Time</th>
+                                <th className="text-left grey-text dark-bg-accent">Price</th>
+                                <th className="text-right grey-text dark-bg-accent">Amount</th>
+                                <th className="text-right grey-text dark-bg-accent">Time</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -4,7 +4,6 @@ import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 const ChartsComponent = (props) => {
     return (
         <React.Fragment>
-            {/* TradingView Widget BEGIN */}
             <TradingViewEmbed
                 widgetType={widgetType.ADVANCED_CHART}
                 widgetConfig={{
@@ -14,7 +13,6 @@ const ChartsComponent = (props) => {
                     height: '100%',
                 }}
             />
-            {/* TradingView Widget END */}
         </React.Fragment>
     );
 };

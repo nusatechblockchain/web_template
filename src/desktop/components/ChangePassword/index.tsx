@@ -9,26 +9,13 @@ import {
     passwordErrorSecondSolution,
     passwordErrorThirdSolution,
 } from '../../../helpers';
-import {
-    forgotPassword,
-    forgotPasswordError,
-    GeetestCaptchaResponse,
-    resetCaptchaState,
-    RootState,
-    selectCaptchaResponse,
-    selectCurrentLanguage,
-    selectForgotPasswordError,
-    selectForgotPasswordSuccess,
-    selectGeetestCaptchaSuccess,
-    selectRecaptchaSuccess,
-} from '../../../modules';
-import { CommonError } from '../../../modules/types';
+import { forgotPassword, resetCaptchaState, selectCaptchaResponse } from '../../../modules';
 import { captchaType } from '../../../api/config';
 import { CustomInput } from '../CustomInput';
 import { Modal } from '../Modal';
 import { PasswordStrengthMeter } from '../index';
 import PinInput from 'react-pin-input';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Captcha } from 'src/components';
 
 export const ChangePasswordComponent = (props) => {
@@ -49,11 +36,6 @@ export const ChangePasswordComponent = (props) => {
     const intl = useIntl();
 
     const captcha_response = useSelector(selectCaptchaResponse);
-    const success = useSelector(selectForgotPasswordSuccess);
-    const errorForgotPassword = useSelector(selectForgotPasswordError);
-    const geetestCaptchaSuccess = useSelector(selectGeetestCaptchaSuccess);
-    const reCaptchaSuccess = useSelector(selectRecaptchaSuccess);
-    const i18n = useSelector(selectCurrentLanguage);
 
     const handleChangePassword = () => {
         const payload = props.hideOldPassword
@@ -139,10 +121,7 @@ export const ChangePasswordComponent = (props) => {
                 break;
         }
 
-        // if (success) {
         setShowModalResendCode(!showModalResendCode);
-        // }
-
         dispatch(resetCaptchaState());
     };
 

@@ -1,13 +1,15 @@
 import React, { FC, ReactElement, Component } from 'react';
 import { useDocumentTitle } from 'src/hooks';
-import AnouncementIcon from '../../../assets/png/landing-announcement.png';
+import AnouncementIcon from '../../../../public/img/landing-announcement.png';
 import { ArrowLeftIcon } from '../../../assets/images/ArrowLeftIcon';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Background from '../../../assets/png/background.png';
-import AnnouncementSlider from '../../../assets/png/Background-announcement.png';
-import Banner from '../../../assets/png/Banner-1.png';
+import Background from '../../../../public/img/background.png';
+import AnnouncementSlider from '../../../../public/img/Background-announcement.png';
+import Banner from '../../../../public/img/Banner-1.png';
+import AnnouncementImage from '../../../../public/img/announcement-big.png';
+import LandingCard from '../../../../public/img/landing-card.png';
 
 export const AnnouncementScreen: FC = (): ReactElement => {
     useDocumentTitle('Announcement');
@@ -129,26 +131,8 @@ export const AnnouncementScreen: FC = (): ReactElement => {
                         {bannerAnnouncement &&
                             bannerAnnouncement.map((item, key) => (
                                 <div className="px-3 radius-md" key={key}>
-                                    <div className=" dark-bg-accent">
-                                        <div
-                                            className="slider-item p-3"
-                                            style={{ backgroundImage: `url(${AnnouncementSlider})` }}>
-                                            <div className="content">
-                                                <div className="d-flex justify-content-end">
-                                                    <img src={AnouncementIcon} className="icon-slider" alt="" />
-                                                </div>
-                                                <div className="d-flex justify-content-between align-items-center">
-                                                    <div className="mr-2">
-                                                        <p className="text-ms grey-text-accent mb-8">{item.label}</p>
-                                                        <p className="text-sm font-bold white-text mb-1">{item.name}</p>
-                                                        <p className="text-xs grey-text-accent">{item.desc}</p>
-                                                    </div>
-                                                    <a href="">
-                                                        <ArrowLeftIcon className={'rotate-180'} />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="slider-item p-3">
+                                        <img src={LandingCard} alt="" className="w-100 h-100" />
                                     </div>
                                 </div>
                             ))}
@@ -163,7 +147,7 @@ export const AnnouncementScreen: FC = (): ReactElement => {
                                         announcement.map((item, key) => (
                                             <div key={key} className="col-md-4 col-sm-6 col-12 mb-4">
                                                 <div className="article-item">
-                                                    <img src={Banner} className="w-100" alt="" />
+                                                    <img src={AnnouncementImage} className="w-100" alt="" />
                                                     <p className="blue-text mb-12">{item.category}</p>
                                                     <h6 className="title mb-24">
                                                         <a href="/detail-article/" className="grey-text-accent">
