@@ -3,7 +3,6 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { Modal, ModalAddBeneficiary } from '../../components';
-import { Link } from 'react-router-dom';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
 import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
 import './ModalBeneficiaryList.pcss';
@@ -16,8 +15,6 @@ export interface ModalBeneficiaryListProps {
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
-    const intl = useIntl();
-    const history = useHistory();
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalBeneficiaryList);
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
     const { currency = '' } = useParams<{ currency?: string }>();

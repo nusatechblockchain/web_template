@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { CurrencyInfo } from '../';
-import { DepositCrypto } from '../DepositCrypto';
 import { selectUserInfo } from '../../../modules/user/profile';
 import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWallets, Wallet } from '../../../modules';
 import { DEFAULT_WALLET } from 'src/constants';
@@ -13,7 +11,7 @@ import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
 import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 const WalletDepositBody = () => {
     useWalletsFetch();
@@ -21,10 +19,8 @@ const WalletDepositBody = () => {
     const intl = useIntl();
     const dispatch = useDispatch();
     const history = useHistory();
-    const user = useSelector(selectUserInfo);
     const wallets = useSelector(selectWallets) || [];
     const { currency = '' } = useParams<{ currency?: string }>();
-    const [showModalTransfer, setShowModalTransfer] = React.useState(false);
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -82,9 +78,6 @@ const WalletDepositBody = () => {
         ) {
             dispatch(walletsAddressFetch({ currency: 'eth', blockchain_key: tab }));
         }
-        // else {
-        //     console.log('test lagi');
-        // }
     };
 
     const buttonLabel = `${intl.formatMessage({
@@ -219,23 +212,6 @@ const WalletDepositBody = () => {
                                 </li>
                                 <li className="white-text text-sm mb-8">Do not send NFTs to this address.</li>
                             </ul>
-
-                            {/* {depositAddress && (
-                                <DepositCrypto
-                                    buttonLabel={buttonLabel}
-                                    copiableTextFieldText={`${wallet.currency.toUpperCase()} ${label}`}
-                                    copyButtonText={intl.formatMessage({
-                                        id: 'page.body.wallets.tabs.deposit.ccy.message.button',
-                                    })}
-                                    error={error}
-                                    handleGenerateAddress={(e) => handleGenerateAddress(e)}
-                                    handleOnCopy={handleOnCopy}
-                                    text={text}
-                                    wallet={wallet}
-                                    network={blockchainKey}
-                                    minDepositAmount={minDepositAmount}
-                                />
-                            )} */}
                         </div>
 
                         <div className="network-container w-50">

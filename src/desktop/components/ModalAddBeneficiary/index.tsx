@@ -2,14 +2,13 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import './ModalAddBeneficiary.pcss';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
 import { Modal, CustomInput } from '..';
 import { CustomStylesSelect } from '../../components';
 import '../../../styles/colors.pcss';
-import { beneficiariesCreate, BeneficiaryBank, selectCurrencies } from '../../../modules';
+import { beneficiariesCreate, selectCurrencies } from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
@@ -26,11 +25,7 @@ const defaultSelected = {
 };
 
 export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryProps> = (props) => {
-    const intl = useIntl();
-    const history = useHistory();
     const dispatch = useDispatch();
-
-    const { formatMessage } = useIntl();
     const { currency = '' } = useParams<{ currency?: string }>();
     const currencies = useSelector(selectCurrencies);
     const currencyItem = currencies.find((item) => item.id === currency);
@@ -89,7 +84,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setFiatBankSwiftCodeFocused(false);
         setFiatIntermediaryBankNameFocused(false);
         setFiatIntermediaryBankSwiftCodeFocused(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getState = React.useCallback(

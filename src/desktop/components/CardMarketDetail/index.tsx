@@ -1,7 +1,5 @@
-import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies, Currency } from 'src/modules';
-import { Link } from 'react-router-dom';
+import * as React from 'react';
+import { Currency } from 'src/modules';
 import './CardMarketDetail.pcss';
 
 export interface DetailProps {
@@ -32,8 +30,6 @@ export interface CardMarketDetailProps {
 }
 
 export const CardMarketDetail: React.FunctionComponent<CardMarketDetailProps> = ({ title, data }) => {
-    const currencies = useSelector(selectCurrencies);
-
     return (
         <React.Fragment>
             <div className="com-card-market-detail">

@@ -1,9 +1,5 @@
-import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies } from 'src/modules';
-import { Link } from 'react-router-dom';
+import * as React from 'react';
 import './CardMarket.pcss';
-import { BtcIcon, DogeIcon, BnbIcon } from '../../../assets/images/CoinIcon';
 
 export interface CardMarketProps {
     title: string;
@@ -11,7 +7,6 @@ export interface CardMarketProps {
 }
 
 export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
-    const currencies = useSelector(selectCurrencies);
     const { title, data } = props;
 
     return (
