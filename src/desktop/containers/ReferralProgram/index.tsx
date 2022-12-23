@@ -5,7 +5,7 @@ import { IntlProps } from '../../../';
 import { CopyableTextField, Table } from '../../../components';
 import { copy } from '../../../helpers';
 import { alertPush, RootState, selectUserInfo, User } from '../../../modules';
-import ReferralImage from '../../../assets/png/referral.png';
+import ReferralImage from '../../../../public/img/referral.png';
 
 interface ReduxProps {
     user: User;

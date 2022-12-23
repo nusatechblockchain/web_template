@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import './Lost2FAStep.pcss';
 import { InputFile } from '../../components';
-import lostImg from '../../../assets/png/lost-two-fa.svg';
+import lostImg from '../../../../public/img/lost-two-fa.svg';
 
 interface StepElement {
     stepOne: boolean;

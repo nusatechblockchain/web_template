@@ -11,19 +11,20 @@ import { toggleColorTheme } from '../../../helpers';
 import { RootState, selectCurrentColorTheme, selectUserLoggedIn } from '../../../modules';
 import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';
 import { AndroidIcon, AppleStoreIcon, GooglePlayIcon, MacOsIcon, WindowsIcon } from '../../../assets/images/DeviceIcon';
-import BitcoinIcon from '../../../assets/png/Bitcoin.png';
-import EtherumIcon from '../../../assets/png/Etherium.png';
-import LiteIcon from '../../../assets/png/LiteCoin.png';
-import MoneroIcon from '../../../assets/png/Monero.png';
-import MarketAnalysisImage from '../../../assets/png/image-blog.png';
-import MarketAnalysisImage2 from '../../../assets/png/image-blog2.png';
-import LandingAplicationImage from '../../../assets/png/application.png';
-import features1 from '../../../assets/png/features.png';
-import features2 from '../../../assets/png/features2.png';
-import features3 from '../../../assets/png/features3.png';
-import features4 from '../../../assets/png/features4.png';
-import features5 from '../../../assets/png/features5.png';
-import features6 from '../../../assets/png/features6.png';
+import BitcoinIcon from '../../../../public/img/Bitcoin.png';
+import EtherumIcon from '../../../../public/img/Etherium.png';
+import LiteIcon from '../../../../public/img/LiteCoin.png';
+import MoneroIcon from '../../../../public/img/Monero.png';
+import MarketAnalysisImage from '../../../../public/img/image-blog.png';
+import MarketAnalysisImage2 from '../../../../public/img/image-blog2.png';
+import LandingAplicationImage from '../../../../public/img/application.png';
+import features1 from '../../../../public/img/features.png';
+import features2 from '../../../../public/img/features2.png';
+import features3 from '../../../../public/img/features3.png';
+import features4 from '../../../../public/img/features4.png';
+import features5 from '../../../../public/img/features5.png';
+import features6 from '../../../../public/img/features6.png';
+import BackgroundLanding from '../../../../public/img/background-landing.png';
 
 interface ReduxProps {
     isLoggedIn: boolean;
@@ -54,7 +55,7 @@ class Landing extends React.Component<Props> {
     public render() {
         return (
             <div className="landing-screen dark-bg-accent">
-                <div className="content-wrapper no-sidebar ">
+                <div className="content-wrapper no-sidebar " style={{ backgroundImage: `url(${BackgroundLanding})` }}>
                     <section className="hero position-relative">
                         <img src={BitcoinIcon} className="image-coin btc" alt="" />
                         <img src={EtherumIcon} className="image-coin eth" alt="" />

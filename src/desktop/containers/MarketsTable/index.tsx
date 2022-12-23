@@ -15,8 +15,8 @@ import {
     selectUserInfo,
     selectCurrencies,
 } from '../../../modules';
-import MoneroIcon from '../../../assets/png/Monero.png';
-import card from '../../../assets/png/landing-card.png';
+import MoneroIcon from '../../../../public/img/Monero.png';
+import card from '../../../../public/img/landing-card.png';
 
 const defaultTicker = {
     amount: '0.0',

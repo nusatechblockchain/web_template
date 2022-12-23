@@ -19,7 +19,7 @@ import {
     logoutFetch,
 } from '../../../modules';
 import { Logo } from '../../../assets/images/Logo';
-import ProfileAvatar from '../../../assets/png/avatar.png';
+import ProfileAvatar from '../../../../public/img/avatar.png';
 import { IndonesianFlag, AmericanFlag, ChinaFlag, KoreaFlag } from '../../../assets/images/Flags';
 import { Api, Dashboard, Logout, Referral, Security, Setting, Wallet } from '../../../assets/images/ProfileDropdown';
 import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';

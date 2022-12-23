@@ -30,7 +30,7 @@ import {
 import { CommonError } from '../../../modules/types';
 import { Link } from 'react-router-dom';
 import PinInput from 'react-pin-input';
-import bgAuth from '../../../assets/png/bg-auth2.png';
+import bgAuth from '../../../../public/img/bg-auth2.png';
 
 interface OwnProps {
     history: History;

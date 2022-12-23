@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import { useReduxSelector } from '../../../hooks';
 import { selectMobileDeviceState } from '../../../modules';
 import './Lost2FAScreen.pcss';
-import bgImage from '../../../assets/png/background.png';
+import bgImage from '../../../../public/img/background.png';
 import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
 import { InputFile } from '../../components';
 import { Lost2FAInfo, Lost2FATimeline, Lost2FAStep } from '../../containers';
