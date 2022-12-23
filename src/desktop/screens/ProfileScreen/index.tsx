@@ -26,15 +26,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     selectUserInfo,
     toggle2faFetch,
-    toggle2faData,
-    selectTwoFactorAuthSuccess,
-    sendPhoneCode,
     selectVerifyPhoneSuccess,
     sendCode,
     resendCode,
-    changeUserLevel,
     verifyPhone,
 } from '../../../modules';
+import { selectApiKeys } from 'src/modules/user/apiKeys/selectors';
 import { Modal, CustomInput } from '../../components';
 // import { ModalComingSoon } from 'src/components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
@@ -43,6 +40,7 @@ import moment from 'moment';
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
+    const apiKeys = useSelector(selectApiKeys);
 
     const verifyPhoneSuccess = useSelector(selectVerifyPhoneSuccess);
     const history = useHistory();
@@ -208,7 +206,11 @@ export const ProfileScreen: FC = (): ReactElement => {
                         data-toggle="modal"
                         data-target="#change-phone"
                         data-dismiss="modal">
-                        {!user.phones[0] ? 'Add' : 'Change'}
+                        {!user.phones[0]
+                            ? 'Add'
+                            : user.phones[0].validated_at === null && !isChangeNumber
+                            ? 'Veify'
+                            : 'Change'}
                     </button>
                 </div>
             </React.Fragment>
@@ -349,9 +351,13 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                     </span>
                                                     <span
                                                         className={`d-block text-left text-xs  font-normal ${
-                                                            !user.phones[0] ? 'danger-text' : 'contrast-text'
+                                                            !user.phones[0] || user.phones[0].validated_at === null
+                                                                ? 'danger-text'
+                                                                : 'contrast-text'
                                                         }`}>
-                                                        {!user.phones[0] ? 'Unverified' : 'Verified'}
+                                                        {!user.phones[0] || user.phones[0].validated_at === null
+                                                            ? 'Unverified'
+                                                            : 'Verified'}
                                                     </span>
                                                 </div>
                                                 {user.phones && user.phones[0] && (
@@ -413,7 +419,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                 <div className="ml-3 mr-3">
                                                     <p className="mb-1 text-ms font-normal white-text">API</p>
                                                     <span className="d-block text-xs grey-text font-normal ">
-                                                        0 API enabled
+                                                        {apiKeys && apiKeys.length} API enabled
                                                     </span>
                                                 </div>
                                             </div>
