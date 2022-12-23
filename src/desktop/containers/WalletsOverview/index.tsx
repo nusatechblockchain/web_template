@@ -1,5 +1,4 @@
 import React, { FC, ReactElement, useCallback, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { Decimal, formatWithSeparators, Table } from 'src/components';

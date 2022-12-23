@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import './WalletWithdrawalInfo.pcss';
 
 export const WalletWithdrawalInfo: React.FC = () => {

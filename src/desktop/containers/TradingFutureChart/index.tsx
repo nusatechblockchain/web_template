@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { selectCurrencies } from 'src/modules';
 import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import './TradingFutureChart.pcss';
 
 export const TradingFutureChart: FC = (): ReactElement => {

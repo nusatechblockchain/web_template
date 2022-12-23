@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { IntlProps } from '../../../';
 import { CopyableTextField, Table } from '../../../components';

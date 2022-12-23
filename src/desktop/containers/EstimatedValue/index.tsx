@@ -5,9 +5,7 @@ import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch } from 'src/ho
 import { formatWithSeparators } from '../../../components';
 import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from '../../../constants';
 import { estimateUnitValue, estimateValue } from '../../../helpers/estimateValue';
-import { truncateMiddle } from '../../../helpers/truncateMiddle';
 import { selectCurrencies, selectMarkets, selectMarketTickers, Wallet } from '../../../modules';
-import { EyeClose, EyeOpen } from '../../../assets/images/Eye';
 
 interface EstimatedValueProps {
     wallets: Wallet[];

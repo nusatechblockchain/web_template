@@ -7,8 +7,6 @@ import './WalletWithdrawalForm.pcss';
 import Select from 'react-select';
 import { CustomStylesSelect, CustomInput, Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
 import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
-import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
-import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 
 export const WalletWithdrawalForm: React.FC = () => {

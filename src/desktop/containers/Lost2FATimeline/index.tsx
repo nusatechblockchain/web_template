@@ -1,14 +1,8 @@
-import cx from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { useReduxSelector } from '../../../hooks';
-import { selectMobileDeviceState } from '../../../modules';
 import './Lost2FATimeline.pcss';
-import bgImage from '../../../assets/png/background.png';
-import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
-import { InputFile } from '../../components';
 
 interface TimelineElement {
     stepOneActive: boolean;

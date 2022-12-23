@@ -372,7 +372,6 @@ class Head extends React.Component<Props, HeaderState> {
                                     )}
                                 </li>
                             ) : (
-                                // Sign In and Sign Up
                                 <React.Fragment>
                                     <li className="nav-item dropdown avatar px-3">
                                         <Link to={'/signin'} className="gradient-text text-sm font-bold mr-3">

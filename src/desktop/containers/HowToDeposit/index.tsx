@@ -5,9 +5,6 @@ import { useWalletsFetch } from '../../../hooks';
 import './HowToDeposit.pcss';
 
 const HowToDeposit: React.FC = () => {
-    const intl = useIntl();
-    const history = useHistory();
-
     useWalletsFetch();
 
     return (

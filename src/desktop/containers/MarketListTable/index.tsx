@@ -1,7 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrencies } from 'src/modules';
-import { Link } from 'react-router-dom';
 import { Tabs, Tab } from 'react-bootstrap';
 import { StarIconFill } from 'src/assets/images/StarIcon';
 import {

@@ -1,7 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrencies } from 'src/modules';
-import { Link } from 'react-router-dom';
 import './TradingFutureOrderForm.pcss';
 import { SpeedIcon } from 'src/assets/images/SpeedIcon';
 import { CustomInput, Modal } from 'src/desktop/components';

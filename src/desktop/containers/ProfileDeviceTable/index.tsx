@@ -1,12 +1,11 @@
 import classnames from 'classnames';
 import * as React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { IntlProps } from '../../../';
 import { Table } from '../../../components';
 import { Pagination } from '../../components';
 import { DeviceIcon } from '../../../assets/images/ProfileIcon';
-import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { getUserAgent, localeDate } from '../../../helpers';
 import {
     getUserActivity,

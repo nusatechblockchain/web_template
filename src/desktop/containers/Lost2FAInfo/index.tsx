@@ -1,20 +1,10 @@
-import cx from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { useReduxSelector } from '../../../hooks';
-import { selectMobileDeviceState } from '../../../modules';
 import './Lost2FAInfo.pcss';
-import bgImage from '../../../assets/png/background.png';
-import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
-import { InputFile } from '../../components';
 
 export const Lost2FAInfo: React.FC = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const { formatMessage } = useIntl();
-
     return (
         <React.Fragment>
             <h6 className="gradient-text font-bold text-md mb-8">Security Verification</h6>

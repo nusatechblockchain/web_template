@@ -2,7 +2,7 @@ import { History } from 'history';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
-import { Link, RouteProps, withRouter } from 'react-router-dom';
+import { RouteProps, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import {
     changeLanguage,
