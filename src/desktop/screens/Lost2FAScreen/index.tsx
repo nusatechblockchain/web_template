@@ -1,15 +1,12 @@
 import cx from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { useReduxSelector } from '../../../hooks';
-import { selectMobileDeviceState } from '../../../modules';
 import './Lost2FAScreen.pcss';
 import bgImage from '../../../../public/img/background.png';
 import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
-import { InputFile } from '../../components';
-import { Lost2FAInfo, Lost2FATimeline, Lost2FAStep } from '../../containers';
+import { Lost2FAStep } from '../../containers';
 
 export const Lost2FAScreen: React.FC = () => {
     const dispatch = useDispatch();
@@ -53,20 +50,8 @@ export const Lost2FAScreen: React.FC = () => {
                                 </div>
                             </div>
                             <div className="row justify-content-center">
-                                <div className="col-8 dark-bg-main py-5 px-5">
-                                    {!stepThree && <Lost2FAInfo />}
-                                    <Lost2FATimeline
-                                        stepOneActive={stepOneActive}
-                                        stepTwoActive={stepTwoActive}
-                                        stepThreeActive={stepThreeActive}
-                                    />
-                                    <Lost2FAStep
-                                        stepOne={stepOne}
-                                        stepTwo={stepTwo}
-                                        stepThree={stepThree}
-                                        handleNextStep={handleNextStep}
-                                        handleSubmit={handleSubmit}
-                                    />
+                                <div className="col-12 col-md-10 dark-bg-main py-5 px-5">
+                                    <Lost2FAStep />
                                 </div>
                             </div>
                         </div>
