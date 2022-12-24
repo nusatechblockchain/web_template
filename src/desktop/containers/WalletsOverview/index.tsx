@@ -30,6 +30,7 @@ interface ExtendedWallet extends Wallet {
     p2pBalance?: string;
     p2pLocked?: string;
     status?: string;
+    network?: any;
 }
 
 const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
@@ -55,6 +56,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     useMarketsTickersFetch();
     useMarketsFetch();
 
+    // console.log(currencies);
+
     useEffect(() => {
         if (wallets.length && currencies.length) {
             const extendedWallets: ExtendedWallet[] = currencies.map((cur) => {
@@ -63,11 +66,13 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                 }
 
                 const spotWallet = wallets.find((i) => i.currency === cur.id);
+
                 return {
                     ...spotWallet,
                     spotBalance: spotWallet ? spotWallet.balance : '0',
                     spotLocked: spotWallet ? spotWallet.locked : '0',
                     status: cur.status,
+                    network: cur.networks,
                 };
             });
 
@@ -88,7 +93,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         [isP2PEnabled]
     );
 
-    console.log(filteredWallets, 'wallets');
+    // console.log(filteredWallets);
 
     const handleClickDeposit = useCallback(
         (currency) => {
@@ -114,6 +119,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                 i.name?.toLocaleLowerCase().includes(filterValue.toLowerCase()) ||
                 i.currency?.toLocaleLowerCase().includes(filterValue.toLowerCase())
         );
+
+        console.log(filteredList);
 
         return !filteredList.length
             ? [[]]
@@ -154,22 +161,35 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                       </Decimal>,
                       <div key={index} className="ml-auto">
                           <button
-                              onClick={() => handleClickDeposit(currency)}
-                              className="bg-transparent border-none blue-text mr-24">
-                              {translate('page.body.wallets.overview.action.deposit')}
+                              onClick={() => {
+                                  item.network[0] ? handleClickDeposit(currency) : null;
+                              }}
+                              className={`bg-transparent border-none mr-24 ${
+                                  item.network[0] ? 'blue-text' : 'grey-text'
+                              }`}>
+                              {item.network[0] ? translate('page.body.wallets.overview.action.deposit') : 'Disabled'}
                           </button>
                           <button
-                              onClick={() => handleClickWithdraw(currency)}
+                              onClick={() => {
+                                  item.network &&
+                                      item.network[0] &&
+                                      item.network[0].withdrawal_enabled &&
+                                      handleClickWithdraw(currency);
+                              }}
                               //   onClick={() => setShowModalLocked(!showModalLocked)}
-                              className="bg-transparent border-none danger-text">
-                              {translate('page.body.wallets.overview.action.withdraw')}
+                              className={`bg-transparent border-none ${
+                                  item.network && item.network[0] && item.network[0].withdrawal_enabled
+                                      ? 'danger-text'
+                                      : 'grey-text'
+                              }`}>
+                              {item.network && item.network[0] && item.network[0].withdrawal_enabled
+                                  ? translate('page.body.wallets.overview.action.withdraw')
+                                  : 'Disabled'}
                           </button>
                       </div>,
                   ];
               });
     }, [filteredWallets, nonZeroSelected, abilities, currencies, markets, tickers]);
-
-    console.log(filteredWallets, 'Ini filterred wallet');
 
     const renderHeaderModalLocked = () => {
         return (

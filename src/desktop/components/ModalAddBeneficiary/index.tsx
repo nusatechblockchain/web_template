@@ -43,32 +43,13 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
-    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalAddBeneficiary);
+    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
     const [coinAddress, setCoinAddress] = React.useState('');
     const [coinAddressValid, setCoinAddressValid] = React.useState(false);
     const [coinBlockchainName, setCoinBlockchainName] = React.useState(defaultSelected);
     const [coinBeneficiaryName, setCoinBeneficiaryName] = React.useState('');
     const [coinDescription, setCoinDescription] = React.useState('');
     const [coinDestinationTag, setCoinDestinationTag] = React.useState('');
-    const [coinAddressFocused, setCoinAddressFocused] = React.useState(false);
-    const [coinBeneficiaryNameFocused, setCoinBeneficiaryNameFocused] = React.useState(false);
-    const [coinDescriptionFocused, setCoinDescriptionFocused] = React.useState(false);
-    const [coinDestinationTagFocused, setCoinDestinationTagFocused] = React.useState(false);
-
-    const [fiatName, setFiatName] = React.useState('');
-    const [fiatFullName, setFiatFullName] = React.useState('');
-    const [fiatAccountNumber, setFiatAccountNumber] = React.useState('');
-    const [fiatBankName, setFiatBankName] = React.useState('');
-    const [fiatBankSwiftCode, setFiatBankSwiftCode] = React.useState('');
-    const [fiatIntermediaryBankName, setFiatIntermediaryBankName] = React.useState('');
-    const [fiatIntermediaryBankSwiftCode, setFiatIntermediaryBankSwiftCode] = React.useState('');
-    const [fiatNameFocused, setFiatNameFocused] = React.useState(false);
-    const [fiatFullNameFocused, setFiatFullNameFocused] = React.useState(false);
-    const [fiatAccountNumberFocused, setFiatAccountNumberFocused] = React.useState(false);
-    const [fiatBankNameFocused, setFiatBankNameFocused] = React.useState(false);
-    const [fiatBankSwiftCodeFocused, setFiatBankSwiftCodeFocused] = React.useState(false);
-    const [fiatIntermediaryBankNameFocused, setFiatIntermediaryBankNameFocused] = React.useState(false);
-    const [fiatIntermediaryBankSwiftCodeFocused, setFiatIntermediaryBankSwiftCodeFocused] = React.useState(false);
 
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
@@ -81,104 +62,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setCoinBlockchainName(defaultSelected);
         setCoinDescription('');
         setCoinDestinationTag('');
-        setCoinAddressFocused(false);
-        setCoinBeneficiaryNameFocused(false);
-        setCoinDescriptionFocused(false);
-        setCoinDestinationTagFocused(false);
-        setCoinAddressValid(false);
-
-        setFiatAccountNumber('');
-        setFiatName('');
-        setFiatFullName('');
-        setFiatBankName('');
-        setFiatBankSwiftCode('');
-        setFiatIntermediaryBankName('');
-        setFiatIntermediaryBankSwiftCode('');
-        setFiatNameFocused(false);
-        setFiatFullNameFocused(false);
-        setFiatAccountNumberFocused(false);
-        setFiatBankNameFocused(false);
-        setFiatBankSwiftCodeFocused(false);
-        setFiatIntermediaryBankNameFocused(false);
-        setFiatIntermediaryBankSwiftCodeFocused(false);
     }, []);
-
-    const getState = React.useCallback(
-        (key) => {
-            switch (key) {
-                case 'coinAddress':
-                    return coinAddress;
-                case 'coinBeneficiaryName':
-                    return coinBeneficiaryName;
-                case 'coinDestinationTag':
-                    return coinDestinationTag;
-                case 'coinDescription':
-                    return coinDescription;
-                case 'coinAddressFocused':
-                    return coinAddressFocused;
-                case 'coinBeneficiaryNameFocused':
-                    return coinBeneficiaryNameFocused;
-                case 'coinDescriptionFocused':
-                    return coinDescriptionFocused;
-                case 'coinDestinationTagFocused':
-                    return coinDestinationTagFocused;
-                case 'fiatName':
-                    return fiatName;
-                case 'fiatFullName':
-                    return fiatFullName;
-                case 'fiatAccountNumber':
-                    return fiatAccountNumber;
-                case 'fiatBankName':
-                    return fiatBankName;
-                case 'fiatBankSwiftCode':
-                    return fiatBankSwiftCode;
-                case 'fiatIntermediaryBankName':
-                    return fiatIntermediaryBankName;
-                case 'fiatIntermediaryBankSwiftCode':
-                    return fiatIntermediaryBankSwiftCode;
-                case 'fiatNameFocused':
-                    return fiatNameFocused;
-                case 'fiatFullNameFocused':
-                    return fiatFullNameFocused;
-                case 'fiatAccountNumberFocused':
-                    return fiatAccountNumberFocused;
-                case 'fiatBankNameFocused':
-                    return fiatBankNameFocused;
-                case 'fiatBankSwiftCodeFocused':
-                    return fiatBankSwiftCodeFocused;
-                case 'fiatIntermediaryBankNameFocused':
-                    return fiatIntermediaryBankNameFocused;
-                case 'fiatIntermediaryBankSwiftCodeFocused':
-                    return fiatIntermediaryBankSwiftCodeFocused;
-                default:
-                    return '';
-            }
-        },
-        [
-            coinAddress,
-            coinAddressFocused,
-            coinBeneficiaryName,
-            coinBeneficiaryNameFocused,
-            coinDescription,
-            coinDescriptionFocused,
-            coinDestinationTag,
-            coinDestinationTagFocused,
-            fiatAccountNumber,
-            fiatAccountNumberFocused,
-            fiatBankName,
-            fiatBankNameFocused,
-            fiatBankSwiftCode,
-            fiatBankSwiftCodeFocused,
-            fiatFullName,
-            fiatFullNameFocused,
-            fiatIntermediaryBankName,
-            fiatIntermediaryBankNameFocused,
-            fiatIntermediaryBankSwiftCode,
-            fiatIntermediaryBankSwiftCodeFocused,
-            fiatName,
-            fiatNameFocused,
-        ]
-    );
 
     const validateCoinAddressFormat = React.useCallback(
         (value: string) => {
@@ -232,11 +116,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setShowModalBeneficiaryList(!showModalBeneficiaryList);
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
 
-    const disabledButton = () => {
-        if (coinAddress && coinBeneficiaryName === '' && !currency) {
-            return true;
-        }
-    };
+    const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
 
     const optionNetworks =
         currencyItem &&
@@ -354,7 +234,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                         </div>
 
                         <button
-                            disabled={disabledButton()}
+                            disabled={isDisabled}
                             onClick={handleSubmitAddAddressCoinModal}
                             type="button"
                             className="btn btn-primary btn-block">
