@@ -29,3 +29,5 @@ export * from './TradingFutureChart';
 export * from './TradingFutureOrderBook';
 export * from './TradingFutureOrderForm';
 export * from './TradingFutureRecentTrades';
+export * from './KycDocument';
+export * from './KycProfile';
