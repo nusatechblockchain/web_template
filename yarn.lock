@@ -7027,10 +7027,10 @@ ini@^1.3.4, ini@^1.3.5:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
-input-core@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/input-core/-/input-core-2.1.0.tgz#e414c90ca103e786ae8d946a013db92b2b67e1e8"
-  integrity sha512-Va2U9xDvLKWxtyqyKJqYjkgkY23C6Xfvb73coTCMEivsxhUjyWGln2esaP/zan5yMur0LzrJg9ac+22UxyVV4g==
+input-core@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/input-core/-/input-core-1.0.0.tgz#e8c02f92fbac4033058fcaa1b779bef3a8fbae70"
+  integrity sha512-DnYUbK76MVFK53gr2uI17FWrN3u1MsC5Aysoec2kt8iidFDOwnUvCDHkDM1R/fyPMwv2DUzgOLwba9ae8YJMoA==
 
 inquirer@3.0.6:
   version "3.0.6"
@@ -11593,12 +11593,12 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-maskinput@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-maskinput/-/react-maskinput-3.2.0.tgz#0c56cd12c450645054da159d8908b014993e8156"
-  integrity sha512-4JHk1ylfZ3fMPvh50PZZLy9AjRIhQ9UHH/7CgMk+HkDKO1BpIM2/vJefOsKn0HA7hHxUe/Sf3DPkwIh9Hh7Ukg==
+react-maskinput@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-maskinput/-/react-maskinput-1.0.1.tgz#9d3df4a5a019a03676401c48e3d04ace08df9d05"
+  integrity sha512-hYAEgL2rxPAsia/MGUmFdb46eKsFSACm5lJ/Ql92Z+v3GmKuB/AC/9mG0FNiriqeg+xCqnJqlhUsTWvp+LKhAw==
   dependencies:
-    input-core "^2.1.0"
+    input-core "^1.0.0"
 
 react-overlays@^4.1.0:
   version "4.1.1"

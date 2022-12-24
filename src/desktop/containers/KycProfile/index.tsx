@@ -56,14 +56,8 @@ interface IdentityState {
     firstName: string;
     lastName: string;
     postcode: string;
-    fullName: string;
     residentialAddress: string;
     cityFocused: boolean;
-    dateOfBirthFocused: boolean;
-    firstNameFocused: boolean;
-    lastNameFocused: boolean;
-    postcodeFocused: boolean;
-    residentialAddressFocused: boolean;
 }
 
 type Props = ReduxProps & DispatchProps & RouterProps & IntlProps;
@@ -75,15 +69,9 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         dateOfBirth: '',
         firstName: '',
         lastName: '',
-        fullName: '',
         postcode: '',
         residentialAddress: '',
         cityFocused: false,
-        dateOfBirthFocused: false,
-        firstNameFocused: false,
-        lastNameFocused: false,
-        postcodeFocused: false,
-        residentialAddressFocused: false,
     };
 
     public translate = (e: string) => {
@@ -101,61 +89,13 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
 
     public render() {
         const { editSuccess, sendSuccess, lang } = this.props;
-        const {
-            city,
-            dateOfBirth,
-            firstName,
-            lastName,
-            fullName,
-            postcode,
-            residentialAddress,
-            cityFocused,
-            dateOfBirthFocused,
-            firstNameFocused,
-            lastNameFocused,
-            postcodeFocused,
-            residentialAddressFocused,
-        } = this.state;
-
-        const firstNameGroupClass = cr('pg-confirm__content-identity__forms__row__content', {
-            'pg-confirm__content-identity__forms__row__content--focused': firstNameFocused,
-            'pg-confirm__content-identity__forms__row__content--wrong':
-                firstName && !this.handleValidateInput('firstName', firstName),
-        });
-
-        const lastNameGroupClass = cr('pg-confirm__content-identity__forms__row__content', {
-            'pg-confirm__content-identity__forms__row__content--focused': lastNameFocused,
-            'pg-confirm__content-identity__forms__row__content--wrong':
-                lastName && !this.handleValidateInput('lastName', lastName),
-        });
-
-        const dateOfBirthGroupClass = cr('pg-confirm__content-identity__forms__row__content', {
-            'pg-confirm__content-identity__forms__row__content--focused': dateOfBirthFocused,
-            'pg-confirm__content-identity__forms__row__content--wrong':
-                dateOfBirth && !this.handleValidateInput('dateOfBirth', dateOfBirth),
-        });
-
-        const residentialAddressGroupClass = cr('pg-confirm__content-identity__forms__row__content', {
-            'pg-confirm__content-identity__forms__row__content--focused': residentialAddressFocused,
-            'pg-confirm__content-identity__forms__row__content--wrong':
-                residentialAddress && !this.handleValidateInput('residentialAddress', residentialAddress),
-        });
-
-        const cityGroupClass = cr('pg-confirm__content-identity__forms__row__content', {
-            'pg-confirm__content-identity__forms__row__content--focused': cityFocused,
-            'pg-confirm__content-identity__forms__row__content--wrong': city && !this.handleValidateInput('city', city),
-        });
-
-        const postcodeGroupClass = cr('pg-confirm__content-identity__forms__row__content', {
-            'pg-confirm__content-identity__forms__row__content--focused': postcodeFocused,
-            'pg-confirm__content-identity__forms__row__content--wrong':
-                postcode && !this.handleValidateInput('postcode', postcode),
-        });
-
+        const { city, dateOfBirth, firstName, lastName, postcode, residentialAddress, cityFocused } = this.state;
         /* tslint:disable */
         languages.map((l: string) => countries.registerLocale(require(`i18n-iso-countries/langs/${l}.json`)));
 
         /* tslint:enable */
+
+        console.log(this.props.user);
 
         const dataCountries = Object.values(countries.getNames(lang)).map((item) => {
             return { label: item, value: item };
@@ -180,8 +120,8 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         labelVisible
                                         classNameLabel="white-text text-sm"
                                         classNameGroup="mb-24"
-                                        inputValue={fullName}
-                                        handleChangeInput={this.handleChangeFullName}
+                                        inputValue={firstName}
+                                        handleChangeInput={this.handleChangeFirstName}
                                     />
 
                                     <div className="input-date-document">
@@ -189,7 +129,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         <MaskInput
                                             maskString="00/00/0000"
                                             mask="00/00/0000"
-                                            onChange={(value) => this.handleChangeDate(value)}
+                                            onChange={this.handleChangeDate}
                                             value={dateOfBirth}
                                         />
                                     </div>
@@ -220,7 +160,19 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                     />
                                 </div>
                                 <div className="px-24">
-                                    <button type="button" className="btn btn-primary px-5 rounded-xl">
+                                    <div className="mb-12">
+                                        {sendSuccess && !editSuccess && (
+                                            <p className="pg-confirm__success">{this.translate(sendSuccess)}</p>
+                                        )}
+                                        {editSuccess && !sendSuccess && (
+                                            <p className="pg-confirm__success">{this.translate(editSuccess)}</p>
+                                        )}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary px-5 rounded-xl"
+                                        onClick={this.sendData}
+                                        disabled={this.handleCheckButtonDisabled()}>
                                         Submit
                                     </button>
                                 </div>
@@ -246,37 +198,24 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         });
     };
 
-    private handleConfirmEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && !this.handleCheckButtonDisabled()) {
-            event.preventDefault();
-            this.sendData(event);
-        }
-    };
-
-    private handleChangeFullName = (e: string) => {
+    private handleChangeFirstName = (e: string) => {
         this.setState({
-            fullName: e,
+            firstName: e,
         });
     };
 
-    private handleChangeDate = (e) => {
+    private handleChangeDate = (e: OnChangeEvent) => {
         this.setState({
-            dateOfBirth: formatDate(e),
-        });
-    };
-
-    private selectCountry = (option) => {
-        this.setState({
-            countryOfBirth: countries.getAlpha2Code(option.value, this.props.lang),
+            dateOfBirth: formatDate(e.target.value),
         });
     };
 
     private handleValidateInput = (field: string, value: string): boolean => {
         switch (field) {
-            case 'firstName':
-                const firstNameRegex = new RegExp(`^[a-zA-Z—-\\s]{1,255}$`);
+            case 'fullName':
+                const fullNameRegex = new RegExp(`^[a-zA-Z—-\\s]{1,255}$`);
 
-                return Boolean(value.match(firstNameRegex));
+                return Boolean(value.match(fullNameRegex));
             case 'lastName':
                 const lastNameRegex = new RegExp(`^[a-zA-Z—-\\s]{1,255}$`);
 
@@ -305,24 +244,14 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
     };
 
     private handleCheckButtonDisabled = () => {
-        const { city, dateOfBirth, firstName, lastName, postcode, residentialAddress, countryOfBirth } = this.state;
+        const { dateOfBirth, firstName, postcode, residentialAddress } = this.state;
 
-        const firstNameValid = this.handleValidateInput('firstName', firstName);
-        const lastNameValid = this.handleValidateInput('lastName', lastName);
+        const fullNameValid = this.handleValidateInput('fullName', firstName);
         const residentialAddressValid = this.handleValidateInput('residentialAddress', residentialAddress);
-        const cityValid = this.handleValidateInput('city', city);
         const postcodeValid = this.handleValidateInput('postcode', postcode);
         const dateOfBirthValid = this.handleValidateInput('dateOfBirth', dateOfBirth);
 
-        return (
-            !firstNameValid ||
-            !lastNameValid ||
-            !residentialAddressValid ||
-            !countryOfBirth ||
-            !cityValid ||
-            !postcodeValid ||
-            !dateOfBirthValid
-        );
+        return !fullNameValid || !residentialAddressValid || !postcodeValid || !dateOfBirthValid;
     };
 
     private sendData = (event) => {
@@ -331,12 +260,12 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const dob = !isDateInFuture(this.state.dateOfBirth) ? this.state.dateOfBirth : '';
         const profileInfo: IdentityData = {
             first_name: this.state.firstName,
-            last_name: this.state.lastName,
+            last_name: 'al',
             dob,
             address: this.state.residentialAddress,
             postcode: this.state.postcode,
-            city: this.state.city,
-            country: this.state.countryOfBirth,
+            city: 'batang',
+            country: countries.getAlpha2Code('Indonesia', this.props.lang),
             confirm: true,
         };
         const isIdentity =
@@ -344,10 +273,15 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const verifiedProfiles = user.profiles.length ? user.profiles.filter((i) => i.state === 'verified') : [];
         const lastVerifiedProfile = verifiedProfiles.length && verifiedProfiles[verifiedProfiles.length - 1];
 
+        console.log(isIdentity, 'INI IDENTITY');
+        console.log(labels, 'INI LABELS');
+
         if (!isIdentity && lastVerifiedProfile && lastVerifiedProfile.address) {
+            console.log('edit');
             this.props.editIdentity(profileInfo);
         } else {
             this.props.sendIdentity(profileInfo);
+            console.log('tambah baru');
         }
     };
 }

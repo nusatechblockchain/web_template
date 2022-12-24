@@ -118,7 +118,7 @@ export interface RootState {
         recentTrades: RecentTradesState;
         rgl: GridLayoutState;
         p2p: P2PState;
-        withdrawLimits: WithdrawLimitsState,
+        withdrawLimits: WithdrawLimitsState;
     };
     user: {
         abilities: AbilitiesState;

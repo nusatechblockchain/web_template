@@ -1,45 +1,40 @@
+import cr from 'classnames';
+import * as countries from 'i18n-iso-countries';
 import * as React from 'react';
+import { Button } from 'react-bootstrap';
 import { injectIntl } from 'react-intl';
+import MaskInput from 'react-maskinput';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
-import { RouterProps, withRouter } from 'react-router';
+import { RouterProps } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
-import { setDocumentTitle } from '../../../helpers';
-import MaskInput from 'react-maskinput';
-import { CloseIcon } from '../../../assets/images/CloseIcon';
-import { CustomInput, Modal } from '../../components';
-import { KycDrivingLicense, KycNationalCard, KycPasport } from '../../containers';
-import { PasportIcon, DrivingLlicenseIcon, NationalIDIcon } from '../../../assets/images/KycIcon';
 import { accountUploadSizeMaxRange, accountUploadSizeMinRange, languages } from '../../../api/config';
+import { CustomInput, UploadFile } from '../../components';
 import { formatDate, isDateInFuture, randomSecureHex } from '../../../helpers';
-import { sendDocuments, selectSendDocumentsSuccess, alertPush, RootState } from '../../../modules';
+import {
+    alertPush,
+    RootState,
+    selectCurrentLanguage,
+    selectMobileDeviceState,
+    selectSendDocumentsSuccess,
+    sendDocuments,
+} from '../../../modules';
+import { DrivingLlicenseIcon, NationalIDIcon, PasportIcon, UploadFileIcon } from '../../../assets/images/KycIcon';
+import { CloseIcon } from '../../../assets/images/CloseIcon';
+import DocumentFrontExample from 'src/assets/images/kyc/DocumentFrontExample.svg';
+import DocumentBackExample from 'src/assets/images/kyc/DocumentBackExample.svg';
+import DocumentSelfieExample from 'src/assets/images/kyc/DocumentSelfieExample.svg';
 
-interface KycScreenState {
-    documentsType: string;
-    idNumber: string;
-    issuedDate: string;
-    showModal: boolean;
-    issuedDateFocused: boolean;
-    expireDate: string;
-    expireDateFocused: boolean;
-    idNumberFocused: boolean;
-    fileFront: File[];
-    fileBack: File[];
-    fileSelfie: File[];
-    frontFileSizeErrorMessage: string;
-    backFileSizeErrorMessage: string;
-    selfieFileSizeErrorMessage: string;
+interface ReduxProps {
+    lang: string;
+    success?: string;
+    isMobileDevice: boolean;
 }
 
-interface HistoryProps {
-    history: {
-        location: {
-            search: string;
-            state: {
-                email: string;
-            };
-        };
-    };
+interface DispatchProps {
+    sendDocuments: typeof sendDocuments;
+    fetchAlert: typeof alertPush;
 }
 
 interface OnChangeEvent {
@@ -48,39 +43,22 @@ interface OnChangeEvent {
     };
 }
 
-interface ReduxProps {
-    success?: string;
+interface DocumentsState {
+    documentsType: string;
+    issuedDate: string;
+    expireDate: string;
+    idNumber: string;
+    fileFront: File[];
+    fileBack: File[];
+    fileSelfie: File[];
+    frontFileSizeErrorMessage: string;
+    backFileSizeErrorMessage: string;
+    selfieFileSizeErrorMessage: string;
 }
 
-interface DispatchProps {
-    sendDocuments: typeof sendDocuments;
-    fetchAlert: typeof alertPush;
-}
+type Props = ReduxProps & DispatchProps & RouterProps & IntlProps;
 
-type Props = ReduxProps & DispatchProps & RouterProps & HistoryProps & IntlProps & KycScreenState;
-
-class KycDocumentComponent extends React.Component<Props, KycScreenState> {
-    constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            documentsType: '',
-            idNumber: '',
-            issuedDate: '',
-            showModal: false,
-            issuedDateFocused: false,
-            expireDate: '',
-            expireDateFocused: false,
-            idNumberFocused: false,
-            fileFront: [],
-            fileBack: [],
-            fileSelfie: [],
-            frontFileSizeErrorMessage: '',
-            backFileSizeErrorMessage: '',
-            selfieFileSizeErrorMessage: '',
-        };
-    }
-
+class KycDocumentComponent extends React.Component<Props, DocumentsState> {
     public translate = (key: string, value?: string, min?: string) =>
         this.props.intl.formatMessage({ id: key }, { value, min });
 
@@ -90,28 +68,45 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
         this.translate('page.body.kyc.documents.select.driverLicense'),
     ];
 
-    public componentDidMount() {
-        setDocumentTitle('Kyc Screen');
-        this.setState({ documentsType: 'Passport' });
+    public state = {
+        documentsType: '',
+        issuedDate: '',
+        expireDate: '',
+        idNumber: '',
+        fileFront: [],
+        fileBack: [],
+        fileSelfie: [],
+        frontFileSizeErrorMessage: '',
+        backFileSizeErrorMessage: '',
+        selfieFileSizeErrorMessage: '',
+    };
+
+    public UNSAFE_componentWillReceiveProps(next: Props) {
+        if (next.success && !this.props.success) {
+            this.props.history.push('/profile');
+        }
     }
 
     public render() {
+        const { isMobileDevice } = this.props;
         const {
             documentsType,
-            issuedDate,
-            issuedDateFocused,
-            idNumber,
-            idNumberFocused,
             fileFront,
             fileBack,
             fileSelfie,
+            issuedDate,
+            expireDate,
+            idNumber,
             frontFileSizeErrorMessage,
             backFileSizeErrorMessage,
             selfieFileSizeErrorMessage,
-            showModal,
-        } = this.state;
+        }: DocumentsState = this.state;
 
-        const checkForm = documentsType != '' && issuedDate != '' && idNumber != '';
+        /* tslint:disable */
+        languages.map((l: string) => countries.registerLocale(require(`i18n-iso-countries/langs/${l}.json`)));
+        /* tslint:enable */
+
+        const onSelect = (value) => this.handleChangeDocumentsType(this.data[value]);
 
         return (
             <React.Fragment>
@@ -196,54 +191,93 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
                                                 <MaskInput
                                                     maskString="00/00/0000"
                                                     mask="00/00/0000"
-                                                    onChange={(value) => this.handleChangeIssuedDate(value)}
+                                                    onChange={this.handleChangeIssuedDate}
                                                     value={issuedDate}
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {documentsType == 'Passport' ? (
-                                    <KycPasport
-                                        handleUploadScanFront={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'front')
-                                        }
-                                        handleUploadScanSelfie={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'selfie')
-                                        }
-                                    />
-                                ) : documentsType == 'Identity card' ? (
-                                    <KycNationalCard
-                                        handleUploadScanFront={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'front')
-                                        }
-                                        handleUploadScanBack={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'back')
-                                        }
-                                        handleUploadScanSelfie={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'selfie')
-                                        }
-                                    />
-                                ) : documentsType == 'Driver license' ? (
-                                    <KycDrivingLicense
-                                        handleUploadScanFront={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'front')
-                                        }
-                                        handleUploadScanBack={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'back')
-                                        }
-                                        handleUploadScanSelfie={(uploadEvent) =>
-                                            this.handleUploadScan(uploadEvent, 'selfie')
-                                        }
-                                    />
-                                ) : (
-                                    ''
-                                )}
+                                <div className="row">
+                                    {this.state.documentsType ? (
+                                        <div className="col-lg-6">
+                                            <UploadFile
+                                                isMobileDevice={isMobileDevice}
+                                                id="fileFront"
+                                                title={this.translate('page.body.kyc.documents.uploadFile.front.title')}
+                                                label={this.translate('page.body.kyc.documents.uploadFile.front.label')}
+                                                buttonText={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.front.button'
+                                                )}
+                                                sizesText={this.uploadFileSizeGuide()}
+                                                formatsText={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.front.formats'
+                                                )}
+                                                handleUploadScan={(uploadEvent) =>
+                                                    this.handleUploadScan(uploadEvent, 'front')
+                                                }
+                                                exampleImagePath={DocumentFrontExample}
+                                                uploadedFile={fileFront[0] && (fileFront[0] as File).name}
+                                                fileSizeErrorMessage={frontFileSizeErrorMessage}
+                                            />
+                                        </div>
+                                    ) : null}
+                                    {this.state.documentsType && this.state.documentsType !== 'Passport' ? (
+                                        <div className="col-lg-6">
+                                            <UploadFile
+                                                isMobileDevice={isMobileDevice}
+                                                id="fileBack"
+                                                title={this.translate('page.body.kyc.documents.uploadFile.back.title')}
+                                                label={this.translate('page.body.kyc.documents.uploadFile.back.label')}
+                                                buttonText={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.back.button'
+                                                )}
+                                                sizesText={this.uploadFileSizeGuide()}
+                                                formatsText={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.back.formats'
+                                                )}
+                                                handleUploadScan={(uploadEvent) =>
+                                                    this.handleUploadScan(uploadEvent, 'back')
+                                                }
+                                                exampleImagePath={DocumentBackExample}
+                                                uploadedFile={fileBack[0] && (fileBack[0] as File).name}
+                                                fileSizeErrorMessage={backFileSizeErrorMessage}
+                                            />
+                                        </div>
+                                    ) : null}
+                                    {this.state.documentsType ? (
+                                        <div className="col-lg-6">
+                                            <UploadFile
+                                                isMobileDevice={isMobileDevice}
+                                                id="fileSelfie"
+                                                title={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.selfie.title'
+                                                )}
+                                                label={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.selfie.label'
+                                                )}
+                                                buttonText={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.selfie.button'
+                                                )}
+                                                sizesText={this.uploadFileSizeGuide()}
+                                                formatsText={this.translate(
+                                                    'page.body.kyc.documents.uploadFile.selfie.formats'
+                                                )}
+                                                handleUploadScan={(uploadEvent) =>
+                                                    this.handleUploadScan(uploadEvent, 'selfie')
+                                                }
+                                                exampleImagePath={DocumentSelfieExample}
+                                                uploadedFile={fileSelfie[0] && (fileSelfie[0] as File).name}
+                                                fileSizeErrorMessage={selfieFileSizeErrorMessage}
+                                            />
+                                        </div>
+                                    ) : null}
+                                </div>
                                 <button
                                     type="button"
                                     className="btn btn-primary px-lg mt-4"
-                                    onClick={() => this.setState({ showModal: true })}
-                                    disabled={!checkForm}>
+                                    onClick={this.sendDocuments}
+                                    disabled={this.handleCheckButtonDisabled()}>
                                     Submit
                                 </button>
                             </form>
@@ -251,37 +285,13 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
                     </div>
                 </div>
 
-                <Modal
+                {/* <Modal
                     content={this.renderContentModal()}
                     header={this.renderHeaderModal()}
                     footer={this.renderFooterModal()}
                     show={showModal}
-                />
+                /> */}
             </React.Fragment>
-        );
-    }
-
-    private renderHeaderModal() {
-        return <h6 className="text-md white-text font-semibold">Document Upload Success</h6>;
-    }
-
-    private renderContentModal() {
-        return (
-            <p className="text-sm grey-text-accent mb-0">
-                The verification process takes up to 7 days, always check your email to find out the information of the
-                documents you uploaded
-            </p>
-        );
-    }
-
-    private renderFooterModal() {
-        return (
-            <button
-                type="button"
-                onClick={() => this.setState({ showModal: false })}
-                className="btn btn-primary sm mx-2 px-5">
-                Continue
-            </button>
         );
     }
 
@@ -309,9 +319,15 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
         });
     };
 
-    private handleChangeIssuedDate = (e) => {
+    private handleChangeIssuedDate = (e: OnChangeEvent) => {
         this.setState({
             issuedDate: formatDate(e.target.value),
+        });
+    };
+
+    private handleChangeExpiration = (e: OnChangeEvent) => {
+        this.setState({
+            expireDate: formatDate(e.target.value),
         });
     };
 
@@ -426,7 +442,6 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
         return (
             !this.handleValidateInput('idNumber', idNumber) ||
             !this.handleValidateInput('issuedDate', issuedDate) ||
-            (expireDate && !this.handleValidateInput('expireDate', expireDate)) ||
             !filesValid
         );
     };
@@ -449,7 +464,7 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
     };
 
     private createFormData = (docCategory: string, upload: File[], identificator: string) => {
-        const { documentsType, expireDate, issuedDate, idNumber }: KycScreenState = this.state;
+        const { documentsType, expireDate, issuedDate, idNumber }: DocumentsState = this.state;
         const typeOfDocuments = this.getDocumentsType(documentsType);
 
         const request = new FormData();
@@ -483,7 +498,9 @@ class KycDocumentComponent extends React.Component<Props, KycScreenState> {
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => ({
+    lang: selectCurrentLanguage(state),
     success: selectSendDocumentsSuccess(state),
+    isMobileDevice: selectMobileDeviceState(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
@@ -491,4 +508,8 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispa
     sendDocuments: (payload) => dispatch(sendDocuments(payload)),
 });
 
-export const KycDocument = compose(injectIntl, withRouter, connect())(KycDocumentComponent) as React.ComponentClass;
+export const KycDocument = compose(
+    injectIntl,
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(KycDocumentComponent) as any;

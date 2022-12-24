@@ -890,6 +890,7 @@ export const en = {
     'resource.labels.private': "Can't update label",
     'resource.user.no_activity': 'No activity recorded or wrong topic',
     'resource.profile.not_exist': 'User has no profile',
+    // 'resource.profile.doesnt_exist_or_not_editable': 'Resource profile doesnt exist ',
     'resource.profile.exist': 'Profile already exists',
     'resource.api_key.2fa_disabled': 'Only accounts with enabled 2FA alowed',
     'resource.api_key.missing_otp': 'Theaccount has enabled 2FA but OTP code is missing',

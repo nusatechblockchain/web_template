@@ -30,3 +30,4 @@ export * from './MarketNewListingTabs';
 export * from './MarketSpotTabs';
 export * from './ModalTwoFa';
 export * from './CardMarketDetail';
+export * from './UploadFile';
