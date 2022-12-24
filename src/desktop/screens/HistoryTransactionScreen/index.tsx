@@ -1,196 +1,81 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
-import { selectCurrencies, Currency } from 'src/modules';
-import { Link } from 'react-router-dom';
-import { Table } from 'src/components';
-import { CustomStylesSelect } from 'src/desktop/components';
+import { useDocumentTitle, useWalletsFetch, useHistoryFetch } from '../../../hooks';
+import {
+    selectCurrencies,
+    Currency,
+    selectHistory,
+    selectFirstElemIndex,
+    selectCurrentPage,
+    selectLastElemIndex,
+    selectNextPageExists,
+    RootState,
+} from '../../../modules';
+import { Table } from '../../../components';
+import { Pagination } from '../../../desktop/components';
+import { CustomStylesSelect } from '../../../desktop/components';
 import { Tabs, Tab } from 'react-bootstrap';
-import { BtcIcon } from 'src/assets/images/CoinIcon';
 import Select from 'react-select';
+import moment from 'moment';
 import './HistoryTransactionScreen.pcss';
 
+const DEFAULT_LIMIT = 5;
 export const HistoryTransactionScreen: FC = (): ReactElement => {
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const page = useSelector(selectCurrentPage);
+    const list = useSelector(selectHistory);
 
-    useDocumentTitle('Market List');
+    const [currentPage, setCurrentPage] = React.useState(0);
+    const [currency, setCurrency] = React.useState('trx');
+    const [type, setType] = React.useState('deposits');
+    const [status, setStatus] = React.useState('completed');
+    const [date, setDate] = React.useState('');
+
+    const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
+    const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
+    const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, DEFAULT_LIMIT));
+
+    const historyFetch = useHistoryFetch({ type: type, currency: currency, limit: DEFAULT_LIMIT, page: currentPage });
+    useDocumentTitle('Transaction History');
     useWalletsFetch();
 
-    const dataAll = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Pending',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Withdrawal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Transfer Internal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Canceled',
-        },
-    ];
+    const handleChangeType = (e) => {
+        setType(e);
+        historyFetch;
+    };
 
-    const dataDeposit = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Pending',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Canceled',
-        },
-    ];
-
-    const dataWithdrawal = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Withdrawal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Pending',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Withdrawal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Withdrawal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Withdrawal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Canceled',
-        },
-    ];
-
-    const dataTransferInternal = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Transfer Internal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Pending',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Transfer Internal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Transfer Internal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Transfer Internal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            txid: 'TXASF21351S...',
-            status: 'Canceled',
-        },
-    ];
+    const onClickPrevPage = () => {
+        setCurrentPage(Number(page) - 1);
+    };
+    const onClickNextPage = () => {
+        setCurrentPage(Number(page) + 1);
+    };
 
     const getTableHeaders = () => {
-        return ['Date', 'Type', 'Asset', 'Ammount', 'TxID', 'Status'];
+        return ['Date', 'Type', 'Asset', 'Ammount', 'Receiver UID', 'Status'];
     };
 
     const getTableData = (data) => {
         return data.map((item) => [
-            <p className="m-0 text-sm white-text">{item.date}</p>,
+            <p className="m-0 text-sm white-text">{moment(item.created_at).format('D MMM YYYY - HH:mm')}</p>,
             <p
                 className={`m-0 text-sm font-bold ${
-                    item.type === 'Deposit' ? 'contrast-text' : item.type === 'Withdrawal' ? 'danger-text' : 'blue-text'
+                    type === 'deposits' ? 'contrast-text' : type === 'withdraws' ? 'danger-text' : 'blue-text'
                 }`}>
-                {item.type}
+                {type === 'deposits'
+                    ? 'Deposit'
+                    : type === 'withdraws'
+                    ? 'Withdrawal'
+                    : type === 'transfers'
+                    ? 'Internal Transfer'
+                    : ''}
             </p>,
             <div className="d-flex align-items-center text-sm">
                 <span className="mr-12">{item.icon}</span>
-                <p className="m-0 mr-24 white-text font-bold">{item.assets}</p>
+                <p className="m-0 mr-24 white-text font-bold">{item.currency.toUpperCase()}</p>
             </div>,
-            <p className="m-0 text-sm white-text">{item.ammount}</p>,
-            <p className="m-0 text-sm white-text text-italic">{item.txid}</p>,
+            <p className="m-0 text-sm white-text">{item.amount}</p>,
+            <p className="m-0 text-sm white-text text-italic">{item.receiver_uid}</p>,
             <p
                 className={`m-0 text-sm ${
                     item.status === 'Pending'
@@ -199,7 +84,13 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                         ? 'danger-text'
                         : 'green-text'
                 }`}>
-                {item.status}
+                {item.status === 'pending'
+                    ? 'Pending'
+                    : item.status === 'canceled'
+                    ? 'Canceled'
+                    : item.status === 'completed'
+                    ? 'Completed'
+                    : ''}
             </p>,
         ]);
     };
@@ -212,7 +103,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
 
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
-        { label: <p className="m-0 text-sm grey-text-accent">Done</p>, value: 'done' },
+        { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'completed' },
         { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
     ];
 
@@ -256,10 +147,11 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     <p className="m-0 white-text text-sm mb-8">Assets</p>
                     <Select
                         value={optionAssets.filter(function (option) {
-                            return option.value === 'bnb';
+                            return option.value === currency;
                         })}
                         styles={CustomStylesSelect}
                         options={optionAssets}
+                        onChange={(e) => setCurrency(e.value)}
                     />
                 </div>
 
@@ -267,10 +159,11 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     <p className="m-0 white-text text-sm mb-8">Status</p>
                     <Select
                         value={optionStatus.filter(function (option) {
-                            return option.value === 'pending';
+                            return option.value === status;
                         })}
                         styles={CustomStylesSelect}
                         options={optionStatus}
+                        onChange={(e) => setStatus(e.value)}
                     />
                 </div>
 
@@ -296,29 +189,57 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                 </div>
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="transaction-history-tabs">
-                        <Tabs defaultActiveKey="deposit" id="uncontrolled-tab-example" className="mb-3">
-                            {/* <Tab eventKey="all" title="All" className="mb-24">
+                        <Tabs
+                            defaultActiveKey="deposits"
+                            onSelect={(e) => handleChangeType(e)}
+                            id="uncontrolled-tab-example"
+                            className="mb-3">
+                            <Tab eventKey="deposits" title="Deposit" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(dataAll)} />
-                                </div>
-                            </Tab> */}
-                            <Tab eventKey="deposit" title="Deposit" className="mb-24">
-                                <div className="mt-24">
-                                    {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(dataDeposit)} />
+                                    <Table header={getTableHeaders()} data={getTableData(list)} />
+                                    {list[0] && (
+                                        <Pagination
+                                            firstElemIndex={firstElemIndex}
+                                            lastElemIndex={lastElemIndex}
+                                            page={page}
+                                            nextPageExists={nextPageExists}
+                                            onClickPrevPage={onClickPrevPage}
+                                            onClickNextPage={onClickNextPage}
+                                        />
+                                    )}
                                 </div>
                             </Tab>
-                            <Tab eventKey="withdrawal" title="Withdrawal" className="mb-24">
+                            <Tab eventKey="withdraws" title="Withdrawal" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(dataWithdrawal)} />
+                                    <Table header={getTableHeaders()} data={getTableData(list)} />
+                                    {list[0] && (
+                                        <Pagination
+                                            firstElemIndex={firstElemIndex}
+                                            lastElemIndex={lastElemIndex}
+                                            page={page}
+                                            nextPageExists={nextPageExists}
+                                            onClickPrevPage={onClickPrevPage}
+                                            onClickNextPage={onClickNextPage}
+                                        />
+                                    )}
                                 </div>
                             </Tab>
-                            <Tab eventKey="internal-transfer" title="Internal Transfer" className="mb-24">
+                            <Tab eventKey="transfers" title="Internal Transfer" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(dataTransferInternal)} />
+                                    <Table header={getTableHeaders()} data={getTableData(list)} />
+                                    {list[0] && (
+                                        <Pagination
+                                            firstElemIndex={firstElemIndex}
+                                            lastElemIndex={lastElemIndex}
+                                            page={page}
+                                            nextPageExists={nextPageExists}
+                                            onClickPrevPage={onClickPrevPage}
+                                            onClickNextPage={onClickNextPage}
+                                        />
+                                    )}
                                 </div>
                             </Tab>
                         </Tabs>

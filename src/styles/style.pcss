@@ -305,8 +305,9 @@ body {
 }
 
 .btn-transparent:focus {
-    border: 0;
-    outline: 0;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 button:disabled,
@@ -504,6 +505,10 @@ button[disabled] {
 .w-10 {
     width: 10% !important;
 }
+
+.min-w-500 {
+    min-width: 500px !important;
+}
 /* end width variable */
 
 /* notification  style*/
@@ -517,6 +522,12 @@ button[disabled] {
     }
 }
 /* end notification */
+
+/* modal variable */
+.modal-md {
+    min-width: 500px !important;
+}
+/* end modal variable */
 
 /* another css variable */
 .right-position {

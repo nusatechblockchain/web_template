@@ -129,8 +129,8 @@ export const WalletWithdrawalForm: React.FC = () => {
                         <div
                             onClick={() =>
                                 beneficiaries && beneficiaries[0]
-                                    ? setShowModalBeneficiaryList(!showModalBeneficiaryList)
-                                    : setShowModalModalAddBeneficiary(!showModalAddBeneficiary)
+                                    ? setShowModalBeneficiaryList(true)
+                                    : setShowModalModalAddBeneficiary(true)
                             }>
                             <CustomInput
                                 type="text"
@@ -148,7 +148,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                             />
                         </div>
                         <span
-                            onClick={() => setShowModalModalAddBeneficiary(!showModalAddBeneficiary)}
+                            onClick={() => setShowModalModalAddBeneficiary(true)}
                             className="position-absolute cursor-pointer">
                             <CirclePlusIcon />
                         </span>
