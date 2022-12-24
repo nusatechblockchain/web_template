@@ -1,9 +1,10 @@
 import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 import { selectCurrencies } from 'src/modules';
 import './TradingFutureOrderForm.pcss';
 import { SpeedIcon } from 'src/assets/images/SpeedIcon';
 import { CustomInput, Modal } from 'src/desktop/components';
+import { selectUserLoggedIn } from '../../../modules';
+import { useSelector } from 'react-redux';
 
 export const TradingFutureOrderForm: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
@@ -11,6 +12,7 @@ export const TradingFutureOrderForm: FC = (): ReactElement => {
     const [showModalBuySuccessfully, setShowModalBuySuccessfully] = React.useState(false);
     const [showModalSellConfirmation, setShowModalSellConfirmation] = React.useState(false);
     const [showModalSellSuccessfully, setShowModalSellSuccessfully] = React.useState(false);
+    const isLoggedin = useSelector(selectUserLoggedIn);
 
     const renderHeaderModalBuyConfirmation = () => {
         return <h6 className="text-md white-text font-semibold">Are you sure to Buy BTC?</h6>;
@@ -130,7 +132,7 @@ export const TradingFutureOrderForm: FC = (): ReactElement => {
         <React.Fragment>
             <div className="pr-3">
                 <p className="white-text font-bold text-sm mb-6">Order Form</p>
-                <form action="">
+                <form action="" className={isLoggedin ? '' : 'blur-effect'}>
                     <div className="d-flex mb-1 order-tab">
                         <input
                             type="radio"
@@ -354,6 +356,7 @@ export const TradingFutureOrderForm: FC = (): ReactElement => {
                             type="button"
                             className="btn btn-success px-4"
                             data-toggle="modal"
+                            disabled={!isLoggedin}
                             data-target="#buy-order">
                             Buy Long
                         </button>
@@ -362,6 +365,7 @@ export const TradingFutureOrderForm: FC = (): ReactElement => {
                             type="button"
                             className="btn btn-danger px-4"
                             data-toggle="modal"
+                            disabled={!isLoggedin}
                             data-target="#sell-order">
                             Sell Short
                         </button>

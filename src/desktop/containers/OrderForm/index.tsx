@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Modal } from '../../components';
+import { selectUserLoggedIn } from '../../../modules';
+import { useSelector } from 'react-redux';
 
 const OrderFormComponent = (props) => {
     const [orderType, setOrderType] = React.useState('');
@@ -8,6 +10,7 @@ const OrderFormComponent = (props) => {
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
     const [showModalSellSuccess, setShowModalSellSuccess] = React.useState(false);
+    const isLoggedin = useSelector(selectUserLoggedIn);
 
     const renderModalContentSell = () => (
         <React.Fragment>
@@ -71,7 +74,7 @@ const OrderFormComponent = (props) => {
         <React.Fragment>
             <div className="p-3">
                 <p className="white-text font-bold text-sm mb-3">Order Form</p>
-                <div className="row">
+                <div className={isLoggedin ? 'row ' : 'row blur-effect'}>
                     <div className="col-6">
                         <form action="">
                             <div className="d-flex mb-1 order-tab">
@@ -287,7 +290,8 @@ const OrderFormComponent = (props) => {
                             <button
                                 type="button"
                                 className="btn btn-success btn-block"
-                                onClick={() => setShowModalBuy(true)}>
+                                onClick={() => setShowModalBuy(true)}
+                                disabled={!isLoggedin}>
                                 Buy BTC
                             </button>
                         </form>
@@ -516,6 +520,7 @@ const OrderFormComponent = (props) => {
                             <button
                                 type="button"
                                 className="btn btn-danger btn-block"
+                                disabled={!isLoggedin}
                                 onClick={() => setShowModalSell(true)}>
                                 Sell BTC
                             </button>

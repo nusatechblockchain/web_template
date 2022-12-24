@@ -296,13 +296,13 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                 </div>
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="transaction-history-tabs">
-                        <Tabs defaultActiveKey="all" id="uncontrolled-tab-example" className="mb-3">
-                            <Tab eventKey="all" title="All" className="mb-24">
+                        <Tabs defaultActiveKey="deposit" id="uncontrolled-tab-example" className="mb-3">
+                            {/* <Tab eventKey="all" title="All" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
                                     <Table header={getTableHeaders()} data={getTableData(dataAll)} />
                                 </div>
-                            </Tab>
+                            </Tab> */}
                             <Tab eventKey="deposit" title="Deposit" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
