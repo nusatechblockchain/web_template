@@ -32,7 +32,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
 
     const [showModalTransfer, setShowModalTransfer] = React.useState(props.showModalTransfer);
     const [showModalTransferConfirmation, setShowModalTransferConfirmation] = React.useState(false);
-    const [showModalTransferSuccessfully, setShowModalTransferSuccessfully] = React.useState(false);
 
     const [amount, setAmount] = React.useState('');
     const [uid, setUid] = React.useState('');
@@ -57,6 +56,12 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
         setUid(value);
     };
 
+    const disableButton = () => {
+        if (amount === '' || uid === '' || otp === '' || otp.length < 6) {
+            return true;
+        }
+    };
+
     const handleCreateTransfer = () => {
         const payload = {
             currency: currency.toLowerCase(),
@@ -70,8 +75,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
 
     React.useEffect(() => {
         if (transferSuccess) {
-            setShowModalTransferConfirmation(!showModalTransferConfirmation);
-            setShowModalTransferSuccessfully(!showModalTransferSuccessfully);
+            setShowModalTransferConfirmation(false);
         }
     }, [transferSuccess]);
 
@@ -110,97 +114,103 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
         return (
             <React.Fragment>
                 <div className="body mb-24">
-                    <p className="text-ms white-text mb-24">Send Assets to another member</p>
-                    <div className="form">
-                        <div className="mb-24">
-                            <CustomInput
-                                type="text"
-                                label={'Enter a valid UID of a user you want to transfer money'}
-                                placeholder={'Enter UID'}
-                                defaultLabel={'Enter a valid UID of a user you want to transfer money'}
-                                handleChangeInput={handleChangeUid}
-                                inputValue={uid}
-                                // handleFocusInput={}
-                                classNameLabel="text-ms white-text mb-8"
-                                classNameInput={`dark-bg-accent`}
-                                autoFocus={false}
-                                labelVisible
-                            />
-                        </div>
+                    {user.otp ? (
+                        <React.Fragment>
+                            <p className="text-ms white-text mb-24">Send Assets to another member</p>
+                            <div className="form">
+                                <div className="mb-24">
+                                    <CustomInput
+                                        type="text"
+                                        label={'Enter a valid UID of a user you want to transfer money'}
+                                        placeholder={'Enter UID'}
+                                        defaultLabel={'Enter a valid UID of a user you want to transfer money'}
+                                        handleChangeInput={handleChangeUid}
+                                        inputValue={uid}
+                                        classNameLabel="text-ms white-text mb-8"
+                                        classNameInput={`dark-bg-accent`}
+                                        autoFocus={false}
+                                        labelVisible
+                                    />
+                                </div>
 
-                        <div className="d-flex flex-column justify-content-between align-items-start">
-                            <p className="text-ms white-text mb-8">Coins</p>
+                                <div className="d-flex flex-column justify-content-between align-items-start">
+                                    <p className="text-ms white-text mb-8">Coins</p>
 
-                            <div className="w-100">
-                                <Select
-                                    value={optionCurrency.filter(function (option) {
-                                        return option.value === currency;
-                                    })}
-                                    styles={CustomStylesSelect}
-                                    options={optionCurrency}
-                                />
+                                    <div className="w-100">
+                                        <Select
+                                            value={optionCurrency.filter(function (option) {
+                                                return option.value === currency;
+                                            })}
+                                            styles={CustomStylesSelect}
+                                            options={optionCurrency}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <CustomInput
+                                        type="text"
+                                        label={'Input Ammount to send'}
+                                        placeholder={'Input Amount'}
+                                        defaultLabel={'Input Ammount to send'}
+                                        handleChangeInput={handleChangeAmount}
+                                        inputValue={amount}
+                                        classNameLabel="text-ms white-text mb-8"
+                                        classNameInput={`dark-bg-accent`}
+                                        autoFocus={false}
+                                        labelVisible
+                                    />
+                                </div>
+
+                                <div className="py-3 px-3 mb-3 dark-bg-main radius-md d-flex justify-content-between">
+                                    <div className="mr-2">
+                                        <p className="mb-2 text-sm white-text">Available</p>
+                                        <p className="mb-2 text-sm white-text">Balance</p>
+                                    </div>
+                                    <div className="ml-2">
+                                        <p className="mb-2 text-sm grey-text">
+                                            {' '}
+                                            <Decimal fixed={selectedFixed} thousSep=",">
+                                                {balance}
+                                            </Decimal>{' '}
+                                            {currency.toUpperCase()}
+                                        </p>
+                                        <p className="mb-2 text-sm grey-text-accent">$ 0</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <CustomInput
+                                        type="text"
+                                        label={'Enter 2FA Code'}
+                                        placeholder={'2FA Code'}
+                                        defaultLabel={'Enter 2FA Code'}
+                                        handleChangeInput={handleChangeOtp}
+                                        inputValue={otp}
+                                        classNameLabel="text-ms white-text mb-8"
+                                        classNameInput={`dark-bg-accent`}
+                                        autoFocus={false}
+                                        labelVisible
+                                    />
+                                </div>
+
+                                <button
+                                    disabled={disableButton()}
+                                    onClick={() => {
+                                        setShowModalTransfer(false);
+                                        setShowModalTransferConfirmation(true);
+                                    }}
+                                    type="button"
+                                    className="btn btn-primary btn-block">
+                                    Continue
+                                </button>
                             </div>
-                        </div>
-
-                        <div>
-                            <CustomInput
-                                type="text"
-                                label={'Input Ammount to send'}
-                                placeholder={'Input Amount'}
-                                defaultLabel={'Input Ammount to send'}
-                                handleChangeInput={handleChangeAmount}
-                                inputValue={amount}
-                                // handleFocusInput={}
-                                classNameLabel="text-ms white-text mb-8"
-                                classNameInput={`dark-bg-accent`}
-                                autoFocus={false}
-                                labelVisible
-                            />
-                        </div>
-
-                        <div className="py-3 px-3 mb-3 dark-bg-main radius-md d-flex justify-content-between">
-                            <div className="mr-2">
-                                <p className="mb-2 text-sm white-text">Available</p>
-                                <p className="mb-2 text-sm white-text">Balance</p>
-                            </div>
-                            <div className="ml-2">
-                                <p className="mb-2 text-sm grey-text">
-                                    {' '}
-                                    <Decimal fixed={selectedFixed} thousSep=",">
-                                        {balance}
-                                    </Decimal>{' '}
-                                    {currency.toUpperCase()}
-                                </p>
-                                <p className="mb-2 text-sm grey-text-accent">$ 0</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <CustomInput
-                                type="text"
-                                label={'Enter 2FA Code'}
-                                placeholder={'2FA Code'}
-                                defaultLabel={'Enter 2FA Code'}
-                                handleChangeInput={handleChangeOtp}
-                                inputValue={otp}
-                                // handleFocusInput={}
-                                classNameLabel="text-ms white-text mb-8"
-                                classNameInput={`dark-bg-accent`}
-                                autoFocus={false}
-                                labelVisible
-                            />
-                        </div>
-
-                        <button
-                            onClick={() => {
-                                setShowModalTransfer(!showModalTransfer);
-                                setShowModalTransferConfirmation(!showModalTransferConfirmation);
-                            }}
-                            type="button"
-                            className="btn btn-primary btn-block">
-                            Continue
-                        </button>
-                    </div>
+                        </React.Fragment>
+                    ) : (
+                        <p className="mt-4  warning-text font-semibold text-md">
+                            Please enable Two-Factor Authentication
+                        </p>
+                    )}
                 </div>
             </React.Fragment>
         );
@@ -235,31 +245,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
         );
     };
 
-    const renderHeaderModalTransferSuccessfully = () => {
-        return (
-            <React.Fragment>
-                <h6 className="text-md white-text font-semibold m-0">Transfer BTC has Successfully </h6>
-            </React.Fragment>
-        );
-    };
-
-    const renderContentModalTransferSuccessfully = () => {
-        return (
-            <React.Fragment>
-                <p className="text-ms grey-text-accent font-semibold mb-24">
-                    You success to transfer {amount} {currency.toUpperCase()} to UID {uid}
-                </p>
-                <div className="d-flex">
-                    <button
-                        className="btn btn-danger sm px-5 mr-3"
-                        onClick={() => setShowModalTransferSuccessfully(!showModalTransferSuccessfully)}>
-                        Cancel
-                    </button>
-                </div>
-            </React.Fragment>
-        );
-    };
-
     return (
         <React.Fragment>
             <Modal
@@ -273,13 +258,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                     show={showModalTransferConfirmation}
                     header={renderHeaderModalTransferConfirmation()}
                     content={renderContentModalTransferConfirmation()}
-                />
-            )}
-            {showModalTransferSuccessfully && (
-                <Modal
-                    show={showModalTransferSuccessfully}
-                    header={renderHeaderModalTransferSuccessfully()}
-                    content={renderContentModalTransferSuccessfully()}
                 />
             )}
         </React.Fragment>
