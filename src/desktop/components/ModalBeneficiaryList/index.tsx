@@ -10,8 +10,9 @@ import { TrashIcon } from 'src/assets/images/TrashIcon';
 
 export interface ModalBeneficiaryListProps {
     showModalBeneficiaryList: boolean;
-    showModalAddBeneficiary: boolean;
-    blockchainKey: string;
+    showModalAddBeneficiary?: boolean;
+    blockchainKey?: string;
+    onClose: () => void;
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
@@ -26,15 +27,14 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
         (item) => item.blockchain_key === props.blockchainKey
     );
     const estimatedValueFee = +currencyItem?.price * +blockchainItem?.withdraw_fee;
+    console.log(beneficiaries, 'ini benefi');
 
     const renderHeaderBeneficiaryList = () => {
         return (
             <React.Fragment>
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <h6 className="text-md font-normal white-text mb-0">Select Form Addres Book</h6>
-                    <span
-                        onClick={() => setShowModalBeneficiaryList(!showModalBeneficiaryList)}
-                        className="cursor-pointer">
+                    <span onClick={props.onClose} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>
@@ -88,8 +88,8 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                     <div className="d-flex justify-content-center">
                         <button
                             onClick={() => {
-                                setShowModalBeneficiaryList(!showModalBeneficiaryList);
-                                setShowModalAddBeneficiary(!showModalAddBeneficiary);
+                                setShowModalBeneficiaryList(false);
+                                setShowModalAddBeneficiary(true);
                             }}
                             type="button"
                             className="btn btn-transparent gradient-text font-bold">
@@ -112,7 +112,12 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                     />
                 </div>
             )}
-            {showModalAddBeneficiary && <ModalAddBeneficiary showModalAddBeneficiary={showModalAddBeneficiary} />}
+            {showModalAddBeneficiary && (
+                <ModalAddBeneficiary
+                    onClose={() => setShowModalAddBeneficiary(false)}
+                    showModalAddBeneficiary={showModalAddBeneficiary}
+                />
+            )}
         </React.Fragment>
     );
 };
