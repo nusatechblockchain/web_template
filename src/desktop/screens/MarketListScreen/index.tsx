@@ -14,7 +14,7 @@ export const MarketListScreen: FC = (): ReactElement => {
 
     return (
         <React.Fragment>
-            <div className="pg-market-list-screen dark-bg-main">
+            <div className="pg-market-list-screen">
                 <div className="dark-bg-main container">
                     <MarketListHeader />
                 </div>

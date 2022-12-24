@@ -32,6 +32,7 @@ import {
     WithdrawlIcon,
     InternalTransferIcon,
 } from '../../../assets/images/sidebar';
+import { TradeHistory } from '../../../assets/images/sidebar/TradeHistory';
 import './Sidebar.pcss';
 import '../../../styles/colors.pcss';
 
@@ -86,127 +87,51 @@ class Side extends React.Component<Props, SidebarState> {
             dataProfile: [
                 {
                     name: 'Dashboard',
-                    icon: (
-                        <UserIcon
-                            strokeColor={
-                                localStorage.getItem('sidebar') === 'Dashboard'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/profile',
                     comingsoon: false,
                 },
                 {
                     name: 'Wallet',
-                    icon: (
-                        <WalletIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'Wallet'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/wallets',
                     comingsoon: false,
                 },
                 {
                     name: 'Market Order',
-                    icon: (
-                        <AnalysIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'Market Order'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/markets-open',
                     comingsoon: false,
                 },
                 {
                     name: 'Trade History',
-                    icon: (
-                        <CalendarIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'Trade History'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/trade-history',
                     comingsoon: false,
                 },
                 {
+                    name: 'Transaction History',
+                    path: '/history-transaction',
+                    comingsoon: false,
+                },
+                {
                     name: 'Security',
-                    icon: (
-                        <SecurityIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'Security'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/profile/security',
                     comingsoon: false,
                 },
                 {
                     name: 'Referral',
-                    icon: (
-                        <AddUserIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'Referral'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/profile/referral',
                     comingsoon: false,
                 },
                 {
                     name: 'API Management',
-                    icon: (
-                        <ApiIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'API Management'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/profile/api-key',
                     comingsoon: false,
                 },
                 {
                     name: 'Announcement',
-                    icon: (
-                        <AnnouncementIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'Announcement'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/announcement',
                     comingsoon: false,
                 },
                 {
                     name: 'FAQ',
-                    icon: (
-                        <FaqIcon
-                            fillColor={
-                                localStorage.getItem('sidebar') === 'FAQ'
-                                    ? 'var(--text-primary-color)'
-                                    : 'var(--text-secondary-color)'
-                            }
-                        />
-                    ),
                     path: '/faq',
                     comingsoon: false,
                 },
@@ -228,7 +153,7 @@ class Side extends React.Component<Props, SidebarState> {
                     <div className="sidebar dark-bg-accent">
                         <div className="mb-36"></div>
                         <ul>
-                            {this.state.dataProfile.slice(0, 4).map((el, i) => (
+                            {this.state.dataProfile.slice(0, 5).map((el, i) => (
                                 <li
                                     key={i}
                                     onClick={() => {
@@ -266,9 +191,17 @@ class Side extends React.Component<Props, SidebarState> {
                                                 }
                                             />
                                         ) : el.name === 'Trade History' ? (
-                                            <CalendarIcon
+                                            <TradeHistory
                                                 fillColor={
                                                     localStorage.getItem('sidebar') === 'Trade History'
+                                                        ? 'var(--text-primary-color)'
+                                                        : 'var(--text-secondary-color)'
+                                                }
+                                            />
+                                        ) : el.name === 'Transaction History' ? (
+                                            <CalendarIcon
+                                                fillColor={
+                                                    localStorage.getItem('sidebar') === 'Transaction History'
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -288,7 +221,7 @@ class Side extends React.Component<Props, SidebarState> {
                         </ul>
                         <div className="devider"></div>
                         <ul>
-                            {this.state.dataProfile.slice(4).map((el, i) => (
+                            {this.state.dataProfile.slice(5).map((el, i) => (
                                 <li
                                     key={i}
                                     onClick={() => {
