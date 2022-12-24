@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Lost2FAStep.pcss';
 import lostImg from '../../../../public/img/lost-two-fa.svg';
 
@@ -12,9 +13,14 @@ export const Lost2FAStep: React.FC = (): React.ReactElement => {
                     </div>
                     <h3 className="white-text text-center mb-24">Please Contact Support Admin</h3>
                     <p className=" grey-text-accent text-center">
-                        Please contact the heaven exchange admin contact and report that you have lost the two fa code
-                        then you will be assisted to get it back
+                        please contact the heaven exchange admin to find out the procedure for getting your google two
+                        factor authentication code back
                     </p>
+                    <div className="d-flex justify-content-center">
+                        <Link to={'/faq'} className="btn btn-primary btn-sm">
+                            Contact Support
+                        </Link>
+                    </div>
                 </div>
             </div>
         </React.Fragment>
