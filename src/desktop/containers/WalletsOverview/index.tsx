@@ -12,6 +12,7 @@ import {
     Wallet,
     User,
     selectUserInfo,
+    Currency,
 } from 'src/modules';
 import { estimateUnitValue } from 'src/helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY } from 'src/constants';
@@ -28,6 +29,7 @@ interface ExtendedWallet extends Wallet {
     spotLocked?: string;
     p2pBalance?: string;
     p2pLocked?: string;
+    status?: string;
 }
 
 const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
@@ -44,7 +46,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     ]);
     const wallets = useSelector(selectWallets);
     const abilities = useSelector(selectAbilities);
-    const currencies = useSelector(selectCurrencies);
+    const currencies: Currency[] = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const tickers = useSelector(selectMarketTickers);
     const user: User = useSelector(selectUserInfo);
@@ -59,11 +61,13 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                 if (cur.status === 'hidden' && user.role !== 'admin' && user.role !== 'superadmin') {
                     return null;
                 }
+
                 const spotWallet = wallets.find((i) => i.currency === cur.id);
                 return {
                     ...spotWallet,
                     spotBalance: spotWallet ? spotWallet.balance : '0',
                     spotLocked: spotWallet ? spotWallet.locked : '0',
+                    status: cur.status,
                 };
             });
 
@@ -83,6 +87,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         ],
         [isP2PEnabled]
     );
+
+    console.log(filteredWallets, 'wallets');
 
     const handleClickDeposit = useCallback(
         (currency) => {

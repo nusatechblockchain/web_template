@@ -26,6 +26,8 @@ export const WalletWithdrawalForm: React.FC = () => {
     const currencies: Currency[] = useSelector(selectCurrencies);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
 
+    console.log(currencies, 'INI CURRENCIES');
+
     const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
 
@@ -105,8 +107,6 @@ export const WalletWithdrawalForm: React.FC = () => {
             </React.Fragment>
         );
     };
-
-    console.log(beneficiaries, 'INI BENE');
 
     return (
         <React.Fragment>
