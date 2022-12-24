@@ -22,6 +22,7 @@ export interface PrivateTradeEvent {
     total: string;
     amount: string;
     market: string;
+    currency: string;
     created_at: string;
     taker_type: string;
     side?: string;
