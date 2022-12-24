@@ -206,9 +206,7 @@ class Head extends React.Component<Props, HeaderState> {
                                         className={`nav-item ${
                                             (location.pathname == '/profile' || location.pathname == '/') && 'active'
                                         }`}>
-                                        <Link
-                                            to={isLoggedIn ? '/profile' : '/'}
-                                            className="nav-link px-3 text-sm font-bold">
+                                        <Link to={'/'} className="nav-link px-3 text-sm font-bold">
                                             Home
                                         </Link>
                                     </li>

@@ -20,7 +20,6 @@ const defaultTicker = {
     high: '0.0',
     open: '0.0',
     low: '0.0',
-    // price_change_percent: '+0.00%',
     volume: '0.0',
 };
 
@@ -35,8 +34,6 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     const dispatch = useDispatch();
     const [favorite, setFavorite] = useState(false);
     const [favoriteMarket, setFavoriteMarket] = React.useState(JSON.parse(localStorage.getItem('favourites') || '[]'));
-
-    console.log(isLoggedin);
 
     useEffect(() => {
         setFavoriteMarket(JSON.parse(localStorage.getItem('favourites') || '[]'));
@@ -85,8 +82,9 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
             if (dataUser) {
                 const payload = {
                     ...user,
-                    data: JSON.stringify({ ...dataUser, dataMarket }),
+                    data: { ...dataUser, dataMarket },
                 };
+
                 dispatch(changeUserDataFetch({ user: payload }));
             }
         }
