@@ -11,6 +11,7 @@ import {
     Currency,
     selectMarkets,
     Market,
+    selectUserLoggedIn,
 } from '../../../modules';
 import { Decimal } from '../../../components';
 import { ModalMobile } from 'src/mobile/components';
@@ -38,6 +39,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const [showTrading, setShowTrading] = React.useState(false);
     const [showSidebar, setShowSidebar] = React.useState(false);
     const [key, setKey] = React.useState('USDT');
+    const isLoggedin = useSelector(selectUserLoggedIn);
     useDocumentTitle('Trading');
 
     const optionStatus = [
@@ -186,7 +188,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     />
                 )}
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
-                    <div className="buy-sell-container">
+                    <div className={`buy-sell-container  ${isLoggedin ? '' : 'blur-effect blur-mobile'}`}>
                         <ul className="nav nav-pills w-100" id="pills-tab" role="tablist">
                             <li
                                 className={`nav-item buy ${marketType == 'buy' && 'active'}`}
@@ -267,6 +269,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                                         type="button"
                                         className="btn-primary btn-buy btn-block"
                                         data-toggle="modal"
+                                        disabled={!isLoggedin}
                                         data-target="#modal-confirm-buy">
                                         Buy
                                     </button>
@@ -275,6 +278,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                                         type="button"
                                         className="btn-danger btn-sell btn-block"
                                         data-toggle="modal"
+                                        disabled={!isLoggedin}
                                         data-target="#modal-confirm-buy">
                                         Buy
                                     </button>

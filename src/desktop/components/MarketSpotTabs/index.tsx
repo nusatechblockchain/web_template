@@ -34,7 +34,6 @@ export const MarketSpotTabs: FC = (): ReactElement => {
             ...market,
             last: Decimal.format(Number((marketTickers[market.id] || defaultTicker).last), market.amount_precision),
             open: Decimal.format(Number((marketTickers[market.id] || defaultTicker).open), market.price_precision),
-            // price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
             high: Decimal.format(Number((marketTickers[market.id] || defaultTicker).high), market.amount_precision),
             currency: currencies.find((cur) => cur.id == market.base_unit),
             volume: Decimal.format(Number((marketTickers[market.id] || defaultTicker).volume), market.price_precision),
