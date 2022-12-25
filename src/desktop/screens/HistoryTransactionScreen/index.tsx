@@ -55,6 +55,18 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         return ['Date', 'Type', 'Asset', 'Ammount', 'Receiver UID', 'Status'];
     };
 
+    // function getDaysAgoData(data, daysAgo) {
+    //     // Get current date
+    //     let t = new Date();
+    //     // Create UTC date for daysAgo
+    //     let d = new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate() - daysAgo));
+    //     // Filter and sort data
+    //     return data.filter(item => new Date(item.datum) >= d)
+    //                .sort((a, b) => a.datum.localeCompare(b.datum));
+    //   }
+      
+    //   console.log(getDaysAgoData(list, 30));
+
     const getTableData = (data) => {
         return data.map((item) => [
             <p className="m-0 text-sm white-text">{moment(item.created_at).format('D MMM YYYY - HH:mm')}</p>,
@@ -123,12 +135,6 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         };
     });
 
-    const optionTxId = [
-        { label: <p className="m-0 text-sm grey-text-accent">TXASF21351S...</p>, value: 'TXASF21351S...' },
-        { label: <p className="m-0 text-sm grey-text-accent">TXASF21352S...</p>, value: 'TXASF21352S...' },
-        { label: <p className="m-0 text-sm grey-text-accent">TXASF21353S...</p>, value: 'TXASF21353S...' },
-    ];
-
     const renderFilter = () => {
         return (
             <div className="d-flex align-items-center">
@@ -164,17 +170,6 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                         styles={CustomStylesSelect}
                         options={optionStatus}
                         onChange={(e) => setStatus(e.value)}
-                    />
-                </div>
-
-                <div className="w-20">
-                    <p className="m-0 white-text text-sm mb-8">TX ID</p>
-                    <Select
-                        value={optionTxId.filter(function (option) {
-                            return option.value === 'TXASF21351S...';
-                        })}
-                        styles={CustomStylesSelect}
-                        options={optionTxId}
                     />
                 </div>
             </div>
