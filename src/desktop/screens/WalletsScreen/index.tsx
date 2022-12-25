@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 import { EstimatedValue, WalletsOverview } from '../../containers';
 import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
 import { selectCurrencies, selectWallets } from 'src/modules';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export const WalletsScreen: FC = (): ReactElement => {
+    const history = useHistory()
     const wallets = useSelector(selectWallets) || [];
     const currencies = useSelector(selectCurrencies);
 
@@ -19,18 +20,25 @@ export const WalletsScreen: FC = (): ReactElement => {
                     <h1 className="text-xl white-text">Wallet Overview</h1>
 
                     <div>
-                        <Link to={`/trade-history`}>
+                        
                             <button
+                                onClick={() => {
+                                    localStorage.setItem("sidebar", "Trade History");
+                                    history.push("/trade-history")
+                                }}
                                 type="button"
                                 className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
                                 Trade History
                             </button>
-                        </Link>
-                        <Link to={`/history-transaction`}>
-                            <button type="button" className="btn-secondary radius-sm text-sm white-text font-bold">
+                            <button
+                             onClick={() => {
+                                localStorage.setItem("sidebar", "Transaction History");
+                                history.push("/history-transaction")
+                            }}
+                            type="button" 
+                            className="btn-secondary radius-sm text-sm white-text font-bold">
                                 Transaction History
                             </button>
-                        </Link>
                     </div>
                 </div>
                 <EstimatedValue wallets={wallets} />
