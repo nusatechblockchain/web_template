@@ -65,40 +65,17 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     );
 
     const handleFavorite = (dataMarket: string) => {
-        if (!isLoggedin) {
-            const isFavorite = favoriteMarket.includes(dataMarket);
-
-            if (!isFavorite) {
-                const newStorageItem = [...favoriteMarket, dataMarket];
-                setFavoriteMarket(newStorageItem);
-                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
-            } else {
-                const newStorageItem = favoriteMarket.filter((savedId) => savedId !== dataMarket);
-                setFavoriteMarket(newStorageItem);
-                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
-            }
-        } else {
-            const dataUser = user.data && JSON.parse(user.data);
-            if (dataUser) {
-                const payload = {
-                    ...user,
-                    data: { ...dataUser, dataMarket },
-                };
-
-                dispatch(changeUserDataFetch({ user: payload }));
-            }
-        }
+        const favorite = JSON.parse(localStorage.getItem('favourites') || '[]');
+        const newStorageItem = favorite.filter((savedId) => savedId !== dataMarket);
+        setFavoriteMarket(newStorageItem);
+        localStorage.setItem('favourites', JSON.stringify(newStorageItem));
     };
 
     const getTableData = (data) => {
         return data.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <div className="mr-2 cursor-pointer">
-                    <Favorite
-                        fillColor={favoriteMarket.includes(item.name) ? '#EF8943' : '#23262F'}
-                        strokeColor={favoriteMarket.includes(item.name) ? '#EF8943' : '#B5B3BC'}
-                        onClick={() => handleFavorite(item.name)}
-                    />
+                    <Favorite fillColor={'#EF8943'} strokeColor={'#EF8943'} onClick={() => handleFavorite(item.name)} />
                 </div>
                 <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
