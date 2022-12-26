@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserInfo } from '../../../modules/user/profile';
 import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWallets, Wallet } from '../../../modules';
 import { DEFAULT_WALLET } from 'src/constants';
 import './WalletDepositBody.pcss';
@@ -10,7 +9,6 @@ import { QRCode, Decimal, Table } from '../../../components';
 import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
 import { Modal } from 'react-bootstrap';
-import Select from 'react-select';
 import { useParams, useHistory } from 'react-router-dom';
 
 const WalletDepositBody = () => {
@@ -67,17 +65,17 @@ const WalletDepositBody = () => {
 
     const handleGenerateAddress = (e) => {
         e.preventDefault();
-        // if (
-        //     depositAddress &&
-        //     depositAddress.address === null &&
-        //     wallets.length &&
-        //     wallet.type !== 'fiat' &&
-        //     currencyItem?.networks &&
-        //     blockchain?.status !== ' disabled' &&
-        //     active?.toLowerCase() === blockchain?.blockchain_key?.toLowerCase()
-        // ) {
-        dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
-        // }
+        if (
+            depositAddress === null &&
+            wallets.length &&
+            wallet !== null &&
+            wallet.type !== 'fiat' &&
+            currencyItem?.networks &&
+            blockchain?.status !== ' disabled' &&
+            tab === blockchain?.blockchain_key
+        ) {
+            dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
+        }
     };
 
     const buttonLabel = `${intl.formatMessage({
@@ -92,26 +90,22 @@ const WalletDepositBody = () => {
         { confirmations: currencyItem.min_confirmations }
     );
 
-    const handleOnCopy = () => ({});
+    useEffect(() => {
+        if (currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.type !== 'fiat') {
+            setActive(
+                currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
+            );
 
-    const optionCurrency = currencies.map((item) => {
-        const handleChangeCurrency = () => {
-            history.push(`/wallets/${item.id}/deposit`);
-        };
-        const customLabel = (
-            <div onClick={handleChangeCurrency} className="d-flex align-items-center">
-                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                <div>
-                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                </div>
-            </div>
-        );
-        return {
-            label: customLabel,
-            value: item.id,
-        };
-    });
+            setTab(
+                currencyItem &&
+                    currencyItem.networks &&
+                    currencyItem.networks[0] &&
+                    currencyItem.networks[0].blockchain_key
+            );
+        }
+    }, [currencyItem]);
+
+    const handleOnCopy = () => ({});
 
     const dataTable = [
         {
@@ -147,25 +141,6 @@ const WalletDepositBody = () => {
         ]);
     };
 
-    useEffect(() => {
-        if (!active && currencyItem.networks && currencyItem.type !== 'fiat') {
-            setActive(
-                currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
-            );
-
-            setTab(
-                currencyItem &&
-                    currencyItem.networks &&
-                    currencyItem.networks[0] &&
-                    currencyItem.networks[0].blockchain_key
-            );
-        }
-
-        console.log(depositAddress, 'DEPOSIT ADDRESS');
-        console.log(currencyItem, 'CURRENCY ITEM');
-        console.log(wallet, 'WALLET');
-    }, [depositAddress, currencyItem, active, wallet]);
-
     const renderDeposit = useMemo(() => {
         return (
             <React.Fragment>
@@ -181,13 +156,21 @@ const WalletDepositBody = () => {
                             <div className="d-flex align-items-start select-container mb-24">
                                 <p className="text-ms font-extrabold white-text">Coin Base</p>
                                 <div className="w-75">
-                                    <Select
-                                        value={optionCurrency.filter(function (option) {
-                                            return option.value === currency;
-                                        })}
-                                        styles={CustomStylesSelect}
-                                        options={optionCurrency}
-                                    />
+                                    <div className="w-100 d-flex align-items-center coin-selected mb-8">
+                                        <img
+                                            src={currencyItem && currencyItem.icon_url}
+                                            alt="icon"
+                                            className="mr-12 small-coin-icon"
+                                        />
+                                        <div>
+                                            <p className="m-0 text-sm grey-text-accent">
+                                                {currencyItem && currencyItem.id && currencyItem.id.toUpperCase()}
+                                            </p>
+                                            <p className="m-0 text-xs grey-text-accent">
+                                                {currencyItem && currencyItem.name}
+                                            </p>
+                                        </div>
+                                    </div>
                                     <p className="m-0 text-sm grey-text">Min Deposit : {minDepositAmount}</p>
                                 </div>
                             </div>
@@ -220,7 +203,10 @@ const WalletDepositBody = () => {
 
                         <div className="network-container w-50">
                             <h1 className="white-text text-ms font-extrabold mb-16">
-                                {depositAddress && depositAddress.address && 'Select Network :'}
+                                {currencyItem &&
+                                    currencyItem.networks &&
+                                    currencyItem.networks.length > 1 &&
+                                    'Select Network :'}
                             </h1>
 
                             <div className="navbar position-relative navbar-expand-lg mb-24">
@@ -245,18 +231,24 @@ const WalletDepositBody = () => {
                                 </div>
                             </div>
 
-                            {(depositAddress || (depositAddress && depositAddress.address === null)) && (
+                            {depositAddress === null ? (
                                 <button
                                     onClick={(e) => handleGenerateAddress(e)}
                                     className="w-100 btn-primary cursor-pointer"
                                     disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
                                     type="button">
-                                    {depositAddress && depositAddress.state === 'pending'
-                                        ? 'Waiting Confitmation'
-                                        : buttonLabel
-                                        ? buttonLabel
-                                        : 'Generate deposit address'}
+                                    {'Generate Address'}
                                 </button>
+                            ) : (
+                                depositAddress &&
+                                depositAddress.address === null && (
+                                    <button
+                                        className="w-100 btn-primary cursor-pointer"
+                                        disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
+                                        type="button">
+                                        {'Waiting Confirmation'}
+                                    </button>
+                                )
                             )}
 
                             {depositAddress && depositAddress.address !== null && (
@@ -324,7 +316,6 @@ const WalletDepositBody = () => {
     }, [
         currency,
         currencies,
-        optionCurrency,
         CustomStylesSelect,
         minDepositAmount,
         depositAddress,
