@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrencies, selectMarkets, selectMarketTickers, selectUserLoggedIn } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
@@ -13,7 +13,6 @@ const defaultTicker = {
     high: '0.0',
     open: '0.0',
     low: '0.0',
-    // price_change_percent: '+0.00%',
     volume: '0.0',
 };
 
@@ -54,23 +53,21 @@ export const MarketSpotTabs: FC = (): ReactElement => {
         return ['Name', 'Price', '24 Change', 'Volume', 'Market Cap', ''];
     };
 
-    const favoriteSpot = marketList.filter((market) =>
-        JSON.parse(localStorage.getItem('favourites') || '[]').some((name) => name == market.name)
-    );
+    useEffect(() => {
+        setFavoriteMarket(JSON.parse(localStorage.getItem('favourites') || '[]'));
+    }, [localStorage.getItem('favourites')]);
 
     const handleFavorite = (data) => {
-        if (!isLogin) {
-            const isFavorite = favoriteMarket.includes(data);
-
-            if (!isFavorite) {
-                const newStorageItem = [...favoriteMarket, data];
-                setFavoriteMarket(newStorageItem);
-                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
-            } else {
-                const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
-                setFavoriteMarket(newStorageItem);
-                localStorage.setItem('favourites', JSON.stringify(newStorageItem));
-            }
+        const isFavorite = favoriteMarket.includes(data);
+        const favorite = JSON.parse(localStorage.getItem('favourites') || '[]');
+        if (!isFavorite) {
+            const newStorageItem = [...favoriteMarket, data];
+            setFavoriteMarket(newStorageItem);
+            localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+        } else {
+            const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
+            setFavoriteMarket(newStorageItem);
+            localStorage.setItem('favourites', JSON.stringify(newStorageItem));
         }
     };
 
