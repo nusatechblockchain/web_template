@@ -365,7 +365,7 @@ export const TradingFutureOrderForm: FC = (): ReactElement => {
                             type="button"
                             className="btn btn-danger px-4"
                             data-toggle="modal"
-                            disabled={!isLoggedin}
+                            disabled={!isLoggedin}  
                             data-target="#sell-order">
                             Sell Short
                         </button>
