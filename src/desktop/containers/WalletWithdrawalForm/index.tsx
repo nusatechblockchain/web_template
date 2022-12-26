@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import './WalletWithdrawalForm.pcss';
-import Select from 'react-select';
-import { CustomStylesSelect, CustomInput, Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
+import { CustomInput, Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
 import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
@@ -23,31 +22,12 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [amount, setAmount] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
 
-    const currencies: Currency[] = useSelector(selectCurrencies);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
-
-    console.log(currencies, 'INI CURRENCIES');
+    const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencyItem: Currency = currencies.find((item) => item.id === currency);
 
     const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
-
-    const optionCurrency = currencies.map((item) => {
-        const customLabel = (
-            <Link key={item.id} to={`/wallets/${item.id}/withdraw`}>
-                <div className="d-flex align-items-center">
-                    <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                    <div>
-                        <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                        <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                    </div>
-                </div>
-            </Link>
-        );
-        return {
-            label: customLabel,
-            value: item.id,
-        };
-    });
 
     const renderHeaderModalWithdrawalConfirmation = () => {
         return (
@@ -112,26 +92,30 @@ export const WalletWithdrawalForm: React.FC = () => {
         <React.Fragment>
             <div>
                 <div className="d-flex justify-content-between align-items-start select-container mb-24">
-                    <p className="text-ms font-extrabold white-text">Select Coin</p>
-                    <div className="w-70">
-                        <Select
-                            value={optionCurrency.filter(function (option) {
-                                return option.value === currency;
-                            })}
-                            styles={CustomStylesSelect}
-                            options={optionCurrency}
-                        />
+                    <p className="text-ms font-extrabold white-text">Coin Asset</p>
+                    <div className="w-70 d-flex align-items-center coin-selected">
+                        <img src={currencyItem && currencyItem.icon_url} alt="icon" className="mr-12 small-coin-icon" />
+                        <div>
+                            <p className="m-0 text-sm grey-text-accent">
+                                {currencyItem && currencyItem.id.toUpperCase()}
+                            </p>
+                            <p className="m-0 text-xs grey-text-accent">{currencyItem && currencyItem.name}</p>
+                        </div>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-start select-container mb-24">
                     <p className="text-ms font-extrabold white-text">Select Address</p>
                     <div className="w-70 position-relative input-add-address">
                         <div
-                            onClick={() =>
+                            onClick={() => {
                                 beneficiaries && beneficiaries[0]
                                     ? setShowModalBeneficiaryList(true)
-                                    : setShowModalModalAddBeneficiary(true)
-                            }>
+                                    : setShowModalModalAddBeneficiary(true);
+                                console.log(showModalAddBeneficiary, 'ADD Bene');
+                                console.log(showModalBeneficiaryList, 'LIST BENER');
+                                console.log(beneficiaries[0], 'BENE');
+                                console.log('jos');
+                            }}>
                             <CustomInput
                                 type="text"
                                 isDisabled={true}
@@ -208,16 +192,27 @@ export const WalletWithdrawalForm: React.FC = () => {
 
             {showModalBeneficiaryList && (
                 <ModalBeneficiaryList
-                    onClose={() => setShowModalBeneficiaryList(false)}
                     blockchainKey={''}
                     showModalBeneficiaryList={showModalBeneficiaryList}
+                    onCloseList={() => setShowModalBeneficiaryList(false)}
                     showModalAddBeneficiary={showModalAddBeneficiary}
+                    onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
+                    handleAddAddress={() => {
+                        setShowModalBeneficiaryList(false);
+                        setShowModalModalAddBeneficiary(true);
+                    }}
                 />
             )}
             {showModalAddBeneficiary && (
                 <ModalAddBeneficiary
-                    onClose={() => setShowModalModalAddBeneficiary(false)}
+                    showModalBeneficiaryList={showModalBeneficiaryList}
+                    onCloseList={() => setShowModalBeneficiaryList(false)}
                     showModalAddBeneficiary={showModalAddBeneficiary}
+                    onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
+                    handleAddAddress={() => {
+                        setShowModalBeneficiaryList(true);
+                        setShowModalModalAddBeneficiary(false);
+                    }}
                 />
             )}
         </React.Fragment>
