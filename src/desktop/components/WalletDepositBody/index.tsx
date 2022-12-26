@@ -75,6 +75,8 @@ const WalletDepositBody = () => {
             tab === blockchain?.blockchain_key
         ) {
             dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
+        } else {
+            console.log('haaai ini error');
         }
     };
 
@@ -246,7 +248,7 @@ const WalletDepositBody = () => {
                                         className="w-100 btn-primary cursor-pointer"
                                         disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
                                         type="button">
-                                        {'Waiting Confirmation'}
+                                        {'Creating ...'}
                                     </button>
                                 )
                             )}
