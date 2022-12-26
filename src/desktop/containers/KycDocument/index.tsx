@@ -8,6 +8,7 @@ import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouterProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+// import { useDocumentationFetch } from '../../../hooks';
 import { IntlProps } from '../../../';
 import { accountUploadSizeMaxRange, accountUploadSizeMinRange, languages } from '../../../api/config';
 import { CustomInput, UploadFile } from '../../components';
@@ -18,7 +19,10 @@ import {
     selectCurrentLanguage,
     selectMobileDeviceState,
     selectSendDocumentsSuccess,
+    selectUserInfo,
+    User,
     sendDocuments,
+    UserOffersData,
 } from '../../../modules';
 import { DrivingLlicenseIcon, NationalIDIcon, PasportIcon, UploadFileIcon } from '../../../assets/images/KycIcon';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
@@ -30,6 +34,7 @@ interface ReduxProps {
     lang: string;
     success?: string;
     isMobileDevice: boolean;
+    user: User;
 }
 
 interface DispatchProps {
@@ -467,6 +472,9 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         const { documentsType, expireDate, issuedDate, idNumber }: DocumentsState = this.state;
         const typeOfDocuments = this.getDocumentsType(documentsType);
 
+        const user = this.props.user;
+        console.log(user);
+
         const request = new FormData();
 
         if (expireDate) {
@@ -479,6 +487,18 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         request.append('identificator', identificator);
         request.append('doc_category', docCategory);
         request.append('upload[]', upload[0]);
+        request.append('birthDate', user.profiles[0].dob);
+        request.append('address', user.profiles[0].address);
+        request.append('district', 'jos');
+        request.append('city', 'jos');
+        request.append('province', 'jos');
+        request.append('country', 'jos');
+        request.append('postal_code', user.profiles[0].postcode);
+        request.append('place_of_birth', user.profiles[0].dob);
+        request.append('name', 'jos');
+        request.append('idNumber', idNumber);
+        request.append('selfie_image', upload[0]);
+        request.append('identity_image', upload[0]);
 
         return request;
     };
@@ -501,6 +521,7 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
     lang: selectCurrentLanguage(state),
     success: selectSendDocumentsSuccess(state),
     isMobileDevice: selectMobileDeviceState(state),
+    user: selectUserInfo(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
