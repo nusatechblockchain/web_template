@@ -56,8 +56,6 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     useMarketsTickersFetch();
     useMarketsFetch();
 
-    // console.log(currencies);
-
     useEffect(() => {
         if (wallets.length && currencies.length) {
             const extendedWallets: ExtendedWallet[] = currencies.map((cur) => {
@@ -93,8 +91,6 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         [isP2PEnabled]
     );
 
-    // console.log(filteredWallets);
-
     const handleClickDeposit = useCallback(
         (currency) => {
             history.push(`/wallets/${currency}/deposit`);
@@ -119,8 +115,6 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                 i.name?.toLocaleLowerCase().includes(filterValue.toLowerCase()) ||
                 i.currency?.toLocaleLowerCase().includes(filterValue.toLowerCase())
         );
-
-        console.log(filteredList);
 
         return !filteredList.length
             ? [[]]

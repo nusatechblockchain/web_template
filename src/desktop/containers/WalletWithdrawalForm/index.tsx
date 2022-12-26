@@ -20,11 +20,15 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
     const [amount, setAmount] = React.useState('');
+    const [address, setAddress] = React.useState({});
     const { currency = '' } = useParams<{ currency?: string }>();
 
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
+    const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
+
+    console.log(currencyItem, 'INI CURRENCY YA');
 
     const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
@@ -108,13 +112,9 @@ export const WalletWithdrawalForm: React.FC = () => {
                     <div className="w-70 position-relative input-add-address">
                         <div
                             onClick={() => {
-                                beneficiaries && beneficiaries[0]
+                                beneficiariesList && beneficiariesList.length >= 1
                                     ? setShowModalBeneficiaryList(true)
                                     : setShowModalModalAddBeneficiary(true);
-                                console.log(showModalAddBeneficiary, 'ADD Bene');
-                                console.log(showModalBeneficiaryList, 'LIST BENER');
-                                console.log(beneficiaries[0], 'BENE');
-                                console.log('jos');
                             }}>
                             <CustomInput
                                 type="text"

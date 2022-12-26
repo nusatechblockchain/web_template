@@ -989,6 +989,7 @@ export const ru: LangType = {
 
     // resource module
     'resource.email.code_sent_too_fast': 'Вы слишком быстро отправили код подтверждения по электронной почте',
+    'account.wallet.not_found': 'Что-то пошло не так. Пожалуйста, повторите попытку позже',
 
     'resource.otp.missing_code': '2FA отсутствует',
     'resource.otp.empty_code': '2FA отсутствует',

@@ -14,13 +14,16 @@ import './WalletDeposit.pcss';
 const WalletDeposit: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
-    const { currency = '' } = useParams<{ currency?: string }>();
-    const [showModalTransfer, setShowModalTransfer] = React.useState(false);
-    const wallets = useSelector(selectWallets) || [];
-
     useWalletsFetch();
 
+    const wallets = useSelector(selectWallets) || [];
+
+    const { currency = '' } = useParams<{ currency?: string }>();
+    // const currencies: Currency[] = useSelector(selectCurrencies);
+    // const currencyItem: Currency = currencies.find((item) => item.id === currency);
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
+
+    const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
     return (
         <React.Fragment>
