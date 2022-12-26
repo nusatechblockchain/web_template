@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import './ModalInternalTransfer.pcss';
-import { Modal, CustomStylesSelect, CustomInput } from '../../components';
+import { Modal, CustomInput } from '../../components';
 import { Decimal } from '../../../components';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
 import {
@@ -14,9 +14,6 @@ import {
     selectWallets,
     selectUserInfo,
 } from '../../../modules';
-import CurrencyConverter from 'react-currency-conv';
-import Select from 'react-select';
-import moment from 'moment';
 
 export interface ModalTransferShowProps {
     showModalTransfer: boolean;
@@ -40,15 +37,10 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const [otp, setOtp] = React.useState('');
 
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencyItem: Currency = currencies.find((item) => item.id === currency);
     const wallet = wallets.length && wallets.find((item) => item.currency.toLowerCase() === currency.toLowerCase());
-    const selectedCurrency = currencies.length && currencies.find((item) => item.id.toLowerCase() === currency.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
-    const price = selectedCurrency && selectedCurrency.price
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
-    const priceConvert = +balance * +price
-    
-
-    console.log(priceConvert);
 
     const handleChangeAmount = (value) => {
         setAmount(value);
@@ -84,22 +76,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
             setShowModalTransferConfirmation(false);
         }
     }, [transferSuccess]);
-
-    const optionCurrency = currencies.map((item) => {
-        const customLabel = (
-            <div className="d-flex align-items-center">
-                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                <div>
-                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                </div>
-            </div>
-        );
-        return {
-            label: customLabel,
-            value: item.id,
-        };
-    });
 
     const renderHeaderModalTransfer = () => {
         return (
@@ -139,17 +115,23 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                     />
                                 </div>
 
-                                <div className="d-flex flex-column justify-content-between align-items-start">
+                                <div className="d-flex flex-column justify-content-between align-items-start mb-24">
                                     <p className="text-ms white-text mb-8">Coins</p>
 
-                                    <div className="w-100">
-                                        <Select
-                                            value={optionCurrency.filter(function (option) {
-                                                return option.value === currency;
-                                            })}
-                                            styles={CustomStylesSelect}
-                                            options={optionCurrency}
+                                    <div className="w-100 d-flex align-items-center coin-selected">
+                                        <img
+                                            src={currencyItem && currencyItem.icon_url}
+                                            alt="icon"
+                                            className="mr-12 small-coin-icon"
                                         />
+                                        <div>
+                                            <p className="m-0 text-sm grey-text-accent">
+                                                {currencyItem && currencyItem.id.toUpperCase()}
+                                            </p>
+                                            <p className="m-0 text-xs grey-text-accent">
+                                                {currencyItem && currencyItem.name}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -171,21 +153,14 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 <div className="py-3 px-3 mb-3 dark-bg-main radius-md d-flex justify-content-between">
                                     <div className="mr-2">
                                         <p className="mb-2 text-sm white-text">Available</p>
-                                        <p className="mb-2 text-sm white-text">Balance</p>
                                     </div>
                                     <div className="ml-2">
                                         <p className="mb-2 text-sm grey-text">
-                                            {' '}
                                             <Decimal fixed={selectedFixed} thousSep=",">
                                                 {balance}
                                             </Decimal>{' '}
                                             {currency.toUpperCase()}
                                         </p>
-                                       {/* <div className='d-flex'> */}
-                                       <p className="mb-2 text-sm grey-text-accent">$ {priceConvert}
-                                        </p>
-                                        {/* <CurrencyConverter from={'IDR'} to={'USD'} value={1000} precision={2} date={moment(new Date).format("YYYY-MM-DD")}  className="mb-2 text-sm grey-text-accent" />
-                                       </div> */}
                                     </div>
                                 </div>
 
