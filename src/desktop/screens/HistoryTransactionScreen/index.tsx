@@ -17,6 +17,7 @@ import { CustomStylesSelect } from '../../../desktop/components';
 import { Tabs, Tab } from 'react-bootstrap';
 import Select from 'react-select';
 import moment from 'moment';
+import { NoData } from '../../components';
 import './HistoryTransactionScreen.pcss';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -234,6 +235,8 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                             onClickNextPage={onClickNextPage}
                                         />
                                     )}
+
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>
                             <Tab eventKey="withdraws" title="Withdrawal" className="mb-24">
@@ -250,6 +253,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                             onClickNextPage={onClickNextPage}
                                         />
                                     )}
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>
                             <Tab eventKey="transfers" title="Internal Transfer" className="mb-24">
@@ -266,6 +270,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                             onClickNextPage={onClickNextPage}
                                         />
                                     )}
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>
                         </Tabs>

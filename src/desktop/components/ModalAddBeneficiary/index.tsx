@@ -88,19 +88,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setCoinDescription(value);
     };
 
-    // const handleChangeBlockchain = (index: number) => {
-    //     const blockchainItem = currencyItem.networks[index];
-
-    //     setCoinBlockchainName({
-    //         blockchainKey: blockchainItem.blockchain_key,
-    //         protocol: blockchainItem.protocol,
-    //         name: currencyItem.name,
-    //         id: currencyItem.id,
-    //         fee: blockchainItem?.withdraw_fee,
-    //         minWithdraw: blockchainItem.min_withdraw_amount,
-    //     });
-    // };
-
     const handleSubmitAddAddressCoinModal = React.useCallback(() => {
         const payload = {
             currency: currency || '',
