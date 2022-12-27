@@ -113,6 +113,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         /* tslint:enable */
 
         const dataCountries = Object.values(countries.getNames(lang)).map((item) => {
+            console.log(this.state.country);
             return { label: item, value: item };
         });
 
@@ -358,7 +359,6 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const dateOfBirthValid = this.handleValidateInput('dateOfBirth', dateOfBirth);
         const cityValid = this.handleValidateInput('city', city);
         const districtValid = this.handleValidateInput('district', district);
-        const countryValid = this.handleValidateInput('country', country);
         const provinceValid = this.handleValidateInput('province', province);
         const placeOfBirthValid = this.handleValidateInput('placeOfBirth', placeOfBirth);
 
@@ -367,7 +367,6 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
             !residentialAddressValid ||
             !cityValid ||
             !districtValid ||
-            !countryValid ||
             !provinceValid ||
             !placeOfBirthValid ||
             !postcodeValid ||
@@ -382,11 +381,11 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const profileInfo: IdentityData = {
             first_name: this.state.firstName,
             last_name: '',
-            dob: `${dob + '/' + this.state.placeOfBirth}`,
+            dob: `${dob + '-' + this.state.placeOfBirth}`,
             address: `${this.state.residentialAddress + '/' + this.state.district}`,
             postcode: this.state.postcode,
-            city: `${this.state.city + '/' + this.state.province}`,
-            country: countries.getAlpha2Code(this.state.country, this.props.lang),
+            city: `${this.state.city + ' ' + this.state.province}`,
+            country: this.state.country,
             confirm: true,
         };
         const isIdentity =
