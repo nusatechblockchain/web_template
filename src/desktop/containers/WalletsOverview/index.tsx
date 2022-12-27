@@ -17,7 +17,7 @@ import {
 import { estimateUnitValue } from 'src/helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY } from 'src/constants';
 import { WalletsHeader, Modal } from '../../components';
-import { useHistory } from 'react-router';
+import { useHistory, Link } from 'react-router-dom';
 import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIcon';
 
 interface Props {
@@ -100,7 +100,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
 
     const handleClickWithdraw = useCallback(
         (currency) => {
-            history.push(`/wallets/${currency}/withdraw`);
+            user.otp ? history.push(`/wallets/${currency}/withdraw`) : setShowModalLocked(!showModalLocked);
         },
         [history]
     );
@@ -156,27 +156,30 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                       <div key={index} className="ml-auto">
                           <button
                               onClick={() => {
-                                  item.network[0] ? handleClickDeposit(currency) : null;
+                                  item && item.network && item.network[0] ? handleClickDeposit(currency) : null;
                               }}
                               className={`bg-transparent border-none mr-24 ${
-                                  item.network[0] ? 'blue-text' : 'grey-text'
+                                  item && item.network && item.network[0] ? 'blue-text' : 'grey-text'
                               }`}>
-                              {item.network[0] ? translate('page.body.wallets.overview.action.deposit') : 'Disabled'}
+                              {item && item.network && item.network[0]
+                                  ? translate('page.body.wallets.overview.action.deposit')
+                                  : 'Disabled'}
                           </button>
                           <button
                               onClick={() => {
-                                  item.network &&
+                                  item &&
+                                      item.network &&
                                       item.network[0] &&
                                       item.network[0].withdrawal_enabled &&
                                       handleClickWithdraw(currency);
                               }}
                               //   onClick={() => setShowModalLocked(!showModalLocked)}
                               className={`bg-transparent border-none ${
-                                  item.network && item.network[0] && item.network[0].withdrawal_enabled
+                                  item && item.network && item.network[0] && item.network[0].withdrawal_enabled
                                       ? 'danger-text'
                                       : 'grey-text'
                               }`}>
-                              {item.network && item.network[0] && item.network[0].withdrawal_enabled
+                              {item && item.network && item.network[0] && item.network[0].withdrawal_enabled
                                   ? translate('page.body.wallets.overview.action.withdraw')
                                   : 'Disabled'}
                           </button>
@@ -188,7 +191,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     const renderHeaderModalLocked = () => {
         return (
             <React.Fragment>
-                <div className="text-center">
+                <div className="d-flex justify-content-center align-items-center w-100 min-w-500">
                     <CircleCloseDangerLargeIcon />
                 </div>
             </React.Fragment>
@@ -198,14 +201,14 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     const renderContentModalLocked = () => {
         return (
             <React.Fragment>
-                <h1 className="white-text text-lg mb-24">Withdraw Locked</h1>
-                <p className="grey-text text-ms font-extrabold mb-24">To withdraw you have to enable 2FA</p>
-                <div className="d-flex">
-                    <button
-                        className="btn btn-danger sm px-5 mr-3"
-                        onClick={() => setShowModalLocked(!showModalLocked)}>
-                        Enable 2FA
-                    </button>
+                <h1 className="white-text text-lg mb-24 text-center min-w-500">Withdraw Locked</h1>
+                <p className="grey-text text-ms font-extrabold mb-24 text-center">To withdraw you have to enable 2FA</p>
+                <div className="d-flex justify-content-center align-items-center w-100 mb-0">
+                    <Link to={`/two-fa-activation`}>
+                        <button type="button" className="btn btn-primary sm px-5 mr-3">
+                            Enable 2FA
+                        </button>
+                    </Link>
                 </div>
             </React.Fragment>
         );
