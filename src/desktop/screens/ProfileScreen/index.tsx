@@ -286,16 +286,20 @@ export const ProfileScreen: FC = (): ReactElement => {
     const renderKycStatus = () => {
         const kycData = user.profiles.length;
         if (kycData > 0) {
-            const kycStatus = user.profiles[0].state;
+            const kycReverse = user.profiles.slice(-1);
+            const kycStatus = kycReverse[0].state;
             switch (kycStatus) {
                 case '':
-                    return <span className="d-block p-1 danger-text text-xs font-normal ">Disable</span>;
+                    return <span className="d-block p-1 warning-text text-xs font-normal ">Profile Unverified</span>;
                     break;
                 case 'submitted':
                     return <span className="d-block p-1 grey-text text-xs font-normal ">Profile Pending</span>;
                     break;
                 case 'verified':
                     return <span className="d-block p-1 contrast-text text-xs font-normal ">Profile Verivied</span>;
+                    break;
+                case 'rejected':
+                    return <span className="d-block p-1 danger-text text-xs font-normal ">Profile Unverified</span>;
                     break;
             }
         } else {

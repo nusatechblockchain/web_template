@@ -16,8 +16,8 @@ export const WalletsScreen: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="wallet-screen content-wrapper dark-bg-main">
-                <div className="d-flex justify-content-between align-items-center mb-24">
-                    <h1 className="text-xl white-text">Wallet Overview</h1>
+                <div className="d-flex justify-content-between align-items-center mb-24 px-24">
+                    <h1 className="text-xl white-text pt-4 pb-4">Wallet Overview</h1>
 
                     <div>
                         <button
@@ -40,8 +40,10 @@ export const WalletsScreen: FC = (): ReactElement => {
                         </button>
                     </div>
                 </div>
-                <EstimatedValue wallets={wallets} />
-                <WalletsOverview />
+                <div className="px-24">
+                    <EstimatedValue wallets={wallets} />
+                    <WalletsOverview />
+                </div>
             </div>
         </React.Fragment>
     );
