@@ -1,0 +1,226 @@
+.internal-transfer-mobile-screen {
+    .container-fluid {
+        gap: 16px;
+        padding: 24px !important;
+        max-width: 768px;
+        position: relative !important;
+    }
+
+    .input-group-text {
+        background: transparent;
+        border: none;
+        padding: 0;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-secondary-color);
+        cursor: pointer;
+    }
+
+    .form-control {
+        margin: 0 14px 0 8px;
+        background: transparent;
+        border: none;
+        padding: 9px 8px;
+        color: var(--white) !important;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+    }
+
+    .form-control:focus {
+        background: transparent;
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .form-control::placeholder {
+        color: var(--text-secondary-color);
+    }
+
+    .option-currency {
+        padding: 16px 0px;
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+    }
+
+    a.nav-link,
+    .nav-tabs {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+        color: var(--text-grey-color);
+        background: transparent;
+        border: 0;
+        text-align: center;
+    }
+
+    .nav-tabs .nav-link:hover {
+        border-color: transparent;
+    }
+
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--text-success-color);
+        padding: 9px 19px;
+        background: none;
+        border-width: 1px;
+        border-radius: 8px;
+        border-image: var(--button-primary-color);
+        border-image-slice: 1;
+        border-style: solid;
+    }
+
+    .tab-content {
+        width: 100%;
+    }
+
+    .search-history-container p {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .search-history-container svg {
+        cursor: pointer;
+    }
+
+    .search-history {
+        margin: 8px 0 16px 0;
+        width: 60%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 16px;
+        grid-auto-rows: minmax(16px, auto);
+    }
+
+    .search-history h5 {
+        padding: 0px 8px;
+        gap: 8px;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--text-secondary-color);
+    }
+
+    table tr {
+        border-bottom: 1px solid rgba(181, 179, 188, 0.1);
+    }
+
+    .td-coin,
+    .td-available-order {
+        padding: 16px 8px;
+    }
+
+    .td-coin {
+        gap: 8px;
+    }
+
+    .text-one {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--grey-200);
+    }
+
+    .text-two {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--grey-300);
+    }
+
+    .sorting-alpha-container {
+        max-width: 768px;
+        top: 20%;
+        right: 16.5px;
+    }
+
+    .sorting-alpha {
+        padding: 4px 5.5ppx;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--grey-300);
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .form-transfer {
+        label {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 16px;
+            color: var(--text-secondary-color);
+        }
+
+        .form-control {
+            background: transparent;
+            border: 1px solid var(--text-grey-color);
+            border-radius: 8px;
+            padding: 16px;
+            color: var(--white) !important;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            height: 54px !important;
+        }
+
+        .form-control:focus {
+            background: transparent;
+            border: 1px solid var(--text-grey-color);
+            outline: none;
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-grey-color-color);
+        }
+
+        .transfer-information {
+            background: var(--dark-500);
+            border-radius: 8px;
+        }
+
+        .transfer-information .input-group-text,
+        .transfer-information .form-control {
+            border: none;
+            background: transparent;
+            padding: 16px;
+        }
+
+        .transfer-information label {
+            padding: 0 16px;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 16px;
+            color: var(--text-grey-color);
+        }
+
+        .transfer-information .form-control,
+        .transfer-information .form-control::placeholder {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 16px;
+            color: var(--text-grey-color) !important;
+        }
+
+        .transfer-information .input-group .form-control,
+        .transfer-information .input-group .form-control::placeholder {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 16px;
+            color: var(--text-grey-color) !important;
+        }
+    }
+}

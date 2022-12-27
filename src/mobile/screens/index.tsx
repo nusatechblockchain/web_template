@@ -21,3 +21,4 @@ export * from './MarketOrder';
 export * from './HistoryTransaction';
 export * from './Trading';
 export * from './TradingFuture';
+export * from './InternalTransfer';

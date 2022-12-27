@@ -40,8 +40,14 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
     const wallet = wallets.length && wallets.find((item) => item.currency.toLowerCase() === currency.toLowerCase());
+    const selectedCurrency =
+        currencies.length && currencies.find((item) => item.id.toLowerCase() === currency.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const price = selectedCurrency && selectedCurrency.price;
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
+    const priceConvert = +balance * +price;
+
+    console.log(priceConvert);
 
     const handleChangeAmount = (value) => {
         setAmount(value);
@@ -163,6 +169,10 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                             </Decimal>{' '}
                                             {currency.toUpperCase()}
                                         </p>
+                                        {/* <div className='d-flex'> */}
+                                        <p className="mb-2 text-sm grey-text-accent">$ {priceConvert}</p>
+                                        {/* <CurrencyConverter from={'IDR'} to={'USD'} value={1000} precision={2} date={moment(new Date).format("YYYY-MM-DD")}  className="mb-2 text-sm grey-text-accent" />
+                                       </div> */}
                                     </div>
                                 </div>
 

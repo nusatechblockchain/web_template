@@ -20,6 +20,9 @@ import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from 'src/co
 import { WithdrawlIcon, DepositIcon, TransferIcon } from '../../assets/Wallet';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { SearchIcon } from '../../assets/Market';
+import { Modal } from 'react-bootstrap';
+import { TrashIconMobile } from 'src/mobile/assets/TrashIcon';
+import CoinTransfer from 'src/mobile/components/CoinTransfer/CoinTransfer';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -41,7 +44,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     const { isP2PEnabled } = props;
     const { formatMessage } = useIntl();
     const history = useHistory();
+    const [fullscreen, setFullScreen] = React.useState(true);
 
+    const [showModal, setShowModal] = React.useState(false);
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
@@ -212,7 +217,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             <WithdrawlIcon className={'mr-2'} />
                             Withdraw
                         </button>
-                        <button className="btn btn-primary btn-sm">
+                        <button onClick={() => setShowModal(!showModal)} className="btn btn-primary btn-sm">
                             <TransferIcon className={'mr-2'} />
                             Transfer
                         </button>
@@ -245,6 +250,85 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                 </div>
                 <Table data={renderTableData(wallets)} />
             </div>
+
+            {showModal && (
+                <Modal
+                    // className="modal-internal-transfer"
+                    // dialogClassName="modal-transfer-fullscreen"
+                    onHide={() => setShowModal(!showModal)}
+                    show={showModal}>
+                    <section className="internal-transfer-mobile-screen">
+                        <div className="container-fluid w-100 p-0 m-0 dark-bg-accent position-relative">
+                            <div className="d-flex justify-content-between align-items-center w-100 search-container">
+                                <div className="input-group">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            <SearchIcon />
+                                        </span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        aria-label="search"
+                                        placeholder="Enter the currency you are looking for."
+                                    />
+                                    <div className="input-group-append">
+                                        <div onClick={() => setShowModal(!showModal)}>
+                                            <span className="input-group-text">Cancel</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <nav className="w-100">
+                                <div
+                                    className="option-currency nav nav-tabs w-100 d-flex justify-content-between align-items-center"
+                                    id="nav-tab"
+                                    role="tablist">
+                                    <a
+                                        className="nav-item nav-link active w-50"
+                                        id="nav-crypto-tab"
+                                        data-toggle="tab"
+                                        href="#nav-crypto"
+                                        role="tab"
+                                        aria-controls="nav-crypto"
+                                        aria-selected="true">
+                                        Crypto
+                                    </a>
+                                    <a
+                                        className="nav-item nav-link w-50"
+                                        id="nav-idr-tab"
+                                        data-toggle="tab"
+                                        href="#nav-idr"
+                                        role="tab"
+                                        aria-controls="nav-idr"
+                                        aria-selected="false">
+                                        IDR
+                                    </a>
+                                </div>
+                            </nav>
+
+                            <div className="search-history-container d-flex justify-content-between align-items-center">
+                                <p className="p-0 m-0">Search History</p>
+                                <TrashIconMobile />
+                            </div>
+
+                            <div className="search-history w-60">
+                                <h5>BTC</h5>
+                                <h5>ETH</h5>
+                                <h5>UTSD</h5>
+                                <h5>TRX</h5>
+                                <h5>BNB</h5>
+                                <h5>XRP</h5>
+                            </div>
+
+                            <div className="table-mobile-wrapper">
+                                <CoinTransfer />
+                            </div>
+                        </div>
+                    </section>
+                </Modal>
+            )}
         </React.Fragment>
     );
 };
