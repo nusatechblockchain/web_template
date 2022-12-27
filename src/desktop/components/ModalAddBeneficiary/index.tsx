@@ -181,8 +181,14 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                                 classNameLabel="text-ms white-text mb-8"
                                 classNameInput={``}
                                 autoFocus={false}
+                                classNameGroup={'mb-1'}
                                 labelVisible
                             />
+                            <div className="mb-3">
+                                {coinAddress != '' && !coinAddressValid && (
+                                    <span className="text-xs danger-text">Invalid Address</span>
+                                )}
+                            </div>
                             <p className="mb-16 text-xs grey-text ">
                                 Do not send Tether USD unless you are certain the destination supports TRC-20
                                 transactions. If it does not, you could permanently lose access to your coins.

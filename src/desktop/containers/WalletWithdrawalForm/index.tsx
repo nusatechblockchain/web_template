@@ -28,8 +28,6 @@ export const WalletWithdrawalForm: React.FC = () => {
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
 
-    console.log(currencyItem, 'INI CURRENCY YA');
-
     const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
 

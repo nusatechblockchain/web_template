@@ -19,6 +19,7 @@ import { VALUATION_PRIMARY_CURRENCY } from 'src/constants';
 import { WalletsHeader, Modal } from '../../components';
 import { useHistory, Link } from 'react-router-dom';
 import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIcon';
+import { NoData } from '../../components';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -225,6 +226,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
             />
             <p className="text-sm grey-text-accent mb-8">Asset balance</p>
             <Table header={headerTitles()} data={retrieveData()} />
+
+            {retrieveData().length < 1 && <NoData text="No Data Yet" />}
 
             {showModalLocked && (
                 <Modal show={showModalLocked} header={renderHeaderModalLocked()} content={renderContentModalLocked()} />

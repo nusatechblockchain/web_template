@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import { Favorite } from '../../../assets/images/Favorite';
 import './MarketFavoriteTabs.pcss';
+import { NoData } from '../../components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -29,7 +30,6 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    const isLoggedin = useSelector(selectUserLoggedIn);
     const user = useSelector(selectUserInfo);
     const dispatch = useDispatch();
     const [favorite, setFavorite] = useState(false);
@@ -102,6 +102,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
         <React.Fragment>
             <div className="com-market-all-tabs">
                 <Table header={getTableHeaders()} data={getTableData(spotMarket)} />
+                {spotMarket.length < 1 && <NoData text="No Data Yet" />}
             </div>
         </React.Fragment>
     );

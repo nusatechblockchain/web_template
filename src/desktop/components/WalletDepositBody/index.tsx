@@ -17,16 +17,15 @@ import { QRCode, Decimal, Table } from '../../../components';
 import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
 import { Modal } from 'react-bootstrap';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
+import { NoData } from '../../components';
 
 const WalletDepositBody = () => {
     const intl = useIntl();
     const dispatch = useDispatch();
     const history = useHistory();
-
     const historys = useSelector(selectHistory);
     const wallets = useSelector(selectWallets) || [];
-
     const { currency = '' } = useParams<{ currency?: string }>();
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -34,15 +33,12 @@ const WalletDepositBody = () => {
         min_confirmations: 6,
         deposit_enabled: false,
     };
-
     useWalletsFetch();
     useHistoryFetch({ type: 'deposits', currency: currency, limit: 3, page: 0 });
-
     const [active, setActive] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.protocol : '');
     const [tab, setTab] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.blockchain_key : '');
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -90,18 +86,6 @@ const WalletDepositBody = () => {
             console.log('haaai ini error');
         }
     };
-
-    const buttonLabel = `${intl.formatMessage({
-        id: 'page.body.wallets.tabs.deposit.ccy.button.generate',
-    })} ${wallet.currency.toUpperCase()} ${intl.formatMessage({
-        id: 'page.body.wallets.tabs.deposit.ccy.button.address',
-    })}`;
-
-    const error = intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.pending' });
-    const text = intl.formatMessage(
-        { id: 'page.body.wallets.tabs.deposit.ccy.message.submit' },
-        { confirmations: currencyItem.min_confirmations }
-    );
 
     useEffect(() => {
         if (currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.type !== 'fiat') {
@@ -285,6 +269,14 @@ const WalletDepositBody = () => {
                     <div className="table-container">
                         <h1 className="mb-24 text-lg white-text">Recent Deposit</h1>
                         <Table header={getTableHeaders()} data={getTableData(historys)} />
+                        {historys.length < 1 && <NoData text="No Data Yet" />}
+                        {historys.length > 0 && (
+                            <div className="d-flex justify-content-center">
+                                <Link to="/history-transaction" className="font-bold text-center gradient-text text-sm">
+                                    View All
+                                </Link>
+                            </div>
+                        )}
                     </div>
 
                     <Modal show={show} onHide={handleClose} centered>

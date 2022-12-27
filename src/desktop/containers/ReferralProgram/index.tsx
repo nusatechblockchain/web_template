@@ -6,6 +6,7 @@ import { CopyableTextField, Table } from '../../../components';
 import { copy } from '../../../helpers';
 import { alertPush, RootState, selectUserInfo, User } from '../../../modules';
 import ReferralImage from '../../../../public/img/referral.png';
+import { NoData } from '../../components';
 
 interface ReduxProps {
     user: User;
@@ -118,6 +119,7 @@ class ReferralProgramClass extends React.Component<Props> {
                     </div>
                     <h6 className="text-ms white-text font-normal mb-0">Referral List</h6>
                     <Table header={this.getTableHeaders()} data={this.getTableData(dataTable)} />
+                    {dataTable.length < 1 && <NoData text="No Data Yet" />}
                 </div>
             </div>
         );
