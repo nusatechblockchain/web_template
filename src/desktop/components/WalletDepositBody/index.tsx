@@ -1,39 +1,44 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserInfo } from '../../../modules/user/profile';
-import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWallets, Wallet } from '../../../modules';
-import { DEFAULT_WALLET } from 'src/constants';
+import {
+    alertPush,
+    Currency,
+    selectCurrencies,
+    walletsAddressFetch,
+    selectWallets,
+    selectHistory,
+    Wallet,
+} from '../../../modules';
+import { DEFAULT_WALLET } from '../../../constants';
 import './WalletDepositBody.pcss';
-import { useWalletsFetch } from 'src/hooks';
+import { useWalletsFetch, useHistoryFetch } from '../../../hooks';
 import { QRCode, Decimal, Table } from '../../../components';
 import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
 import { Modal } from 'react-bootstrap';
-import Select from 'react-select';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
+import { NoData } from '../../components';
 
 const WalletDepositBody = () => {
-    useWalletsFetch();
-
     const intl = useIntl();
     const dispatch = useDispatch();
     const history = useHistory();
+    const historys = useSelector(selectHistory);
     const wallets = useSelector(selectWallets) || [];
     const { currency = '' } = useParams<{ currency?: string }>();
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
-
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency | any = (currencies && currencies.find((item) => item.id === wallet.currency)) || {
         min_confirmations: 6,
         deposit_enabled: false,
     };
-
+    useWalletsFetch();
+    useHistoryFetch({ type: 'deposits', currency: currency, limit: 3, page: 0 });
     const [active, setActive] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.protocol : '');
     const [tab, setTab] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.blockchain_key : '');
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -67,70 +72,37 @@ const WalletDepositBody = () => {
 
     const handleGenerateAddress = (e) => {
         e.preventDefault();
-        // if (
-        //     depositAddress &&
-        //     depositAddress.address === null &&
-        //     wallets.length &&
-        //     wallet.type !== 'fiat' &&
-        //     currencyItem?.networks &&
-        //     blockchain?.status !== ' disabled' &&
-        //     active?.toLowerCase() === blockchain?.blockchain_key?.toLowerCase()
-        // ) {
-        dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
-        // }
+        if (
+            depositAddress === null &&
+            wallets.length &&
+            wallet !== null &&
+            wallet.type !== 'fiat' &&
+            currencyItem?.networks &&
+            blockchain?.status !== ' disabled' &&
+            tab === blockchain?.blockchain_key
+        ) {
+            dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
+        } else {
+            console.log('haaai ini error');
+        }
     };
 
-    const buttonLabel = `${intl.formatMessage({
-        id: 'page.body.wallets.tabs.deposit.ccy.button.generate',
-    })} ${wallet.currency.toUpperCase()} ${intl.formatMessage({
-        id: 'page.body.wallets.tabs.deposit.ccy.button.address',
-    })}`;
+    useEffect(() => {
+        if (currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.type !== 'fiat') {
+            setActive(
+                currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
+            );
 
-    const error = intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.pending' });
-    const text = intl.formatMessage(
-        { id: 'page.body.wallets.tabs.deposit.ccy.message.submit' },
-        { confirmations: currencyItem.min_confirmations }
-    );
+            setTab(
+                currencyItem &&
+                    currencyItem.networks &&
+                    currencyItem.networks[0] &&
+                    currencyItem.networks[0].blockchain_key
+            );
+        }
+    }, [currencyItem]);
 
     const handleOnCopy = () => ({});
-
-    const optionCurrency = currencies.map((item) => {
-        const handleChangeCurrency = () => {
-            history.push(`/wallets/${item.id}/deposit`);
-        };
-        const customLabel = (
-            <div onClick={handleChangeCurrency} className="d-flex align-items-center">
-                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                <div>
-                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                </div>
-            </div>
-        );
-        return {
-            label: customLabel,
-            value: item.id,
-        };
-    });
-
-    const dataTable = [
-        {
-            date: '24 Oct 2022 - 14.44',
-            transactionId: 'PX8RTQWVA....',
-            amount: '0.5 BTC',
-            type: 'Deposit',
-            status: 'Pending',
-            confirmation: '1/4',
-        },
-        {
-            date: '24 Oct 2022 - 14.44',
-            transactionId: 'PX8RTQWVA....',
-            amount: '0.5 BTC',
-            type: 'Deposit',
-            status: 'Pending',
-            confirmation: '1/4',
-        },
-    ];
 
     const getTableHeaders = () => {
         return ['Date', 'Transacsion ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
@@ -147,25 +119,6 @@ const WalletDepositBody = () => {
         ]);
     };
 
-    useEffect(() => {
-        if (!active && currencyItem.networks && currencyItem.type !== 'fiat') {
-            setActive(
-                currencyItem && currencyItem.networks && currencyItem.networks[0] && currencyItem.networks[0].protocol
-            );
-
-            setTab(
-                currencyItem &&
-                    currencyItem.networks &&
-                    currencyItem.networks[0] &&
-                    currencyItem.networks[0].blockchain_key
-            );
-        }
-
-        console.log(depositAddress, 'DEPOSIT ADDRESS');
-        console.log(currencyItem, 'CURRENCY ITEM');
-        console.log(wallet, 'WALLET');
-    }, [depositAddress, currencyItem, active, wallet]);
-
     const renderDeposit = useMemo(() => {
         return (
             <React.Fragment>
@@ -181,13 +134,21 @@ const WalletDepositBody = () => {
                             <div className="d-flex align-items-start select-container mb-24">
                                 <p className="text-ms font-extrabold white-text">Coin Base</p>
                                 <div className="w-75">
-                                    <Select
-                                        value={optionCurrency.filter(function (option) {
-                                            return option.value === currency;
-                                        })}
-                                        styles={CustomStylesSelect}
-                                        options={optionCurrency}
-                                    />
+                                    <div className="w-100 d-flex align-items-center coin-selected mb-8">
+                                        <img
+                                            src={currencyItem && currencyItem.icon_url}
+                                            alt="icon"
+                                            className="mr-12 small-coin-icon"
+                                        />
+                                        <div>
+                                            <p className="m-0 text-sm grey-text-accent">
+                                                {currencyItem && currencyItem.id && currencyItem.id.toUpperCase()}
+                                            </p>
+                                            <p className="m-0 text-xs grey-text-accent">
+                                                {currencyItem && currencyItem.name}
+                                            </p>
+                                        </div>
+                                    </div>
                                     <p className="m-0 text-sm grey-text">Min Deposit : {minDepositAmount}</p>
                                 </div>
                             </div>
@@ -220,7 +181,10 @@ const WalletDepositBody = () => {
 
                         <div className="network-container w-50">
                             <h1 className="white-text text-ms font-extrabold mb-16">
-                                {depositAddress && depositAddress.address && 'Select Network :'}
+                                {currencyItem &&
+                                    currencyItem.networks &&
+                                    currencyItem.networks.length > 1 &&
+                                    'Select Network :'}
                             </h1>
 
                             <div className="navbar position-relative navbar-expand-lg mb-24">
@@ -245,18 +209,24 @@ const WalletDepositBody = () => {
                                 </div>
                             </div>
 
-                            {(depositAddress || (depositAddress && depositAddress.address === null)) && (
+                            {depositAddress === null ? (
                                 <button
                                     onClick={(e) => handleGenerateAddress(e)}
                                     className="w-100 btn-primary cursor-pointer"
                                     disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
                                     type="button">
-                                    {depositAddress && depositAddress.state === 'pending'
-                                        ? 'Waiting Confitmation'
-                                        : buttonLabel
-                                        ? buttonLabel
-                                        : 'Generate deposit address'}
+                                    {'Generate Address'}
                                 </button>
+                            ) : (
+                                depositAddress &&
+                                depositAddress.address === null && (
+                                    <button
+                                        className="w-100 btn-primary cursor-pointer"
+                                        disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
+                                        type="button">
+                                        {'Creating ...'}
+                                    </button>
+                                )
                             )}
 
                             {depositAddress && depositAddress.address !== null && (
@@ -298,7 +268,15 @@ const WalletDepositBody = () => {
 
                     <div className="table-container">
                         <h1 className="mb-24 text-lg white-text">Recent Deposit</h1>
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
+                        <Table header={getTableHeaders()} data={getTableData(historys)} />
+                        {historys.length < 1 && <NoData text="No Data Yet" />}
+                        {historys.length > 0 && (
+                            <div className="d-flex justify-content-center">
+                                <Link to="/history-transaction" className="font-bold text-center gradient-text text-sm">
+                                    View All
+                                </Link>
+                            </div>
+                        )}
                     </div>
 
                     <Modal show={show} onHide={handleClose} centered>
@@ -324,7 +302,6 @@ const WalletDepositBody = () => {
     }, [
         currency,
         currencies,
-        optionCurrency,
         CustomStylesSelect,
         minDepositAmount,
         depositAddress,

@@ -7,7 +7,7 @@ import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
 import { DEFAULT_WALLET } from '../../../constants';
 import { Modal, CustomInput } from '..';
-import { CustomStylesSelect, ModalBeneficiaryList } from '../../components';
+import { CustomStylesSelect } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
@@ -17,7 +17,9 @@ import Select from 'react-select';
 export interface ModalAddBeneficiaryProps {
     showModalAddBeneficiary: boolean;
     showModalBeneficiaryList?: boolean;
-    onClose: () => void;
+    onCloseAdd: () => void;
+    onCloseList: () => void;
+    handleAddAddress: () => void;
 }
 
 const defaultSelected = {
@@ -43,7 +45,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
-    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
+    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalBeneficiaryList);
     const [coinAddress, setCoinAddress] = React.useState('');
     const [coinAddressValid, setCoinAddressValid] = React.useState(false);
     const [coinBlockchainName, setCoinBlockchainName] = React.useState(defaultSelected);
@@ -86,19 +88,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setCoinDescription(value);
     };
 
-    // const handleChangeBlockchain = (index: number) => {
-    //     const blockchainItem = currencyItem.networks[index];
-
-    //     setCoinBlockchainName({
-    //         blockchainKey: blockchainItem.blockchain_key,
-    //         protocol: blockchainItem.protocol,
-    //         name: currencyItem.name,
-    //         id: currencyItem.id,
-    //         fee: blockchainItem?.withdraw_fee,
-    //         minWithdraw: blockchainItem.min_withdraw_amount,
-    //     });
-    // };
-
     const handleSubmitAddAddressCoinModal = React.useCallback(() => {
         const payload = {
             currency: currency || '',
@@ -112,8 +101,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
         dispatch(beneficiariesCreate(payload));
         handleClearModalsInputs();
-        setShowModalAddBeneficiary(!showModalAddBeneficiary);
-        setShowModalBeneficiaryList(!showModalBeneficiaryList);
+        props.handleAddAddress();
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
 
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
@@ -140,7 +128,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                     className="com-modal-add-beneficiary-header
                  d-flex justify-content-between align-items-center w-100">
                     <h6 className="text-xl font-bold white-text mb-0">Withdraw Crypto</h6>
-                    <span onClick={props.onClose} className="cursor-pointer">
+                    <span onClick={() => props.onCloseAdd()} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>
@@ -156,15 +144,13 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                         <div className="py-3 px-3 mb-3 dark-bg-main radius-md d-flex justify-content-between">
                             <div className="mr-2">
                                 <p className="mb-2 text-sm white-text">Available</p>
-                                <p className="mb-2 text-sm white-text">Balance</p>
                             </div>
                             <div className="ml-2">
-                                <p className="mb-2 text-sm grey-text text-right">10075.56213968 USDT</p>
-                                <p className="mb-2 text-sm grey-text-accent text-right">
-                                    ${' '}
+                                <p className="mb-2 text-sm grey-text text-right">
                                     <Decimal fixed={selectedFixed} thousSep=",">
                                         {balance}
-                                    </Decimal>
+                                    </Decimal>{' '}
+                                    {currency.toUpperCase()}
                                 </p>
                             </div>
                         </div>
@@ -182,8 +168,14 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                                 classNameLabel="text-ms white-text mb-8"
                                 classNameInput={``}
                                 autoFocus={false}
+                                classNameGroup={'mb-1'}
                                 labelVisible
                             />
+                            <div className="mb-3">
+                                {coinAddress != '' && !coinAddressValid && (
+                                    <span className="text-xs danger-text">Invalid Address</span>
+                                )}
+                            </div>
                             <p className="mb-16 text-xs grey-text ">
                                 Do not send Tether USD unless you are certain the destination supports TRC-20
                                 transactions. If it does not, you could permanently lose access to your coins.
@@ -253,13 +245,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                     show={showModalAddBeneficiary}
                     header={renderHeaderModalAddBeneficiary()}
                     content={renderContentModalAddBeneficiary()}
-                />
-            )}
-
-            {showModalBeneficiaryList && (
-                <ModalBeneficiaryList
-                    showModalBeneficiaryList={showModalBeneficiaryList}
-                    onClose={() => setShowModalBeneficiaryList(false)}
                 />
             )}
         </React.Fragment>

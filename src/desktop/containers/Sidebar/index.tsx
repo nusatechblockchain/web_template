@@ -160,7 +160,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         if (el.comingsoon) {
                                             this.setState({ showModalComingSoon: !this.state.showModalComingSoon });
                                         } else {
-                                            localStorage.setItem('sidebar', el.name);
+                                            // localStorage.setItem('sidebar', el.name);
                                             this.props.history.push(el.path);
                                         }
                                     }}
@@ -169,31 +169,36 @@ class Side extends React.Component<Props, SidebarState> {
                                         {el.name === 'Dashboard' ? (
                                             <UserIcon
                                                 strokeColor={
-                                                    localStorage.getItem('sidebar') === 'Dashboard'
-                                                        ? 'var(--text-primary-color)'
+                                                    location.pathname == '/profile' ||
+                                                    location.pathname == '/profile/kyc'
+                                                        ? // localStorage.getItem('sidebar') === 'Dashboard'
+                                                          'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
                                             />
                                         ) : el.name === 'Wallet' ? (
                                             <WalletIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Wallet'
-                                                        ? 'var(--text-primary-color)'
+                                                    location.pathname.includes('wallets')
+                                                        ? // localStorage.getItem('sidebar') === 'Wallet'
+                                                          'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
                                             />
                                         ) : el.name === 'Market Order' ? (
                                             <AnalysIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Market Order'
-                                                        ? 'var(--text-primary-color)'
+                                                    location.pathname.includes('markets-open')
+                                                        ? // localStorage.getItem('sidebar') === 'Market Order'
+                                                          'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
                                             />
                                         ) : el.name === 'Trade History' ? (
                                             <TradeHistory
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Trade History'
+                                                    // localStorage.getItem('sidebar') === 'Trade History'
+                                                    location.pathname.includes('trade-history')
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -201,7 +206,8 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Transaction History' ? (
                                             <CalendarIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Transaction History'
+                                                    // localStorage.getItem('sidebar') === 'Transaction History'
+                                                    location.pathname.includes('history-transaction')
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -212,7 +218,12 @@ class Side extends React.Component<Props, SidebarState> {
                                     </div>
                                     <p
                                         className={`font-bold text-sm mb-0 ${
-                                            localStorage.getItem('sidebar') === el.name ? 'white-text' : 'grey-text'
+                                            (location.pathname == '/profile' || location.pathname == '/profile/kyc') &&
+                                            location.pathname.includes(el.path)
+                                                ? 'white-text'
+                                                : el.path != '/profile' && location.pathname.includes(el.path)
+                                                ? 'white-text'
+                                                : 'grey-text'
                                         }`}>
                                         {el.name}
                                     </p>
@@ -228,7 +239,7 @@ class Side extends React.Component<Props, SidebarState> {
                                         if (el.comingsoon) {
                                             this.setState({ showModalComingSoon: !this.state.showModalComingSoon });
                                         } else {
-                                            localStorage.setItem('sidebar', el.name);
+                                            // localStorage.setItem('sidebar', el.name);
                                             this.props.history.push(el.path);
                                         }
                                     }}
@@ -237,23 +248,26 @@ class Side extends React.Component<Props, SidebarState> {
                                         {el.name === 'Profile Setting' ? (
                                             <SettingIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Profile Setting'
-                                                        ? 'var(--text-primary-color)'
+                                                    location.pathname.includes('setting')
+                                                        ? // localStorage.getItem('sidebar') === 'Profile Setting'
+                                                          'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
                                             />
                                         ) : el.name === 'Security' ? (
                                             <SecurityIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Security'
-                                                        ? 'var(--text-primary-color)'
+                                                    location.pathname.includes('security')
+                                                        ? // localStorage.getItem('sidebar') === 'Security'
+                                                          'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
                                             />
                                         ) : el.name === 'Referral' ? (
                                             <AddUserIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Referral'
+                                                    // localStorage.getItem('sidebar') === 'Referral'
+                                                    location.pathname.includes('referral')
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -261,7 +275,8 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'API Management' ? (
                                             <ApiIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'API Management'
+                                                    // localStorage.getItem('sidebar') === 'API Management'
+                                                    location.pathname.includes('api')
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -269,7 +284,8 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'Announcement' ? (
                                             <AnnouncementIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'Announcement'
+                                                    // localStorage.getItem('sidebar') === 'Announcement'
+                                                    location.pathname.includes('announcement')
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -277,7 +293,8 @@ class Side extends React.Component<Props, SidebarState> {
                                         ) : el.name === 'FAQ' ? (
                                             <FaqIcon
                                                 fillColor={
-                                                    localStorage.getItem('sidebar') === 'FAQ'
+                                                    // localStorage.getItem('sidebar') === 'FAQ'
+                                                    location.pathname.includes('faq')
                                                         ? 'var(--text-primary-color)'
                                                         : 'var(--text-secondary-color)'
                                                 }
@@ -288,7 +305,7 @@ class Side extends React.Component<Props, SidebarState> {
                                     </div>
                                     <p
                                         className={`font-bold text-sm mb-0 ${
-                                            localStorage.getItem('sidebar') === el.name ? 'white-text' : 'grey-text'
+                                            location.pathname.includes(el.path) ? 'white-text' : 'grey-text'
                                         }`}>
                                         {el.name}
                                     </p>

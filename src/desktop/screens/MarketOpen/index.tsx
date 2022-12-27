@@ -7,6 +7,7 @@ import { CustomStylesSelect } from 'src/desktop/components';
 import { Tabs, Tab } from 'react-bootstrap';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 import Select from 'react-select';
+import { NoData } from '../../components';
 
 export const MarketOpen: FC = (): ReactElement => {
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -214,11 +215,13 @@ export const MarketOpen: FC = (): ReactElement => {
                         <Tab eventKey="open" title="Open Order" className="mb-24">
                             <div className="mt-24">
                                 <Table header={getTableHeaders()} data={getTableData(dataOpen)} />
+                                {dataOpen.length < 1 && <NoData text="No Data Yet" />}
                             </div>
                         </Tab>
                         <Tab eventKey="close" title="Close Order" className="mb-24">
                             <div className="mt-24">
                                 <Table header={getTableHeaders()} data={getTableData(dataClose)} />
+                                {dataClose.length < 1 && <NoData text="No Data Yet" />}
                             </div>
                         </Tab>
                     </Tabs>

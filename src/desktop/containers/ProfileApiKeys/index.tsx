@@ -10,6 +10,7 @@ import { CopyableTextField, Table } from '../../../components';
 import { localeDate } from '../../../helpers/localeDate';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 import Modal from 'react-bootstrap/Modal';
+import { NoData } from '../../components';
 
 import {
     alertPush,
@@ -100,7 +101,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
             <React.Fragment>
                 <div className="api-screen dark-bg-accent pb-5">
                     <div className="header dark-bg-main py-4 px-24 mb-24">
-                        <h2 className="mb-0 text-xl white-text font-bold pt-2">API Management</h2>
+                        <h2 className="mb-0 text-xl white-text font-bold ">API Management</h2>
                     </div>
                     <div className="px-24">
                         <div className="d-flex justify-content-between mb-24">
@@ -143,11 +144,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                         </div>
                     )}
 
-                    {user.otp && dataLoaded && !apiKeys.length && (
-                        <div className="text-center mt-4 grey-text-accent text-ms">
-                            {this.t('page.body.profile.apiKeys.noKeys')}
-                        </div>
-                    )}
+                    {user.otp && dataLoaded && !apiKeys.length && <NoData text="You have no API key" />}
 
                     {user.otp && dataLoaded && apiKeys.length > 0 && (
                         <React.Fragment>

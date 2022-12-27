@@ -3,10 +3,6 @@
     width: calc(100% - 223px);
     min-height: 100vh;
 
-    &__title {
-        padding: 30px 24px;
-    }
-
     &__content-wrapper {
         padding: 21px 24px;
     }
@@ -39,5 +35,19 @@
         background: var(--button-primary-color);
         color: var(--text-primary-color);
         transition: 0.3s ease-in all;
+    }
+
+    .form-control {
+        padding: 6px 14px;
+        background: var(--body-background-color);
+        border-color: var(--border-color);
+        height: 52px;
+        color: var(--text-secondary-color);
+
+        &:focus-visible {
+            border-color: var(--border-color);
+            outline: 0;
+            box-shadow: 0 0 0 0;
+        }
     }
 }

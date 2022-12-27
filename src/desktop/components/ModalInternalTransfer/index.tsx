@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import './ModalInternalTransfer.pcss';
-import { Modal, CustomStylesSelect, CustomInput } from '../../components';
+import { Modal, CustomInput } from '../../components';
 import { Decimal } from '../../../components';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
 import {
@@ -14,12 +14,10 @@ import {
     selectWallets,
     selectUserInfo,
 } from '../../../modules';
-import CurrencyConverter from 'react-currency-conv';
-import Select from 'react-select';
-import moment from 'moment';
 
 export interface ModalTransferShowProps {
     showModalTransfer: boolean;
+    onClose: () => void;
 }
 
 export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowProps> = (props) => {
@@ -40,7 +38,9 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const [otp, setOtp] = React.useState('');
 
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencyItem: Currency = currencies.find((item) => item.id === currency);
     const wallet = wallets.length && wallets.find((item) => item.currency.toLowerCase() === currency.toLowerCase());
+<<<<<<< HEAD
     const selectedCurrency =
         currencies.length && currencies.find((item) => item.id.toLowerCase() === currency.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
@@ -49,6 +49,10 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const priceConvert = +balance * +price;
 
     console.log(priceConvert);
+=======
+    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const selectedFixed = (wallet || { fixed: 0 }).fixed;
+>>>>>>> 79feda099e3a5ba9fb9c5ef2f1ff57d7d102fc0b
 
     const handleChangeAmount = (value) => {
         setAmount(value);
@@ -82,24 +86,9 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     React.useEffect(() => {
         if (transferSuccess) {
             setShowModalTransferConfirmation(false);
+            props.onClose;
         }
     }, [transferSuccess]);
-
-    const optionCurrency = currencies.map((item) => {
-        const customLabel = (
-            <div className="d-flex align-items-center">
-                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                <div>
-                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                </div>
-            </div>
-        );
-        return {
-            label: customLabel,
-            value: item.id,
-        };
-    });
 
     const renderHeaderModalTransfer = () => {
         return (
@@ -108,7 +97,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                     className="com-modal-transfer-header
                  d-flex justify-content-between align-items-center">
                     <h6 className="text-xl font-bold white-text mb-0">Transfer Internal</h6>
-                    <span onClick={() => setShowModalTransfer(!showModalTransfer)} className="cursor-pointer">
+                    <span onClick={props.onClose} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>
@@ -139,17 +128,23 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                     />
                                 </div>
 
-                                <div className="d-flex flex-column justify-content-between align-items-start">
+                                <div className="d-flex flex-column justify-content-between align-items-start mb-24">
                                     <p className="text-ms white-text mb-8">Coins</p>
 
-                                    <div className="w-100">
-                                        <Select
-                                            value={optionCurrency.filter(function (option) {
-                                                return option.value === currency;
-                                            })}
-                                            styles={CustomStylesSelect}
-                                            options={optionCurrency}
+                                    <div className="w-100 d-flex align-items-center coin-selected">
+                                        <img
+                                            src={currencyItem && currencyItem.icon_url}
+                                            alt="icon"
+                                            className="mr-12 small-coin-icon"
                                         />
+                                        <div>
+                                            <p className="m-0 text-sm grey-text-accent">
+                                                {currencyItem && currencyItem.id.toUpperCase()}
+                                            </p>
+                                            <p className="m-0 text-xs grey-text-accent">
+                                                {currencyItem && currencyItem.name}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -171,11 +166,9 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 <div className="py-3 px-3 mb-3 dark-bg-main radius-md d-flex justify-content-between">
                                     <div className="mr-2">
                                         <p className="mb-2 text-sm white-text">Available</p>
-                                        <p className="mb-2 text-sm white-text">Balance</p>
                                     </div>
                                     <div className="ml-2">
                                         <p className="mb-2 text-sm grey-text">
-                                            {' '}
                                             <Decimal fixed={selectedFixed} thousSep=",">
                                                 {balance}
                                             </Decimal>{' '}

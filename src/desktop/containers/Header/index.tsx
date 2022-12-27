@@ -183,7 +183,7 @@ class Head extends React.Component<Props, HeaderState> {
             <React.Fragment>
                 <nav
                     className={`navbar navbar-expand-lg py-2 px-24 ${
-                        thisTradingHeader ? 'dark-bg-accent' : 'dark-bg-main'
+                        thisTradingHeader ? 'dark-bg-accent' : 'dark-bg-accent'
                     }`}>
                     <Link to="/" className="navbar-brand">
                         <Logo />

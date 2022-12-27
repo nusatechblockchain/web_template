@@ -6,6 +6,7 @@ import { Table } from 'src/components';
 import { CustomStylesSelect } from 'src/desktop/components';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import Select from 'react-select';
+import { NoData } from '../../components';
 
 export const HistoryTrade: FC = (): ReactElement => {
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -153,6 +154,7 @@ export const HistoryTrade: FC = (): ReactElement => {
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="position-relative">{renderFilter()}</div>
                     <Table header={getTableHeaders()} data={getTableData(dataOpen)} />
+                    {dataOpen.length < 1 && <NoData text="No Data Yet" />}
                 </div>
             </div>
         </React.Fragment>

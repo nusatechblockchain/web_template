@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { Modal, ModalAddBeneficiary } from '../../components';
+import { Modal } from '../../components';
 import { Decimal } from '../../../components';
 import { DEFAULT_WALLET } from '../../../constants';
 import { CircleCloseIcon } from '../../../assets/images/CircleCloseIcon';
@@ -24,12 +24,14 @@ export interface ModalBeneficiaryListProps {
     showModalBeneficiaryList: boolean;
     showModalAddBeneficiary?: boolean;
     blockchainKey?: string;
-    onClose: () => void;
+    onCloseList: () => void;
+    onCloseAdd: () => void;
+    handleAddAddress: () => void;
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalBeneficiaryList);
-    const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalAddBeneficiary);
+    const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalBeneficiaryList);
     const { currency = '' } = useParams<{ currency?: string }>();
     const dispatch = useDispatch();
 
@@ -62,7 +64,7 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
             <React.Fragment>
                 <div className="d-flex justify-content-between align-items-center w-100 min-w-500">
                     <h6 className="text-md font-normal white-text mb-0">Select Form Address Book</h6>
-                    <span onClick={props.onClose} className="cursor-pointer">
+                    <span onClick={() => props.onCloseList()} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>
@@ -77,15 +79,14 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                     <div className="py-3 px-3 mb-3 dark-bg-main radius-md d-flex justify-content-between">
                         <div className="mr-2">
                             <p className="mb-2 text-sm white-text">Available</p>
-                            <p className="mb-2 text-sm white-text">Balance</p>
                         </div>
                         <div className="ml-2">
-                            <p className="mb-2 text-sm grey-text text-right">10075.56213968 USDT</p>
-                            <p className="mb-2 text-sm grey-text-accent text-right">
-                                ${' '}
+                            <p className="mb-2 text-sm grey-text text-right">
+                                {' '}
                                 <Decimal fixed={selectedFixed} thousSep=",">
                                     {balance}
-                                </Decimal>
+                                </Decimal>{' '}
+                                {currency.toUpperCase()}
                             </p>
                         </div>
                     </div>
@@ -109,7 +110,20 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                                             {el && el.data && el.data.address}
                                         </td>
                                         <td className="text-sm grey-text-accent pr-2">{el && el.name}</td>
-                                        <td className="text-sm grey-text-accent pr-2">{el && el.state}</td>
+                                        <td
+                                            className={`text-sm grey-text-accent pr-2 ${
+                                                el && el.state === 'pending'
+                                                    ? 'warning-text'
+                                                    : el && el.state === 'active'
+                                                    ? 'contrast-text'
+                                                    : 'danger-text'
+                                            }`}>
+                                            {el && el.state === 'pending'
+                                                ? 'Pending'
+                                                : el && el.state === 'active'
+                                                ? 'Active'
+                                                : 'Unactive'}
+                                        </td>
                                         <button
                                             onClick={handleDeleteAddress(el)}
                                             className="btn-transparent w-auto cursor-pointer">
@@ -122,10 +136,7 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                     </table>
                     <div className="d-flex justify-content-center">
                         <button
-                            onClick={() => {
-                                setShowModalBeneficiaryList(false);
-                                setShowModalAddBeneficiary(true);
-                            }}
+                            onClick={props.handleAddAddress}
                             type="button"
                             className="btn btn-transparent gradient-text font-bold">
                             Add New Address
@@ -146,12 +157,6 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                         content={renderContentBeneficiaryList()}
                     />
                 </div>
-            )}
-            {showModalAddBeneficiary && (
-                <ModalAddBeneficiary
-                    onClose={() => setShowModalAddBeneficiary(false)}
-                    showModalAddBeneficiary={showModalAddBeneficiary}
-                />
             )}
         </React.Fragment>
     );

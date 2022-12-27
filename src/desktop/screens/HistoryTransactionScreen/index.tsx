@@ -12,12 +12,14 @@ import {
     RootState,
 } from '../../../modules';
 import { Table } from '../../../components';
-import { Pagination } from '../../../desktop/components';
+import { Pagination, CustomInput } from '../../../desktop/components';
 import { CustomStylesSelect } from '../../../desktop/components';
 import { Tabs, Tab } from 'react-bootstrap';
 import Select from 'react-select';
 import moment from 'moment';
+import { NoData } from '../../components';
 import './HistoryTransactionScreen.pcss';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const DEFAULT_LIMIT = 5;
 export const HistoryTransactionScreen: FC = (): ReactElement => {
@@ -25,23 +27,26 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     const page = useSelector(selectCurrentPage);
     const list = useSelector(selectHistory);
 
+    const [historys, setHistorys] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(0);
-    const [currency, setCurrency] = React.useState('trx');
+    const [currency, setCurrency] = React.useState('');
     const [type, setType] = React.useState('deposits');
-    const [status, setStatus] = React.useState('completed');
-    const [date, setDate] = React.useState('');
+    const [status, setStatus] = React.useState('');
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
 
     const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
     const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
     const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, DEFAULT_LIMIT));
 
-    const historyFetch = useHistoryFetch({ type: type, currency: currency, limit: DEFAULT_LIMIT, page: currentPage });
+    useHistoryFetch({ type: type, limit: DEFAULT_LIMIT, currency, page: currentPage });
+
     useDocumentTitle('Transaction History');
     useWalletsFetch();
 
     const handleChangeType = (e) => {
         setType(e);
-        historyFetch;
+        setCurrency('');
     };
 
     const onClickPrevPage = () => {
@@ -55,17 +60,28 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         return ['Date', 'Type', 'Asset', 'Ammount', 'Receiver UID', 'Status'];
     };
 
-    // function getDaysAgoData(data, daysAgo) {
-    //     // Get current date
-    //     let t = new Date();
-    //     // Create UTC date for daysAgo
-    //     let d = new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate() - daysAgo));
-    //     // Filter and sort data
-    //     return data.filter(item => new Date(item.datum) >= d)
-    //                .sort((a, b) => a.datum.localeCompare(b.datum));
-    //   }
-      
-    //   console.log(getDaysAgoData(list, 30));
+    React.useEffect(() => {
+        setHistorys(list);
+    }, [list]);
+
+    const filterredStatus = (status) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.status === status);
+        setHistorys(filterredList);
+    };
+
+    React.useEffect(() => {
+        if (startDate != '' && endDate != '') {
+            const filterredList = list.filter(
+                (item) =>
+                    moment(item.created_at).format() >= moment(startDate).format() &&
+                    moment(item.created_at).format() <= moment(endDate).format()
+            );
+            setHistorys(filterredList);
+        }
+    }, [startDate, endDate]);
 
     const getTableData = (data) => {
         return data.map((item) => [
@@ -139,13 +155,24 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         return (
             <div className="d-flex align-items-center">
                 <div className="w-20 mr-24">
-                    <p className="m-0 white-text text-sm mb-8">Time</p>
-                    <Select
-                        value={optionTime.filter(function (option) {
-                            return option.value === '7';
-                        })}
-                        styles={CustomStylesSelect}
-                        options={optionTime}
+                    <label className="m-0 white-text text-sm mb-8">Start Date</label>
+                    <input
+                        type="date"
+                        className="form-control mb-24"
+                        onChange={(e) => {
+                            setStartDate(e.target.value);
+                        }}
+                    />
+                </div>
+
+                <div className="w-20 mr-24">
+                    <label className="m-0 white-text text-sm mb-8">End Date</label>
+                    <input
+                        type="date"
+                        className="form-control mb-24"
+                        onChange={(e) => {
+                            setEndDate(e.target.value);
+                        }}
                     />
                 </div>
 
@@ -157,7 +184,9 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                         })}
                         styles={CustomStylesSelect}
                         options={optionAssets}
-                        onChange={(e) => setCurrency(e.value)}
+                        onChange={(e) => {
+                            setCurrency(e.value);
+                        }}
                     />
                 </div>
 
@@ -169,7 +198,10 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                         })}
                         styles={CustomStylesSelect}
                         options={optionStatus}
-                        onChange={(e) => setStatus(e.value)}
+                        onChange={(e) => {
+                            setStatus(e.value);
+                            filterredStatus(e.value);
+                        }}
                     />
                 </div>
             </div>
@@ -179,7 +211,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="pg-history-transaction-screen dark-bg-main">
-                <div className="pg-history-transaction-screen__title dark-bg-main">
+                <div className="pg-history-transaction-screen__title dark-bg-main px-24 pb-4 pt-4">
                     <h1 className="m-0 white-text text-xl">Transaction History</h1>
                 </div>
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
@@ -192,8 +224,8 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                             <Tab eventKey="deposits" title="Deposit" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(list)} />
-                                    {list[0] && (
+                                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                                    {historys[0] && (
                                         <Pagination
                                             firstElemIndex={firstElemIndex}
                                             lastElemIndex={lastElemIndex}
@@ -203,13 +235,15 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                             onClickNextPage={onClickNextPage}
                                         />
                                     )}
+
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>
                             <Tab eventKey="withdraws" title="Withdrawal" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(list)} />
-                                    {list[0] && (
+                                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                                    {historys[0] && (
                                         <Pagination
                                             firstElemIndex={firstElemIndex}
                                             lastElemIndex={lastElemIndex}
@@ -219,13 +253,14 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                             onClickNextPage={onClickNextPage}
                                         />
                                     )}
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>
                             <Tab eventKey="transfers" title="Internal Transfer" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(list)} />
-                                    {list[0] && (
+                                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                                    {historys[0] && (
                                         <Pagination
                                             firstElemIndex={firstElemIndex}
                                             lastElemIndex={lastElemIndex}
@@ -235,6 +270,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                             onClickNextPage={onClickNextPage}
                                         />
                                     )}
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>
                         </Tabs>

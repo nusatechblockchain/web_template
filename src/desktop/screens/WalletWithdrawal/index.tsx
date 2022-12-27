@@ -2,39 +2,25 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { useDocumentTitle } from 'src/hooks';
+import { useDocumentTitle, useHistoryFetch } from '../../../hooks';
+import { selectHistory } from '../../../modules';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
 import { WalletWithdrawalForm, WalletWithdrawalInfo } from '../../containers';
-import { ModalInternalTransfer, Modal } from '../../components';
+import { ModalInternalTransfer } from '../../components';
 import { Table } from '../../../components';
+import { NoData } from '../../components';
 
 export const WalletWitdrawal: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
-    useDocumentTitle('Wallet || Withdrawal');
     const { currency = '' } = useParams<{ currency?: string }>();
+    const historys = useSelector(selectHistory);
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
-    const dataTable = [
-        {
-            date: '24 Oct 2022 - 14.44',
-            transactionId: 'PX8RTQWVA....',
-            amount: '0.5 BTC',
-            type: 'Deposit',
-            status: 'Pending',
-            confirmation: '1/4',
-        },
-        {
-            date: '24 Oct 2022 - 14.44',
-            transactionId: 'PX8RTQWVA....',
-            amount: '0.5 BTC',
-            type: 'Deposit',
-            status: 'Pending',
-            confirmation: '1/4',
-        },
-    ];
+    useDocumentTitle('Wallet || Withdrawal');
+    useHistoryFetch({ type: 'withdraws', currency: currency, limit: 3, page: 0 });
 
     const getTableHeaders = () => {
         return ['Date', 'Transacsion ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
@@ -87,12 +73,25 @@ export const WalletWitdrawal: React.FC = () => {
                     </div>
                     <div className="table-container">
                         <h1 className="mb-24 text-lg white-text">Recent Withdraw</h1>
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
+                        <Table header={getTableHeaders()} data={getTableData(historys)} />
+                        {historys.length < 1 && <NoData text="No Data Yet" />}
+                        {historys.length > 0 && (
+                            <div className="d-flex justify-content-center">
+                                <Link to="/history-transaction" className="font-bold text-center gradient-text text-sm">
+                                    View All
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {showModalTransfer && <ModalInternalTransfer showModalTransfer={showModalTransfer} />}
+            {showModalTransfer && (
+                <ModalInternalTransfer
+                    showModalTransfer={showModalTransfer}
+                    onClose={() => setShowModalTransfer(false)}
+                />
+            )}
         </React.Fragment>
     );
 };

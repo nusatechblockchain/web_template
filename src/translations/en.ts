@@ -914,6 +914,7 @@ export const en = {
 
     'email.taken': 'Email already have been taken',
     'success.confirm.code.created': 'Account created',
+    'account.wallet.not_found': 'Something went wrong, please try again later',
 
     'identity.user.invalid_referral_format': 'Invalid referral uid format',
     'identity.user.referral_doesnt_exist': "Referral doesn't exist",
