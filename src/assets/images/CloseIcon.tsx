@@ -61,3 +61,22 @@ export const ModalCloseIcon: React.FC<CloseIconProps> = (props: CloseIconProps) 
         </svg>
     );
 };
+
+export const CloseIconSecurity: React.FC = () => {
+    return (
+        <svg width={16} height={16} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_3195_45979)">
+                <circle cx={8} cy={8} r={8} fill="#fff" />
+                <path
+                    d="M15 2.5c6.904 0 12.5 5.596 12.5 12.5S21.904 27.5 15 27.5 2.5 21.904 2.5 15 8.096 2.5 15 2.5zm-2.651 8.08a1.25 1.25 0 00-1.873 1.65l.105.119 2.65 2.65-2.65 2.652a1.25 1.25 0 001.65 1.873l.118-.104L15 16.767l2.651 2.653a1.25 1.25 0 001.873-1.65l-.104-.119L16.767 15l2.653-2.651a1.25 1.25 0 00-1.65-1.873l-.119.104L15 13.232l-2.651-2.652z"
+                    fill="#FF4445"
+                />
+            </g>
+            <defs>
+                <clipPath id="clip0_3195_45979">
+                    <path fill="#fff" d="M0 0H30V30H0z" />
+                </clipPath>
+            </defs>
+        </svg>
+    );
+};

@@ -44,7 +44,7 @@ export interface Withdraw {
     blockchain_txid: string;
     blockchain_key: string;
     rid: string;
-    state: string;
+    status: string;
     created_at: string;
     updated_at: string;
     completed_at: string;

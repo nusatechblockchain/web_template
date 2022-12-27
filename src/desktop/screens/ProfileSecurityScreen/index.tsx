@@ -16,11 +16,9 @@ import {
 } from '../../../helpers';
 import {
     toggle2faFetch,
-    selectChangePasswordSuccess,
     changePasswordFetch,
     selectUserInfo,
     User,
-    userFetch,
     RootState,
     entropyPasswordFetch,
     selectCurrentPasswordEntropy,
@@ -31,7 +29,7 @@ import {
 import { ModalTwoFa, Modal, CustomInput, PasswordStrengthMeter } from '../../components';
 import { CheckIcon, GoogleIcon, KeyIcon, MailIcon, PhoneIcon } from '../../../assets/images/ProfileSecurityIcon';
 import { Notification } from '../../../assets/images/Notification';
-import { CloseIcon, ModalCloseIcon } from '../../../assets/images/CloseIcon';
+import { CloseIcon, ModalCloseIcon, CloseIconSecurity } from '../../../assets/images/CloseIcon';
 import moment from 'moment';
 interface ProfileSecurityState {
     showTwoFaModal: boolean;
@@ -208,7 +206,11 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                         <div className="ml-4">
                                             <p className="d-flex mb-1 text-ms white-text font-bold">
                                                 Google Authenticator (Recommended)
-                                                <CheckIcon className="ml-3" />
+                                                {this.props.user.otp ? (
+                                                    <CheckIcon className="ml-3" />
+                                                ) : (
+                                                    <CloseIconSecurity />
+                                                )}
                                             </p>
                                             <span className="text-sm grey-text-accent">
                                                 Protect your account and withdrawals with a security key such as
@@ -259,7 +261,12 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                         <div className="ml-4">
                                             <p className="d-flex mb-1 text-ms white-text font-bold">
                                                 Phone Number Verification
-                                                <CheckIcon className="ml-3" />
+                                                {!this.props.user.phones[0] ||
+                                                this.state.phone[0].validated_at === null ? (
+                                                    <CloseIconSecurity />
+                                                ) : (
+                                                    <CheckIcon className="ml-3" />
+                                                )}
                                             </p>
                                             <span className="text-sm grey-text-accent">
                                                 Protect your account and transactions.
@@ -269,7 +276,11 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                                     onClick={() => handleClickPhone()}
                                                     type="button"
                                                     className="btn btn-transparent gradient-text font-bold text-sm w-auto px-0 mr-3">
-                                                    Change
+                                                    {!this.props.user.phones[0]
+                                                        ? 'Add'
+                                                        : this.state.phone[0].validated_at === null
+                                                        ? 'Verify'
+                                                        : 'Change'}
                                                 </button>
                                             </div>
                                         </div>
