@@ -209,7 +209,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                                 {this.props.user.otp ? (
                                                     <CheckIcon className="ml-3" />
                                                 ) : (
-                                                    <CloseIconSecurity />
+                                                    <CloseIconSecurity className="ml-3" />
                                                 )}
                                             </p>
                                             <span className="text-sm grey-text-accent">
@@ -263,7 +263,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                                 Phone Number Verification
                                                 {!this.props.user.phones[0] ||
                                                 this.state.phone[0].validated_at === null ? (
-                                                    <CloseIconSecurity />
+                                                    <CloseIconSecurity className="ml-3" />
                                                 ) : (
                                                     <CheckIcon className="ml-3" />
                                                 )}
