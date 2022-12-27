@@ -40,7 +40,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
     const wallet = wallets.length && wallets.find((item) => item.currency.toLowerCase() === currency.toLowerCase());
-<<<<<<< HEAD
     const selectedCurrency =
         currencies.length && currencies.find((item) => item.id.toLowerCase() === currency.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
@@ -49,10 +48,6 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const priceConvert = +balance * +price;
 
     console.log(priceConvert);
-=======
-    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
-    const selectedFixed = (wallet || { fixed: 0 }).fixed;
->>>>>>> 79feda099e3a5ba9fb9c5ef2f1ff57d7d102fc0b
 
     const handleChangeAmount = (value) => {
         setAmount(value);
