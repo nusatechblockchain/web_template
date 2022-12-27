@@ -5,7 +5,7 @@ export const CustomStylesSelect = {
         background: 'rgb(14, 17, 20)',
         borderRadius: '4px',
         boxShadow: state.isFocused ? null : null,
-        padding: '12px 16px',
+        padding: '8px 16px',
         marginBottom: '24px',
         cursor: 'pointer',
         '&:hover': {
