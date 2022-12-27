@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWallets, Wallet } from '../../../modules';
-import { DEFAULT_WALLET } from 'src/constants';
+import {
+    alertPush,
+    Currency,
+    selectCurrencies,
+    walletsAddressFetch,
+    selectWallets,
+    selectHistory,
+    Wallet,
+} from '../../../modules';
+import { DEFAULT_WALLET } from '../../../constants';
 import './WalletDepositBody.pcss';
-import { useWalletsFetch } from 'src/hooks';
+import { useWalletsFetch, useHistoryFetch } from '../../../hooks';
 import { QRCode, Decimal, Table } from '../../../components';
 import { CustomStylesSelect } from '../../components';
 import { copy } from '../../../helpers';
@@ -12,20 +20,23 @@ import { Modal } from 'react-bootstrap';
 import { useParams, useHistory } from 'react-router-dom';
 
 const WalletDepositBody = () => {
-    useWalletsFetch();
-
     const intl = useIntl();
     const dispatch = useDispatch();
     const history = useHistory();
+
+    const historys = useSelector(selectHistory);
     const wallets = useSelector(selectWallets) || [];
+
     const { currency = '' } = useParams<{ currency?: string }>();
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
-
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency | any = (currencies && currencies.find((item) => item.id === wallet.currency)) || {
         min_confirmations: 6,
         deposit_enabled: false,
     };
+
+    useWalletsFetch();
+    useHistoryFetch({ type: 'deposits', currency: currency, limit: 3, page: 0 });
 
     const [active, setActive] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.protocol : '');
     const [tab, setTab] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.blockchain_key : '');
@@ -108,25 +119,6 @@ const WalletDepositBody = () => {
     }, [currencyItem]);
 
     const handleOnCopy = () => ({});
-
-    const dataTable = [
-        {
-            date: '24 Oct 2022 - 14.44',
-            transactionId: 'PX8RTQWVA....',
-            amount: '0.5 BTC',
-            type: 'Deposit',
-            status: 'Pending',
-            confirmation: '1/4',
-        },
-        {
-            date: '24 Oct 2022 - 14.44',
-            transactionId: 'PX8RTQWVA....',
-            amount: '0.5 BTC',
-            type: 'Deposit',
-            status: 'Pending',
-            confirmation: '1/4',
-        },
-    ];
 
     const getTableHeaders = () => {
         return ['Date', 'Transacsion ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
@@ -292,7 +284,7 @@ const WalletDepositBody = () => {
 
                     <div className="table-container">
                         <h1 className="mb-24 text-lg white-text">Recent Deposit</h1>
-                        <Table header={getTableHeaders()} data={getTableData(dataTable)} />
+                        <Table header={getTableHeaders()} data={getTableData(historys)} />
                     </div>
 
                     <Modal show={show} onHide={handleClose} centered>
