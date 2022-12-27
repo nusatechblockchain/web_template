@@ -6,7 +6,7 @@ import { selectCurrencies, selectWallets } from 'src/modules';
 import { Link, useHistory } from 'react-router-dom';
 
 export const WalletsScreen: FC = (): ReactElement => {
-    const history = useHistory()
+    const history = useHistory();
     const wallets = useSelector(selectWallets) || [];
     const currencies = useSelector(selectCurrencies);
 
@@ -20,25 +20,24 @@ export const WalletsScreen: FC = (): ReactElement => {
                     <h1 className="text-xl white-text">Wallet Overview</h1>
 
                     <div>
-                        
-                            <button
-                                onClick={() => {
-                                    localStorage.setItem("sidebar", "Trade History");
-                                    history.push("/trade-history")
-                                }}
-                                type="button"
-                                className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
-                                Trade History
-                            </button>
-                            <button
-                             onClick={() => {
-                                localStorage.setItem("sidebar", "Transaction History");
-                                history.push("/history-transaction")
+                        <button
+                            onClick={() => {
+                                localStorage.setItem('sidebar', 'Trade History');
+                                history.push('/trade-history');
                             }}
-                            type="button" 
+                            type="button"
+                            className="btn-secondary mr-24 radius-sm text-sm white-text font-bold">
+                            Trade History
+                        </button>
+                        <button
+                            onClick={() => {
+                                localStorage.setItem('sidebar', 'Transaction History');
+                                history.push('/history-transaction');
+                            }}
+                            type="button"
                             className="btn-secondary radius-sm text-sm white-text font-bold">
-                                Transaction History
-                            </button>
+                            Transaction History
+                        </button>
                     </div>
                 </div>
                 <EstimatedValue wallets={wallets} />
