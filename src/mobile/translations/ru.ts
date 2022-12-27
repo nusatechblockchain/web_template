@@ -97,9 +97,18 @@ export const ru = {
     'page.mobile.profile.accountActivity.ip': 'IP address',
     'page.mobile.profile.accountActivity.result': 'Result',
 
+    'page.mobile.profile.apiKeys.noOtp': 'Please enable Two-Factor Authentication',
+    'page.mobile.profile.apiKeys.noKeys': 'You have no API keys',
+    'page.mobile.profile.apiKeys.modal.created_header':'Created API Key',
+    'page.mobile.profile.apiKeys.modal.header': '2FA Verification',
+    'page.mobile.profile.apiKeys.modal.access_key':'Access Key',
+
     'page.mobile.profile.apiKeys.item.kid': 'Kid',
     'page.mobile.profile.apiKeys.item.algorithm': 'Algorithm',
     'page.mobile.profile.apiKeys.item.created': 'Created',
+    'page.mobile.profile.apiKeys.item.state': 'State',
+    'page.mobile.profile.apiKeys.item.status': 'Status',
+    'page.mobile.profile.apiKeys.item.action': 'Action',
     'page.mobile.profile.apiKeys.item.updated': 'Updated',
     'page.mobile.profile.apiKeys.item.delete': 'Delete',
 
@@ -118,4 +127,12 @@ export const ru = {
 
     'page.mobile.createdApiKeyModal.title': 'Created',
     'page.mobile.createdApiKeyModal.confirm': 'confirm',
+
+    
+    'page.mobile.profile.content.copyLink': 'Copy',
+
+    'page.mobile.profile.apiKeys.modal.btn.disabled': 'Disable',
+    'page.mobile.profile.apiKeys.modal.btn.activate':'Activate',
+    'page.mobile.profile.apiKeys.modal.btn.delete':'Delete',
+    'page.mobile.profile.apiKeys.modal.title':'Enter 2FA Code from the app',
 };
