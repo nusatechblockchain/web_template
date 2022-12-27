@@ -10,13 +10,13 @@ import './WalletWithdrawal.pcss';
 import { WalletWithdrawalForm, WalletWithdrawalInfo } from '../../containers';
 import { ModalInternalTransfer } from '../../components';
 import { Table } from '../../../components';
+import { NoData } from '../../components';
 
 export const WalletWitdrawal: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
     const { currency = '' } = useParams<{ currency?: string }>();
     const historys = useSelector(selectHistory);
-
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
     useDocumentTitle('Wallet || Withdrawal');
@@ -74,6 +74,14 @@ export const WalletWitdrawal: React.FC = () => {
                     <div className="table-container">
                         <h1 className="mb-24 text-lg white-text">Recent Withdraw</h1>
                         <Table header={getTableHeaders()} data={getTableData(historys)} />
+                        {historys.length < 1 && <NoData text="No Data Yet" />}
+                        {historys.length > 0 && (
+                            <div className="d-flex justify-content-center">
+                                <Link to="/history-transaction" className="font-bold text-center gradient-text text-sm">
+                                    View All
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

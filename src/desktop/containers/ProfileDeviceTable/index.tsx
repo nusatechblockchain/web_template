@@ -20,6 +20,7 @@ import {
     selectUserActivityPageCount,
     UserActivityDataInterface,
 } from '../../../modules';
+import { NoData } from '../../components';
 
 interface ReduxProps {
     loading: boolean;
@@ -78,6 +79,7 @@ class ProfileAccountActivityComponent extends React.Component<Props> {
                                 onClickPrevPage={this.onClickPrevPage}
                                 onClickNextPage={this.onClickNextPage}
                             />
+                            {userActivity.length < 1 && <NoData text="No Data Yet" />}
                         </div>
                     </div>
                 </div>

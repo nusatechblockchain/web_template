@@ -5,6 +5,7 @@ import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import './MarketAllCryptoTabs.pcss';
+import { NoData } from '../../components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -76,6 +77,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
         <React.Fragment>
             <div className="com-market-all-tabs">
                 <Table header={getTableHeaders()} data={getTableData(marketList)} />
+                {marketList.length < 1 && <NoData text="No Data Yet" />}
             </div>
         </React.Fragment>
     );
