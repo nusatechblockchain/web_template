@@ -57,7 +57,12 @@ const WalletDeposit: React.FC = () => {
                 </div>
             </div>
 
-            {showModalTransfer && <ModalInternalTransfer showModalTransfer={showModalTransfer} />}
+            {showModalTransfer && (
+                <ModalInternalTransfer
+                    showModalTransfer={showModalTransfer}
+                    onClose={() => setShowModalTransfer(false)}
+                />
+            )}
         </React.Fragment>
     );
 };

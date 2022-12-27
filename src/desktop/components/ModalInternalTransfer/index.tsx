@@ -17,6 +17,7 @@ import {
 
 export interface ModalTransferShowProps {
     showModalTransfer: boolean;
+    onClose: () => void;
 }
 
 export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowProps> = (props) => {
@@ -74,6 +75,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     React.useEffect(() => {
         if (transferSuccess) {
             setShowModalTransferConfirmation(false);
+            props.onClose;
         }
     }, [transferSuccess]);
 
@@ -84,7 +86,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                     className="com-modal-transfer-header
                  d-flex justify-content-between align-items-center">
                     <h6 className="text-xl font-bold white-text mb-0">Transfer Internal</h6>
-                    <span onClick={() => setShowModalTransfer(!showModalTransfer)} className="cursor-pointer">
+                    <span onClick={props.onClose} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>

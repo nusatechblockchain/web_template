@@ -405,13 +405,33 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                 </div>
                                                 <div className="ml-3 mr-3">
                                                     <p className="mb-1 text-ms font-normal white-text">Security</p>
-                                                    <span className="d-block text-left text-xs contrast-text font-normal ">
-                                                        Disabled
+                                                    <span
+                                                        className={`d-block text-left text-xs font-normal ${
+                                                            !user.phones[0] ||
+                                                            (user.phones &&
+                                                                user.phones[0] &&
+                                                                user.phones[0].validated_at === null) ||
+                                                            !user.otp
+                                                                ? 'danger-text'
+                                                                : 'contrast-text'
+                                                        }`}>
+                                                        {!user.phones[0] ||
+                                                        (user.phones &&
+                                                            user.phones[0] &&
+                                                            user.phones[0].validated_at === null) ||
+                                                        !user.otp
+                                                            ? 'Disabled'
+                                                            : 'Enabled'}
                                                     </span>
                                                 </div>
-                                                <div className="check">
-                                                    <CheckIcon />
-                                                </div>
+                                                {user.phones &&
+                                                    user.phones[0] &&
+                                                    user.phones[0].validated_at !== null &&
+                                                    user.otp && (
+                                                        <div className="check">
+                                                            <CheckIcon />
+                                                        </div>
+                                                    )}
                                             </div>
                                         </Link>
                                     </div>
