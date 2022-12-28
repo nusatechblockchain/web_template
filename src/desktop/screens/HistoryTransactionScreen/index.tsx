@@ -19,7 +19,6 @@ import Select from 'react-select';
 import moment from 'moment';
 import { NoData } from '../../components';
 import './HistoryTransactionScreen.pcss';
-import 'react-datepicker/dist/react-datepicker.css';
 
 const DEFAULT_LIMIT = 5;
 export const HistoryTransactionScreen: FC = (): ReactElement => {
