@@ -54,6 +54,7 @@ import {
     HistoryTransactionMobileScreen,
     TradingMobileScreen,
     TradingFutureMobileScreen,
+    InternalTransferMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -409,6 +410,14 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             path="/two-fa-authentication"
                             component={TwoFaAuthenticationMobileScreen}
                         />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/transfer"
+                            component={InternalTransferMobileScreen}
+                        />
+
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}

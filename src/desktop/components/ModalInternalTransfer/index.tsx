@@ -17,6 +17,7 @@ import {
 
 export interface ModalTransferShowProps {
     showModalTransfer: boolean;
+    onClose: () => void;
 }
 
 export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowProps> = (props) => {
@@ -39,8 +40,14 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
     const wallet = wallets.length && wallets.find((item) => item.currency.toLowerCase() === currency.toLowerCase());
+    const selectedCurrency =
+        currencies.length && currencies.find((item) => item.id.toLowerCase() === currency.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const price = selectedCurrency && selectedCurrency.price;
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
+    const priceConvert = +balance * +price;
+
+    console.log(priceConvert);
 
     const handleChangeAmount = (value) => {
         setAmount(value);
@@ -74,6 +81,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     React.useEffect(() => {
         if (transferSuccess) {
             setShowModalTransferConfirmation(false);
+            props.onClose;
         }
     }, [transferSuccess]);
 
@@ -84,7 +92,7 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                     className="com-modal-transfer-header
                  d-flex justify-content-between align-items-center">
                     <h6 className="text-xl font-bold white-text mb-0">Transfer Internal</h6>
-                    <span onClick={() => setShowModalTransfer(!showModalTransfer)} className="cursor-pointer">
+                    <span onClick={props.onClose} className="cursor-pointer">
                         <CircleCloseIcon />
                     </span>
                 </div>
@@ -161,6 +169,10 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                             </Decimal>{' '}
                                             {currency.toUpperCase()}
                                         </p>
+                                        {/* <div className='d-flex'> */}
+                                        <p className="mb-2 text-sm grey-text-accent">$ {priceConvert}</p>
+                                        {/* <CurrencyConverter from={'IDR'} to={'USD'} value={1000} precision={2} date={moment(new Date).format("YYYY-MM-DD")}  className="mb-2 text-sm grey-text-accent" />
+                                       </div> */}
                                     </div>
                                 </div>
 

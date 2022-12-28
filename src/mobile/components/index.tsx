@@ -3,3 +3,4 @@
 // export * from './Errors';
 
 export * from './Modal';
+export * from './CustomStyleSelect';
