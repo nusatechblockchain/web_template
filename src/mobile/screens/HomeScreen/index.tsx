@@ -21,22 +21,22 @@ import 'slick-carousel/slick/slick-theme.css';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-import Background1 from '../../assets/Images/home/background-1.png';
-import Background2 from '../../assets/Images/home/background-2.png';
-import Background3 from '../../assets/Images/home/background-3.png';
-import Background4 from '../../assets/Images/home/background-4.png';
-import ImgCard from '../../assets/Images/home/img-card.png';
+import Background1 from '/public/img-mobile/background-1.png';
+import Background2 from '/public/img-mobile/background-2.png';
+import Background3 from '/public/img-mobile/background-3.png';
+import Background4 from '/public/img-mobile/background-4.png';
+import ImgCard from '/public/img-mobile/img-card.png';
 import { BgCardSmall } from '../../assets/BackgroundCard';
 import { Table } from '../../../components';
-import GrapUp from '../../assets/Images/home/grap-up.png';
-import GrapDown from '../../assets/Images/home/grapH-down.png';
+import GrapUp from '/public/img-mobile/grap-up.png';
+import GrapDown from '/public/img-mobile/grapH-down.png';
 import { LogoIcon } from '../../assets/Logo';
 import { ScanIcon } from '../../assets/ScanIcon';
 import { SearchIcon } from '../../assets/SearchIcon';
 import { UserIcon } from '../../assets/UserIcon';
 import { ArrowLeft, ArrowRight } from '../../assets/Arrow';
 import { CopyableTextField } from '../../../components';
-import Avatar from '../../assets/Images/avatar.png';
+import Avatar from '/public/img-mobile/avatar.png';
 import {
     Announcement,
     ApiManagement,
@@ -108,7 +108,8 @@ const HomeMobileScreen: React.FC = () => {
             ),
         }));
 
-    const dataTranding = marketList && marketList.sort((a, b) => +b.currency.price - +a.currency.price);
+    const dataTranding =
+        marketList && marketList.sort((a, b) => +b.currency && +b.currency.price - +a.currency && +a.currency.price);
     const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);
     const dataLosers = marketList && marketList.sort((a, b) => +a.price_change_percent - +b.price_change_percent);
     const dataVolume = marketList && marketList.sort((a, b) => +a.volume - +b.volume);

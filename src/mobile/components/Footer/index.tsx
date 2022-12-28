@@ -13,11 +13,12 @@ const FooterComponent: React.FC = () => {
             icon: (
                 <HomeIcon
                     className={'mb-1'}
-                    fillColor={menuActive == 'Home' || location.pathname.includes('home') ? '#fff' : '#6F6F6F'}
+                    fillColor={menuActive == 'Home' || location.pathname == '/' ? '#fff' : '#6F6F6F'}
                 />
             ),
+            url: '/',
             name: 'home',
-            path: '/home',
+            path: '/',
         },
         {
             icon: (
@@ -26,6 +27,7 @@ const FooterComponent: React.FC = () => {
                     fillColor={menuActive == 'Market' || location.pathname.includes('market') ? '#fff' : '#6F6F6F'}
                 />
             ),
+            url: '/markets',
             name: 'market',
             path: '/markets',
         },
@@ -36,6 +38,7 @@ const FooterComponent: React.FC = () => {
                     fillColor={menuActive == 'Trading' || location.pathname.includes('trading') ? '#fff' : '#6F6F6F'}
                 />
             ),
+            url: '/trading',
             name: 'trading',
             path: '/trading',
         },
@@ -46,6 +49,7 @@ const FooterComponent: React.FC = () => {
                     fillColor={menuActive == 'Order' || location.pathname.includes('order') ? '#fff' : '#6F6F6F'}
                 />
             ),
+            url: '/order',
             name: 'order',
             path: '/order',
         },
@@ -56,6 +60,7 @@ const FooterComponent: React.FC = () => {
                     fillColor={menuActive == 'Wallet' || location.pathname.includes('wallet') ? '#fff' : '#6F6F6F'}
                 />
             ),
+            url: '/wallets',
             name: 'wallet',
             path: '/wallets',
         },
@@ -74,7 +79,9 @@ const FooterComponent: React.FC = () => {
                             {item.icon}
                             <p
                                 className={`p-0 m-0 text-xs font-semibold text-capitalize ${
-                                    menuActive == item.name || location.pathname.includes(item.name)
+                                    location.pathname == '/' && location.pathname.includes(item.url)
+                                        ? 'white-text'
+                                        : item.url != '/' && location.pathname.includes(item.url)
                                         ? 'white-text'
                                         : 'grey-text'
                                 }`}>

@@ -1,87 +1,93 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import { useDocumentTitle, useWalletsFetch } from 'src/hooks';
-import { selectCurrencies, Currency } from 'src/modules';
+import { useDocumentTitle, useWalletsFetch, useHistoryFetch } from 'src/hooks';
+import {
+    selectCurrencies,
+    Currency,
+    selectHistory,
+    selectFirstElemIndex,
+    selectCurrentPage,
+    selectLastElemIndex,
+    selectNextPageExists,
+    RootState,
+} from 'src/modules';
+import { localeDate } from '../../../helpers';
 import { Table } from 'src/components';
-import { CustomStylesSelect } from 'src/desktop/components';
-import { BtcIcon } from '../../../assets/images/CoinIcon';
+import { Pagination, CustomStylesSelect } from 'src/desktop/components';
 import Select from 'react-select';
+import moment from 'moment';
 import { NoData } from '../../components';
+
+const DEFAULT_LIMIT = 5;
 
 export const HistoryTrade: FC = (): ReactElement => {
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const page = useSelector(selectCurrentPage);
+    const list = useSelector(selectHistory);
 
-    useDocumentTitle('History Trade');
-    useWalletsFetch();
+    const [historys, setHistorys] = React.useState([]);
+    const [currentPage, setCurrentPage] = React.useState(0);
+    const [currency, setCurrency] = React.useState('');
+    const [status, setStatus] = React.useState('');
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
 
-    const dataOpen = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Buy',
-            market: 'Limit Order',
-            assets: (
-                <div>
-                    <BtcIcon /> BTC
-                </div>
-            ),
-            volume: '1 BTC',
-            price: '$ 252.125.536',
-            total: '$ 252.125.536',
-            status: 'Success',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Buy',
-            market: 'Limit Order',
-            assets: (
-                <div>
-                    <BtcIcon /> BTC
-                </div>
-            ),
-            volume: '1 BTC',
-            price: '$ 252.125.536',
-            total: '$ 252.125.536',
-            status: 'Success',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Buy',
-            market: 'Limit Order',
-            assets: (
-                <div>
-                    <BtcIcon /> BTC
-                </div>
-            ),
-            volume: '1 BTC',
-            price: '$ 252.125.536',
-            total: '$ 252.125.536',
-            status: 'Success',
-        },
-    ];
+    const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
+    const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
+    const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, DEFAULT_LIMIT));
+    useDocumentTitle('Trade History');
+    useHistoryFetch({ type: 'transfers', limit: DEFAULT_LIMIT, currency, page: currentPage });
+
+    const onClickPrevPage = () => {
+        setCurrentPage(Number(page) - 1);
+    };
+    const onClickNextPage = () => {
+        setCurrentPage(Number(page) + 1);
+    };
+
+    React.useEffect(() => {
+        setHistorys(list);
+    }, [list]);
+
+    const filterredStatus = (status) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.status === status);
+        setHistorys(filterredList);
+    };
+
+    React.useEffect(() => {
+        if (startDate != '' && endDate != '') {
+            const filterredList = list.filter(
+                (item) =>
+                    moment(item.created_at).format() >= moment(startDate).format() &&
+                    moment(item.created_at).format() <= moment(endDate).format()
+            );
+            setHistorys(filterredList);
+        }
+    }, [startDate, endDate]);
+
+    console.log(historys);
 
     const getTableHeaders = () => {
         return ['Date', 'Type', 'Market', 'Assets', 'Volume', 'Price', 'Total', 'Status'];
     };
 
     const getTableData = (data) => {
+        const market = currencies.find((m) => m.id === data.market);
         return data.map((item) => [
-            <p className="m-0 text-sm white-text">{item.date}</p>,
-            <p className={`m-0 text-sm ${item.type == 'Buy' ? 'green-text' : 'danger-text'}`}>{item.type}</p>,
+            <p className="m-0 text-sm white-text">{localeDate(item.created_at, 'fullDate')}</p>,
+            <p className={`m-0 text-sm ${item.side == 'Buy' ? 'green-text' : 'danger-text'}`}>{item.side}</p>,
             <p className="m-0 text-sm white-text">{item.market}</p>,
-            <p className="m-0 text-sm white-text">{item.assets}</p>,
-            <p className="m-0 text-sm white-text">{item.volume}</p>,
+            <p className="m-0 text-sm white-text">{market}</p>,
+            <p className="m-0 text-sm white-text">{item.amount}</p>,
             <p className="m-0 text-sm white-text">{item.price}</p>,
             <p className="m-0 text-sm white-text">{item.total}</p>,
             <p className="m-0 text-sm green-text">{item.status}</p>,
             <p></p>,
         ]);
     };
-
-    const optionTime = [
-        { label: <p className="m-0 text-sm grey-text-accent">Past 7 Days</p>, value: '7' },
-        { label: <p className="m-0 text-sm grey-text-accent">Past 30 Days</p>, value: '30' },
-        { label: <p className="m-0 text-sm grey-text-accent">Past 90 Days</p>, value: '90' },
-    ];
 
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">All</p>, value: 'all' },
@@ -110,13 +116,24 @@ export const HistoryTrade: FC = (): ReactElement => {
         return (
             <div className="d-flex align-items-center">
                 <div className="w-20 mr-24">
-                    <p className="m-0 white-text text-sm mb-8">Time</p>
-                    <Select
-                        value={optionTime.filter(function (option) {
-                            return option.value === '7';
-                        })}
-                        styles={CustomStylesSelect}
-                        options={optionTime}
+                    <label className="m-0 white-text text-sm mb-8">Start Date</label>
+                    <input
+                        type="date"
+                        className="form-control mb-24"
+                        onChange={(e) => {
+                            setStartDate(e.target.value);
+                        }}
+                    />
+                </div>
+
+                <div className="w-20 mr-24">
+                    <label className="m-0 white-text text-sm mb-8">End Date</label>
+                    <input
+                        type="date"
+                        className="form-control mb-24"
+                        onChange={(e) => {
+                            setEndDate(e.target.value);
+                        }}
                     />
                 </div>
 
@@ -124,10 +141,13 @@ export const HistoryTrade: FC = (): ReactElement => {
                     <p className="m-0 white-text text-sm mb-8">Assets</p>
                     <Select
                         value={optionAssets.filter(function (option) {
-                            return option.value === 'bnb';
+                            return option.value === currency;
                         })}
                         styles={CustomStylesSelect}
                         options={optionAssets}
+                        onChange={(e) => {
+                            setCurrency(e.value);
+                        }}
                     />
                 </div>
 
@@ -135,10 +155,14 @@ export const HistoryTrade: FC = (): ReactElement => {
                     <p className="m-0 white-text text-sm mb-8">Status</p>
                     <Select
                         value={optionStatus.filter(function (option) {
-                            return option.value === 'pending';
+                            return option.value === status;
                         })}
                         styles={CustomStylesSelect}
                         options={optionStatus}
+                        onChange={(e) => {
+                            setStatus(e.value);
+                            filterredStatus(e.value);
+                        }}
                     />
                 </div>
             </div>
@@ -153,8 +177,18 @@ export const HistoryTrade: FC = (): ReactElement => {
                 </div>
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="position-relative">{renderFilter()}</div>
-                    <Table header={getTableHeaders()} data={getTableData(dataOpen)} />
-                    {dataOpen.length < 1 && <NoData text="No Data Yet" />}
+                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                    {historys[0] && (
+                        <Pagination
+                            firstElemIndex={firstElemIndex}
+                            lastElemIndex={lastElemIndex}
+                            page={page}
+                            nextPageExists={nextPageExists}
+                            onClickPrevPage={onClickPrevPage}
+                            onClickNextPage={onClickNextPage}
+                        />
+                    )}
+                    {historys.length < 1 && <NoData text="No Data Yet" />}
                 </div>
             </div>
         </React.Fragment>

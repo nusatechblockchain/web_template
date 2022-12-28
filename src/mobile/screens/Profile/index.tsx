@@ -12,7 +12,7 @@ import {
     PasswordIcon,
 } from '../../../assets/images/ProfileIcon';
 import { ArrowLeft } from '../../assets/Arrow';
-import Avatar from '../../assets/Images/avatar.png';
+import Avatar from '/public/img-mobile/avatar.png';
 import { CheckIcon } from '../../../assets/images/ProfileIcon';
 import { WarningIcon } from '../../assets/Nottification';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
