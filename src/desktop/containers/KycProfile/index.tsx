@@ -113,7 +113,6 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         /* tslint:enable */
 
         const dataCountries = Object.values(countries.getNames(lang)).map((item) => {
-            console.log(this.state.country);
             return { label: item, value: item };
         });
 
@@ -394,11 +393,9 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const lastVerifiedProfile = verifiedProfiles.length && verifiedProfiles[verifiedProfiles.length - 1];
 
         if (!isIdentity && lastVerifiedProfile && lastVerifiedProfile.address) {
-            console.log('edit');
             this.props.editIdentity(profileInfo);
         } else {
             this.props.sendIdentity(profileInfo);
-            console.log('tambah baru');
         }
     };
 }
