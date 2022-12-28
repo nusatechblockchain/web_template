@@ -48,6 +48,7 @@ import {
     TradeHistory,
     Wallet,
 } from '../../assets/Sidebar';
+import { CalendarIcon } from '../../assets/CalendarIcon';
 
 const noHeaderRoutes = ['/'];
 
@@ -115,14 +116,21 @@ const HomeMobileScreen: React.FC = () => {
     const dataVolume = marketList && marketList.sort((a, b) => +a.volume - +b.volume);
 
     const sidebarMenu = [
-        { icon: <Dashboard />, name: 'Dashborad', path: '/profile' },
-        { icon: <Wallet />, name: 'Wallet', path: '/wallets' },
-        { icon: <MarketOrder />, name: 'MarketOrder', path: '/market-order' },
-        { icon: <TradeHistory />, name: 'Trade History', path: '/history-trade' },
-        { icon: <Security />, name: 'Security', path: '/security' },
-        { icon: <Referral />, name: 'Referral', path: '/referral' },
-        { icon: <ApiManagement />, name: 'Api Management', path: '/api-key' },
-        { icon: <Faq />, name: 'Faq', path: '/faq' },
+        { icon: <Dashboard />, name: 'Dashborad', path: '/profile', showNotLoggedin: false },
+        { icon: <Wallet />, name: 'Wallet', path: '/wallets', showNotLoggedin: false },
+        { icon: <MarketOrder />, name: 'MarketOrder', path: '/market-order', showNotLoggedin: false },
+        { icon: <TradeHistory />, name: 'Trade History', path: '/history-trade', showNotLoggedin: false },
+        {
+            icon: <CalendarIcon />,
+            name: 'Transaction History',
+            path: '/history-transaction',
+            showNotLoggedin: false,
+        },
+        { icon: <Security />, name: 'Security', path: '/security', showNotLoggedin: false },
+        { icon: <Referral />, name: 'Referral', path: '/referral', showNotLoggedin: false },
+        { icon: <ApiManagement />, name: 'Api Management', path: '/api-key', showNotLoggedin: false },
+        { icon: <Announcement />, name: 'Announcement', path: '/announcement', showNotLoggedin: true },
+        { icon: <Faq />, name: 'Faq', path: '/faq', showNotLoggedin: true },
     ];
 
     const banner = [
@@ -251,29 +259,49 @@ const HomeMobileScreen: React.FC = () => {
                             {sidebarMenu &&
                                 sidebarMenu.map((item, key) => (
                                     <React.Fragment>
-                                        {key % 3 == 0 && <div className="divider" />}
-                                        <Link to={item.path}>
-                                            <div className=" w-100 px-24 py-3 d-flex justify-content-between align-items-center cursor-ointer">
-                                                <div className="card-menu-name d-flex align-items-center">
-                                                    {item.icon}
-                                                    <h3 className="text-sm grey-text font-bold mb-0 ml-2">
-                                                        {item.name}
-                                                    </h3>
+                                        {userLoggedIn ? (
+                                            <React.Fragment>
+                                                {key % 3 == 0 && <div className="divider" />}
+                                                <Link to={item.path} key={key}>
+                                                    <div className=" w-100 px-24 py-3 d-flex justify-content-between align-items-center cursor-ointer">
+                                                        <div className="card-menu-name d-flex align-items-center">
+                                                            {item.icon}
+                                                            <h3 className="text-sm grey-text font-bold mb-0 ml-2">
+                                                                {item.name}
+                                                            </h3>
+                                                        </div>
+                                                        <ArrowRight className={''} />
+                                                    </div>
+                                                </Link>
+                                            </React.Fragment>
+                                        ) : item.showNotLoggedin ? (
+                                            <Link to={item.path} key={key}>
+                                                <div className=" w-100 px-24 py-3 d-flex justify-content-between align-items-center cursor-ointer">
+                                                    <div className="card-menu-name d-flex align-items-center">
+                                                        {item.icon}
+                                                        <h3 className="text-sm grey-text font-bold mb-0 ml-2">
+                                                            {item.name}
+                                                        </h3>
+                                                    </div>
+                                                    <ArrowRight className={''} />
                                                 </div>
-                                                <ArrowRight className={''} />
-                                            </div>
-                                        </Link>
+                                            </Link>
+                                        ) : (
+                                            ''
+                                        )}
                                     </React.Fragment>
                                 ))}
 
-                            <div className="px-24 mt-5">
-                                <button
-                                    onClick={handleLogout}
-                                    type="button"
-                                    className="btn btn-primary btn-mobile btn-block btn-outline">
-                                    Logout
-                                </button>
-                            </div>
+                            {userLoggedIn && (
+                                <div className="px-24 mt-5">
+                                    <button
+                                        onClick={handleLogout}
+                                        type="button"
+                                        className="btn btn-primary btn-mobile btn-block btn-outline">
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
