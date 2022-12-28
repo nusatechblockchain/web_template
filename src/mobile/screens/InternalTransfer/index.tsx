@@ -62,7 +62,7 @@ const InternalTransferMobileScreen: React.FC = () => {
 
     return (
         <section className="internal-transfer-mobile-screen pb-5 dark-bg-main">
-            <div className="container-fluid w-100 p-0 m-0">
+            <div className="container-fluid inside-internal-transfer w-100 h-100">
                 <div className="mb-4">
                     <Link to="/wallets">
                         <ArrowLeft className="white-text" />
@@ -73,15 +73,6 @@ const InternalTransferMobileScreen: React.FC = () => {
                 </div>
 
                 <form className="form-transfer">
-                    {/* <label className="mb-2">Select Coin</label>
-                        <Select
-                            value={optionCurrency.filter(function (option) {
-                                return option.value === currency;
-                            })}
-                            styles={CustomStylesSelect}
-                            options={optionCurrency}
-                        /> */}
-
                     <div className="d-flex flex-column justify-content-between align-items-start">
                         <p className="text-ms white-text mb-8">Coins</p>
                         <div className="w-100 d-flex align-items-center coin-selected">
@@ -126,11 +117,6 @@ const InternalTransferMobileScreen: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
-                    <div className="w-100 text-center mb-1">
-                        <SwapIconMobile />
-                    </div>
-
                     <div className="transfer-information mb-3">
                         <div className="transfer-shipper">
                             <div className="mb-3">
