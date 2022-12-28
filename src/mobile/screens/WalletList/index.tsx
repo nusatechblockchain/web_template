@@ -253,74 +253,14 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
             {showModal && (
                 <Modal
                     // className="modal-internal-transfer"
-                    // dialogClassName="modal-transfer-fullscreen"
+                    dialogClassName="modal-transfer-fullscreen"
                     onHide={() => setShowModal(!showModal)}
                     show={showModal}>
                     <section className="internal-transfer-mobile-screen">
-                        <div className="container-fluid w-100 p-0 m-0 dark-bg-accent position-relative">
-                            <div className="d-flex justify-content-between align-items-center w-100 search-container">
-                                <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text">
-                                            <SearchIcon />
-                                        </span>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        aria-label="search"
-                                        placeholder="Enter the currency you are looking for."
-                                    />
-                                    <div className="input-group-append">
-                                        <div onClick={() => setShowModal(!showModal)}>
-                                            <span className="input-group-text">Cancel</span>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div className="container-fluid w-100 p-0 m-0 position-relative">
+                            <div onClick={() => setShowModal(!showModal)} className="white-text text-right mb-3">
+                                <span className="text-sm">Cancel</span>
                             </div>
-
-                            <nav className="w-100">
-                                <div
-                                    className="option-currency nav nav-tabs w-100 d-flex justify-content-between align-items-center"
-                                    id="nav-tab"
-                                    role="tablist">
-                                    <a
-                                        className="nav-item nav-link active w-50"
-                                        id="nav-crypto-tab"
-                                        data-toggle="tab"
-                                        href="#nav-crypto"
-                                        role="tab"
-                                        aria-controls="nav-crypto"
-                                        aria-selected="true">
-                                        Crypto
-                                    </a>
-                                    <a
-                                        className="nav-item nav-link w-50"
-                                        id="nav-idr-tab"
-                                        data-toggle="tab"
-                                        href="#nav-idr"
-                                        role="tab"
-                                        aria-controls="nav-idr"
-                                        aria-selected="false">
-                                        IDR
-                                    </a>
-                                </div>
-                            </nav>
-
-                            <div className="search-history-container d-flex justify-content-between align-items-center">
-                                <p className="p-0 m-0">Search History</p>
-                                <TrashIconMobile />
-                            </div>
-
-                            <div className="search-history w-60">
-                                <h5>BTC</h5>
-                                <h5>ETH</h5>
-                                <h5>UTSD</h5>
-                                <h5>TRX</h5>
-                                <h5>BNB</h5>
-                                <h5>XRP</h5>
-                            </div>
-
                             <div className="table-mobile-wrapper">
                                 <CoinTransfer />
                             </div>

@@ -433,7 +433,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
-                            path="/history-trade"
+                            path="/history-transaction"
                             component={HistoryTransactionMobileScreen}
                         />
                         <PrivateRoute
