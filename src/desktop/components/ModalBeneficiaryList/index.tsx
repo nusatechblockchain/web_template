@@ -27,11 +27,14 @@ export interface ModalBeneficiaryListProps {
     onCloseList: () => void;
     onCloseAdd: () => void;
     handleAddAddress: () => void;
+    beneficiaryId?: string;
+    handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string) => void;
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(props.showModalBeneficiaryList);
     const [showModalAddBeneficiary, setShowModalAddBeneficiary] = React.useState(props.showModalBeneficiaryList);
+
     const { currency = '' } = useParams<{ currency?: string }>();
     const dispatch = useDispatch();
 
@@ -51,6 +54,8 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
 
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
+
+    // console.log(beneficiariesList);
 
     const handleDeleteAddress = React.useCallback(
         (item: Beneficiary) => () => {
@@ -106,7 +111,15 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                             ) : (
                                 beneficiariesList.map((el, i) => (
                                     <tr key={i}>
-                                        <td className="text-sm grey-text-accent pr-2">
+                                        <td
+                                            onClick={() =>
+                                                props.handleChangeBeneficiaryId(
+                                                    el.id,
+                                                    el.data.address,
+                                                    el.blockchain_key
+                                                )
+                                            }
+                                            className="text-sm grey-text-accent pr-2 cursor-pointer">
                                             {el && el.data && el.data.address}
                                         </td>
                                         <td className="text-sm grey-text-accent pr-2">{el && el.name}</td>

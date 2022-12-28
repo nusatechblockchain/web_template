@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import './WalletWithdrawalForm.pcss';
@@ -9,27 +9,68 @@ import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, Blockchai
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
-import { useBeneficiariesFetch } from '../../../hooks';
+import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
+import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
 
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
+    useWithdrawLimits();
     const intl = useIntl();
     const history = useHistory();
+    const dispatch = useDispatch();
+
     const [showModalWithdrawalConfirmation, setShowModalWithdrawalConfirmation] = React.useState(false);
     const [showModalWithdrawalSuccessfully, setShowModalWithdrawalSuccessfully] = React.useState(false);
     const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
+    const [showModalOtp, setShowModalOtp] = React.useState(false);
+
     const [amount, setAmount] = React.useState('');
-    const [address, setAddress] = React.useState({});
+    const [beneficiaryId, setBeneficiaryId] = React.useState(0);
+    const [blockchainKey, setBlockchainKey] = React.useState('');
+    const [address, setAddress] = React.useState('');
+    const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
 
+    const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
 
-    const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
-    const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
+    // const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
+    // const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
+    // console.log(uniqueBlockchainKeysValues);
+
+    const blockchainKeyValue =
+        currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
+    const fee = blockchainKeyValue && blockchainKeyValue.withdraw_fee;
+
+    const handleChangeBeneficiaryId = (id: number, address: string, blockchainKey: string) => {
+        setBeneficiaryId(id);
+        setAddress(address);
+        setBlockchainKey(blockchainKey);
+        setShowModalBeneficiaryList(false);
+    };
+
+    const handleChangeAmount = (value: string) => {
+        setAmount(value);
+    };
+
+    const handleChangeOtp = (value: string) => {
+        setOtp(value);
+    };
+
+    const handleSubmitWithdraw = () => {
+        dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
+    };
+
+    React.useEffect(() => {
+        if (withdrawSuccess) {
+            setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
+            setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully);
+        }
+    }, [withdrawSuccess]);
 
     const renderHeaderModalWithdrawalConfirmation = () => {
         return (
@@ -42,7 +83,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const renderContentModalWithdrawalConfirmation = () => {
         return (
             <React.Fragment>
-                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10">
+                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10 min-w-500">
                     Please check the target address carefully before confirming the withdrawal.
                 </div>
                 <p className="text-ms grey-text-accent font-semibold mb-24">
@@ -54,12 +95,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                         onClick={() => setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation)}>
                         Cancel
                     </button>
-                    <button
-                        className="btn btn-success sm px-5"
-                        onClick={() => {
-                            setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
-                            setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully);
-                        }}>
+                    <button className="btn btn-success sm px-5" onClick={handleSubmitWithdraw}>
                         Withdraw
                     </button>
                 </div>
@@ -84,6 +120,47 @@ export const WalletWithdrawalForm: React.FC = () => {
                         className="btn btn-danger sm px-5 mr-3"
                         onClick={() => setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully)}>
                         Cancel
+                    </button>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const renderHeaderModalOtp = () => {
+        return (
+            <React.Fragment>
+                <h6 className="text-xl font-bold white-text mb-0">2FA Code</h6>
+            </React.Fragment>
+        );
+    };
+
+    const renderContentModalOtp = () => {
+        return (
+            <React.Fragment>
+                <div className="form min-w-400">
+                    <div className="form-group mb-24">
+                        <CustomInput
+                            defaultLabel=""
+                            inputValue={otp}
+                            label=""
+                            placeholder="______"
+                            type="text"
+                            labelVisible={false}
+                            classNameInput="text-center spacing-10"
+                            classNameLabel="hidden"
+                            handleChangeInput={handleChangeOtp}
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-primary btn-block"
+                        data-dismiss="modal"
+                        disabled={otp.length < 6 ? true : false}
+                        onClick={() => {
+                            setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
+                            setShowModalOtp(!showModalOtp);
+                        }}>
+                        Send
                     </button>
                 </div>
             </React.Fragment>
@@ -120,7 +197,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                                 label={intl.formatMessage({
                                     id: 'page.body.profile.header.account.content.password.new',
                                 })}
-                                placeholder={''}
+                                placeholder={address ? address : 'Select'}
                                 defaultLabel="New password"
                                 inputValue={''}
                                 classNameLabel="d-none"
@@ -144,9 +221,8 @@ export const WalletWithdrawalForm: React.FC = () => {
                             label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.new' })}
                             placeholder={'Add Amount'}
                             defaultLabel=""
-                            handleChangeInput={(e) => setAmount(e)}
+                            handleChangeInput={handleChangeAmount}
                             inputValue={amount}
-                            // handleFocusInput={}
                             classNameLabel="d-none"
                             classNameInput={`dark-bg-accent`}
                             autoFocus={false}
@@ -159,18 +235,26 @@ export const WalletWithdrawalForm: React.FC = () => {
                 </p>
                 <div className="d-flex justify-content-between mb-12">
                     <p className="mb-0 text-ms grey-text-accent">Fee</p>
-                    <p className="mb-0 text-ms grey-text-accent font-bold">$2</p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">$ {fee !== undefined ? fee : '0'}</p>
                 </div>
                 <div className="d-flex justify-content-between mb-24">
                     <p className="mb-0 text-ms grey-text-accent">Total Withdrawal Amount</p>
-                    <p className="mb-0 text-ms grey-text-accent font-bold">0.55 BTC</p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">
+                        {amount !== '' ? amount : '0'} {currency.toUpperCase()}
+                    </p>
                 </div>
                 <button
-                    onClick={() => setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation)}
+                    type="button"
+                    disabled={!currency ? true : !amount ? true : !beneficiaryId ? true : !address ? true : false}
+                    onClick={() => setShowModalOtp(!showModalOtp)}
                     className="btn btn-primary btn-block">
                     Withdraw
                 </button>
             </div>
+
+            {showModalOtp && (
+                <Modal show={showModalOtp} header={renderHeaderModalOtp()} content={renderContentModalOtp()} />
+            )}
 
             {showModalWithdrawalConfirmation && (
                 <Modal
@@ -199,8 +283,10 @@ export const WalletWithdrawalForm: React.FC = () => {
                         setShowModalBeneficiaryList(false);
                         setShowModalModalAddBeneficiary(true);
                     }}
+                    handleChangeBeneficiaryId={handleChangeBeneficiaryId}
                 />
             )}
+
             {showModalAddBeneficiary && (
                 <ModalAddBeneficiary
                     showModalBeneficiaryList={showModalBeneficiaryList}
