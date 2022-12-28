@@ -4,5 +4,30 @@
         margin-left: 223px;
         width: calc(100% - 223px);
         min-height: 100%;
+        .form-control {
+            padding: 6px 14px;
+            background: var(--body-background-color);
+            border-color: var(--border-color);
+            height: 52px;
+            color: var(--text-secondary-color);
+
+            &:focus-visible {
+                border-color: var(--border-color);
+                outline: 0;
+                box-shadow: 0 0 0 0;
+            }
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            color: rgb(255, 255, 255);
+            opacity: 1;
+            display: block;
+            background: url("/public/img/calender.svg") no-repeat;
+            width: 20px;
+            height: 20px;
+            border-width: thin;
+            cursor: pointer;
+            margin-top: 6px;
+        }
     }
 }
