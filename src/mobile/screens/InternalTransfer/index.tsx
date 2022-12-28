@@ -1,34 +1,29 @@
 import React from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
-import { SearchIcon } from 'src/mobile/assets/SearchIcon';
-import { TrashIconMobile } from 'src/mobile/assets/TrashIcon';
-import { Table } from '../../../components';
 import { useSelector, useDispatch } from 'react-redux';
-import { useIntl } from 'react-intl';
-import Select from 'react-select';
-import { Button } from 'react-bootstrap';
-import { CustomStylesSelect } from 'src/mobile/components';
+import { Button, Modal } from 'react-bootstrap';
 import { CustomInput } from 'src/desktop/components';
 import {
     selectCurrencies,
     Currency,
     createInternalTransfersFetch,
     selectInternalTransfersCreateSuccess,
-    selectWallets,
-    selectUserInfo,
 } from '../../../modules';
-import { CodeVerification } from 'src/desktop/components';
 import { SwapIconMobile } from 'src/mobile/assets/Swap';
-import { useWalletsFetch } from 'src/hooks';
+import { KeyConfirmation } from 'src/mobile/assets/KeyConfirmation';
+import { ArrowLeft } from 'src/mobile/assets/Arrow';
 
 const InternalTransferMobileScreen: React.FC = () => {
-    const intl = useIntl();
-    const history = useHistory();
     const dispatch = useDispatch();
+    const { currency = '' } = useParams<{ currency?: string }>();
     const [amount, setAmount] = React.useState('');
     const [uid, setUid] = React.useState('');
     const [otp, setOtp] = React.useState('');
-    const { currency = '' } = useParams<{ currency?: string }>();
+    const transferSuccess = useSelector(selectInternalTransfersCreateSuccess);
+
+    const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencyItem: Currency = currencies.find((item) => item.id === currency);
+    const [showModalConfirmation, setShowModalConfirmation] = React.useState(false);
 
     const handleChangeAmount = (value) => {
         setAmount(value);
@@ -48,47 +43,60 @@ const InternalTransferMobileScreen: React.FC = () => {
         }
     };
 
-    const currencies: Currency[] = useSelector(selectCurrencies);
-
-    const optionCurrency = currencies.map((item) => {
-        const customLabel = (
-            <div className="d-flex align-items-center">
-                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
-                <div>
-                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
-                </div>
-            </div>
-        );
-
-        return {
-            label: customLabel,
-            value: item.id,
+    const handleCreateTransfer = () => {
+        const payload = {
+            currency: currency.toLowerCase(),
+            username_or_uid: uid,
+            amount,
+            otp,
         };
-    });
+
+        dispatch(createInternalTransfersFetch(payload));
+    };
+
+    React.useEffect(() => {
+        if (transferSuccess) {
+            setShowModalConfirmation(false);
+        }
+    }, [transferSuccess]);
 
     return (
         <section className="internal-transfer-mobile-screen pb-5">
             <div className="container-fluid w-100 p-0 m-0 dark-bg-main">
                 <div className="mb-4">
                     <Link to="/wallets">
-                        <span className="text-white">Back</span>
+                        <ArrowLeft className="white-text" />
                     </Link>
                 </div>
                 <div className="d-flex justify-content-between align-items-center w-100 mb-24 transfer-head-container">
-                    <h1 className="navbar-brand p-0 m-0">Internal Transfer</h1>
+                    <h1 className="navbar-brand p-0 m-0 white-text">Internal Transfer</h1>
                 </div>
 
                 <form className="form-transfer">
-                    <div className="mb-3 w-100">
-                        <label className="mb-2">Select Coin</label>
+                    {/* <label className="mb-2">Select Coin</label>
                         <Select
                             value={optionCurrency.filter(function (option) {
                                 return option.value === currency;
                             })}
                             styles={CustomStylesSelect}
                             options={optionCurrency}
-                        />
+                        /> */}
+
+                    <div className="d-flex flex-column justify-content-between align-items-start">
+                        <p className="text-ms white-text mb-8">Coins</p>
+                        <div className="w-100 d-flex align-items-center coin-selected">
+                            <img
+                                src={currencyItem && currencyItem.icon_url}
+                                alt="icon"
+                                className="mr-12 small-coin-icon"
+                            />
+                            <div>
+                                <p className="m-0 text-sm grey-text-accent">
+                                    {currencyItem && currencyItem.id.toUpperCase()}
+                                </p>
+                                <p className="m-0 text-xs grey-text-accent">{currencyItem && currencyItem.name}</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="transfer-information mb-3">
@@ -106,7 +114,7 @@ const InternalTransferMobileScreen: React.FC = () => {
                                 <CustomInput
                                     type="text"
                                     label={'Input Ammount to send'}
-                                    placeholder={'0.0000000000'}
+                                    placeholder={'0.00000000'}
                                     defaultLabel={'Input Ammount to send'}
                                     handleChangeInput={handleChangeAmount}
                                     inputValue={amount}
@@ -149,24 +157,56 @@ const InternalTransferMobileScreen: React.FC = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label>Two-factor Authentications Code</label>
-
-                        <CodeVerification
-                            code={otp}
-                            onChange={() => {}}
-                            onSubmit={() => {}}
-                            codeLength={6}
+                        <label className="ml-2">Two-factor Authentications Code</label>
+                        <CustomInput
                             type="text"
-                            placeholder="______"
-                            inputMode="decimal"
-                            showPaste2FA={false}
+                            label={''}
+                            placeholder={'2FA Code'}
+                            defaultLabel={''}
+                            handleChangeInput={handleChangeOtp}
+                            inputValue={otp}
+                            classNameLabel="text-ms white-text d-none"
+                            classNameInput={`dark-bg-accent`}
+                            autoFocus={false}
+                            labelVisible
                         />
                     </div>
 
-                    <Button block size="lg" variant="primary">
+                    <Button
+                        onClick={() => {
+                            setShowModalConfirmation(!showModalConfirmation);
+                        }}
+                        disabled={disableButton()}
+                        block
+                        size="lg"
+                        variant="primary">
                         Continue
                     </Button>
                 </form>
+                <Modal show={showModalConfirmation} onHide={() => setShowModalConfirmation(!showModalConfirmation)}>
+                    <div className="container p-3 text-center">
+                        <div className="d-flex mb-2 justify-content-center">
+                            <KeyConfirmation />
+                        </div>
+                        <p className="gradient-text font-weight-bold mb-2">Transfer Confirmation</p>
+                        <div className="">
+                            <p className="text-sm text-secondary">
+                                Are you sure to transfer {amount} {currency.toUpperCase()} to another User? Please check
+                                UID of user you want to transfer
+                            </p>
+                        </div>
+                        <div className="">
+                            <button className="btn btn-primary btn-lg btn-block" onClick={handleCreateTransfer}>
+                                Continue
+                            </button>
+                            <button
+                                onClick={() => setShowModalConfirmation(!showModalConfirmation)}
+                                className="btn btn-outline-danger py-3 text-sm btn-lg btn-block">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         </section>
     );
