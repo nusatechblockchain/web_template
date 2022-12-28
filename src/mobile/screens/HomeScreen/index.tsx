@@ -36,7 +36,7 @@ import { SearchIcon } from '../../assets/SearchIcon';
 import { UserIcon } from '../../assets/UserIcon';
 import { ArrowLeft, ArrowRight } from '../../assets/Arrow';
 import { CopyableTextField } from '../../../components';
-import Avatar from '../../assets/Images/avatar.png';
+import Avatar from '/public/img-mobile/avatar.png';
 import {
     Announcement,
     ApiManagement,
