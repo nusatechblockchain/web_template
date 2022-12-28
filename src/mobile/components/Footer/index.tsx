@@ -84,9 +84,6 @@ const FooterComponent: React.FC = () => {
                                         : item.url != '/' && location.pathname.includes(item.url)
                                         ? 'white-text'
                                         : 'grey-text'
-                                    // menuActive == item.name || location.pathname.includes(item.name)
-                                    //     ? 'white-text'
-                                    //     : 'grey-text'
                                 }`}>
                                 {item.name}
                             </p>

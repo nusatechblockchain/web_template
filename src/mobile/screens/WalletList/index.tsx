@@ -18,7 +18,6 @@ import { FilterInput } from 'src/desktop/components';
 import { estimateUnitValue, estimateValue } from 'src/helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from 'src/constants';
 import { WithdrawlIcon, DepositIcon, TransferIcon } from '../../assets/Wallet';
-import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { SearchIcon } from '../../assets/Market';
 import { Modal } from 'react-bootstrap';
 import { TrashIconMobile } from 'src/mobile/assets/TrashIcon';
@@ -195,7 +194,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
         <React.Fragment>
             <div className="mobile-container wallet-list no-header dark-bg-main pt-4 ">
                 <h1 className="w-100 heading-one mb-5">Balances</h1>
-                <div className="estimate-container d-flex flex-column pl-3 w-100">
+                <div className="estimate-container d-flex flex-column w-100">
                     <div className="total-container w-50 d-flex flex-column">
                         <h3 className="text-md grey-text font-bold  mb-0">Estimated Total Balance</h3>
                         <div className="total-value d-flex justify-content-between align-items-center">
