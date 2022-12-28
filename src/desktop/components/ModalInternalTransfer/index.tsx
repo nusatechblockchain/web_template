@@ -43,7 +43,8 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
-    const handleChangeAmount = (value) => {
+    const handleChangeAmount = (e) => {
+        const value = e.replace(/[^0-9\.]/g, '');
         setAmount(value);
     };
 
@@ -140,9 +141,9 @@ export const ModalInternalTransfer: React.FunctionComponent<ModalTransferShowPro
                                 <div>
                                     <CustomInput
                                         type="text"
-                                        label={'Input Ammount to send'}
+                                        label={'Input Amount to send'}
                                         placeholder={'Input Amount'}
-                                        defaultLabel={'Input Ammount to send'}
+                                        defaultLabel={'Input Amount to send'}
                                         handleChangeInput={handleChangeAmount}
                                         inputValue={amount}
                                         classNameLabel="text-ms white-text mb-8"

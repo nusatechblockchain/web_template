@@ -174,7 +174,6 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                                       item.network[0].withdrawal_enabled &&
                                       handleClickWithdraw(currency);
                               }}
-                              //   onClick={() => setShowModalLocked(!showModalLocked)}
                               className={`bg-transparent border-none ${
                                   item && item.network && item.network[0] && item.network[0].withdrawal_enabled
                                       ? 'danger-text'

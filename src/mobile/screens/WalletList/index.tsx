@@ -11,17 +11,18 @@ import {
     Wallet,
     User,
     selectUserInfo,
-} from 'src/modules';
-import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch, useDocumentTitle } from 'src/hooks';
+} from '../../../modules';
+import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch, useDocumentTitle } from '../../../hooks';
 import { Table, Decimal, formatWithSeparators } from '../../../components';
-import { FilterInput } from 'src/desktop/components';
-import { estimateUnitValue, estimateValue } from 'src/helpers/estimateValue';
-import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from 'src/constants';
+import { FilterInput } from '../../../desktop/components';
+import { estimateUnitValue, estimateValue } from '../../../helpers/estimateValue';
+import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from '../../../constants';
 import { WithdrawlIcon, DepositIcon, TransferIcon } from '../../assets/Wallet';
 import { SearchIcon } from '../../assets/Market';
 import { Modal } from 'react-bootstrap';
-import { TrashIconMobile } from 'src/mobile/assets/TrashIcon';
-import CoinTransfer from 'src/mobile/components/CoinTransfer/CoinTransfer';
+import { TrashIconMobile } from '../../../mobile/assets/TrashIcon';
+import CoinTransfer from '../../../mobile/components/CoinTransfer/CoinTransfer';
+import { ArrowRight } from '../../assets/Arrow';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -134,6 +135,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                               <h3 className="p-0 m-0 text-one">Estimated Value</h3>
                               <h4 className="p-0 m-0 text-two">{formatWithSeparators(estimatedValue, ',')}</h4>
                           </div>,
+                          <Link to={`/wallets/${currency}/detail`}>
+                              <ArrowRight className={''} />
+                          </Link>,
                       ];
                   });
         },

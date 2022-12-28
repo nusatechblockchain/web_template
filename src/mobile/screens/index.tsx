@@ -22,3 +22,4 @@ export * from './HistoryTransaction';
 export * from './Trading';
 export * from './TradingFuture';
 export * from './InternalTransfer';
+export * from './WalletDeposit';

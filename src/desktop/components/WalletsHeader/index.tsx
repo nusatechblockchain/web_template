@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { FilterInput } from '..';
 import { Wallet } from '../../../modules';
@@ -50,16 +50,19 @@ export const WalletsHeader: React.FunctionComponent<ParentProps> = (props: Paren
                     className="mr-24"
                 />
             </div>
-            <Form className="cr-wallets-header__checkbox" onClick={handleToggleCheckbox}>
-                <Form.Check
-                    type="checkbox"
-                    custom
-                    id="nonZeroSelected"
-                    checked={nonZeroSelected}
-                    readOnly={true}
-                    label={intl.formatMessage({ id: 'page.body.wallets.overview.nonZero' })}
-                    className="text-sm grey-text-accent"
-                />
+
+            <Form as={Row} className="mb-3 min-w-400" controlId="formHorizontalCheck" onClick={handleToggleCheckbox}>
+                <Col sm={{ span: 20, offset: 0 }}>
+                    <Form.Check
+                        type="checkbox"
+                        custom
+                        id="nonZeroSelected"
+                        checked={nonZeroSelected}
+                        readOnly={true}
+                        label={intl.formatMessage({ id: 'page.body.wallets.overview.nonZero' })}
+                        className="text-sm grey-text-accent m-0 d-flex justify-content-center align-items-center"
+                    />
+                </Col>
             </Form>
         </div>
     );

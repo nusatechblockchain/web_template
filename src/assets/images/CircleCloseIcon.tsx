@@ -26,3 +26,18 @@ export const CircleCloseDangerLargeIcon = () => {
         </svg>
     );
 };
+
+export const CircleCloseModalNetworkIcon = () => {
+    return (
+        <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx={8} cy={8} r={8} fill="#6F6F6F" />
+            <path
+                d="M9.6 6.4L6.4 9.6m0-3.2l3.2 3.2"
+                stroke="#B5B3BC"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+};

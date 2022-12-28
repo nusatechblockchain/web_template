@@ -1,27 +1,16 @@
 import * as React from 'react';
-import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useWalletsFetch } from '../../../hooks';
-import { selectWallets, Wallet } from '../../../modules/user/wallets';
-import { WalletDepositBody, WalletHeader, ModalInternalTransfer } from '../../components';
+import { WalletDepositBody, ModalInternalTransfer } from '../../components';
 import { HowToDeposit } from '../../containers';
-import { DEFAULT_WALLET } from '../../../constants';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletDeposit.pcss';
 
 const WalletDeposit: React.FC = () => {
-    const intl = useIntl();
-    const history = useHistory();
     useWalletsFetch();
 
-    const wallets = useSelector(selectWallets) || [];
-
     const { currency = '' } = useParams<{ currency?: string }>();
-    // const currencies: Currency[] = useSelector(selectCurrencies);
-    // const currencyItem: Currency = currencies.find((item) => item.id === currency);
-    const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
 
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
@@ -52,7 +41,6 @@ const WalletDeposit: React.FC = () => {
                 </div>
                 <div className="dark-bg-accent body-deposit">
                     <HowToDeposit />
-                    {/* <WalletHeader currency={wallet.currency} name={wallet.name} /> */}
                     <WalletDepositBody />
                 </div>
             </div>

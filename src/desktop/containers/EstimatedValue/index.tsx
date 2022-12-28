@@ -46,9 +46,6 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
                         <span className="value-container text-md white-text">
                             <span className="value">{formatWithSeparators(estimatedValueSecondary, ',')}</span>
                             <span className="value-sign mr-24"> {VALUATION_SECONDARY_CURRENCY.toUpperCase()}</span>
-                            {/* <span onClick={() => setShowLocked(!showLocked)} className="cursor-pointer">
-                                {showLocked ? <EyeOpen /> : <EyeClose />}
-                            </span> */}
                         </span>
                     </div>
                 </div>
@@ -69,9 +66,6 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
                     <span className="value-container text-md white-text">
                         <span className="value">{formatWithSeparators(estimatedValue, ',')}</span>
                         <span className="value-sign mr-24">{VALUATION_PRIMARY_CURRENCY.toUpperCase()}</span>
-                        {/* <span onClick={() => setShowAvailable(!showAvailable)} className="cursor-pointer">
-                            {showAvailable ? <EyeOpen /> : <EyeClose />}
-                        </span> */}
                     </span>
                 </div>
             </div>

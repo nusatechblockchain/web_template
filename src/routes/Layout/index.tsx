@@ -55,6 +55,7 @@ import {
     TradingMobileScreen,
     TradingFutureMobileScreen,
     InternalTransferMobileScreen,
+    WalletDepositMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -333,7 +334,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
                         <PublicRoute
                             loading={userLoading}
-                            // isLogged={isLoggedIn}
                             path="/change-password"
                             component={ChangePasswordMobileScreen}
                         />
@@ -421,6 +421,20 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
+                            path="/wallets/:currency/deposit"
+                            component={WalletDepositMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/detail"
+                            component={WalletDetailMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
                             path="/wallets"
                             component={WalletListMobileScreen}
                         />
@@ -435,12 +449,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/history-trade"
                             component={HistoryTransactionMobileScreen}
-                        />
-                        <PrivateRoute
-                            loading={userLoading}
-                            isLogged={isLoggedIn}
-                            path="/wallet/detail"
-                            component={WalletDetailMobileScreen}
                         />
 
                         <PublicRoute loading={userLoading} path="/trading" component={TradingMobileScreen} />

@@ -52,8 +52,8 @@ export const WalletWithdrawalForm: React.FC = () => {
         setBlockchainKey(blockchainKey);
         setShowModalBeneficiaryList(false);
     };
-
-    const handleChangeAmount = (value: string) => {
+    const handleChangeAmount = (e) => {
+        const value = e.replace(/[^0-9\.]/g, '');
         setAmount(value);
     };
 

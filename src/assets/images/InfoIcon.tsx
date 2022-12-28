@@ -20,3 +20,14 @@ export const InfoIcon = () => {
         </svg>
     );
 };
+
+export const InfoModalNetworkIcon = () => {
+    return (
+        <svg width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M6.25 1a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm.375 7.781a.094.094 0 01-.094.094H5.97a.094.094 0 01-.094-.094V5.594c0-.052.042-.094.094-.094h.562c.052 0 .094.042.094.094V8.78zM6.25 4.75a.563.563 0 010-1.125.563.563 0 010 1.125z"
+                fill="#6F6F6F"
+            />
+        </svg>
+    );
+};
