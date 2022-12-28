@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
@@ -6,8 +6,9 @@ import { EditIcon, SearchIcon } from '../../assets/Market';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { Table, Decimal } from '../../../components';
-import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { Link } from 'react-router-dom';
+import { Favorite } from '../../../assets/images/Favorite';
+import { FilterInput } from 'src/desktop/components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -20,7 +21,7 @@ const defaultTicker = {
 };
 
 const MarketListlMobileScreen: React.FC = () => {
-    const [key, setKey] = React.useState('tranding');
+    const [key, setKey] = React.useState('all-crypto');
     const [showSearch, setShowSearch] = React.useState(false);
 
     useMarketsFetch();
@@ -28,6 +29,12 @@ const MarketListlMobileScreen: React.FC = () => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
+    const [favoriteMarket, setFavoriteMarket] = React.useState(() =>
+        JSON.parse(localStorage.getItem('favourites') || '[]')
+    );
+    const [filterMarket, setFilterMarket] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
+    const [filterData, setFilterData] = React.useState([]);
 
     const marketList = markets
         .map((market) => ({
@@ -47,25 +54,148 @@ const MarketListlMobileScreen: React.FC = () => {
             ),
         }));
 
+    const spotMarket = marketList.filter((market) => {
+        return market.type == 'spot';
+    });
+
+    const futureMarket = marketList.filter((market) => {
+        return market.type == 'future';
+    });
+
+    const newListingMarket = marketList.filter((market) => {
+        return market.type == 'spot';
+    });
+
+    const favoriteList = marketList.filter((market) =>
+        JSON.parse(localStorage.getItem('favourites') || '[]').some((name) => name == market.name)
+    );
+
     const renderTableHeader = [
         <p className="mb-0 text-sm grey-text">Name</p>,
-        <p className="mb-0 text-sm grey-text">Last Price</p>,
+        <p className="mb-0 text-sm grey-text text-nowrap">Last Price</p>,
         <p className="mb-0 text-sm grey-text">Change</p>,
-        '',
+        <p className="mb-0 text-sm grey-text">Action</p>,
     ];
 
-    const renderDataTable = (data) => {
-        return data.map((item) => [
-            <div className="d-flex align-items-center text-sm">
-                <img src={item && item.currency && item.currency.icon_url} alt="coin" className="small-coin-icon" />
-                <div className="ml-1">
-                    <p className="mb-0 grey-text-accent mb-0 text-sm ml-2">
-                        {item && item.base_unit && item.base_unit.toUpperCase()} /{' '}
-                        <span className="text-xxs grey-text">{item && item.id.toUpperCase()} </span>
-                    </p>
-                    <p className="mb-0 grey-text text-xxs ml-2">vol : {item && item.volume}</p>
-                </div>
-            </div>,
+    useEffect(() => {
+        setFavoriteMarket(JSON.parse(localStorage.getItem('favourites') || '[]'));
+    }, [localStorage.getItem('favourites')]);
+
+    const handleFavorite = (data) => {
+        const isFavorite = favoriteMarket.includes(data);
+        const favorite = JSON.parse(localStorage.getItem('favourites') || '[]');
+        if (!isFavorite) {
+            const newStorageItem = [...favoriteMarket, data];
+            setFavoriteMarket(newStorageItem);
+            localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+        } else {
+            const newStorageItem = favoriteMarket.filter((savedId) => savedId !== data);
+            setFavoriteMarket(newStorageItem);
+            localStorage.setItem('favourites', JSON.stringify(newStorageItem));
+        }
+    };
+
+    useEffect(() => {
+        filterDataMarket();
+    }, [key, filterMarket]);
+
+    const handleFilter = (result) => {
+        setFilterMarket(result);
+    };
+
+    const searchFilter = (row, searchKey) => {
+        setFilterValue(searchKey);
+        return row ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) : false;
+    };
+
+    const tableData = () => {
+        if (key == 'favorite') {
+            if (!filterMarket[0] && filterValue == '') {
+                return favoriteList;
+            } else {
+                return filterMarket;
+            }
+        } else if (key == 'all-crypto') {
+            if (!filterMarket[0] && filterValue == '') {
+                return marketList;
+            } else {
+                return filterMarket;
+            }
+        } else if (key == 'spot') {
+            if (!filterMarket[0] && filterValue == '') {
+                return spotMarket;
+            } else {
+                return filterMarket;
+            }
+        } else if (key == 'future') {
+            if (!filterMarket[0] && filterValue == '') {
+                return futureMarket;
+            } else {
+                return filterMarket;
+            }
+        } else if (key == 'new-listing') {
+            if (!filterMarket[0] && filterValue == '') {
+                return newListingMarket;
+            } else {
+                return filterMarket;
+            }
+        }
+    };
+
+    const filterDataMarket = () => {
+        if (key == 'favorite') {
+            setFilterData(favoriteList);
+        } else if (key == 'all-crypto') {
+            setFilterData(marketList);
+        } else if (key == 'spot') {
+            setFilterData(spotMarket);
+        } else if (key == 'future') {
+            setFilterData(futureMarket);
+        } else if (key == 'new-listing') {
+            setFilterData(newListingMarket);
+        } else {
+            setFilterData([]);
+        }
+    };
+
+    const handleSelect = (k) => {
+        setKey(k);
+        setFilterMarket([]);
+    };
+
+    const renderDataTable = (data, type: boolean) => {
+        return data.map((item, key) => [
+            <React.Fragment>
+                {type ? (
+                    <div className="ml-1 d-flex align-items-center">
+                        <div className="mr-1 cursor-pointer">
+                            <Favorite
+                                fillColor={favoriteMarket.includes(item.name) ? '#EF8943' : '#23262F'}
+                                strokeColor={favoriteMarket.includes(item.name) ? '#EF8943' : '#B5B3BC'}
+                                onClick={() => handleFavorite(item.name)}
+                            />
+                        </div>
+                        <p className="mb-0 grey-text-accent mb-0 text-sm ml-2 text-nowrap">
+                            {item && item.name && item.name.toUpperCase()}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="d-flex align-items-center text-sm" key={key}>
+                        <img
+                            src={item && item.currency && item.currency.icon_url}
+                            alt="coin"
+                            className="small-coin-icon"
+                        />
+                        <div className="ml-1">
+                            <p className="mb-0 grey-text-accent mb-0 text-sm ml-2 text-nowrap">
+                                {item && item.base_unit && item.base_unit.toUpperCase()} /
+                                {item && item.quote_unit && item.quote_unit.toUpperCase()}
+                            </p>
+                            <p className="mb-0 grey-text text-xxs ml-2">vol : {item && item.volume}</p>
+                        </div>
+                    </div>
+                )}
+            </React.Fragment>,
             <p
                 className={`grey-text text-sm font-bold mb-0 ${
                     item.price_change_percent.includes('-') ? 'danger-text' : 'contrast-text'
@@ -78,81 +208,78 @@ const MarketListlMobileScreen: React.FC = () => {
                 }`}>
                 {item && item.price_change_percent}
             </p>,
-            <Link to={`/markets/${item.base_unit}/detail`} className="gradient-text text-sm">
-                Detail
-            </Link>,
+            <div>
+                <Link to={`/markets/detail/${item.base_unit}`} className="gradient-text text-sm">
+                    Detail
+                </Link>
+                <Link to={`/markets/detail/${item.base_unit}`} className="gradient-text text-sm ml-2">
+                    Trade
+                </Link>
+            </div>,
         ]);
     };
     return (
         <React.Fragment>
             <div className="mobile-container  no-header market-list dark-bg-main">
-                <nav className="navbar navbar-dark mb-16">
+                <nav className="d-flex justify-content-between navbar-dark p-0 mb-16">
                     <h1 className="navbar-brand p-0 m-0">Market</h1>
                     <div className="menu">
                         <div className="mr-2 d-inline">
                             <EditIcon />
                         </div>
-                        <div className="d-inline" onClick={() => setShowSearch(true)}>
+                        <div className="d-inline" onClick={() => setShowSearch(!showSearch)}>
                             <SearchIcon />
                         </div>
                     </div>
                 </nav>
                 {showSearch && (
                     <div className="mb-24 mt-24">
-                        <form>
-                            <div className="d-flex justify-content-between align-items-center form-wrapper">
-                                <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">
-                                            <SearchIcon />
-                                        </span>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Enter the currency you are looking for."
-                                        aria-label="search"
-                                        aria-describedby="basic-addon1"
-                                    />
-                                </div>
-                                <button id="cancel" className="btn-cancel" type="button">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
+                        <FilterInput
+                            data={filterData}
+                            onFilter={handleFilter}
+                            filter={searchFilter}
+                            placeholder={'Search by assets'}
+                            className="w-100"
+                        />
                     </div>
                 )}
                 <Tabs
                     id="controlled-tab-example"
                     defaultActiveKey="all-crypto"
                     activeKey={key}
-                    onSelect={(k) => setKey(k)}
+                    onSelect={(k) => handleSelect(k)}
                     className="">
-                    <Tab eventKey="tranding" title="Tranding">
+                    <Tab eventKey="favorite" title="Favorite">
                         <div className="table-mobile-wrapper">
-                            <Table data={renderDataTable(marketList)} header={renderTableHeader} />
+                            <Table data={renderDataTable(tableData(), true)} header={renderTableHeader} />
                         </div>
                     </Tab>
-                    <Tab eventKey="all-crypto" title="All-crypto">
+                    <Tab eventKey="all-crypto" title="All crypto">
                         <div className="table-mobile-wrapper">
-                            <Table data={renderDataTable(marketList)} header={renderTableHeader} />
+                            <Table data={renderDataTable(tableData(), false)} header={renderTableHeader} />
                         </div>
                     </Tab>
-                    <Tab eventKey="spot" title="Spot">
-                        <div className="table-mobile-wrapper">
-                            <Table data={renderDataTable(marketList)} header={renderTableHeader} />
-                        </div>
-                    </Tab>
-                    <Tab eventKey="future" title="Future">
-                        <div className="table-mobile-wrapper">
-                            <Table data={renderDataTable(marketList)} header={renderTableHeader} />
-                        </div>
-                    </Tab>
-                    <Tab eventKey="New Listing" title="New Listing">
-                        <div className="table-mobile-wrapper">
-                            <Table data={renderDataTable(marketList)} header={renderTableHeader} />
-                        </div>
-                    </Tab>
+                    {spotMarket.length > 0 && (
+                        <Tab eventKey="spot" title="Spot">
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(tableData(), true)} header={renderTableHeader} />
+                            </div>
+                        </Tab>
+                    )}
+                    {futureMarket.length > 0 && (
+                        <Tab eventKey="future" title="Future">
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(tableData(), true)} header={renderTableHeader} />
+                            </div>
+                        </Tab>
+                    )}
+                    {newListingMarket.length > 0 && (
+                        <Tab eventKey="new-listing" title="New Listing">
+                            <div className="table-mobile-wrapper">
+                                <Table data={renderDataTable(tableData(), false)} header={renderTableHeader} />
+                            </div>
+                        </Tab>
+                    )}
                 </Tabs>
             </div>
         </React.Fragment>

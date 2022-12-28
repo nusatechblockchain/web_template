@@ -472,7 +472,6 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         const typeOfDocuments = this.getDocumentsType(documentsType);
 
         const user = this.props.user;
-        console.log(user);
 
         const request = new FormData();
 

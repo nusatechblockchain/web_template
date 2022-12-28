@@ -59,7 +59,7 @@ const HeaderComponent: React.FC = () => {
                     </a>
                     <div className="d-flex align-items-center">
                         <ScanIcon className={'mr-2'} />
-                        <SearchIcon className={'mr-2'} />
+                        {/* <SearchIcon className={'mr-2'} /> */}
                         <div className="cursor-pointer" onClick={() => setShowSidebar(true)}>
                             <UserIcon className={'cursor-pointer'} />
                         </div>

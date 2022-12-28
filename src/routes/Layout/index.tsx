@@ -397,7 +397,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={TradingMobileScreen}
                         />
 
-                        <PrivateRoute
+                        <PublicRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
                             path="/markets"

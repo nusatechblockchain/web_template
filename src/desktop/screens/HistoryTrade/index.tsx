@@ -68,8 +68,6 @@ export const HistoryTrade: FC = (): ReactElement => {
         }
     }, [startDate, endDate]);
 
-    console.log(historys);
-
     const getTableHeaders = () => {
         return ['Date', 'Type', 'Market', 'Assets', 'Volume', 'Price', 'Total', 'Status'];
     };
