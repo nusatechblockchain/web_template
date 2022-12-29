@@ -12,14 +12,16 @@ import {
     selectLastElemIndex,
     selectNextPageExists,
     RootState,
+    currenciesData,
 } from '../../../modules';
+
 import Tabs from 'react-bootstrap/Tabs';
 import { useDocumentTitle } from 'src/hooks';
 import { Table } from '../../../components';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
-import { Pagination } from 'src/desktop/components';
 import { NoData } from 'src/desktop/components';
+import { PaginationMobile } from 'src/mobile/components';
 import { Link } from 'react-router-dom';
 import InternalTransferHistory from 'src/mobile/components/InternalTransferHistory';
 
@@ -27,9 +29,10 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     useDocumentTitle('History Transaction');
     const [key, setKey] = React.useState('all');
 
-    const currencies: Currency[] = useSelector(selectCurrencies);
+    const currencies = useSelector(selectCurrencies);
     const page = useSelector(selectCurrentPage);
     const list = useSelector(selectHistory);
+    const currenciesItem: Currency = currencies.find((item) => item.icon_url);
 
     const [historys, setHistorys] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(0);
@@ -39,11 +42,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
 
-    const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, 5));
-    const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, 5));
+    const firstElementIndex = useSelector((state: RootState) => selectFirstElemIndex(state, 5));
+    const lastElementIndex = useSelector((state: RootState) => selectLastElemIndex(state, 5));
     const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, 5));
 
-    useHistoryFetch({ type: type, limit: 5, currency, page: currentPage });
+    const iconUrl = useHistoryFetch({ type: type, limit: 5, currency, page: currentPage });
 
     useWalletsFetch();
 
@@ -59,21 +62,38 @@ const HistoryTransactionMobileScreen: React.FC = () => {
         setCurrentPage(Number(page) + 1);
     };
 
+    // const getTableHeaders = () => {
+    //     return ['Date', 'Type', 'Asset', 'Ammount', 'Receiver UID', 'Status'];
+    // };
+
     const getTableHeaders = () => {
-        return ['Date', 'Type', 'Asset', 'Ammount', 'Receiver UID', 'Status'];
+        return ['Asset', 'Ammount', 'Type', 'Receiver UID', 'Status'];
+    };
+
+    const getAmmountCode = (code: string) => {
+        switch (code) {
+            case 'trx':
+                return 'TRX';
+            case 'eth':
+                return 'ETH';
+            case 'btc':
+                return 'BTC';
+            default:
+                return;
+        }
     };
 
     React.useEffect(() => {
         setHistorys(list);
     }, [list]);
 
-    const filterredStatus = (status) => {
-        let filterredList;
-        let temp;
-        temp = list;
-        filterredList = temp.filter((item) => item.status === status);
-        setHistorys(filterredList);
-    };
+    // const filterredStatus = (status) => {
+    //     let filterredList;
+    //     let temp;
+    //     temp = list;
+    //     filterredList = temp.filter((item) => item.status === status);
+    //     setHistorys(filterredList);
+    // };
 
     React.useEffect(() => {
         if (startDate != '' && endDate != '') {
@@ -86,29 +106,38 @@ const HistoryTransactionMobileScreen: React.FC = () => {
         }
     }, [startDate, endDate]);
 
+    const transFerlistDataHistory = historys.map((history) => ({
+        ...history,
+        dataCurrency: currencies.find(({ id }) => id == history.currency),
+    }));
+
     const getTableData = (data) => {
         return data.map((item) => [
-            <p className="m-0 text-xs text-nowrap white-text">
-                {moment(item.created_at).format('D MMM YYYY - HH:mm')}
-            </p>,
-            <p
-                className={`m-0 text-xs font-bold ${
-                    type === 'deposits' ? 'contrast-text' : type === 'withdrawl' ? 'danger-text' : 'blue-text'
-                }`}>
-                {type === 'deposits'
-                    ? 'Deposit'
-                    : type === 'withdrawl'
-                    ? 'Withdrawal'
-                    : type === 'transfers'
-                    ? 'Internal Transfer'
-                    : ''}
-            </p>,
-            <div className="d-flex align-items-center text-xs">
-                <span className="">{item.icon}</span>
-                <p className="m-0 mr-24 white-text font-bold">{item.currency.toUpperCase()}</p>
+            <div className="d-flex align-items-center text-sm">
+                <img className="w-100 mr-3" src={item.dataCurrency && item.dataCurrency.icon_url} alt="" />
+                {/* <p className="m-0 mr-24 white-text font-bold">{item.currency.toUpperCase()}</p> */}
             </div>,
-            <p className="m-0 text-sm white-text">{item.amount}</p>,
-            <p className="m-0 text-sm white-text text-xs">{item.receiver_uid}</p>,
+            <div className="text-nowrap">
+                <p className="mb-1 font-weight-bold">
+                    {item.amount} {getAmmountCode(item.currency)}
+                </p>
+                <p className="text-secondary text-sm">{moment(item.created_at).format('D MMM YYYY - HH:mm')}</p>
+            </div>,
+            <div>
+                <p
+                    className={`m-0 text-xs font-bold text-nowrap ${
+                        type === 'deposits' ? 'contrast-text' : type === 'withdrawl' ? 'danger-text' : 'blue-text'
+                    }`}>
+                    {type === 'deposits'
+                        ? 'Deposit'
+                        : type === 'withdrawl'
+                        ? 'Withdrawal'
+                        : type === 'transfers'
+                        ? 'Internal Transfer'
+                        : ''}
+                </p>
+            </div>,
+            <p className="m-0 white-text text-xs">{item.receiver_uid}</p>,
             <p
                 className={`m-0 text-sm ${
                     item.status === 'Pending'
@@ -314,12 +343,12 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                             <Table
                                 className="table-responsive"
                                 header={getTableHeaders()}
-                                data={getTableData(historys)}
+                                data={getTableData(transFerlistDataHistory)}
                             />
                             {historys[0] && (
-                                <Pagination
-                                    firstElemIndex={firstElemIndex}
-                                    lastElemIndex={lastElemIndex}
+                                <PaginationMobile
+                                    firstElementIndex={firstElementIndex}
+                                    lastElementIndex={lastElementIndex}
                                     page={page}
                                     nextPageExists={nextPageExists}
                                     onClickPrevPage={onClickPrevPage}

@@ -5,3 +5,4 @@
 export * from './Modal';
 export * from './CustomStyleSelect';
 export * from './InternalTransferHistory';
+export * from './PaginationMobile';
