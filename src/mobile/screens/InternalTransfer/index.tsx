@@ -9,7 +9,6 @@ import {
     createInternalTransfersFetch,
     selectInternalTransfersCreateSuccess,
 } from '../../../modules';
-import { SwapIconMobile } from 'src/mobile/assets/Swap';
 import { KeyConfirmation } from 'src/mobile/assets/KeyConfirmation';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
 
@@ -144,6 +143,7 @@ const InternalTransferMobileScreen: React.FC = () => {
                         />
                     </div>
 
+                    {/* ===== Trigger modal confirmation for transfer ====== */}
                     <Button
                         onClick={() => {
                             setShowModalConfirmation(!showModalConfirmation);
@@ -155,6 +155,8 @@ const InternalTransferMobileScreen: React.FC = () => {
                         Continue
                     </Button>
                 </form>
+
+                {/* ========= Modal confirmation for Internal Transfer ====== */}
                 <Modal show={showModalConfirmation} onHide={() => setShowModalConfirmation(!showModalConfirmation)}>
                     <div className="container p-3 text-center">
                         <div className="d-flex mb-2 justify-content-center">

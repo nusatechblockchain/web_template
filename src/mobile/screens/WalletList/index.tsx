@@ -260,9 +260,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                 <Table data={renderTableData(wallets)} />
             </div>
 
+            {/* ========= Show modal internal transaction ======== */}
             {showModal && (
                 <Modal
-                    // className="modal-internal-transfer"
                     dialogClassName="modal-transfer-fullscreen"
                     onHide={() => setShowModal(!showModal)}
                     show={showModal}>
