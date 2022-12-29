@@ -8,17 +8,12 @@ const cryptoRegExps = {
     xmr: '4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}',
     neo: 'A[0-9a-zA-Z]{33}',
     xrp: 'r[0-9a-zA-Z]{24,34}?.{1,}',
+    trx: 'T[A-Za-z1-9]{33}',
+    matic: '^0x[a-fA-F0-9]{40}$',
 };
 
 const chainTokens = {
-    eth: [
-        'usdt',
-        'bnb',
-        'mesg',
-        'und',
-        'bdp',
-        'taas',
-    ],
+    eth: ['usdt', 'bnb', 'mesg', 'und', 'bdp', 'taas'],
 };
 
 const buildRegExp = (bodyExp: string, exact?: boolean) =>
