@@ -63,7 +63,7 @@ const InternalTransferMobileScreen: React.FC = () => {
     return (
         <section className="internal-transfer-mobile-screen pb-5 dark-bg-main">
             <div className="container-fluid inside-internal-transfer w-100 h-100">
-                <div className="mb-4">
+                <div className="pt-5 pb-3">
                     <Link to="/wallets">
                         <ArrowLeft className="white-text" />
                     </Link>
@@ -134,12 +134,12 @@ const InternalTransferMobileScreen: React.FC = () => {
                                 />
                             </div>
                         </div>
-                        <div className="transfer-value">
+                        {/* <div className="transfer-value">
                             <div className="mb-3">
                                 <label>Received</label>
                                 <span>00.00 USD</span>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="mb-3">
