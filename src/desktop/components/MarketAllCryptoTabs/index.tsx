@@ -47,7 +47,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
         }));
 
     const getTableHeaders = () => {
-        return ['Name', 'Price', '24 Change', 'Market Cap', ''];
+        return ['Name', <p className="mb-0 text-center">Price</p>, '24 Change', 'Market Cap', ''];
     };
 
     const handleFilter = (result) => {
@@ -74,14 +74,14 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
                 </p>
                 <p className="m-0 grey-text-accent">{item.currency && item.currency.name}</p>
             </div>,
-            <p className="m-0 text-sm white-text">
+            <p className="m-0 text-sm white-text text-right">
                 {
                     numberFormat(item.currency && item.currency.price, 'USA')
                         .toString()
                         .split('.')[0]
                 }
             </p>,
-            <p className={`text-sm m-0 ${item.change.includes('-') ? 'danger-text' : 'green-text'}`}>
+            <p className={`text-sm m-0 ${item.price_change_percent.includes('-') ? 'danger-text' : 'green-text'}`}>
                 {item.price_change_percent}
             </p>,
             <p className="m-0 text-sm white-text">{item.cap}</p>,

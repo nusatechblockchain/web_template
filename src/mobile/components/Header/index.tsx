@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { selectUserLoggedIn, selectUserInfo, logoutFetch } from '../../../modules';
 import { LogoIcon } from '../../assets/Logo';
 import { ScanIcon } from '../../assets/ScanIcon';
-import { SearchIcon } from '../../assets/SearchIcon';
 import { UserIcon } from '../../assets/UserIcon';
 import { ArrowLeft, ArrowRight } from '../../assets/Arrow';
 import { CopyableTextField } from '../../../components';
