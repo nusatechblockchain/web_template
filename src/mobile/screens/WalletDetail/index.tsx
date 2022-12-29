@@ -46,8 +46,6 @@ const WalletDetailMobileScreen: React.FC = () => {
         history.push(`/wallets/${currency}/deposit`, { blockchain_key: blockchain_key, protocol: protocol });
     };
 
-    console.log(currencyItem);
-
     useDocumentTitle(`Detail ${currency.toUpperCase()}`);
     useWalletsFetch();
 
