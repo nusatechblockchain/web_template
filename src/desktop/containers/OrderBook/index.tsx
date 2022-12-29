@@ -1,7 +1,17 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { selectCurrentMarket, selectOpenOrdersList } from '../../../modules';
+import { useOpenOrdersFetch } from '../../../hooks';
 import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
 
 const OrderBookComponent = (props) => {
+    useOpenOrdersFetch();
+
+    const currentMarket = useSelector(selectCurrentMarket);
+    const openOrderList = useSelector(selectOpenOrdersList);
+
+    console.log(openOrderList);
+
     const MarketDeal = 1; //dummy value
     return (
         <React.Fragment>

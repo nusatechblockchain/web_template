@@ -1,8 +1,8 @@
 import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
-import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrencies, selectMarkets, selectMarketTickers, setCurrentMarket, Market } from '../../../modules';
+import { useMarketsFetch, useMarketsTickersFetch } from '../../../hooks';
+import { Link, useHistory } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import './MarketAllCryptoTabs.pcss';
 import { NoData } from '../../components';
@@ -22,11 +22,25 @@ const defaultTicker = {
 export const MarketAllCryptoTabs: FC = (): ReactElement => {
     useMarketsFetch();
     useMarketsTickersFetch();
+
+    const dispatch = useDispatch();
+    const history = useHistory();
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
     const [filterMarket, setFilterMarket] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState('');
+
+    const handleRedirectToTrading = (id: string) => {
+        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
+
+        if (currentMarket) {
+            dispatch(setCurrentMarket(currentMarket));
+            history.push(
+                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
+            );
+        }
+    };
 
     const marketList = markets
         .map((market) => ({
@@ -45,6 +59,8 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
                 market.price_precision
             ),
         }));
+
+    console.log(marketList);
 
     const getTableHeaders = () => {
         return ['Name', <p className="mb-0 text-center">Price</p>, '24 Change', 'Market Cap', ''];
@@ -69,10 +85,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
         return allMarket.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <img src={item.currency && item.currency.icon_url} alt="coin" className="mr-12 small-coin-icon" />
-                <p className="m-0 mr-24 white-text font-bold">
-                    {item.currency && item.currency.id && item.currency.id.toUpperCase()}
-                </p>
-                <p className="m-0 grey-text-accent">{item.currency && item.currency.name}</p>
+                <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
             <p className="m-0 text-sm white-text text-right">
                 {
@@ -92,9 +105,11 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
                     </Link>
                 </div>
                 <div>
-                    <Link to={`/markets/${item.type == 'spot' ? 'trading/' : '/trading-future/'}${item.id}`}>
-                        <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
-                    </Link>
+                    <p
+                        onClick={() => handleRedirectToTrading(item.id)}
+                        className="m-0 text-sm font-bold gradient-text cursor-pointer">
+                        Trade
+                    </p>
                 </div>
             </div>,
         ]);

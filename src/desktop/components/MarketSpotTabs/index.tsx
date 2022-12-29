@@ -1,8 +1,15 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies, selectMarkets, selectMarketTickers, selectUserLoggedIn } from 'src/modules';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    selectCurrencies,
+    selectMarkets,
+    selectMarketTickers,
+    selectUserLoggedIn,
+    setCurrentMarket,
+    Market,
+} from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import { Favorite } from '../../../assets/images/Favorite';
 import './MarketSpotTabs.pcss';
@@ -23,6 +30,10 @@ const defaultTicker = {
 export const MarketSpotTabs: FC = (): ReactElement => {
     useMarketsFetch();
     useMarketsTickersFetch();
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
@@ -31,6 +42,17 @@ export const MarketSpotTabs: FC = (): ReactElement => {
     );
     const [filterMarket, setFilterMarket] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState('');
+
+    const handleRedirectToTrading = (id: string) => {
+        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
+
+        if (currentMarket) {
+            dispatch(setCurrentMarket(currentMarket));
+            history.push(
+                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
+            );
+        }
+    };
 
     const marketList = markets
         .map((market) => ({
@@ -122,9 +144,11 @@ export const MarketSpotTabs: FC = (): ReactElement => {
                     </Link>
                 </div>
                 <div>
-                    <Link to={`/markets/${item.type == 'spot' ? 'trading/' : '/trading-future/'}${item.id}`}>
-                        <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
-                    </Link>
+                    <p
+                        onClick={() => handleRedirectToTrading(item.id)}
+                        className="m-0 text-sm font-bold gradient-text cursor-pointer">
+                        Trade
+                    </p>
                 </div>
             </div>,
         ]);
