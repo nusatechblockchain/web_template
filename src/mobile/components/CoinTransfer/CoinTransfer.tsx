@@ -34,6 +34,13 @@ export const CoinTransfer: React.FC<CoinTransferProps> = (props) => {
         [history]
     );
 
+    const handleClickWithdraw = React.useCallback(
+        (currency) => {
+            history.push(`/wallets/${currency}/withdraw`);
+        },
+        [history]
+    );
+
     const handleClickDeposit = React.useCallback((currency: string) => {
         setShowModalDeposit(true);
         setModalCurrency(currency);
@@ -72,6 +79,8 @@ export const CoinTransfer: React.FC<CoinTransferProps> = (props) => {
                               onClick={
                                   props.type == 'deposit'
                                       ? () => handleClickDeposit(item.currency)
+                                      : props.type == 'withdraw'
+                                      ? () => handleClickWithdraw(item.currency)
                                       : () => handleClickTransfer(item.currency)
                               }
                               key={index}

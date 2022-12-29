@@ -24,3 +24,4 @@ export * from './TradingFuture';
 export * from './InternalTransfer';
 export * from './WalletDeposit';
 export * from './TwoFaLost';
+export * from './WalletWithdraw';

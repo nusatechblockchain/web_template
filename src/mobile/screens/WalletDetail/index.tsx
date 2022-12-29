@@ -19,7 +19,6 @@ import { CustomStylesSelect } from '../../../desktop/components';
 import { ArrowLeft } from '../../assets/Arrow';
 import { WithdrawlIcon, DepositIcon, TransferIcon, FilterIcon, DocIcon } from '../../assets/Wallet';
 import { Table } from '../../../components';
-import { ModalMobile } from '../../components';
 import { CircleCloseModalNetworkIcon } from '../../../assets/images/CircleCloseIcon';
 import { InfoModalNetworkIcon } from '../../../assets/images/InfoIcon';
 
