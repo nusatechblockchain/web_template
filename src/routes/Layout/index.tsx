@@ -56,6 +56,7 @@ import {
     TradingFutureMobileScreen,
     InternalTransferMobileScreen,
     WalletDepositMobileScreen,
+    LostTwoFaMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -343,6 +344,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/two-fa-activation"
                             component={TwoFaActivationMobileScreen}
+                        />
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/lost-two-fa"
+                            component={LostTwoFaMobileScreen}
                         />
                         <PrivateRoute
                             loading={userLoading}
