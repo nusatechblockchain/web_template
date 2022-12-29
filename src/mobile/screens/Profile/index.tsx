@@ -104,7 +104,7 @@ const ProfileMobileScreen: React.FC = () => {
 
                 <div>
                     <div
-                        className=" d-flex align-items-center mb-4 cursor-pointer"
+                        className=" d-flex align-items-center mb-24 cursor-pointer"
                         onClick={() => setShowModalEmail(true)}>
                         <div className="mr-3">
                             <EmailProfileIcon className="profile-icon" />
@@ -118,7 +118,7 @@ const ProfileMobileScreen: React.FC = () => {
                             {user && user.email && <CheckIcon className="check-icon" />}
                         </div>
                     </div>
-                    <div className=" d-flex align-items-center mb-4 cursor-pointer">
+                    <div className=" d-flex align-items-center mb-24 cursor-pointer">
                         <div className="mr-3">
                             <KycProfileIcon className="profile-icon" />
                         </div>
@@ -132,7 +132,7 @@ const ProfileMobileScreen: React.FC = () => {
                         </div>
                     </div>
                     <Link to={'/change-password'}>
-                        <div className=" d-flex align-items-center mb-4 cursor-pointer">
+                        <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <PhoneProfileIcon className="profile-icon" />
                             </div>
@@ -151,7 +151,7 @@ const ProfileMobileScreen: React.FC = () => {
                         </div>
                     </Link>
                     <Link to={'/two-fa-activation'}>
-                        <div className=" d-flex align-items-center mb-4 cursor-pointer">
+                        <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <GoogleProfileIcon className="profile-icon" />
                             </div>
@@ -168,7 +168,7 @@ const ProfileMobileScreen: React.FC = () => {
                         </div>
                     </Link>
                     <Link to={'/change-password'}>
-                        <div className=" d-flex align-items-center mb-4 cursor-pointer">
+                        <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <PasswordIcon className="profile-icon" />
                             </div>
@@ -181,7 +181,7 @@ const ProfileMobileScreen: React.FC = () => {
                         </div>
                     </Link>
                     <Link to={'/api-key'}>
-                        <div className=" d-flex align-items-center mb-4 cursor-pointer">
+                        <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <ApiProfileIcon className="profile-icon" />
                             </div>

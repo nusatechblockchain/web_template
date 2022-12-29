@@ -56,6 +56,7 @@ import {
     TradingFutureMobileScreen,
     InternalTransferMobileScreen,
     WalletDepositMobileScreen,
+    LostTwoFaMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -344,6 +345,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             path="/two-fa-activation"
                             component={TwoFaActivationMobileScreen}
                         />
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/lost-two-fa"
+                            component={LostTwoFaMobileScreen}
+                        />
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
@@ -378,39 +385,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             path="/create-api"
                             component={CreateApiMobileScreen}
                         />
-
-                        <PublicRoute
-                            loading={userLoading}
-                            path="/markets/:currency/detail"
-                            component={MarketDetailMobileScreen}
-                        />
-
-                        <PublicRoute
-                            loading={userLoading}
-                            path="/markets/trading-future/:currency"
-                            component={TradingFutureMobileScreen}
-                        />
-
-                        <PublicRoute
-                            loading={userLoading}
-                            path="/markets/trading/:currency"
-                            component={TradingMobileScreen}
-                        />
-
-                        <PublicRoute
-                            loading={userLoading}
-                            isLogged={isLoggedIn}
-                            path="/markets"
-                            component={MarketListlMobileScreen}
-                        />
-
-                        <PrivateRoute
-                            loading={userLoading}
-                            isLogged={isLoggedIn}
-                            path="/two-fa-authentication"
-                            component={TwoFaAuthenticationMobileScreen}
-                        />
-
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
@@ -438,6 +412,35 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             path="/wallets"
                             component={WalletListMobileScreen}
                         />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/markets/detail/:currency"
+                            component={MarketDetailMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/trading-future/:currency"
+                            component={TradingFutureMobileScreen}
+                        />
+
+                        <PublicRoute loading={userLoading} path="/trading/:currency" component={TradingMobileScreen} />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/markets"
+                            component={MarketListlMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/two-fa-authentication"
+                            component={TwoFaAuthenticationMobileScreen}
+                        />
+
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
