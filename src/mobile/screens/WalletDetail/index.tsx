@@ -13,6 +13,9 @@ import {
     RootState,
 } from '../../../modules';
 import { useHistoryFetch, useDocumentTitle, useWalletsFetch } from '../../../hooks';
+import Select from 'react-select';
+import moment from 'moment';
+import { CustomStylesSelect } from '../../../desktop/components';
 import { ArrowLeft } from '../../assets/Arrow';
 import { WithdrawlIcon, DepositIcon, TransferIcon, FilterIcon, DocIcon } from '../../assets/Wallet';
 import { Table } from '../../../components';
@@ -22,8 +25,6 @@ import { InfoModalNetworkIcon } from '../../../assets/images/InfoIcon';
 
 const DEFAULT_LIMIT = 5;
 const WalletDetailMobileScreen: React.FC = () => {
-    const [showModalFilter, setShowModalFilter] = React.useState(false);
-
     const history = useHistory();
     const { currency = '' } = useParams<{ currency?: string }>();
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -39,6 +40,7 @@ const WalletDetailMobileScreen: React.FC = () => {
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
     const [showNetwork, setShowNetwork] = React.useState(false);
+    const [showFilter, setShowFilter] = React.useState(false);
 
     useHistoryFetch({ type: type, limit: 15, currency: currency, page: currentPage });
 
@@ -63,6 +65,25 @@ const WalletDetailMobileScreen: React.FC = () => {
     React.useEffect(() => {
         setHistorys(list);
     }, [list]);
+
+    React.useEffect(() => {
+        if (startDate != '' && endDate != '') {
+            const filterredList = list.filter(
+                (item) =>
+                    moment(item.created_at).format() >= moment(startDate).format() &&
+                    moment(item.created_at).format() <= moment(endDate).format()
+            );
+            setHistorys(filterredList);
+        }
+    }, [startDate, endDate]);
+
+    const filterredStatus = (status) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.status === status);
+        setHistorys(filterredList);
+    };
 
     const getTableData = (data) => {
         return (
@@ -97,49 +118,32 @@ const WalletDetailMobileScreen: React.FC = () => {
         );
     };
 
-    const renderModalFilter = () => (
-        <React.Fragment>
-            <div className="menu-container d-flex flex-column">
-                <p>Side</p>
-                <div className="d-flex justify-content-between align-items-center menu-option">
-                    <button className="btn btn-option active">All</button>
-                    <button className="btn btn-option">Received</button>
-                    <button className="btn btn-option">Sent</button>
-                </div>
-            </div>
-            <div className="menu-container d-flex flex-column">
-                <p>Time</p>
-                <div className="d-flex justify-content-between align-items-center menu-option">
-                    <button className="btn btn-option active">All</button>
-                    <button className="btn btn-option">Received</button>
-                    <button className="btn btn-option">Sent</button>
-                </div>
-            </div>
-            <div className="menu-container d-flex flex-column">
-                <p>Side</p>
-                <div className="d-flex flex-column justify-content-start align-items-center menu-option">
-                    <button className="btn btn-type">All</button>
-                    <button className="btn btn-type active">
-                        Deposit
-                        <img src="../../../../assets/icons/check-primary.svg" alt="selected" />
-                    </button>
-                    <button className="btn btn-type">Withdraw</button>
-                    <button className="btn btn-type">Transfer</button>
-                </div>
-            </div>
-        </React.Fragment>
-    );
-
     const renderFilter = () => {
         return (
             <div className="detail-history-action-container d-flex justify-content-between align-items-center mt-3">
                 <p className="p-0 m-0 title">Detail History</p>
-                <div onClick={() => setShowModalFilter(true)}>
-                    <FilterIcon className={''} />
+                <div onClick={() => setShowFilter(true)}>
+                    <span className="cursor-pointer">
+                        <FilterIcon className={''} />
+                    </span>
                 </div>
             </div>
         );
     };
+
+    const handleReset = () => {
+        setStatus('');
+        setStartDate('');
+        setEndDate('');
+        setShowFilter(false);
+        setHistorys(list);
+    };
+
+    const optionStatus = [
+        { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
+        { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'completed' },
+        { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
+    ];
 
     return (
         <React.Fragment>
@@ -180,11 +184,17 @@ const WalletDetailMobileScreen: React.FC = () => {
                         <DepositIcon className={''} />
                         Deposit
                     </button>
-                    <button className="btn btn-primary btn-sm font-normal m-1">
+                    <button
+                        type="button"
+                        onClick={() => history.push(`/wallets/${currency}/withdraw`)}
+                        className="btn btn-primary btn-sm font-normal m-1">
                         <WithdrawlIcon className={''} />
                         Withdraw
                     </button>
-                    <button className="btn btn-primary btn-sm font-normal m-1">
+                    <button
+                        type="button"
+                        onClick={() => history.push(`/wallets/${currency}/transfer`)}
+                        className="btn btn-primary btn-sm font-normal m-1">
                         <TransferIcon className={''} />
                         Transfer
                     </button>
@@ -266,9 +276,63 @@ const WalletDetailMobileScreen: React.FC = () => {
                             ))}
                     </div>
                 </div>
-            </div>
 
-            <ModalMobile content={renderModalFilter()} show={showModalFilter} />
+                <div id="off-canvas-filter" className={`position-fixed off-canvas-filter ${showFilter ? 'show' : ''}`}>
+                    <div className="fixed-bottom off-canvas-content-container-filter overflow-auto">
+                        <div>
+                            <label className="m-0 white-text text-sm mb-8">Start Date</label>
+                            <input
+                                type="date"
+                                className="form-control mb-24"
+                                onChange={(e) => {
+                                    setStartDate(e.target.value);
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="m-0 white-text text-sm mb-8">End Date</label>
+                            <input
+                                type="date"
+                                className="form-control mb-24"
+                                onChange={(e) => {
+                                    setEndDate(e.target.value);
+                                }}
+                            />
+                        </div>
+
+                        <div className="mb-24">
+                            <p className="m-0 white-text text-sm mb-8">Status</p>
+                            <Select
+                                value={optionStatus.filter(function (option) {
+                                    return option.value === status;
+                                })}
+                                styles={CustomStylesSelect}
+                                options={optionStatus}
+                                onChange={(e) => {
+                                    setStatus(e.value);
+                                    filterredStatus(e.value);
+                                }}
+                            />
+                        </div>
+
+                        <div className="d-flex justify-content-center align-items-center">
+                            <button
+                                onClick={handleReset}
+                                type="button"
+                                className="btn btn-reset grey-text-accent dark-bg-accent text-sm w-40 mr-8">
+                                Reset
+                            </button>
+                            <button
+                                onClick={() => setShowFilter(!showFilter)}
+                                type="button"
+                                className="btn-primary grey-text-accent text-sm font-normal w-40">
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </React.Fragment>
     );
 };

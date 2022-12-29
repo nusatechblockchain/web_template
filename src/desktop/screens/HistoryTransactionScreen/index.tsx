@@ -12,7 +12,7 @@ import {
     RootState,
 } from '../../../modules';
 import { Table } from '../../../components';
-import { Pagination, CustomInput } from '../../../desktop/components';
+import { Pagination } from '../../../desktop/components';
 import { CustomStylesSelect } from '../../../desktop/components';
 import { Tabs, Tab } from 'react-bootstrap';
 import Select from 'react-select';
@@ -63,14 +63,6 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         setHistorys(list);
     }, [list]);
 
-    const filterredStatus = (status) => {
-        let filterredList;
-        let temp;
-        temp = list;
-        filterredList = temp.filter((item) => item.status === status);
-        setHistorys(filterredList);
-    };
-
     React.useEffect(() => {
         if (startDate != '' && endDate != '') {
             const filterredList = list.filter(
@@ -81,6 +73,14 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
             setHistorys(filterredList);
         }
     }, [startDate, endDate]);
+
+    const filterredStatus = (status) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.status === status);
+        setHistorys(filterredList);
+    };
 
     const getTableData = (data) => {
         return data.map((item) => [
@@ -121,12 +121,6 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
             </p>,
         ]);
     };
-
-    const optionTime = [
-        { label: <p className="m-0 text-sm grey-text-accent">Past 7 Days</p>, value: '7' },
-        { label: <p className="m-0 text-sm grey-text-accent">Past 30 Days</p>, value: '30' },
-        { label: <p className="m-0 text-sm grey-text-accent">Past 90 Days</p>, value: '90' },
-    ];
 
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
