@@ -7,6 +7,7 @@ import { Table, Decimal } from '../../../components';
 import { Favorite } from '../../../assets/images/Favorite';
 import './MarketFuturesTabs.pcss';
 import { NoData } from '../../components';
+import { FilterInput } from 'src/desktop/components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -25,6 +26,8 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
+    const [filterMarket, setFilterMarket] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
 
     const marketList = markets
         .map((market) => ({
@@ -52,8 +55,23 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
         return ['Name', 'Price', '24 Change', 'Volume', 'Market Cap', ''];
     };
 
+    const handleFilter = (result) => {
+        setFilterMarket(result);
+    };
+
+    const searchFilter = (row, searchKey) => {
+        setFilterValue(searchKey);
+        return row ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) : false;
+    };
+
     const getTableData = (data) => {
-        return data.map((item, i) => [
+        let futureData = [];
+        if (filterValue != '') {
+            futureData = filterMarket;
+        } else {
+            futureData = data;
+        }
+        return futureData.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <div className="mr-2">
                     <Favorite
@@ -85,6 +103,15 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-all-tabs">
+                <div className="search-form">
+                    <FilterInput
+                        data={marketList}
+                        onFilter={handleFilter}
+                        filter={searchFilter}
+                        placeholder={'Search by assets'}
+                        className="filter-search"
+                    />
+                </div>
                 <Table header={getTableHeaders()} data={getTableData(spotMarket)} />
                 {spotMarket.length < 1 && <NoData text="No Data Yet" />}
             </div>
