@@ -154,7 +154,6 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     return (
         <React.Fragment>
             <div className="mobile-container trading-screen no-header position-relative dark-bg-main">
-                <h1 className="w-100 trading-head-title mb-24">Trading</h1>
                 <div className="d-flex justify-content-between align-items-center mb-3 ">
                     <div className="d-flex align-items-center menu-title">
                         <div className="cursor-pointer" onClick={() => setShowSidebar(true)}>

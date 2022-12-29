@@ -18,9 +18,7 @@ import { FilterInput } from '../../../desktop/components';
 import { estimateUnitValue, estimateValue } from '../../../helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from '../../../constants';
 import { WithdrawlIcon, DepositIcon, TransferIcon } from '../../assets/Wallet';
-import { SearchIcon } from '../../assets/Market';
 import { Modal } from 'react-bootstrap';
-import { TrashIconMobile } from '../../../mobile/assets/TrashIcon';
 import CoinTransfer from '../../../mobile/components/CoinTransfer/CoinTransfer';
 import { ArrowRight } from '../../assets/Arrow';
 

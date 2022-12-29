@@ -24,6 +24,8 @@ const MarketListlMobileScreen: React.FC = () => {
     const [key, setKey] = React.useState('all-crypto');
     const [showSearch, setShowSearch] = React.useState(false);
 
+    console.log('MASUK MARKET');
+
     useMarketsFetch();
     useMarketsTickersFetch();
     const currencies = useSelector(selectCurrencies);

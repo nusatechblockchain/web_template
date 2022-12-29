@@ -38,7 +38,7 @@ const MarketDetailMobileScreen: React.FC = () => {
             open: Decimal.format(Number((marketTickers[market.id] || defaultTicker).open), market.price_precision),
             price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
             high: Decimal.format(Number((marketTickers[market.id] || defaultTicker).high), market.amount_precision),
-            currency: currencies.find((cur) => cur.id == market.base_unit),
+            currency: currencies.find((cur) => cur.id === market.base_unit),
             volume: Decimal.format(Number((marketTickers[market.id] || defaultTicker).volume), market.price_precision),
         }))
         .map((market) => ({
@@ -53,11 +53,9 @@ const MarketDetailMobileScreen: React.FC = () => {
         return obj.base_unit === currency;
     });
 
-    const optionStatus = [
-        { label: <p className="m-0 text-sm grey-text-accent">USD</p>, value: 'usd' },
-        { label: <p className="m-0 text-sm grey-text-accent">IDR</p>, value: 'idr' },
-        { label: <p className="m-0 text-sm grey-text-accent">USDT</p>, value: 'usdt' },
-    ];
+    console.log(detail);
+
+    const optionStatus = [{ label: <p className="m-0 text-sm grey-text-accent">USDT</p>, value: 'usdt' }];
     return (
         <React.Fragment>
             <div className="mobile-container no-header market-detail dark-bg-main">
@@ -79,7 +77,7 @@ const MarketDetailMobileScreen: React.FC = () => {
 
                         <Select
                             value={optionStatus.filter(function (option) {
-                                return option.value === 'usd';
+                                return option.value === 'usdt';
                             })}
                             styles={CustomStylesSelect}
                             options={optionStatus}
@@ -112,12 +110,12 @@ const MarketDetailMobileScreen: React.FC = () => {
                     <div className="info-coin-container d-flex flex-column mt-5">
                         <h4>{detail && detail.base_unit && detail.base_unit.toUpperCase()} Information</h4>
                         <p className="m-0 p-0 grey-text">
-                            The live price of Bitcoin is $ 19,544.40 per (
+                            The live price of {detail && detail.currency && detail.currency.name} is ${' '}
+                            {detail && detail.currency && detail.currency.price} per (
                             {detail && detail.base_unit && detail.base_unit.toUpperCase()} / USD) today with a current
-                            market cap of $ 375.03B USD. 24-hour trading volume is $ 28.46B USD.{' '}
+                            market cap of $ 375.03B USD. Trading volume is {detail && detail.volume} USD.
                             {detail && detail.base_unit && detail.base_unit.toUpperCase()} to USD price is updated in
-                            real-time. Bitcoin is -0.21% in the last 24 hours. It has a circulating supply of 19.19M
-                            USD.
+                            real-time. {detail && detail.currency && detail.currency.name} is{' '}
                         </p>
                     </div>
                     <div className="low-high-container d-flex flex-column w-100">
@@ -128,7 +126,7 @@ const MarketDetailMobileScreen: React.FC = () => {
                         <div className="d-flex justify-content-between align-items-center w-100 low-high-progress">
                             <p>Low : $ {detail && detail.min_price}</p>
                             <div className="progress-bar">
-                                <div className="progress" />
+                                <div className="progress" style={{ width: '50%' }} />
                             </div>
                             <p>High : $ {detail && detail.max_price}</p>
                         </div>
@@ -139,7 +137,7 @@ const MarketDetailMobileScreen: React.FC = () => {
                                     <WarningIcon className={''} />
                                 </div>
                                 <h4 className="p-0 m-0">High</h4>
-                                <p className="p-0 m-0 all-time">$ 19,398.39</p>
+                                <p className="p-0 m-0 all-time">{detail && detail.high}</p>
                             </div>
                             <div className="d-flex flex-column justify-content-start align-items-start card-price-change w-100">
                                 <div className="d-flex justify-content-between align-items-center w-100">
@@ -147,20 +145,33 @@ const MarketDetailMobileScreen: React.FC = () => {
                                     <WarningIcon className={''} />
                                 </div>
                                 <h4 className="p-0 m-0">Change (1h)</h4>
-                                <p className="p-0 m-0 success">+0.23%</p>
+                                <p
+                                    className={`p-0 m-0 ${
+                                        detail && detail.price_change_percent.includes('+')
+                                            ? 'green-text'
+                                            : detail && detail.price_change_percent.includes('-')
+                                            ? 'danger-text'
+                                            : 'grey-text-accent'
+                                    }`}>
+                                    {detail && detail.price_change_percent}
+                                </p>
                             </div>
                             <div className="d-flex flex-column justify-content-start align-items-start card-price-change w-100">
                                 <div className="d-flex justify-content-between align-items-center w-100">
-                                    <h4 className="m-0 p-0">Price</h4>
+                                    <h4 className="m-0 p-0">Last</h4>
                                     <WarningIcon className={''} />
                                 </div>
-                                <h4 className="p-0 m-0">Change (24h)</h4>
-                                <p className="p-0 m-0 danger">-0.17%</p>
+                                <h4 className="p-0 m-0">Price</h4>
+                                <p className="p-0 m-0 grey-text-accent">{detail && detail.last}</p>
                             </div>
                         </div>
                         <div className="mb-4">
                             <Link
-                                to={`/markets/${currency}/trade-future`}
+                                to={
+                                    detail && detail.type == 'spot'
+                                        ? `/trading/${detail && detail.base_unit}`
+                                        : `/trading-future/${detail && detail.base_unit}`
+                                }
                                 className="btn btn-primary btn-mobile btn-block">
                                 Trade Now
                             </Link>
