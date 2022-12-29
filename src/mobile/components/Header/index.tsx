@@ -126,14 +126,26 @@ const HeaderComponent: React.FC = () => {
                                             <React.Fragment>
                                                 {key % 3 == 0 && <div className="divider" />}
                                                 <Link to={item.path} key={key} onClick={() => setShowSidebar(false)}>
-                                                    <div className=" w-100 px-24 py-3 d-flex justify-content-between align-items-center cursor-ointer">
-                                                        <div className="card-menu-name d-flex align-items-center">
+                                                    <div
+                                                        className={`sidebar-item w-100 px-24 py-3 d-flex justify-content-between align-items-center cursor-pointer ${
+                                                            location.pathname.includes(item.path) ? 'active' : ''
+                                                        }`}>
+                                                        <div className={`card-menu-name d-flex align-items-center `}>
                                                             {item.icon}
-                                                            <h3 className="text-sm grey-text font-bold mb-0 ml-2">
+                                                            <h3
+                                                                className={`text-sm font-bold mb-0 ml-2 ${
+                                                                    location.pathname.includes(item.path)
+                                                                        ? 'white-text'
+                                                                        : 'grey-text'
+                                                                }`}>
                                                                 {item.name}
                                                             </h3>
                                                         </div>
-                                                        <ArrowRight className={''} />
+                                                        <ArrowRight
+                                                            className={
+                                                                location.pathname.includes(item.path) ? 'active' : ''
+                                                            }
+                                                        />
                                                     </div>
                                                 </Link>
                                             </React.Fragment>

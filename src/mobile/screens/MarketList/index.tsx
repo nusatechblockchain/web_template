@@ -56,6 +56,8 @@ const MarketListlMobileScreen: React.FC = () => {
             ),
         }));
 
+    console.log(marketList);
+
     const spotMarket = marketList.filter((market) => {
         return market.type == 'spot';
     });

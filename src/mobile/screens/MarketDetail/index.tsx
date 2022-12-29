@@ -1,15 +1,11 @@
 import * as React from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDocumentTitle, useWalletsFetch, useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
 import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
-import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { WarningIcon } from '../../assets/Warning';
-import Select from 'react-select';
-import { CustomStylesSelect } from 'src/desktop/components';
 import { Decimal } from 'src/components';
-import { ArrowLeft } from '../../assets/Arrow';
 
 const defaultTicker = {
     amount: '0.0',
@@ -74,14 +70,6 @@ const MarketDetailMobileScreen: React.FC = () => {
                                 </span>
                             </h3>
                         </div>
-
-                        <Select
-                            value={optionStatus.filter(function (option) {
-                                return option.value === 'usdt';
-                            })}
-                            styles={CustomStylesSelect}
-                            options={optionStatus}
-                        />
                     </div>
 
                     <div className="price-container d-flex justify-content-start align-items-center w-100">

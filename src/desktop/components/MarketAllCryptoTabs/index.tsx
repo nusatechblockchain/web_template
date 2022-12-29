@@ -6,7 +6,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import './MarketAllCryptoTabs.pcss';
 import { NoData } from '../../components';
-import { FilterInput } from '../../../desktop/components';
+import { FilterInput } from 'src/desktop/components';
+import { numberFormat } from '../../../helpers';
 
 const defaultTicker = {
     amount: '0.0',
@@ -14,7 +15,7 @@ const defaultTicker = {
     high: '0.0',
     open: '0.0',
     low: '0.0',
-    // price_change_percent: '+0.00%',
+    price_change_percent: '+0.00%',
     volume: '0.0',
 };
 
@@ -46,7 +47,7 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
             ...market,
             last: Decimal.format(Number((marketTickers[market.id] || defaultTicker).last), market.amount_precision),
             open: Decimal.format(Number((marketTickers[market.id] || defaultTicker).open), market.price_precision),
-            // price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
+            price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
             high: Decimal.format(Number((marketTickers[market.id] || defaultTicker).high), market.amount_precision),
             currency: currencies.find((cur) => cur.id == market.base_unit),
             volume: Decimal.format(Number((marketTickers[market.id] || defaultTicker).volume), market.price_precision),
@@ -86,8 +87,16 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
                 <img src={item.currency && item.currency.icon_url} alt="coin" className="mr-12 small-coin-icon" />
                 <p className="m-0 mr-24 white-text font-bold">{item && item.name}</p>
             </div>,
-            <p className="m-0 text-sm white-text">{item.currency && item.currency.price}</p>,
-            <p className={`text-sm m-0 ${item.change.includes('-') ? 'danger-text' : 'green-text'}`}>{item.change}</p>,
+            <p className="m-0 text-sm white-text">
+                {
+                    numberFormat(item.currency && item.currency.price, 'USA')
+                        .toString()
+                        .split('.')[0]
+                }
+            </p>,
+            <p className={`text-sm m-0 ${item.change.includes('-') ? 'danger-text' : 'green-text'}`}>
+                {item.price_change_percent}
+            </p>,
             <p className="m-0 text-sm white-text">{item.cap}</p>,
             <div className="d-flex">
                 <div className="mr-3">
