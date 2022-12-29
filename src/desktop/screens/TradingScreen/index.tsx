@@ -1,7 +1,11 @@
 import React, { FC, ReactElement } from 'react';
+import { useSelector } from 'react-redux';
+import { selectCurrentMarket } from 'src/modules';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, Charts } from '../../containers';
 
 export const TradingScreen: FC = (): ReactElement => {
+    const currentMarket = useSelector(selectCurrentMarket);
+
     return (
         <React.Fragment>
             <div className="market-trade-screen">

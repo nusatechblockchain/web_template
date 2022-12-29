@@ -133,9 +133,11 @@ export const MarketSpotTabs: FC = (): ReactElement => {
                     </Link>
                 </div>
                 <div>
-                    <Link to={`/markets/${item.type == 'spot' ? 'trading/' : '/trading-future/'}${item.id}`}>
-                        <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
-                    </Link>
+                    <p
+                        onClick={() => handleRedirectToTrading(item.id)}
+                        className="m-0 text-sm font-bold gradient-text cursor-pointer">
+                        Trade
+                    </p>
                 </div>
             </div>,
         ]);

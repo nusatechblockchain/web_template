@@ -81,10 +81,7 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
         return newListingData.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <img src={item.currency && item.currency.icon_url} alt="coin" className="mr-12 small-coin-icon" />
-                <p className="m-0 mr-24 white-text font-bold">
-                    {item.currency && item.currency.id && item.currency.id.toUpperCase()}
-                </p>
-                <p className="m-0 grey-text-accent">{item.currency && item.currency.name}</p>
+                <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
             <p className="m-0 text-sm white-text">{item.currency && item.currency.price}</p>,
             <p className={`text-sm m-0 ${item.change.includes('-') ? 'danger-text' : 'green-text'}`}>{item.change}</p>,
@@ -96,9 +93,11 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
                     </Link>
                 </div>
                 <div>
-                    <Link to={`/markets/${item.type == 'spot' ? 'trading/' : '/trading-future/'}${item.id}`}>
-                        <p className="m-0 text-sm font-bold gradient-text cursor-pointer">Trade</p>
-                    </Link>
+                    <p
+                        onClick={() => handleRedirectToTrading(item.id)}
+                        className="m-0 text-sm font-bold gradient-text cursor-pointer">
+                        Trade
+                    </p>
                 </div>
             </div>,
         ]);
