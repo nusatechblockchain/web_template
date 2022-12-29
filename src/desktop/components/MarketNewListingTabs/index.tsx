@@ -1,8 +1,8 @@
 import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrencies, selectMarkets, selectMarketTickers, setCurrentMarket, Market } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import './MarketNewListingTabs.pcss';
 import { NoData } from '../../components';
@@ -20,11 +20,26 @@ const defaultTicker = {
 export const MarketNewListingTabs: FC = (): ReactElement => {
     useMarketsFetch();
     useMarketsTickersFetch();
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
     const [filterMarket, setFilterMarket] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState('');
+
+    const handleRedirectToTrading = (id: string) => {
+        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
+
+        if (currentMarket) {
+            dispatch(setCurrentMarket(currentMarket));
+            history.push(
+                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
+            );
+        }
+    };
 
     const marketList = markets
         .map((market) => ({

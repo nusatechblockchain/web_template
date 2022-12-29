@@ -51,7 +51,8 @@ export const MarketDetailScreen: FC = (): ReactElement => {
         return obj.base_unit === currency;
     });
 
-    const dataTranding = marketList && marketList.sort((a, b) => +b.currency.price - +a.currency.price);
+    const dataTranding =
+        marketList && marketList.sort((a, b) => +b.currency && +b.currency.price - +a.currency && +a.currency.price);
     const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);
     const dataLosers = marketList && marketList.sort((a, b) => +a.price_change_percent - +b.price_change_percent);
 
