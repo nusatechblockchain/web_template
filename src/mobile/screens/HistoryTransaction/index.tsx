@@ -384,7 +384,7 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                     <ArrowLeft className={'back'} />
                 </Link>
                 <h1 className="text-center text-md grey-text-accent font-bold">History Transaction</h1>
-                <div className="handle-filter text-right">
+                <div className="handle-filter text-right index-0 test-class">
                     <span className="cursor-pointer" onClick={() => setShowFilter(true)}>
                         <FilterIcon className="filter-icon" />
                     </span>
