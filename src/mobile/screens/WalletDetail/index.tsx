@@ -71,25 +71,25 @@ const WalletDetailMobileScreen: React.FC = () => {
                 <div className="d-flex justify-content-start align-items-start td-coin">
                     <img src={currencyItem && currencyItem.icon_url} alt="logo" className="small-coin-icon mr-8" />
                     <div className="d-flex flex-column justify-content-start align-items-start">
-                        <h3 className="p-0 m-0 grey-text-accent text-ms font-bold">Amount</h3>
-                        <h4 className="p-0 m-0 grey-text text-ms font-bold">
+                        <h3 className="p-0 m-0 grey-text-accent text-sm font-bold">Amount</h3>
+                        <h4 className="p-0 m-0 grey-text text-sm font-bold text-nowrap">
                             {item.amount} {item.currency.toUpperCase()}
                         </h4>
                     </div>
                 </div>,
                 <div className="td-id-status-type d-flex flex-column justify-content-start align-items-start">
-                    <h3 className="p-0 m-0 grey-text-accent text-ms font-bold">ID</h3>
-                    <h4 className="p-0 m-0 grey-text text-ms font-bold">{item.receiver_uid.slice(0, 5)}..</h4>
+                    <h3 className="p-0 m-0 grey-text-accent text-sm font-bold">ID</h3>
+                    <h4 className="p-0 m-0 grey-text text-sm font-bold">{item.receiver_uid.slice(0, 5)}..</h4>
                 </div>,
                 <div className="td-id-status-type d-flex flex-column justify-content-start align-items-start">
-                    <h3 className="p-0 m-0 grey-text-accent text-ms font-bold">Status</h3>
-                    <h4 className="p-0 m-0 grey-text text-ms font-bold">
+                    <h3 className="p-0 m-0 grey-text-accent text-sm font-bold">Status</h3>
+                    <h4 className="p-0 m-0 grey-text text-sm font-bold">
                         {item.status === 'completed' ? 'Completed' : item.status === 'pending' ? 'Pending' : 'Canceled'}
                     </h4>
                 </div>,
                 <div className="td-id-status-type d-flex flex-column justify-content-end align-items-end">
-                    <h3 className="p-0 m-0 grey-text-accent text-ms font-bold">Type</h3>
-                    <h4 className="p-0 m-0 grey-text text-ms font-bold">
+                    <h3 className="p-0 m-0 grey-text-accent text-sm font-bold">Type</h3>
+                    <h4 className="p-0 m-0 grey-text text-sm font-bold text-nowrap">
                         {type === 'deposits' ? 'Deposit' : type === 'withdraws' ? 'Withdraw' : 'Internal Transfer'}
                     </h4>
                 </div>,
@@ -132,7 +132,7 @@ const WalletDetailMobileScreen: React.FC = () => {
 
     const renderFilter = () => {
         return (
-            <div className="detail-history-action-container d-flex justify-content-between align-items-center">
+            <div className="detail-history-action-container d-flex justify-content-between align-items-center mt-3">
                 <p className="p-0 m-0 title">Detail History</p>
                 <div onClick={() => setShowModalFilter(true)}>
                     <FilterIcon className={''} />
@@ -156,35 +156,35 @@ const WalletDetailMobileScreen: React.FC = () => {
                 <div className="detail-assets-container w-100 mb-4">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex flex-column justify-content-center align-items-center">
-                            <h3 className="text-ms grey-text">Available</h3>
-                            <h2 className="text-ms grey-text font-extrabold">0</h2>
+                            <h3 className="text-sm grey-text">Available</h3>
+                            <h2 className="text-sm grey-text font-extrabold">0</h2>
                         </div>
                         <div className="d-flex flex-column justify-content-center align-items-center">
-                            <h3 className="text-ms grey-text">Locked</h3>
-                            <h2 className="text-ms grey-text font-extrabold">0</h2>
+                            <h3 className="text-sm grey-text">Locked</h3>
+                            <h2 className="text-sm grey-text font-extrabold">0</h2>
                         </div>
 
                         <div className="d-flex flex-column justify-content-center align-items-center">
-                            <h3 className="text-ms grey-text">Estimated IDR</h3>
-                            <h2 className="text-ms grey-text font-extrabold">0</h2>
+                            <h3 className="text-sm grey-text">Estimated IDR</h3>
+                            <h2 className="text-sm grey-text font-extrabold">0</h2>
                         </div>
                     </div>
                 </div>
 
-                <div className="btn-action-container d-flex justify-content-between align-items-center pb-4">
+                <div className="btn-action-container d-flex justify-content-center flex-wrap pb-4">
                     <button
                         id="network-canvas"
                         type="button"
                         onClick={() => setShowNetwork(true)}
-                        className="btn btn-primary btn-sm">
+                        className="btn btn-primary btn-sm font-normal m-1">
                         <DepositIcon className={''} />
                         Deposit
                     </button>
-                    <button className="btn btn-primary btn-sm">
+                    <button className="btn btn-primary btn-sm font-normal m-1">
                         <WithdrawlIcon className={''} />
                         Withdraw
                     </button>
-                    <button className="btn btn-primary btn-sm">
+                    <button className="btn btn-primary btn-sm font-normal m-1">
                         <TransferIcon className={''} />
                         Transfer
                     </button>

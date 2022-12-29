@@ -41,14 +41,11 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
 
     const { isP2PEnabled } = props;
     const { formatMessage } = useIntl();
-    const history = useHistory();
-    const [fullscreen, setFullScreen] = React.useState(true);
 
     const [showModal, setShowModal] = React.useState(false);
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
-    const [showModalLocked, setShowModalLocked] = React.useState<boolean>(false);
 
     const translate = React.useCallback((id: string, value?: any) => formatMessage({ id: id }, { ...value }), [
         formatMessage,
@@ -194,8 +191,8 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
 
     return (
         <React.Fragment>
-            <div className="mobile-container wallet-list no-header dark-bg-main pt-4 ">
-                <h1 className="w-100 heading-one mb-5">Balances</h1>
+            <div className="mobile-container wallet-list no-header dark-bg-main">
+                <h1 className="w-100 heading-one mb-24 mt-0">Balances</h1>
                 <div className="estimate-container d-flex flex-column w-100">
                     <div className="total-container w-50 d-flex flex-column">
                         <h3 className="text-md grey-text font-bold  mb-0">Estimated Total Balance</h3>
