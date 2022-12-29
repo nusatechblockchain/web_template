@@ -3,6 +3,8 @@ import Tab from 'react-bootstrap/Tab';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useHistoryFetch, useWalletsFetch } from '../../../hooks';
+import { CustomStylesSelect } from 'src/desktop/components';
+import Select from 'react-select';
 import {
     selectCurrencies,
     Currency,
@@ -13,7 +15,7 @@ import {
     selectNextPageExists,
     RootState,
 } from '../../../modules';
-
+import { FilterIcon } from 'src/mobile/assets/Wallet';
 import Tabs from 'react-bootstrap/Tabs';
 import { useDocumentTitle } from 'src/hooks';
 import { Table } from '../../../components';
@@ -32,6 +34,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     const [currentPage, setCurrentPage] = React.useState(0);
     const [currency, setCurrency] = React.useState('');
     const [type, setType] = React.useState('deposits');
+
+    const [status, setStatus] = React.useState('');
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
+    const [showFilter, setShowFilter] = React.useState(false);
 
     // Handle get item pagination
     const firstElementIndex = useSelector((state: RootState) => selectFirstElemIndex(state, 5));
@@ -332,9 +339,42 @@ const HistoryTransactionMobileScreen: React.FC = () => {
         ]);
     };
 
+    const filterredStatus = (status) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.status === status);
+        setHistorys(filterredList);
+    };
+
     React.useEffect(() => {
         setHistorys(list);
     }, [list]);
+
+    React.useEffect(() => {
+        if (startDate != '' && endDate != '') {
+            const filterredList = list.filter(
+                (item) =>
+                    moment(item.created_at).format() >= moment(startDate).format() &&
+                    moment(item.created_at).format() <= moment(endDate).format()
+            );
+            setHistorys(filterredList);
+        }
+    }, [startDate, endDate]);
+
+    const handleReset = () => {
+        setStatus('');
+        setStartDate('');
+        setEndDate('');
+        setShowFilter(false);
+        setHistorys(list);
+    };
+
+    const optionStatus = [
+        { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
+        { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'completed' },
+        { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
+    ];
 
     return (
         <section className="mobile-container pg-history-transaction no-header dark-bg-main">
@@ -344,6 +384,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                     <ArrowLeft className={'back'} />
                 </Link>
                 <h1 className="text-center text-md grey-text-accent font-bold">History Transaction</h1>
+                <div className="handle-filter text-right index-0 test-class">
+                    <span className="cursor-pointer" onClick={() => setShowFilter(true)}>
+                        <FilterIcon className="filter-icon" />
+                    </span>
+                </div>
             </div>
             {/* ===== End Header History Transaction ===== */}
 
@@ -385,6 +430,62 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                 </Tab>
             </Tabs>
             {/* =================== End Tab navigation history transaction =========== */}
+
+            <div id="off-canvas-filter" className={`position-fixed off-canvas-filter ${showFilter ? 'show' : ''}`}>
+                <div className="fixed-bottom off-canvas-content-container-filter overflow-auto">
+                    <div>
+                        <label className="m-0 white-text text-sm mb-8">Start Date</label>
+                        <input
+                            type="date"
+                            className="form-control mb-24"
+                            onChange={(e) => {
+                                setStartDate(e.target.value);
+                            }}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="m-0 white-text text-sm mb-8">End Date</label>
+                        <input
+                            type="date"
+                            className="form-control mb-24"
+                            onChange={(e) => {
+                                setEndDate(e.target.value);
+                            }}
+                        />
+                    </div>
+
+                    <div className="mb-24">
+                        <p className="m-0 white-text text-sm mb-8">Status</p>
+                        <Select
+                            value={optionStatus.filter(function (option) {
+                                return option.value === status;
+                            })}
+                            styles={CustomStylesSelect}
+                            options={optionStatus}
+                            onChange={(e) => {
+                                setStatus(e.value);
+                                filterredStatus(e.value);
+                            }}
+                        />
+                    </div>
+
+                    <div className="d-flex justify-content-center align-items-center">
+                        <button
+                            onClick={handleReset}
+                            type="button"
+                            className="btn btn-reset grey-text-accent dark-bg-accent text-sm w-40 mr-8">
+                            Reset
+                        </button>
+                        <button
+                            onClick={() => setShowFilter(!showFilter)}
+                            type="button"
+                            className="btn-primary grey-text-accent text-sm font-normal w-40">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
     );
 };
