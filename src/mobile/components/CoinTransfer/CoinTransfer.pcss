@@ -25,3 +25,31 @@
         display: none;
     }
 }
+
+.modal-deposit-wallet {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--modal-background-color);
+    transform: translateY(100%);
+    transition: ease-in 0.3s all;
+    &.show {
+        transform: translateY(0%);
+    }
+
+    &__content {
+        height: 350px;
+        background: var(--main-background-color);
+        border-radius: 12px 12px 0 0;
+        padding: 24px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+    }
+    /* Off Canvas Cancel End */
+    .cr-table-container {
+        overflow-x: auto;
+    }
+}

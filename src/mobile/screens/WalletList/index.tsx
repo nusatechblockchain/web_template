@@ -19,7 +19,7 @@ import { estimateUnitValue, estimateValue } from '../../../helpers/estimateValue
 import { VALUATION_PRIMARY_CURRENCY, VALUATION_SECONDARY_CURRENCY } from '../../../constants';
 import { WithdrawlIcon, DepositIcon, TransferIcon } from '../../assets/Wallet';
 import { Modal } from 'react-bootstrap';
-import CoinTransfer from '../../../mobile/components/CoinTransfer/CoinTransfer';
+import { CoinTransfer } from '../../../mobile/components/CoinTransfer/CoinTransfer';
 import { ArrowRight } from '../../assets/Arrow';
 
 interface Props {
@@ -43,6 +43,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     const { formatMessage } = useIntl();
 
     const [showModal, setShowModal] = React.useState(false);
+    const [modalType, setModalType] = React.useState('');
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
@@ -207,7 +208,12 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                     <div>{VALUATION_SECONDARY_CURRENCY && renderSecondaryCurrencyValuation(estimatedValue)}</div>
 
                     <div className="action-container w-100 d-flex flex-wrap justify-content-center align-items-center">
-                        <button className="btn btn-primary btn-sm">
+                        <button
+                            onClick={() => {
+                                setShowModal(!showModal);
+                                setModalType('deposit');
+                            }}
+                            className="btn btn-primary btn-sm">
                             <DepositIcon className={'mr-2'} />
                             Deposit
                         </button>
@@ -215,7 +221,12 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             <WithdrawlIcon className={'mr-2'} />
                             Withdraw
                         </button>
-                        <button onClick={() => setShowModal(!showModal)} className="btn btn-primary btn-sm">
+                        <button
+                            onClick={() => {
+                                setShowModal(!showModal);
+                                setModalType('transfer');
+                            }}
+                            className="btn btn-primary btn-sm">
                             <TransferIcon className={'mr-2'} />
                             Transfer
                         </button>
@@ -261,7 +272,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                                 <span className="text-sm">Cancel</span>
                             </div>
                             <div className="table-mobile-wrapper">
-                                <CoinTransfer />
+                                <CoinTransfer type={modalType} />
                             </div>
                         </div>
                     </section>
