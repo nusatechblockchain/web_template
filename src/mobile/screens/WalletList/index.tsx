@@ -217,7 +217,14 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             <DepositIcon className={'mr-2'} />
                             Deposit
                         </button>
-                        <button className="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-withdraw">
+                        <button
+                            onClick={() => {
+                                setShowModal(!showModal);
+                                setModalType('withdraw');
+                            }}
+                            className="btn btn-primary btn-sm"
+                            data-toggle="modal"
+                            data-target="#modal-withdraw">
                             <WithdrawlIcon className={'mr-2'} />
                             Withdraw
                         </button>
@@ -260,9 +267,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                 <Table data={renderTableData(wallets)} />
             </div>
 
+            {/* ========= Show modal internal transaction ======== */}
             {showModal && (
                 <Modal
-                    // className="modal-internal-transfer"
                     dialogClassName="modal-transfer-fullscreen"
                     onHide={() => setShowModal(!showModal)}
                     show={showModal}>

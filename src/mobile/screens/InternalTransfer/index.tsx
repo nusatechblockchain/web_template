@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import { CustomInput } from 'src/desktop/components';
@@ -9,7 +9,6 @@ import {
     createInternalTransfersFetch,
     selectInternalTransfersCreateSuccess,
 } from '../../../modules';
-import { SwapIconMobile } from 'src/mobile/assets/Swap';
 import { KeyConfirmation } from 'src/mobile/assets/KeyConfirmation';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
 
@@ -26,7 +25,8 @@ const InternalTransferMobileScreen: React.FC = () => {
     const [showModalConfirmation, setShowModalConfirmation] = React.useState(false);
 
     const handleChangeAmount = (value) => {
-        setAmount(value);
+        const data = value.replace(/[^0-9\.]/g, '');
+        setAmount(data);
     };
 
     const handleChangeOtp = (value) => {
@@ -68,13 +68,13 @@ const InternalTransferMobileScreen: React.FC = () => {
                         <ArrowLeft className="white-text" />
                     </Link>
                 </div>
-                <div className="d-flex justify-content-between align-items-center w-100 mb-24 transfer-head-container">
+                <div className="d-flex justify-content-between align-items-center mb-2 transfer-head-container">
                     <h1 className="navbar-brand p-0 m-0 white-text">Internal Transfer</h1>
                 </div>
 
                 <form className="form-transfer">
                     <div className="d-flex flex-column justify-content-between align-items-start">
-                        <p className="text-ms white-text mb-8">Coins</p>
+                        <p className="text-sm white-text mb-1">Coins</p>
                         <div className="w-100 d-flex align-items-center coin-selected">
                             <img
                                 src={currencyItem && currencyItem.icon_url}
@@ -90,16 +90,7 @@ const InternalTransferMobileScreen: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="transfer-information mb-3">
-                        <div className="transfer-shipper">
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                    <span className="input-group-text" id="basic-addon1">
-                                        From : Main Account
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="transfer-information mt-3 mb-3">
                         <div className="transfer-value">
                             <div className="mb-3">
                                 <CustomInput
@@ -110,7 +101,7 @@ const InternalTransferMobileScreen: React.FC = () => {
                                     handleChangeInput={handleChangeAmount}
                                     inputValue={amount}
                                     classNameLabel="text-ms white-text mb-8"
-                                    classNameInput={`dark-bg-accent`}
+                                    classNameInput={`d-block dark-bg-accent m-0`}
                                     autoFocus={false}
                                     labelVisible
                                 />
@@ -124,26 +115,20 @@ const InternalTransferMobileScreen: React.FC = () => {
                                     type="text"
                                     label={'Enter UID'}
                                     placeholder={'Enter UID'}
-                                    defaultLabel={'Input Ammount to send'}
+                                    defaultLabel={''}
                                     handleChangeInput={handleChangeUid}
                                     inputValue={uid}
                                     classNameLabel="text-ms white-text mb-8"
-                                    classNameInput={`dark-bg-accent`}
+                                    classNameInput={`dark-bg-accent d-block m-0`}
                                     autoFocus={false}
                                     labelVisible
                                 />
                             </div>
                         </div>
-                        {/* <div className="transfer-value">
-                            <div className="mb-3">
-                                <label>Received</label>
-                                <span>00.00 USD</span>
-                            </div>
-                        </div> */}
                     </div>
 
                     <div className="mb-3">
-                        <label className="ml-2">Two-factor Authentications Code</label>
+                        <label className="m-0 mb-2">Two-factor Authentications Code</label>
                         <CustomInput
                             type="text"
                             label={''}
@@ -152,12 +137,13 @@ const InternalTransferMobileScreen: React.FC = () => {
                             handleChangeInput={handleChangeOtp}
                             inputValue={otp}
                             classNameLabel="text-ms white-text d-none"
-                            classNameInput={`dark-bg-accent`}
+                            classNameInput={`dark-bg-accent m-0`}
                             autoFocus={false}
                             labelVisible
                         />
                     </div>
 
+                    {/* ===== Trigger modal confirmation for transfer ====== */}
                     <Button
                         onClick={() => {
                             setShowModalConfirmation(!showModalConfirmation);
@@ -169,6 +155,8 @@ const InternalTransferMobileScreen: React.FC = () => {
                         Continue
                     </Button>
                 </form>
+
+                {/* ========= Modal confirmation for Internal Transfer ====== */}
                 <Modal show={showModalConfirmation} onHide={() => setShowModalConfirmation(!showModalConfirmation)}>
                     <div className="container p-3 text-center">
                         <div className="d-flex mb-2 justify-content-center">

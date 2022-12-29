@@ -57,6 +57,7 @@ import {
     InternalTransferMobileScreen,
     WalletDepositMobileScreen,
     LostTwoFaMobileScreen,
+    WalletWithdrawMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -390,6 +391,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/wallets/:currency/transfer"
                             component={InternalTransferMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/withdraw"
+                            component={WalletWithdrawMobileScreen}
                         />
 
                         <PrivateRoute
