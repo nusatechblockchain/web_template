@@ -7,6 +7,7 @@ import { Table, Decimal } from '../../../components';
 import { Favorite } from '../../../assets/images/Favorite';
 import './MarketSpotTabs.pcss';
 import { NoData } from '../../components';
+import { FilterInput } from 'src/desktop/components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -26,6 +27,8 @@ export const MarketSpotTabs: FC = (): ReactElement => {
     const [favoriteMarket, setFavoriteMarket] = React.useState(() =>
         JSON.parse(localStorage.getItem('favourites') || '[]')
     );
+    const [filterMarket, setFilterMarket] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
 
     const marketList = markets
         .map((market) => ({
@@ -70,8 +73,23 @@ export const MarketSpotTabs: FC = (): ReactElement => {
         }
     };
 
+    const handleFilter = (result) => {
+        setFilterMarket(result);
+    };
+
+    const searchFilter = (row, searchKey) => {
+        setFilterValue(searchKey);
+        return row ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) : false;
+    };
+
     const getTableData = (data) => {
-        return data.map((item, i) => [
+        let spotData = [];
+        if (filterValue != '') {
+            spotData = filterMarket;
+        } else {
+            spotData = data;
+        }
+        return spotData.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <div className="mr-2 cursor-pointer">
                     <Favorite
@@ -104,6 +122,15 @@ export const MarketSpotTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-all-tabs">
+                <div className="search-form">
+                    <FilterInput
+                        data={marketList}
+                        onFilter={handleFilter}
+                        filter={searchFilter}
+                        placeholder={'Search by assets'}
+                        className="filter-search"
+                    />
+                </div>
                 <Table header={getTableHeaders()} data={getTableData(spotMarket)} />
                 {spotMarket.length < 1 && <NoData text="No Data Yet" />}
             </div>

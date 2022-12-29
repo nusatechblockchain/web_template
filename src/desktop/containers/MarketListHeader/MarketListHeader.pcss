@@ -1,7 +1,13 @@
 .cr-market-list-header {
     &__card-container {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-column-gap: 8px;
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+
+        .com-card-market {
+            width: calc(25% - 16px);
+            min-width: 200px;
+        }
     }
 }

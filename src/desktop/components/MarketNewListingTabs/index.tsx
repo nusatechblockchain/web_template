@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import './MarketNewListingTabs.pcss';
 import { NoData } from '../../components';
+import { FilterInput } from 'src/desktop/components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -22,6 +23,8 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
+    const [filterMarket, setFilterMarket] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
 
     const marketList = markets
         .map((market) => ({
@@ -44,8 +47,23 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
         return ['Name', 'Price', '24 Change', 'Market Cap', ''];
     };
 
+    const handleFilter = (result) => {
+        setFilterMarket(result);
+    };
+
+    const searchFilter = (row, searchKey) => {
+        setFilterValue(searchKey);
+        return row ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) : false;
+    };
+
     const getTableData = (data) => {
-        return data.map((item, i) => [
+        let newListingData = [];
+        if (filterValue != '') {
+            newListingData = filterMarket;
+        } else {
+            newListingData = data;
+        }
+        return newListingData.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <img src={item.currency && item.currency.icon_url} alt="coin" className="mr-12 small-coin-icon" />
                 <p className="m-0 mr-24 white-text font-bold">
@@ -74,6 +92,15 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-all-tabs">
+                <div className="search-form">
+                    <FilterInput
+                        data={marketList}
+                        onFilter={handleFilter}
+                        filter={searchFilter}
+                        placeholder={'Search by assets'}
+                        className="filter-search"
+                    />
+                </div>
                 <Table header={getTableHeaders()} data={getTableData(marketList)} />
                 {marketList.length < 1 && <NoData text="No Data Yet" />}
             </div>

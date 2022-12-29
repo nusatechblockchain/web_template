@@ -1,19 +1,13 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-    selectCurrencies,
-    selectMarkets,
-    selectMarketTickers,
-    selectUserLoggedIn,
-    selectUserInfo,
-    changeUserDataFetch,
-} from 'src/modules';
+import { useSelector } from 'react-redux';
+import { selectCurrencies, selectMarkets, selectMarketTickers } from 'src/modules';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { Link } from 'react-router-dom';
 import { Table, Decimal } from '../../../components';
 import { Favorite } from '../../../assets/images/Favorite';
 import './MarketFavoriteTabs.pcss';
 import { NoData } from '../../components';
+import { FilterInput } from 'src/desktop/components';
 
 const defaultTicker = {
     amount: '0.0',
@@ -30,10 +24,9 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    const user = useSelector(selectUserInfo);
-    const dispatch = useDispatch();
-    const [favorite, setFavorite] = useState(false);
     const [favoriteMarket, setFavoriteMarket] = React.useState(JSON.parse(localStorage.getItem('favourites') || '[]'));
+    const [filterMarket, setFilterMarket] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
 
     useEffect(() => {
         setFavoriteMarket(JSON.parse(localStorage.getItem('favourites') || '[]'));
@@ -60,7 +53,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
         return ['Name', 'Price', '24 Change', 'Volume', 'Market Cap', ''];
     };
 
-    const spotMarket = marketList.filter((market) =>
+    const favoriteMarketData = marketList.filter((market) =>
         JSON.parse(localStorage.getItem('favourites') || '[]').some((name) => name == market.name)
     );
 
@@ -71,8 +64,23 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
         localStorage.setItem('favourites', JSON.stringify(newStorageItem));
     };
 
+    const handleFilter = (result) => {
+        setFilterMarket(result);
+    };
+
+    const searchFilter = (row, searchKey) => {
+        setFilterValue(searchKey);
+        return row ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) : false;
+    };
+
     const getTableData = (data) => {
-        return data.map((item, i) => [
+        let favoriteData = [];
+        if (filterValue != '') {
+            favoriteData = filterMarket;
+        } else {
+            favoriteData = data;
+        }
+        return favoriteData.map((item, i) => [
             <div key={i} className="d-flex align-items-center text-sm">
                 <div className="mr-2 cursor-pointer">
                     <Favorite fillColor={'#EF8943'} strokeColor={'#EF8943'} onClick={() => handleFavorite(item.name)} />
@@ -101,8 +109,17 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="com-market-all-tabs">
-                <Table header={getTableHeaders()} data={getTableData(spotMarket)} />
-                {spotMarket.length < 1 && <NoData text="No Data Yet" />}
+                <div className="search-form">
+                    <FilterInput
+                        data={favoriteMarketData}
+                        onFilter={handleFilter}
+                        filter={searchFilter}
+                        placeholder={'Search by assets'}
+                        className="filter-search"
+                    />
+                </div>
+                <Table header={getTableHeaders()} data={getTableData(favoriteMarketData)} />
+                {favoriteMarketData.length < 1 && <NoData text="No Data Yet" />}
             </div>
         </React.Fragment>
     );
