@@ -68,7 +68,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
         }));
 
     const getTableHeaders = () => {
-        return ['Name', <p className="mb-0 text-center">Price</p>, '24 Change', 'Volume', 'Market Cap', ''];
+        return ['Name', 'Price', '24 Change', 'Volume', 'Market Cap', ''];
     };
 
     const favoriteMarketData = marketList.filter((market) =>
@@ -105,9 +105,10 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
                 </div>
                 <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
-            <p className="m-0 text-sm white-text text-right">
+            <p className="m-0 text-sm white-text">
+                $
                 {
-                    numberFormat(item.currency && item.currency.price, 'USA')
+                    numberFormat(item.currency && item.currency.price, 'IDR')
                         .toString()
                         .split('.')[0]
                 }

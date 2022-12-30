@@ -51,10 +51,16 @@ export const MarketDetailScreen: FC = (): ReactElement => {
         return obj.base_unit === currency;
     });
 
-    const dataTranding =
-        marketList && marketList.sort((a, b) => +b.currency && +b.currency.price - +a.currency && +a.currency.price);
-    const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);
-    const dataLosers = marketList && marketList.sort((a, b) => +a.price_change_percent - +b.price_change_percent);
+    console.log(detail);
+    console.log(currency);
+
+    const dataTranding = [...marketList].sort((a, b) => Number(+b.volume) - Number(+a.volume));
+    const dataGainers = [...marketList]
+        .filter((data) => data.price_change_percent.includes('+'))
+        .sort((a, b) => Number(b.price_change_percent.slice(1, -1)) - Number(a.price_change_percent.slice(1, -1)));
+    const dataLosers = [...marketList]
+        .filter((data) => data.price_change_percent.includes('-'))
+        .sort((a, b) => Number(b.price_change_percent.slice(1, -1)) - Number(a.price_change_percent.slice(1, -1)));
 
     return (
         <React.Fragment>
@@ -71,7 +77,6 @@ export const MarketDetailScreen: FC = (): ReactElement => {
                             </p>
                         </div>
                     </div>
-
                     <MarketDetailInfo detail={detail} />
                 </div>
                 <div className="w-30 d-flex flex-column pg-market-detail-screen__content-right">

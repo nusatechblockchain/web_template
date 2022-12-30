@@ -17,6 +17,7 @@ import {
 } from '../../../modules';
 import MoneroIcon from '../../../../public/img/Monero.png';
 import card from '../../../../public/img/landing-card.png';
+import { numberFormat } from '../../../helpers';
 
 const defaultTicker = {
     amount: '0.0',
@@ -127,7 +128,7 @@ const MarketsTableComponent = (props) => {
         : [];
 
     const popularMarket = [...formattedMarkets].sort((a, b) => b.price - a.price);
-    const topPopular = popularMarket.slice(0, 10);
+    const topPopular = popularMarket.slice(0, 6);
 
     const filteredMarkets = topPopular
         .map((market) => {
@@ -158,17 +159,22 @@ const MarketsTableComponent = (props) => {
                                     <div key={index} className="market-item py-24 mx-4">
                                         <p className="mb-0 text-lg white-text font-bold mb-8">
                                             {item.name}
-                                            <span className="contrast-text font-bold text-ms ml-2">
+
+                                            <span
+                                                className={` font-bold text-ms ml-2 ${
+                                                    item.price_change_percent.includes('-')
+                                                        ? 'danger-text'
+                                                        : 'green-text'
+                                                }`}>
                                                 {item.price_change_percent}
                                             </span>
                                         </p>
                                         <p className="mb-0 text-lg white-text font-bold">
-                                            <Decimal fixed={2} thousSep="." floatSep=",">
-                                                {item.last}
-                                            </Decimal>
+                                            ${numberFormat(item.last, 'IDR').toString()}
                                         </p>
                                         <p className="mb-0 text-xs grey-text-accent">
-                                            <span>Volume: </span> {item.volume}
+                                            <span>Volume: </span>
+                                            {numberFormat(item.volume, 'USD').toString().split('.')[0]}
                                         </p>
                                     </div>
                                 ))}
@@ -181,7 +187,7 @@ const MarketsTableComponent = (props) => {
                             {cardBanner &&
                                 cardBanner.map((item, key) => (
                                     <div className="d-flex justify-content-between align-items-center p-2">
-                                        <img src={card} alt="card" />
+                                        <img src={card} alt="card" className="w-100" />
                                     </div>
                                 ))}
                         </Slider>

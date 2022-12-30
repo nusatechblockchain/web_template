@@ -62,7 +62,7 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
         }));
 
     const getTableHeaders = () => {
-        return ['Name', <p className="mb-0 text-center">Price</p>, '24 Change', 'Market Cap', ''];
+        return ['Name', 'Price', '24 Change', 'Market Cap', ''];
     };
 
     const handleFilter = (result) => {
@@ -86,14 +86,15 @@ export const MarketNewListingTabs: FC = (): ReactElement => {
                 <img src={item.currency && item.currency.icon_url} alt="coin" className="mr-12 small-coin-icon" />
                 <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
-            <p className="m-0 text-sm white-text text-right">
+            <p className="m-0 text-sm white-text">
+                $
                 {
-                    numberFormat(item.currency && item.currency.price, 'USA')
+                    numberFormat(item.currency && item.currency.price, 'IDR')
                         .toString()
                         .split('.')[0]
                 }
             </p>,
-            <p className={`text-sm m-0 ${item.change.includes('-') ? 'danger-text' : 'green-text'}`}>
+            <p className={`text-sm m-0 ${item.price_change_percent.includes('-') ? 'danger-text' : 'green-text'}`}>
                 {item.price_change_percent}
             </p>,
             <p className="m-0 text-sm white-text">{item.cap}</p>,
