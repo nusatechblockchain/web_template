@@ -1,0 +1,43 @@
+:root,
+.light-mode {
+    --main-background-color: rgb(var(--rgb-main-background-color));
+    --body-background-color: rgb(var(--rgb-body-background-color));
+    --header-background-color: rgb(var(--rgb-header-background-color));
+    --footer-background-color: rgb(var(--rgb-footer-background-color));
+    --notification-background-color: rgb(var(--rgb-notification-background-color));
+    --modal-background-color: rgb(var(--rgba-modal-background-color));
+    --grey-background-color: rgb(var(--rgb-system-grey));
+    --light-background-color: rgb(var(--rgb-system-white));
+    --opacity-background-color: rgba(var(--rgb-body-background-color), 0.7);
+
+    --input-border-color: rgb(var(--rgb-input-border-color));
+    --input-color: rgb(var(--rgb-text-secondary-color));
+    --input-focus-border-color: rgb(var(--rgb-divider-color));
+    --input-background-color: rgb(var(--rgb-main-background-color));
+
+    --text-primary-color: rgb(var(--rgb-text-primary-color));
+    --text-secondary-color: rgb(var(--rgb-text-secondary-color));
+    --text-grey-color: rgb(var(--rgb-text-grey-color));
+    --text-non-active-color: rgb(var(--rgb-system-grey));
+    --text-contrast-color: rgb(var(--rgb-text-contrast-color));
+    --text-contart-secondary-color: rgb(var(--rgb-text-contrast-secondary-color));
+    --text-gradient-color: var(--rgb-cta-primary-color);
+    --text-success-color: rgb(var(--rgb-system-green));
+    --text-danger-color: rgb(var(--rgb-system-red));
+    --text-warning-color: rgb(var(--rgb-system-yellow));
+    --text-blue-color: rgb(var(--rgb-system-blue));
+
+    --button-primary-color: var(--rgb-cta-primary-color);
+    --button-secondary-color: rgb(var(--rgb-cta-secondary-color));
+    --button-success-color: rgb(var(--rgb-text-contrast-color));
+    --button-danger-color: rgb(var(--rgb-system-red));
+
+    --border-color: rgb(var(--rgb-divider-color));
+    --border-grey-color: rgb(var(--rgb-cta-secondary-color));
+    --border-table-color: rgb(var(--rgb-cta-secondary-color));
+
+    --mobile-notification-warning: rgb(var(--rgb-mobile-warning));
+    --mobile-notification-warning-background: rgba(var(--rgb-mobile-warning), 0.2);
+
+    --green-system-color: rgba(var(--rgb-system-green), 0.2);
+}
