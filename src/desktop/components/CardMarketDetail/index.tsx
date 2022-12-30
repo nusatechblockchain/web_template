@@ -62,7 +62,7 @@ export const CardMarketDetail: React.FunctionComponent<CardMarketDetailProps> = 
                                 <p className="mb-8 text-sm white-text text-left font-bold" style={{ minWidth: 100 }}>
                                     $
                                     {
-                                        numberFormat(detail && detail.currency && detail.currency.price, 'USA')
+                                        numberFormat(detail && detail.last, 'USA')
                                             .toString()
                                             .split('.')[0]
                                     }

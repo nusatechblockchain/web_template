@@ -170,7 +170,7 @@ const MarketsTableComponent = (props) => {
                                             </span>
                                         </p>
                                         <p className="mb-0 text-lg white-text font-bold">
-                                            ${numberFormat(item.last, 'IDR').toString()}
+                                            ${numberFormat(item.last, 'USD').toString()}
                                         </p>
                                         <p className="mb-0 text-xs grey-text-accent">
                                             <span>Volume: </span>
