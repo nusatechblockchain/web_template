@@ -49,6 +49,7 @@ const MarketListTradeComponent = (props) => {
             currency: currencies.find((cur) => cur.id == market.base_unit),
             last: Number((marketTickers[market.id] || defaultTicker).last),
             open: Number((marketTickers[market.id] || defaultTicker).open),
+            price_change_percent: (marketTickers[market.id] || defaultTicker).price_change_percent,
         }))
         .map((market) => ({
             ...market,
@@ -142,13 +143,13 @@ const MarketListTradeComponent = (props) => {
                                         <div className="py-2">
                                             <p
                                                 className={`text-xs mb-0 text-right ${
-                                                    item.change.includes('+')
+                                                    item.price_change_percent.includes('+')
                                                         ? 'green-text'
-                                                        : item.change.includes('-')
+                                                        : item.price_change_percent.includes('-')
                                                         ? 'danger-text'
                                                         : 'green-text'
                                                 }`}>
-                                                {item.change}%
+                                                {item.price_change_percent}
                                             </p>
                                         </div>
                                     </td>

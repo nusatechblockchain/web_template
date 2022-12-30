@@ -217,7 +217,7 @@ class Head extends React.Component<Props, HeaderState> {
                                         <div className="nav-link px-12">
                                             <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">Price</p>
                                             <p className=" font-bold mb-0 white-text text-sm">
-                                                {numberFormat(currencyItem?.price, 'USD').toString().split('.')[0]}
+                                                {numberFormat(ticker?.last, 'USD').toString().split('.')[0]}
                                             </p>
                                         </div>
                                     </li>
