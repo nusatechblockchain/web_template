@@ -7,7 +7,6 @@ import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
 import '../../../styles/colors.pcss';
-import Select from 'react-select';
 import {
     Market,
     RootState,
@@ -17,16 +16,22 @@ import {
     toggleMarketSelector,
     selectUserLoggedIn,
     logoutFetch,
+    selectCurrencies,
+    Currency,
+    selectMarketTickers,
 } from '../../../modules';
+import { numberFormat } from '../../../helpers';
 import { Logo } from '../../../assets/images/Logo';
 import ProfileAvatar from '../../../../public/img/avatar.png';
 import { IndonesianFlag, AmericanFlag, ChinaFlag, KoreaFlag } from '../../../assets/images/Flags';
 import { Api, Dashboard, Logout, Referral, Security, Setting, Wallet } from '../../../assets/images/ProfileDropdown';
-import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';
+
 interface ReduxProps {
     currentMarket: Market | undefined;
     colorTheme: string;
     isLoggedIn: boolean;
+    currencies: Currency[];
+    tickers: any;
 }
 
 interface OwnProps {
@@ -74,35 +79,6 @@ class Head extends React.Component<Props, HeaderState> {
         const logoutButton = async () => {
             await this.props.logout();
             this.props.history.push('/trading');
-        };
-
-        const SelectMarketTrade = {
-            control: (provided, state) => ({
-                ...provided,
-                border: 'none',
-                background: 'var(--main-background-color)',
-                borderRadius: '4px',
-                boxShadow: state.isFocused ? null : null,
-                padding: '6px',
-                marginBottom: '0',
-                cursor: 'pointer',
-                '&:hover': {
-                    borderColor: 'rgba(35, 38, 47)',
-                },
-            }),
-            placeholder: (provided) => ({
-                ...provided,
-                color: 'rgba(181, 179, 188)',
-            }),
-            option: (provided, state) => ({
-                ...provided,
-                margin: '0',
-                background: state.isSelected ? 'rgb(14, 17, 20)' : 'rgb(11, 14, 17)',
-                '&:hover': {
-                    background: state.isFocused ? 'rgb(14, 17, 20)' : 'rgb(11, 14, 17)',
-                },
-            }),
-            indicatorSeparator: () => {},
         };
 
         const ProfileDropdown = [
@@ -157,27 +133,11 @@ class Head extends React.Component<Props, HeaderState> {
             },
         ];
 
-        const currencies = [
-            { id: 'bnb', icon: <BnbIcon className="mr-12 small-coin-icon" />, name: 'BNB/IDR' },
-            { id: 'btc', icon: <BtcIcon className="mr-12 small-coin-icon" />, name: 'BTC/IDR' },
-            { id: 'doge', icon: <DogeIcon className="mr-12 small-coin-icon" />, name: 'DOGE/IDR' },
-            { id: 'tron', icon: <TronIcon className="mr-12 small-coin-icon" />, name: 'TRON/IDR' },
-        ];
+        const currencyItem: Currency | any =
+            this.props.currencies &&
+            this.props.currencies.find((item) => item.id === this.props.currentMarket?.base_unit);
 
-        const optionAssets = currencies.map((item) => {
-            const customLabel = (
-                <div className="d-flex align-items-center">
-                    {item.icon}
-                    <div>
-                        <p className="m-0 font-bold white-text text-ms">{item.name}</p>
-                    </div>
-                </div>
-            );
-            return {
-                label: customLabel,
-                value: item.id,
-            };
-        });
+        const ticker = this.props.tickers[this.props.currentMarket?.id];
 
         return (
             <React.Fragment>
@@ -229,42 +189,60 @@ class Head extends React.Component<Props, HeaderState> {
                             ) : thisTradingHeader ? (
                                 <ul className="navbar-nav main-navbar align-items-center">
                                     <li className="nav-item dropdown market-dropdown ">
-                                        <Select
-                                            value={optionAssets.filter(function (option) {
-                                                return option.value === 'bnb';
-                                            })}
-                                            styles={SelectMarketTrade}
-                                            options={optionAssets}
-                                        />
+                                        <div className="d-flex align-items-center">
+                                            <img
+                                                src={currencyItem && currencyItem.icon_url}
+                                                alt="coin"
+                                                className="small-coin-icon mr-8"
+                                            />
+                                            <h2 className="white-text text-md m-0 p-0">
+                                                {this.props.currentMarket?.name}
+                                            </h2>
+                                        </div>
                                     </li>
                                     <li className="nav-item nav-large-display">
                                         <div className="nav-link px-12">
                                             <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Change</p>
-                                            <p className=" font-bold mb-0 contrast-text text-sm">$252.245</p>
+                                            <p
+                                                className={`font-bold mb-0 text-sm ${
+                                                    ticker?.price_change_percent.includes('+')
+                                                        ? 'contrast-text'
+                                                        : 'danger-text'
+                                                }`}>
+                                                {ticker?.price_change_percent}
+                                            </p>
                                         </div>
                                     </li>
                                     <li className="nav-item nav-large-display">
                                         <div className="nav-link px-12">
                                             <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">Price</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">11.5 + 4.29%</p>
+                                            <p className=" font-bold mb-0 white-text text-sm">
+                                                {numberFormat(currencyItem?.price, 'USD').toString().split('.')[0]}
+                                            </p>
                                         </div>
                                     </li>
                                     <li className="nav-item nav-large-display">
                                         <div className="nav-link px-12">
                                             <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h high</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">2935.0</p>
+                                            <p className=" font-bold mb-0 white-text text-sm">
+                                                {numberFormat(ticker?.high, 'USD').toString().split('.')[0]}
+                                            </p>
                                         </div>
                                     </li>
                                     <li className="nav-item nav-large-display">
                                         <div className="nav-link px-12">
                                             <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Low</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">2873.45</p>
+                                            <p className=" font-bold mb-0 white-text text-sm">
+                                                {numberFormat(ticker?.low, 'USD').toString().split('.')[0]}
+                                            </p>
                                         </div>
                                     </li>
                                     <li className="nav-item nav-large-display">
                                         <div className="nav-link px-12">
                                             <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Volume</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">2873.45</p>
+                                            <p className=" font-bold mb-0 white-text text-sm">
+                                                {numberFormat(ticker?.volume, 'USD').toString().split('.')[0]}
+                                            </p>
                                         </div>
                                     </li>
                                 </ul>
@@ -395,6 +373,8 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
     currentMarket: selectCurrentMarket(state),
     colorTheme: selectCurrentColorTheme(state),
     isLoggedIn: selectUserLoggedIn(state),
+    currencies: selectCurrencies(state),
+    tickers: selectMarketTickers(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
