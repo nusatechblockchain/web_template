@@ -10,8 +10,6 @@ const OrderBookComponent = (props) => {
     const currentMarket = useSelector(selectCurrentMarket);
     const openOrderList = useSelector(selectOpenOrdersList);
 
-    console.log(openOrderList);
-
     const MarketDeal = 1; //dummy value
     return (
         <React.Fragment>

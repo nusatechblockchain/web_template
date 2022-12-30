@@ -69,7 +69,7 @@ export const MarketDetailCalculator: React.FC<MarketDetailCalculatorProps> = ({ 
                     <p className="m-0">Price</p>
                     <p className="m-0">USD $ {+inputCalc * (detail && detail.last)}</p>
                 </div>
-                <Link to={`/trading`}>
+                <Link to={`/markets/trading/${detail && detail.id}`}>
                     <button className="btn-primary w-100">Trade Now</button>
                 </Link>
             </form>
