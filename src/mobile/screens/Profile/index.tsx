@@ -131,7 +131,7 @@ const ProfileMobileScreen: React.FC = () => {
                             <CheckIcon className="check-icon" />
                         </div>
                     </div>
-                    <Link to={'/change-password'}>
+                    <Link to={'/change-phone'}>
                         <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <PhoneProfileIcon className="profile-icon" />
@@ -141,12 +141,20 @@ const ProfileMobileScreen: React.FC = () => {
                                     <h4 className="mb-0 text-sm font-bold grey-text-accent">Phone</h4>
                                     <p
                                         className={`mb-0 text-xs ${
-                                            user && user.phones && user.phones[0] ? 'green-text' : 'danger-text'
+                                            !user.phones[0] ||
+                                            (user.phones && user.phones[0] && user.phones[0].validated_at === null)
+                                                ? 'danger-text'
+                                                : 'contrast-text'
                                         }`}>
-                                        {user && user.phones && user.phones[0] ? 'Verified' : 'Unverified'}
+                                        {!user.phones[0] ||
+                                        (user.phones && user.phones[0] && user.phones[0].validated_at === null)
+                                            ? 'Unverified'
+                                            : 'Verified'}
                                     </p>
                                 </div>
-                                {user && user.phones && user.phones[0] && <CheckIcon className="check-icon" />}
+                                {user.phones && user.phones[0] && user.phones[0].validated_at !== null && (
+                                    <CheckIcon className="check-icon" />
+                                )}
                             </div>
                         </div>
                     </Link>
