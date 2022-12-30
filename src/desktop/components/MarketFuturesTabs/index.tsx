@@ -99,7 +99,7 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
                 <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
             <p className="m-0 text-sm white-text">
-                Rp.
+                $
                 {
                     numberFormat(item.currency && item.currency.price, 'IDR')
                         .toString()

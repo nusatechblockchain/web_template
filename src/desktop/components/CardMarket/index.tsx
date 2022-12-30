@@ -29,7 +29,7 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                                 <p className="white-text m-0">{el && el.currency && el.currency.id.toUpperCase()}</p>
                             </td>
                             <td className="white-text pr-8">
-                                Rp.
+                                $
                                 {
                                     numberFormat(el && el.currency && el.currency.price, 'USA')
                                         .toString()

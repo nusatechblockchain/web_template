@@ -505,7 +505,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/email-verification"
                         component={EmailVerificationScreen}
                     />
-                    <PublicRoute loading={userLoading} path="/trading" component={TradingScreen} />
                     <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
@@ -617,7 +616,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                     />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
-                        <Redirect to="/trading/" />
+                        <Redirect to="/markets/" />
                     </Route>
                 </Switch>
                 {isLoggedIn && <WalletsFetch />}

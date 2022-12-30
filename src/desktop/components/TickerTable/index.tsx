@@ -1,8 +1,9 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { Market } from '../../../modules';
-import { Decimal } from '../../../components';
-import { Link } from 'react-router-dom';
+import { setCurrentMarket, Market } from '../../../modules';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { numberFormat } from '../../../helpers';
 
 interface Props {
     currentBidUnit: string;
@@ -20,12 +21,29 @@ export const TickerTable: React.FC<Props> = ({
     redirectToTrading,
 }) => {
     const { formatMessage } = useIntl();
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const handleRedirectToTrading = (id: string) => {
+        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
+
+        if (currentMarket) {
+            dispatch(setCurrentMarket(currentMarket));
+            history.push(
+                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
+            );
+        }
+    };
+
+    const handleToMarket = (id) => {
+        history.push(`markets/detail/${id}`);
+    };
 
     const renderItem = React.useCallback(
         (market, index: number) => {
             const marketChangeColor = +(market.change || 0) < 0 ? 'negative-price' : 'positive-price';
             return (
-                <tr key={index} onClick={() => redirectToTrading(market.id)}>
+                <tr key={index}>
                     <td>
                         <div className="d-flex align-items-center">
                             <img
@@ -40,39 +58,29 @@ export const TickerTable: React.FC<Props> = ({
                         </div>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
-                                {market.last}
-                            </Decimal>
-                        </span>
+                        <span>${numberFormat(market.last, 'USD').toString().split('.')[0]}</span>
                     </td>
                     <td>
                         <span className={marketChangeColor}>{market.price_change_percent}</span>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep="," floatSep=",">
-                                {market.high}
-                            </Decimal>
-                        </span>
+                        <span>${numberFormat(market.high, 'USD').toString().split('.')[0]}</span>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=".">
-                                {market.low}
-                            </Decimal>
-                        </span>
+                        <span>${numberFormat(market.low, 'USD').toString().split('.')[0]}</span>
                     </td>
                     <td>
                         <div className="d-flex">
-                            <Link
-                                to={`/market-detail/${market.base_unit}`}
-                                className="gradient-text font-normal mx-2 text-sm">
-                                Detail
-                            </Link>
-                            <Link to={`/trading/${market.id}`} className="gradient-text font-normal mx-2 text-sm">
+                            <p
+                                className="gradient-text font-normal mx-2 text-sm cursor-pointer"
+                                onClick={() => handleToMarket(market.base_unit)}>
+                                detail
+                            </p>
+                            <p
+                                onClick={() => handleRedirectToTrading(market.id)}
+                                className="gradient-text font-normal mx-2 text-sm cursor-pointer">
                                 Trade
-                            </Link>
+                            </p>
                         </div>
                     </td>
                 </tr>

@@ -36,15 +36,7 @@ export interface MarketDetailInfoProps {
 }
 
 export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) => {
-    const currencies = useSelector(selectCurrencies);
     const { currency = '' } = useParams<{ currency?: string }>();
-
-    const optionCurrency = [
-        { label: <p className="m-0 text-sm grey-text-accent">USD - $</p>, value: 'USD' },
-        { label: <p className="m-0 text-sm grey-text-accent">EUR - €</p>, value: 'EUR' },
-        { label: <p className="m-0 text-sm grey-text-accent">PHP - ₱</p>, value: 'PHP' },
-        { label: <p className="m-0 text-sm grey-text-accent">JPY(¥)</p>, value: 'JPY' },
-    ];
 
     return (
         <React.Fragment>
@@ -61,15 +53,6 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                     <span className="grey-text-accent text-ms font-extrabold">
                         ({detail && detail.base_unit && detail.base_unit.toUpperCase()})
                     </span>
-                </div>
-                <div className="w-25">
-                    <Select
-                        value={optionCurrency.filter(function (option) {
-                            return option.value === 'USD';
-                        })}
-                        styles={CustomStylesSelect}
-                        options={optionCurrency}
-                    />
                 </div>
             </div>
             <div className="d-flex align-items-center mb-24">
