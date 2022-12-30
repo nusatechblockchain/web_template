@@ -1,7 +1,7 @@
 function fetchConfigs() {
     const fetchConfig = new XMLHttpRequest();
-    // const hostUrl = 'https://www.heavenexchange.io';
-    const hostUrl = 'https://app.nagaexchange.co.id';
+    const hostUrl = 'https://www.heavenexchange.io';
+    // const hostUrl = 'https://app.nagaexchange.co.id';
 
     fetchConfig.open('GET', `${hostUrl}/api/v2/sonic/public/config`, false);
     fetchConfig.send(null);
