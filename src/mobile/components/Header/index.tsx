@@ -58,7 +58,6 @@ const HeaderComponent: React.FC = () => {
                     </a>
                     <div className="d-flex align-items-center">
                         <ScanIcon className={'mr-2'} />
-                        {/* <SearchIcon className={'mr-2'} /> */}
                         <div className="cursor-pointer" onClick={() => setShowSidebar(true)}>
                             <UserIcon className={'cursor-pointer'} />
                         </div>
@@ -98,7 +97,6 @@ const HeaderComponent: React.FC = () => {
                                                     </h3>
                                                 </div>
                                             </div>
-                                            <ArrowRight className={'cursor-pointer'} />
                                         </div>
                                     </div>
                                 </Link>
@@ -112,7 +110,6 @@ const HeaderComponent: React.FC = () => {
                                                     Welcome to Heaven Exchange
                                                 </h3>
                                             </div>
-                                            <ArrowRight className={'cursor-pointer'} />
                                         </div>
                                     </div>
                                 </Link>
@@ -140,11 +137,6 @@ const HeaderComponent: React.FC = () => {
                                                                 {item.name}
                                                             </h3>
                                                         </div>
-                                                        <ArrowRight
-                                                            className={
-                                                                location.pathname.includes(item.path) ? 'active' : ''
-                                                            }
-                                                        />
                                                     </div>
                                                 </Link>
                                             </React.Fragment>
@@ -157,7 +149,6 @@ const HeaderComponent: React.FC = () => {
                                                             {item.name}
                                                         </h3>
                                                     </div>
-                                                    <ArrowRight className={''} />
                                                 </div>
                                             </Link>
                                         ) : (
