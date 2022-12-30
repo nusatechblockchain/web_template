@@ -55,7 +55,9 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                 </div>
             </div>
             <div className="d-flex align-items-center mb-24">
-                <h3 className="white-text m-0 text-title-2 mr-24">$ {detail && detail.last}</h3>
+                <h3 className="white-text m-0 text-title-2 mr-24">
+                    $ {numberFormat(detail.last, 'USD').toString().split('.')[0]}
+                </h3>
                 <h6
                     className={`text-lg font-bold m-0 mr-24 ${
                         detail && detail.price_change_percent && detail.price_change_percent.includes('-')

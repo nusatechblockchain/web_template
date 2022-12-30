@@ -59,7 +59,6 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
                 market.price_precision
             ),
         }));
-    console.log(marketList);
 
     const getTableHeaders = () => {
         return ['Name', 'Price', 'Price Change', 'Market Cap', ''];

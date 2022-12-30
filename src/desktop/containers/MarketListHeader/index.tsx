@@ -25,6 +25,7 @@ export const MarketListHeader: FC = (): ReactElement => {
 
     const marketList = markets.map((market) => ({
         ...market,
+        last: Decimal.format(Number((marketTickers[market.id] || defaultTicker).last), market.amount_precision),
         currency: currencies.find((cur) => cur.id == market.base_unit),
         price_change_percent:
             (marketTickers[market.id] && marketTickers[market.id].price_change_percent) ||
