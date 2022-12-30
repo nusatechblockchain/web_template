@@ -24,6 +24,14 @@
                 }
                 &.market-list {
                     grid-column: 10/13;
+
+                    table tr:hover {
+                        background: var(--notification-background-color);
+                    }
+
+                    table tr.active {
+                        background: var(--notification-background-color);
+                    }
                 }
                 &.recent-trades {
                     grid-row: 2/3;
@@ -233,6 +241,11 @@
         .content-right {
             display: flex;
             justify-content: center;
+        }
+        .filter-market-trade {
+            &.form-input {
+                width: 100%;
+            }
         }
     }
 }
