@@ -1,5 +1,7 @@
 import * as React from 'react';
 import './CardMarket.pcss';
+import { numberFormat } from '../../../helpers';
+import { NoData } from '../../components';
 
 export interface CardMarketProps {
     title: string;
@@ -26,12 +28,21 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                                 </div>
                                 <p className="white-text m-0">{el && el.currency && el.currency.id.toUpperCase()}</p>
                             </td>
-                            <td className="white-text pr-8">{el && el.currency && el.currency.price}</td>
+                            <td className="white-text pr-8">
+                                Rp.
+                                {
+                                    numberFormat(el && el.currency && el.currency.price, 'USA')
+                                        .toString()
+                                        .split('.')[0]
+                                }
+                            </td>
                             <td className={el && el.price_change_percent?.includes('-') ? 'danger' : 'primary'}>
                                 {el && el.price_change_percent}
                             </td>
                         </tr>
                     ))}
+
+                    {data.length < 1 && <NoData text="You have no API key" />}
                 </table>
             </div>
         </React.Fragment>

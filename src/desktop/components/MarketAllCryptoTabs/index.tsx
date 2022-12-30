@@ -60,10 +60,8 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
             ),
         }));
 
-    console.log(marketList);
-
     const getTableHeaders = () => {
-        return ['Name', <p className="mb-0 text-center">Price</p>, '24 Change', 'Market Cap', ''];
+        return ['Name', 'Price', 'Price Change', 'Market Cap', ''];
     };
 
     const handleFilter = (result) => {
@@ -87,9 +85,10 @@ export const MarketAllCryptoTabs: FC = (): ReactElement => {
                 <img src={item.currency && item.currency.icon_url} alt="coin" className="mr-12 small-coin-icon" />
                 <p className="m-0 mr-24 white-text font-bold">{item.name && item.name.toUpperCase()}</p>
             </div>,
-            <p className="m-0 text-sm white-text text-right">
+            <p className="m-0 text-sm white-text">
+                Rp.
                 {
-                    numberFormat(item.currency && item.currency.price, 'USA')
+                    numberFormat(item.currency && item.currency.price, 'IDR')
                         .toString()
                         .split('.')[0]
                 }
