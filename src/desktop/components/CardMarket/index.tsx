@@ -42,7 +42,7 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                         </tr>
                     ))}
 
-                    {data.length < 1 && <NoData text="You have no API key" />}
+                    {data.length < 1 && <NoData text="There is no market data" />}
                 </table>
             </div>
         </React.Fragment>

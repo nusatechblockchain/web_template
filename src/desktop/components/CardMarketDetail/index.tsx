@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Currency } from 'src/modules';
 import './CardMarketDetail.pcss';
+import { numberFormat } from '../../../helpers';
+import { NoData } from '../../components';
 
 export interface DetailProps {
     amount_precision: string;
@@ -57,8 +59,13 @@ export const CardMarketDetail: React.FunctionComponent<CardMarketDetailProps> = 
                             </div>
 
                             <div>
-                                <p className="mb-8 text-sm white-text font-bold">
-                                    {detail && detail.currency && detail.currency.price}
+                                <p className="mb-8 text-sm white-text text-left font-bold" style={{ minWidth: 100 }}>
+                                    $
+                                    {
+                                        numberFormat(detail && detail.currency && detail.currency.price, 'USA')
+                                            .toString()
+                                            .split('.')[0]
+                                    }
                                 </p>
                                 <p
                                     className={`m-0 text-xs ${
@@ -73,6 +80,7 @@ export const CardMarketDetail: React.FunctionComponent<CardMarketDetailProps> = 
                             </div>
                         </div>
                     ))}
+                {data.length < 1 && <NoData text="There is no market data" />}
             </div>
         </React.Fragment>
     );

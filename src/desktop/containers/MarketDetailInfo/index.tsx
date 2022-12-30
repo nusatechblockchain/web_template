@@ -1,12 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { selectCurrencies, Currency } from 'src/modules';
+import { Currency } from 'src/modules';
 import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 import { InfoIcon } from 'src/assets/images/InfoIcon';
-import Select from 'react-select';
-import { CustomStylesSelect } from 'src/desktop/components';
 import './MarketDetailInfo.pcss';
+import { numberFormat } from '../../../helpers';
 
 export interface InfoMarketDetailProps {
     amount_precision: string;
@@ -88,24 +87,49 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                         {detail && detail.base_unit && detail.base_unit.toUpperCase()} Information
                     </h5>
                     <p className="grey-text-accent text-ms mb-24">
-                        The live price of {detail && detail.currency && detail.currency.name} is $ 19,544.40 per (
-                        {detail && detail.base_unit && detail.base_unit.toUpperCase()} / USD) today with a current
-                        market cap of $ 375.03B USD. 24-hour trading volume is $ 28.46B USD.
+                        The live price of {detail && detail.currency && detail.currency.name} is ${' '}
+                        {
+                            numberFormat(detail && detail.currency && detail.currency.price, 'IDR')
+                                .toString()
+                                .split('.')[0]
+                        }{' '}
+                        per ({detail && detail.base_unit && detail.base_unit.toUpperCase()} / USD) . 24-hour trading
+                        volume is ${' '}
+                        {
+                            numberFormat(detail && detail.volume, 'IDR')
+                                .toString()
+                                .split('.')[0]
+                        }{' '}
+                        USD.
                         {detail && detail.base_unit && detail.base_unit.toUpperCase()} to USD price is updated in
                         real-time.
-                        {detail && detail.currency && detail.currency.name} is -0.21% in the last 24 hours. It has a
-                        circulating supply of 19.19M USD.
+                        {detail && detail.currency && detail.currency.name} is &nbsp;
+                        {detail && detail.price_change_percent} in the last 24 hours.
                     </p>
                     <p className="grey-text-accent light mb-3">
                         24 Low &amp; High
                         <InfoIcon />
                     </p>
                     <div className="d-flex align-items-center mb-24">
-                        <p className="grey-text-accent light mb-0">Low : $ {detail && detail.min_price}</p>
+                        <p className="grey-text-accent light mb-0">
+                            Low : ${' '}
+                            {
+                                numberFormat(detail && detail.min_price, 'IDR')
+                                    .toString()
+                                    .split('.')[0]
+                            }
+                        </p>
                         <div className="bar position-relative">
-                            <div className="positive" style={{ width: '12%' }} />
+                            <div className="positive" style={{ width: '50%' }} />
                         </div>
-                        <p className="grey-text-accent light mb-0">High : $ {detail && detail.max_price}</p>
+                        <p className="grey-text-accent light mb-0">
+                            High : ${' '}
+                            {
+                                numberFormat(detail && detail.max_price, 'IDR')
+                                    .toString()
+                                    .split('.')[0]
+                            }
+                        </p>
                     </div>
                     <div className="row px-3">
                         <div className="col-lg-4 px-0 box col-xl-3 col-sm-6 mb-24">
