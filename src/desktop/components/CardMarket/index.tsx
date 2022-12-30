@@ -11,8 +11,6 @@ export interface CardMarketProps {
 export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
     const { title, data } = props;
 
-    console.log(data);
-
     return (
         <React.Fragment>
             <div className="com-card-market dark-bg-accent radius-md mb-24">
