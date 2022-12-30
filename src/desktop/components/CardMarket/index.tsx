@@ -31,7 +31,7 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                             <td className="white-text pr-8">
                                 $
                                 {
-                                    numberFormat(el && el.currency && el.currency.price, 'USA')
+                                    numberFormat(el && el.last, 'USA')
                                         .toString()
                                         .split('.')[0]
                                 }

@@ -55,9 +55,7 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                 </div>
             </div>
             <div className="d-flex align-items-center mb-24">
-                <h3 className="white-text m-0 text-title-2 mr-24">
-                    $ {detail && detail.currency && detail.currency.price}
-                </h3>
+                <h3 className="white-text m-0 text-title-2 mr-24">$ {detail && detail.last}</h3>
                 <h6
                     className={`text-lg font-bold m-0 mr-24 ${
                         detail && detail.price_change_percent && detail.price_change_percent.includes('-')
@@ -88,14 +86,14 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                 <p className="grey-text-accent text-ms mb-24">
                     The live price of {detail && detail.currency && detail.currency.name} is ${' '}
                     {
-                        numberFormat(detail && detail.currency && detail.currency.price, 'IDR')
+                        numberFormat(detail && detail.last, 'USD')
                             .toString()
                             .split('.')[0]
                     }{' '}
                     per ({detail && detail.base_unit && detail.base_unit.toUpperCase()} / USD) . 24-hour trading volume
                     is ${' '}
                     {
-                        numberFormat(detail && detail.volume, 'IDR')
+                        numberFormat(detail && detail.volume, 'USD')
                             .toString()
                             .split('.')[0]
                     }{' '}
@@ -112,7 +110,7 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                     <p className="grey-text-accent light mb-0">
                         Low : ${' '}
                         {
-                            numberFormat(detail && detail.min_price, 'IDR')
+                            numberFormat(detail && detail.min_price, 'USD')
                                 .toString()
                                 .split('.')[0]
                         }
@@ -123,7 +121,7 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                     <p className="grey-text-accent light mb-0">
                         High : ${' '}
                         {
-                            numberFormat(detail && detail.max_price, 'IDR')
+                            numberFormat(detail && detail.max_price, 'USD')
                                 .toString()
                                 .split('.')[0]
                         }
@@ -137,7 +135,7 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                         <p className="mb-0 font-bold white-text">
                             ${' '}
                             {
-                                numberFormat(detail && detail.min_price, 'IDR')
+                                numberFormat(detail && detail.min_price, 'USD')
                                     .toString()
                                     .split('.')[0]
                             }
@@ -150,7 +148,7 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
                         <p className="mb-0 font-bold white-text">
                             ${' '}
                             {
-                                numberFormat(detail && detail.max_price, 'IDR')
+                                numberFormat(detail && detail.max_price, 'USD')
                                     .toString()
                                     .split('.')[0]
                             }

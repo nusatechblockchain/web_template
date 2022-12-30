@@ -51,9 +51,6 @@ export const MarketDetailScreen: FC = (): ReactElement => {
         return obj.base_unit === currency;
     });
 
-    console.log(detail);
-    console.log(currency);
-
     const dataTranding = [...marketList].sort((a, b) => Number(+b.volume) - Number(+a.volume));
     const dataGainers = [...marketList]
         .filter((data) => data.price_change_percent.includes('+'))

@@ -49,8 +49,6 @@ const MarketDetailMobileScreen: React.FC = () => {
         return obj.base_unit === currency;
     });
 
-    console.log(detail);
-
     const optionStatus = [{ label: <p className="m-0 text-sm grey-text-accent">USDT</p>, value: 'usdt' }];
     return (
         <React.Fragment>
@@ -73,7 +71,7 @@ const MarketDetailMobileScreen: React.FC = () => {
                     </div>
 
                     <div className="price-container d-flex justify-content-start align-items-center w-100">
-                        <h1 className="p-0 m-0">$ {detail && detail.currency && detail.currency.price}</h1>
+                        <h1 className="p-0 m-0">$ {detail && detail.last}</h1>
                         <h4
                             className={`p-0 m-0 ${
                                 detail && detail.price_change_percent && detail.price_change_percent.includes('-')
@@ -99,9 +97,9 @@ const MarketDetailMobileScreen: React.FC = () => {
                         <h4>{detail && detail.base_unit && detail.base_unit.toUpperCase()} Information</h4>
                         <p className="m-0 p-0 grey-text">
                             The live price of {detail && detail.currency && detail.currency.name} is ${' '}
-                            {detail && detail.currency && detail.currency.price} per (
-                            {detail && detail.base_unit && detail.base_unit.toUpperCase()} / USD) today with a current
-                            market cap of $ 375.03B USD. Trading volume is {detail && detail.volume} USD.
+                            {detail && detail.last} per ({detail && detail.base_unit && detail.base_unit.toUpperCase()}{' '}
+                            / USD) today with a current market cap of $ 375.03B USD. Trading volume is{' '}
+                            {detail && detail.volume} USD.
                             {detail && detail.base_unit && detail.base_unit.toUpperCase()} to USD price is updated in
                             real-time. {detail && detail.currency && detail.currency.name} is{' '}
                         </p>
