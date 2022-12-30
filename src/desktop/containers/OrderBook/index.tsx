@@ -1,16 +1,32 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentMarket, selectOpenOrdersList } from '../../../modules';
+import { selectCurrentMarket, selectDepthBids, selectDepthAsks } from '../../../modules';
 import { useOpenOrdersFetch } from '../../../hooks';
 import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
+import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers';
+import { Decimal } from '../../../components';
 
 const OrderBookComponent = (props) => {
     useOpenOrdersFetch();
 
     const currentMarket = useSelector(selectCurrentMarket);
-    const openOrderList = useSelector(selectOpenOrdersList);
+    const asks = useSelector(selectDepthAsks);
+    const bids = useSelector(selectDepthBids);
 
-    console.log(openOrderList);
+    const mapValues = (maxVolume?: number, data?: number[]) => {
+        const resultData =
+            data && maxVolume && data.length
+                ? data.map((currentVolume) => {
+                      // tslint:disable-next-line:no-magic-numbers
+                      return { value: (currentVolume / maxVolume) * 100 };
+                  })
+                : [];
+
+        return resultData;
+    };
+
+    const bgWitdhBids = mapValues(calcMaxVolume(bids, asks), accumulateVolume(bids, false));
+    const bgWidthAsk = mapValues(calcMaxVolume(bids, asks), accumulateVolume(asks, false));
 
     const MarketDeal = 1; //dummy value
     return (
@@ -19,18 +35,14 @@ const OrderBookComponent = (props) => {
                 <p className="white-text font-bold text-sm">Order Book</p>
                 <div className="max-400 position-relative">
                     <div className="table-background">
-                        <div className="table-background-row danger" style={{ width: '70%' }} />
-                        <div className="table-background-row danger" style={{ width: '20%' }} />
-                        <div className="table-background-row danger" style={{ width: '30%' }} />
-                        <div className="table-background-row danger" style={{ width: '33%' }} />
-                        <div className="table-background-row danger" style={{ width: '12%' }} />
-                        <div className="table-background-row danger" style={{ width: '98%' }} />
-                        <div className="table-background-row danger" style={{ width: '34%' }} />
-                        <div className="table-background-row danger" style={{ width: '34%' }} />
-                        <div className="table-background-row danger" style={{ width: '34%' }} />
-                        <div className="table-background-row danger" style={{ width: '23%' }} />
-                        <div className="table-background-row danger" style={{ width: '62%' }} />
-                        <div className="table-background-row danger" style={{ width: '70%' }} />
+                        {asks &&
+                            asks.map((item, i) => (
+                                <div
+                                    key={i}
+                                    className="table-background-row danger"
+                                    style={{ width: bgWidthAsk[i].toString() }}
+                                />
+                            ))}
                     </div>
                     <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
                         <thead>
@@ -41,162 +53,36 @@ const OrderBookComponent = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.120<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.090<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.120<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.090<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.120<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.090<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.120<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.090<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.120<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.090<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.120<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm danger-text font-bold mb-0 text-left">
-                                        0.090<span className="danger-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
+                            {asks &&
+                                asks.map((item, i) => (
+                                    <tr key={i}>
+                                        <td>
+                                            <p className="text-sm danger-text font-bold mb-0 text-left">
+                                                {
+                                                    numberFormat(+item[0], 'USD')
+                                                        .toString()
+                                                        .split('.')[0]
+                                                }
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p className="text-sm grey-text-accent font-bold mb-0 text-right">
+                                                <Decimal fixed={currentMarket.amount_precision} thousSep=",">
+                                                    {item[1]}
+                                                </Decimal>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p className="text-sm mb-0 grey-text-accent font-bold text-right">
+                                                {
+                                                    numberFormat(+item[0] * +item[1], 'USD')
+                                                        .toString()
+                                                        .split('.')[0]
+                                                }
+                                            </p>
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 </div>
@@ -207,177 +93,46 @@ const OrderBookComponent = (props) => {
                 </div>
                 <div className="max-400 position-relative">
                     <div className="table-background top-30">
-                        <div className="table-background-row good" style={{ width: '70%' }} />
-                        <div className="table-background-row good" style={{ width: '20%' }} />
-                        <div className="table-background-row good" style={{ width: '30%' }} />
-                        <div className="table-background-row good" style={{ width: '33%' }} />
-                        <div className="table-background-row good" style={{ width: '12%' }} />
-                        <div className="table-background-row good" style={{ width: '98%' }} />
-                        <div className="table-background-row good" style={{ width: '34%' }} />
-                        <div className="table-background-row good" style={{ width: '34%' }} />
-                        <div className="table-background-row good" style={{ width: '34%' }} />
-                        <div className="table-background-row good" style={{ width: '23%' }} />
-                        <div className="table-background-row good" style={{ width: '62%' }} />
-                        <div className="table-background-row good" style={{ width: '70%' }} />
+                        {bids &&
+                            bids.map((item, i) => (
+                                <div
+                                    key={i}
+                                    className="table-background-row good"
+                                    style={{ width: bgWitdhBids[i].toString() }}
+                                />
+                            ))}
                     </div>
                     <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.120<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.090<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.120<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.090<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.120<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.090<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.120<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.090<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.120<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.090<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.120<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">17.7123</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.641310513</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p className="text-sm green-text font-bold mb-0 text-left">
-                                        0.090<span className="green-text-accent">765</span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p className="text-sm grey-text-accent font-bold mb-0 text-right">1123.711</p>
-                                </td>
-                                <td>
-                                    <p className="text-sm mb-0 grey-text-accent font-bold text-right">1.1221313</p>
-                                </td>
-                            </tr>
+                            {bids.map((item, i) => (
+                                <tr key={i}>
+                                    <td>
+                                        <p className="text-sm green-text font-bold mb-0 text-left">
+                                            {
+                                                numberFormat(+item[0], 'USD')
+                                                    .toString()
+                                                    .split('.')[0]
+                                            }
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p className="text-sm grey-text-accent font-bold mb-0 text-right">
+                                            <Decimal fixed={currentMarket.amount_precision} thousSep=",">
+                                                {item[1]}
+                                            </Decimal>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p className="text-sm mb-0 grey-text-accent font-bold text-right">
+                                            {
+                                                numberFormat(+item[0] * +item[1], 'USD')
+                                                    .toString()
+                                                    .split('.')[0]
+                                            }
+                                        </p>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectRecentTrades, recentTradesFetch, selectCurrentMarket } from '../../../modules';
-import { NoData } from '../../../desktop/components';
+import { Decimal } from '../../../components';
 import moment from 'moment';
 import { numberFormat } from '../../../helpers';
 
@@ -49,12 +49,9 @@ const RecentTradesComponent = (props) => {
                                     </td>
                                     <td>
                                         <p className="text-sm grey-text-accent font-bold mb-0 text-right">
-                                            {/* {
-                                                numberFormat(+trade.amount, 'USD')
-                                                    .toString()
-                                                    .split('.')[0]
-                                            } */}
-                                            {trade.amount}
+                                            <Decimal fixed={currentMarket.amount_precision} thousSep=",">
+                                                {trade.amount}
+                                            </Decimal>
                                         </p>
                                     </td>
                                     <td>
