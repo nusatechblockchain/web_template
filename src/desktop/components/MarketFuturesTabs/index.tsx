@@ -68,7 +68,7 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
     });
 
     const getTableHeaders = () => {
-        return ['Name', 'Price', '24 Change', 'Volume', 'Market Cap', ''];
+        return ['Name', 'Price', '24 Change', 'Volume', ''];
     };
 
     const handleFilter = (result) => {
@@ -102,7 +102,7 @@ export const MarketFuturesTabs: FC = (): ReactElement => {
             <p className={`text-sm m-0 ${item.price_change_percent.includes('-') ? 'danger-text' : 'green-text'}`}>
                 {item.price_change_percent}
             </p>,
-            <p className="m-0 text-sm white-text">{item.cap}</p>,
+            <p className="text-sm m-0 grey-text-accent">{numberFormat(item.volume, 'USD').toString().split('.')[0]}</p>,
             <div className="d-flex">
                 <div className="mr-3">
                     <Link to={`/markets/detail/${item.base_unit}`}>
