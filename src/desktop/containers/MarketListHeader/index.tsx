@@ -33,11 +33,9 @@ export const MarketListHeader: FC = (): ReactElement => {
     }));
 
     const dataVolumes = [...marketList].sort((a, b) => Number(+b.volume) - Number(+a.volume));
-    const dataGainers =
-        marketList &&
-        marketList
-            .filter((data) => data.price_change_percent.includes('+'))
-            .sort((a, b) => Number(b.price_change_percent) - Number(a.price_change_percent));
+    const dataGainers = [...marketList]
+        .filter((data) => data.price_change_percent.includes('+'))
+        .sort((a, b) => Number(b.price_change_percent.slice(1, -1)) - Number(a.price_change_percent.slice(1, -1)));
 
     const dataHighlight = [...marketList].sort(
         (a, b) => Number(b.currency && b.currency.price) - Number(a.currency && a.currency.price)
