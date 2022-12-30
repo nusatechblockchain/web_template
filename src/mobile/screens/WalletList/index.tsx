@@ -21,6 +21,7 @@ import { WithdrawlIcon, DepositIcon, TransferIcon } from '../../assets/Wallet';
 import { Modal } from 'react-bootstrap';
 import { CoinTransfer } from '../../../mobile/components/CoinTransfer/CoinTransfer';
 import { ArrowRight } from '../../assets/Arrow';
+import { GearIcon } from 'src/mobile/assets/Gear';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -40,6 +41,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     useDocumentTitle('Wallets');
 
     const { isP2PEnabled } = props;
+    const history = useHistory();
     const { formatMessage } = useIntl();
 
     const [showModal, setShowModal] = React.useState(false);
@@ -47,6 +49,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
+    const [showModalLocked, setShowModalLocked] = React.useState<boolean>(false);
 
     const translate = React.useCallback((id: string, value?: any) => formatMessage({ id: id }, { ...value }), [
         formatMessage,
@@ -190,6 +193,10 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
         [nonZeroSelected, setNonZeroSelected]
     );
 
+    const handleClickWithdraw = React.useCallback(() => {
+        user.otp ? setShowModal(true) : setShowModalLocked(!showModalLocked);
+    }, [history]);
+
     return (
         <React.Fragment>
             <div className="mobile-container wallet-list no-header dark-bg-main">
@@ -219,7 +226,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                         </button>
                         <button
                             onClick={() => {
-                                setShowModal(!showModal);
+                                handleClickWithdraw();
                                 setModalType('withdraw');
                             }}
                             className="btn btn-primary btn-sm"
@@ -230,7 +237,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                         </button>
                         <button
                             onClick={() => {
-                                setShowModal(!showModal);
+                                handleClickWithdraw();
                                 setModalType('transfer');
                             }}
                             className="btn btn-primary btn-sm">
@@ -266,6 +273,38 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                 </div>
                 <Table data={renderTableData(wallets)} />
             </div>
+
+            {/* ========= Show Modal Locked 2FA =========== */}
+
+            {showModalLocked && (
+                <Modal show={showModalLocked}>
+                    <section className="container p-3 dark-bg-main">
+                        <div className="d-flex justify-content-center my-2">
+                            <GearIcon />
+                        </div>
+                        <div className="text-center">
+                            <p className="gradient-text mb-3">Two-factor Authentication Needed</p>
+                            <p className="text-secondary text-sm">
+                                Please turn on Two-factor authentication before make a withdrawal
+                            </p>
+                        </div>
+                        <div className="mb-0">
+                            <Link to={`/two-fa-activation`}>
+                                <button type="button" className="btn btn-primary btn-block">
+                                    Enable 2FA
+                                </button>
+                            </Link>
+                            <div className="mt-3" onClick={() => setShowModalLocked(!showModalLocked)}>
+                                <button type="button" className="btn btn-outline-primary btn-block">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </Modal>
+            )}
+
+            {/* ========== End Modal ===========*/}
 
             {/* ========= Show modal internal transaction ======== */}
             {showModal && (

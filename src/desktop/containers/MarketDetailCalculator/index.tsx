@@ -3,6 +3,7 @@ import { Currency } from 'src/modules';
 import { Link } from 'react-router-dom';
 import { CustomInput } from 'src/desktop/components';
 import './MarketDetailCalculator.pcss';
+import { numberFormat } from '../../../helpers';
 
 export interface CalculatorMarketDetailProps {
     amount_precision: string;
@@ -67,9 +68,16 @@ export const MarketDetailCalculator: React.FC<MarketDetailCalculatorProps> = ({ 
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-24 grey-text-accent text-ms font-bold">
                     <p className="m-0">Price</p>
-                    <p className="m-0">USD $ {+inputCalc * (detail && detail.last)}</p>
+                    <p className="m-0">
+                        USD ${' '}
+                        {
+                            numberFormat(+inputCalc * (detail && detail.last), 'USD')
+                                .toString()
+                                .split('.')[0]
+                        }
+                    </p>
                 </div>
-                <Link to={`/trading`}>
+                <Link to={`/markets/trading/${detail && detail.id}`}>
                     <button className="btn-primary w-100">Trade Now</button>
                 </Link>
             </form>
