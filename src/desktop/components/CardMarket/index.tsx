@@ -11,6 +11,8 @@ export interface CardMarketProps {
 export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
     const { title, data } = props;
 
+    console.log(data);
+
     return (
         <React.Fragment>
             <div className="com-card-market dark-bg-accent radius-md mb-24">
@@ -29,12 +31,7 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                                 <p className="white-text m-0">{el && el.currency && el.currency.id.toUpperCase()}</p>
                             </td>
                             <td className="white-text pr-8">
-                                $
-                                {
-                                    numberFormat(el && el.last, 'USA')
-                                        .toString()
-                                        .split('.')[0]
-                                }
+                                ${numberFormat(el.last, 'USD').toString().split('.')[0]}
                             </td>
                             <td className={el && el.price_change_percent?.includes('-') ? 'danger' : 'primary'}>
                                 {el && el.price_change_percent}
