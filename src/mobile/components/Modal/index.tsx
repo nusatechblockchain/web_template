@@ -42,7 +42,7 @@ export const ModalMobile: React.FunctionComponent<ModalProps> = (props) => {
                 <div className="custom-modal-dialog" role="document">
                     <div className="custom-modal-content">
                         <div className="header mb-24">{props.header}</div>
-                        <div className="body mb-24">{props.content}</div>
+                        <div className="body h-full">{props.content}</div>
                         {footer ? <div className="footer">{props.footer}</div> : ''}
                     </div>
                 </div>
