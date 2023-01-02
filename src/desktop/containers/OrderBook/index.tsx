@@ -20,7 +20,7 @@ const OrderBookComponent = (props) => {
             data && maxVolume && data.length
                 ? data.map((currentVolume) => {
                       // tslint:disable-next-line:no-magic-numbers
-                      return { value: (currentVolume / maxVolume) * 100 };
+                      return { value: (currentVolume / maxVolume) * 1000 };
                   })
                 : [];
 
@@ -32,6 +32,8 @@ const OrderBookComponent = (props) => {
 
     const bgWitdhBids = mapValues(calcMaxVolume(bids, asks), accumulateVolume(bids, false));
     const bgWidthAsk = mapValues(calcMaxVolume(bids, asks), accumulateVolume(asks, false));
+
+    console.log(bgWidthAsk[0]?.value);
 
     const MarketDeal = 1; //dummy value
     return (
@@ -45,7 +47,7 @@ const OrderBookComponent = (props) => {
                                 <div
                                     key={i}
                                     className="table-background-row danger"
-                                    style={{ width: bgWidthAsk[i].toString() }}
+                                    style={{ width: `${bgWidthAsk[i].value.toString()}%` }}
                                 />
                             ))}
                     </div>

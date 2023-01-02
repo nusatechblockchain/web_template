@@ -1,29 +1,139 @@
 import * as React from 'react';
 import { Modal } from '../../components';
-import { selectUserLoggedIn } from '../../../modules';
-import { useSelector } from 'react-redux';
+import { Decimal } from '../../../components';
+import {
+    selectUserLoggedIn,
+    selectCurrencies,
+    Currency,
+    selectMarketTickers,
+    selectCurrentMarket,
+    Ticker,
+    selectWallets,
+    alertPush,
+    orderExecuteFetch,
+    selectCurrentPrice,
+    setCurrentPrice,
+    selectAmount,
+    setAmount,
+    selectOrderType,
+    setOrderType,
+} from '../../../modules';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useHistory } from 'react-router';
 
 const OrderFormComponent = (props) => {
-    const [orderType, setOrderType] = React.useState('');
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const isLoggedin = useSelector(selectUserLoggedIn);
+    const currencies = useSelector(selectCurrencies);
+    const tickers = useSelector(selectMarketTickers);
+    const currentMarket = useSelector(selectCurrentMarket);
+    const currentPrice = useSelector(selectCurrentPrice);
+    const wallets = useSelector(selectWallets);
+
+    // console.log(currentPrice, 'current price');
+
+    const { currency = '' } = useParams<{ currency?: string }>();
+    const currencyItem: Currency = currencies.find((item) => item.id === currentMarket?.base_unit);
+    const tickerItem: Ticker = tickers[currency];
+    const wallet =
+        wallets.length &&
+        wallets.find((item) => item.currency.toLowerCase() === currentMarket?.base_unit?.toLowerCase());
+    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const selectedFixed = (wallet || { fixed: 0 }).fixed;
+
+    const [orderType, setOrderType] = React.useState('market');
     const [orderPrecentageBuy, setOrderPrecentageBuy] = React.useState(0);
     const [orderPrecentageSell, setOrderPrecentageSell] = React.useState(0);
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
     const [showModalSellSuccess, setShowModalSellSuccess] = React.useState(false);
-    const isLoggedin = useSelector(selectUserLoggedIn);
+    const [priceBuy, setPriceBuy] = React.useState('');
+    const [amountBuy, setAmountBuy] = React.useState(0);
+    const [totalBuy, setTotalBuy] = React.useState(0);
+    const [priceSell, setPriceSell] = React.useState('');
+    const [amountSell, setAmountSell] = React.useState(0);
+    const [totalSell, setTotalSell] = React.useState(0);
+
+    const handleChangePriceBuy = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setPriceBuy(value);
+    };
+
+    const handleChangePriceSell = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setPriceSell(value);
+    };
+
+    React.useEffect(() => {
+        if (priceSell) {
+            setTotalSell(+priceSell * +amountSell);
+        }
+    }, [priceSell, amountSell]);
+
+    React.useEffect(() => {
+        if (priceBuy) {
+            setTotalBuy(+priceBuy * +amountBuy);
+        }
+    }, [priceBuy, amountBuy]);
+
+    React.useEffect(() => {
+        if (priceBuy) {
+            setAmountBuy((+balance / +priceBuy) * orderPrecentageBuy);
+        }
+    }, [priceBuy, orderPrecentageBuy]);
+
+    React.useEffect(() => {
+        setAmountSell(+balance * orderPrecentageSell);
+    }, [orderPrecentageSell]);
+
+    const handleSellOrder = () => {
+        setShowModalSell(false);
+        setTimeout(() => {
+            setShowModalSellSuccess(true);
+        }, 1000);
+    };
+
+    const handleSubmitSell = () => {
+        dispatch(
+            orderExecuteFetch({
+                market: currentMarket?.id,
+                side: 'sell',
+                volume: amountSell.toString(),
+                price: priceSell,
+                ord_type: orderType,
+            })
+        );
+    };
+
+    const handleSubmitBuy = () => {
+        dispatch(
+            orderExecuteFetch({
+                market: currentMarket?.id,
+                side: 'buy',
+                volume: amountBuy.toString(),
+                price: priceBuy,
+                ord_type: orderType,
+            })
+        );
+    };
 
     const renderModalContentSell = () => (
         <React.Fragment>
-            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Sell BTC?</h6>
+            <h6 className="text-md white-text font-semibold mb-24">
+                Are you sure to Sell {currentMarket?.base_unit?.toUpperCase()}?
+            </h6>
             <ul className="pl-2 mb-24">
-                <li className="text-ms grey-text-accent font-semibold">Sell in 0.00003324 BTC = $ 857,887,545</li>
+                <li className="text-ms grey-text-accent font-semibold">
+                    Sell in 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 857,887,545
+                </li>
                 <li className="text-ms grey-text-accent font-semibold">Total spent $ 12,453</li>
             </ul>
             <div className="d-flex">
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalSell(false)}>
                     Cancel
                 </button>
-                <button className="btn btn-success sm px-5" onClick={handleSellOrder}>
+                <button onClick={handleSubmitSell} type="button" className="btn btn-success sm px-5">
                     Sell
                 </button>
             </div>
@@ -32,26 +142,38 @@ const OrderFormComponent = (props) => {
 
     const renderModalContentBuy = () => (
         <React.Fragment>
-            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Buy BTC?</h6>
+            <h6 className="text-md white-text font-semibold mb-24">
+                Are you sure to Buy {currentMarket?.base_unit?.toUpperCase()}?
+            </h6>
             <ul className="pl-2 mb-24">
-                <li className="text-ms grey-text-accent font-semibold">Bought 0.00003324 BTC = $ 212,642,342</li>
+                <li className="text-ms grey-text-accent font-semibold">
+                    Bought 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 212,642,342
+                </li>
                 <li className="text-ms grey-text-accent font-semibold">Total spent $ 12,453</li>
             </ul>
             <div className="d-flex">
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalBuy(false)}>
                     Cancel
                 </button>
-                <button className="btn btn-success sm px-5">Buy</button>
+                <button onClick={handleSubmitBuy} type="button" className="btn btn-success sm px-5">
+                    Buy
+                </button>
             </div>
         </React.Fragment>
     );
 
     const renderModalContentSellSuccess = () => (
         <React.Fragment>
-            <h6 className="text-md white-text font-semibold mb-24">Sell BTC has Succesfully </h6>
+            <h6 className="text-md white-text font-semibold mb-24">
+                Sell {currentMarket?.base_unit?.toUpperCase()} has Succesfully{' '}
+            </h6>
             <ul className="pl-2">
-                <li className="text-ms grey-text-accent font-semibold">Bought 0.00003324 BTC = $ 212,642,342</li>
-                <li className="text-ms grey-text-accent font-semibold">Sell in 0.00003324 BTC = $ 857,887,545</li>
+                <li className="text-ms grey-text-accent font-semibold">
+                    Bought 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 212,642,342
+                </li>
+                <li className="text-ms grey-text-accent font-semibold">
+                    Sell in 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 857,887,545
+                </li>
                 <li className="text-ms grey-text-accent font-semibold">Fee $ 64</li>
                 <li className="text-ms grey-text-accent font-semibold">Amount Received : 0.000002154</li>
             </ul>
@@ -62,13 +184,6 @@ const OrderFormComponent = (props) => {
             </div>
         </React.Fragment>
     );
-
-    const handleSellOrder = () => {
-        setShowModalSell(false);
-        setTimeout(() => {
-            setShowModalSellSuccess(true);
-        }, 1000);
-    };
 
     return (
         <React.Fragment>
@@ -119,21 +234,32 @@ const OrderFormComponent = (props) => {
                                 </label>
                             </div>
                             <div className="form-group mb-3 position-relative  w-100">
-                                <input type="text" className="form-control input-order-form" id="input-order" />
+                                <input
+                                    type="text"
+                                    value={priceBuy}
+                                    onChange={(e) => handleChangePriceBuy(e.target.value)}
+                                    className="form-control input-order-form"
+                                    id="input-order"
+                                />
                                 <label htmlFor="input-order" className="input-order-label-left">
                                     Price
                                 </label>
                                 <label htmlFor="input-order" className="input-order-label-right">
-                                    USDT
+                                    {currentMarket?.quote_unit?.toUpperCase()}
                                 </label>
                             </div>
                             <div className="form-group mb-3 position-relative  w-100">
-                                <input type="text" className="form-control input-order-form" id="input-order" />
+                                <input
+                                    type="text"
+                                    value={amountBuy}
+                                    className="form-control input-order-form"
+                                    id="input-order"
+                                />
                                 <label htmlFor="input-order" className="input-order-label-left">
-                                    Ammount
+                                    Amount
                                 </label>
                                 <label htmlFor="input-order" className="input-order-label-right">
-                                    BTC
+                                    {currentMarket?.base_unit?.toUpperCase()}
                                 </label>
                             </div>
                             <div className="input-timeline mb-24 position-relative">
@@ -275,24 +401,34 @@ const OrderFormComponent = (props) => {
                             </div>
 
                             <div className="form-group mb-3 position-relative  w-100">
-                                <input type="text" className="form-control input-order-form" id="input-order" />
+                                <input
+                                    type="text"
+                                    value={totalBuy}
+                                    className="form-control input-order-form"
+                                    id="input-order"
+                                />
                                 <label htmlFor="input-order" className="input-order-label-left">
                                     Total
                                 </label>
                                 <label htmlFor="input-order" className="input-order-label-right">
-                                    BTC
+                                    {currentMarket?.base_unit?.toUpperCase()}
                                 </label>
                             </div>
                             <div className="mb-3 d-flex justify-content-between">
                                 <p className="text-sm grey-text-accent"> Avaliable </p>
-                                <p className="text-sm white-text"> 0.000000 BTC </p>
+                                <p className="text-sm white-text">
+                                    <Decimal fixed={selectedFixed} thousSep=",">
+                                        {balance}
+                                    </Decimal>{' '}
+                                    {currentMarket?.base_unit?.toUpperCase()}{' '}
+                                </p>
                             </div>
                             <button
                                 type="button"
                                 className="btn btn-success btn-block"
                                 onClick={() => setShowModalBuy(true)}
                                 disabled={!isLoggedin}>
-                                Buy BTC
+                                Buy {currentMarket?.base_unit?.toUpperCase()}
                             </button>
                         </form>
                     </div>
@@ -333,25 +469,36 @@ const OrderFormComponent = (props) => {
                                 <label
                                     htmlFor="stop-order"
                                     className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
-                                    STOP
+                                    SPOT
                                 </label>
                             </div>
                             <div className="form-group mb-3 position-relative  w-100">
-                                <input type="text" className="form-control input-order-form" id="input-order" />
+                                <input
+                                    type="text"
+                                    value={priceSell}
+                                    onChange={(e) => handleChangePriceSell(e.target.value)}
+                                    className="form-control input-order-form"
+                                    id="input-order"
+                                />
                                 <label htmlFor="input-order" className="input-order-label-left">
                                     Price
                                 </label>
                                 <label htmlFor="input-order" className="input-order-label-right">
-                                    USDT
+                                    {currentMarket?.quote_unit?.toUpperCase()}
                                 </label>
                             </div>
                             <div className="form-group mb-3 position-relative  w-100">
-                                <input type="text" className="form-control input-order-form" id="input-order" />
+                                <input
+                                    type="text"
+                                    value={amountSell}
+                                    className="form-control input-order-form"
+                                    id="input-order"
+                                />
                                 <label htmlFor="input-order" className="input-order-label-left">
-                                    Ammount
+                                    Amount
                                 </label>
                                 <label htmlFor="input-order" className="input-order-label-right">
-                                    BTC
+                                    {currentMarket?.base_unit?.toUpperCase()}
                                 </label>
                             </div>
                             <div className="input-timeline mb-24 position-relative">
@@ -505,24 +652,34 @@ const OrderFormComponent = (props) => {
                             </div>
 
                             <div className="form-group mb-3 position-relative  w-100">
-                                <input type="text" className="form-control input-order-form" id="input-order" />
+                                <input
+                                    type="text"
+                                    value={totalSell}
+                                    className="form-control input-order-form"
+                                    id="input-order"
+                                />
                                 <label htmlFor="input-order" className="input-order-label-left">
                                     Total
                                 </label>
                                 <label htmlFor="input-order" className="input-order-label-right">
-                                    BTC
+                                    {currentMarket?.base_unit?.toUpperCase()}
                                 </label>
                             </div>
                             <div className="mb-3 d-flex justify-content-between">
                                 <p className="text-sm grey-text-accent"> Avaliable </p>
-                                <p className="text-sm white-text"> 0.000000 BTC </p>
+                                <p className="text-sm white-text">
+                                    <Decimal fixed={selectedFixed} thousSep=",">
+                                        {balance}
+                                    </Decimal>{' '}
+                                    {currentMarket?.base_unit?.toUpperCase()}{' '}
+                                </p>
                             </div>
                             <button
                                 type="button"
                                 className="btn btn-danger btn-block"
                                 disabled={!isLoggedin}
                                 onClick={() => setShowModalSell(true)}>
-                                Sell BTC
+                                Sell {currentMarket?.base_unit?.toUpperCase()}
                             </button>
                         </form>
                     </div>

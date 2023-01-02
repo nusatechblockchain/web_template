@@ -70,6 +70,8 @@ const WalletDepositBody = () => {
         setCurrentTabIndex(0);
     }, [wallet.currency]);
 
+    console.log(depositAddress);
+
     const handleGenerateAddress = (e) => {
         e.preventDefault();
         if (

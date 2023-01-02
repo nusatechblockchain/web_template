@@ -17,8 +17,6 @@ const RecentTradesComponent = (props) => {
         }
     }, [dispatch, currentMarket]);
 
-    console.log(recentTrades, 'recent trade');
-
     return (
         <React.Fragment>
             <div className="p-3">
