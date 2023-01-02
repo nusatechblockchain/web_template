@@ -6,6 +6,7 @@ import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 import { InfoIcon } from 'src/assets/images/InfoIcon';
 import './MarketDetailInfo.pcss';
 import { numberFormat } from '../../../helpers';
+import { TradingChart } from '../../containers';
 
 export interface InfoMarketDetailProps {
     amount_precision: string;
@@ -56,7 +57,7 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
             </div>
             <div className="d-flex align-items-center mb-24">
                 <h3 className="white-text m-0 text-title-2 mr-24">
-                    $ {numberFormat(detail.last, 'USD').toString().split('.')[0]}
+                    $ {numberFormat(detail?.last, 'USD').toString().split('.')[0]}
                 </h3>
                 <h6
                     className={`text-lg font-bold m-0 mr-24 ${
@@ -70,15 +71,9 @@ export const MarketDetailInfo: React.FC<MarketDetailInfoProps> = ({ detail }) =>
             </div>
 
             <div className="mb-24 mr-12">
-                <TradingViewEmbed
-                    widgetType={widgetType.ADVANCED_CHART}
-                    widgetConfig={{
-                        colorTheme: 'dark',
-                        symbol: currency,
-                        width: '100%',
-                        height: '500px',
-                    }}
-                />
+                <div className="trading-wrap">
+                    <TradingChart />
+                </div>
             </div>
 
             <div className="information">

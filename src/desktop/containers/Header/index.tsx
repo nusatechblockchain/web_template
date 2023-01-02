@@ -6,6 +6,7 @@ import { RouterProps } from 'react-router';
 import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
+import Humberger from '../../../../public/img/humberger.png';
 import '../../../styles/colors.pcss';
 import {
     Market,
@@ -52,6 +53,7 @@ interface LocationProps extends RouterProps {
 export interface HeaderState {
     showLanguage: boolean;
     showProfileDropdown: boolean;
+    showHeader: boolean;
 }
 
 const authHeader = ['/signin', '/signup', '/email-verification', '/forgot_password', '/password_reset', '/trading'];
@@ -66,6 +68,7 @@ class Head extends React.Component<Props, HeaderState> {
         this.state = {
             showLanguage: false,
             showProfileDropdown: false,
+            showHeader: false,
         };
     }
 
@@ -156,9 +159,20 @@ class Head extends React.Component<Props, HeaderState> {
                         aria-controls="navbarNavDropdown"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon" />
+                        <span className="navbar-toggler-icon">
+                            <img
+                                src={Humberger}
+                                className="humberger-icon"
+                                alt="humberger icon"
+                                onClick={() => this.setState({ showHeader: !this.state.showHeader })}
+                            />
+                        </span>
                     </button>
-                    <div className="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+                    <div
+                        className={`collapse ${
+                            this.state.showHeader && 'show'
+                        } navbar-collapse justify-content-between`}
+                        id="navbarNavDropdown">
                         <div>
                             {!thisAuthHeader ? (
                                 <ul className="navbar-nav main-navbar">
