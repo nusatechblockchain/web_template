@@ -315,7 +315,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                     <section className="internal-transfer-mobile-screen">
                         <div className="container-fluid w-100 p-0 m-0 position-relative">
                             <div onClick={() => setShowModal(!showModal)} className="white-text text-right mb-3">
-                                <span className="text-sm">Cancel</span>
+                                <span className="text-sm cursor-pointer text-secondary">Cancel</span>
                             </div>
                             <div className="table-mobile-wrapper">
                                 <CoinTransfer type={modalType} />

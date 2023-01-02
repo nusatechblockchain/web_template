@@ -339,14 +339,6 @@ const HistoryTransactionMobileScreen: React.FC = () => {
         ]);
     };
 
-    const filterredStatus = (status) => {
-        let filterredList;
-        let temp;
-        temp = list;
-        filterredList = temp.filter((item) => item.status === status);
-        setHistorys(filterredList);
-    };
-
     React.useEffect(() => {
         setHistorys(list);
     }, [list]);
@@ -361,6 +353,14 @@ const HistoryTransactionMobileScreen: React.FC = () => {
             setHistorys(filterredList);
         }
     }, [startDate, endDate]);
+
+    const filterredStatus = (status) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.status === status);
+        setHistorys(filterredList);
+    };
 
     const handleReset = () => {
         setStatus('');
