@@ -15,15 +15,7 @@ import {
     selectOpenOrdersFetching,
     selectOpenOrdersList,
 } from 'src/modules';
-import {
-    OpenOrders,
-    OrderBook,
-    MarketListTrade,
-    RecentTrades,
-    OrderForm,
-    Charts,
-    TradingChart,
-} from '../../containers';
+import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
 import { OrderCommon } from '../../../modules/types';
 import { getTriggerSign } from './helpers';
 
@@ -165,7 +157,6 @@ export const TradingScreen: FC = (): ReactElement => {
                                 <OrderBook />
                             </div>
                             <div className="grid-item chart">
-                                {/* <Charts /> */}
                                 <TradingChart />
                             </div>
                             <div className="grid-item market-list">

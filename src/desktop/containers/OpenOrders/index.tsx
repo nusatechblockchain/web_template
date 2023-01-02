@@ -4,6 +4,7 @@ import { CellData, Table } from '../../../components';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { Sell, Buy } from '../../../assets/images/TradeIcon';
 import { Form, Spinner } from 'react-bootstrap';
+import { isLogin } from '@ionic/cli';
 
 export interface OpenOrdersProps {
     /**
@@ -84,7 +85,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                         </div>
                     </div>
                 </div>
-                <Table header={headers} data={tableData as CellData[][]} />
+                {isLogin ? <Table header={headers} data={tableData as CellData[][]} /> : ''}
             </div>
         );
     }

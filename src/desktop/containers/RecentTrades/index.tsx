@@ -4,6 +4,7 @@ import { selectRecentTrades, recentTradesFetch, selectCurrentMarket } from '../.
 import { Decimal } from '../../../components';
 import moment from 'moment';
 import { numberFormat } from '../../../helpers';
+import { NoData } from '../../../desktop/components';
 
 const RecentTradesComponent = (props) => {
     const dispatch = useDispatch();
@@ -15,6 +16,8 @@ const RecentTradesComponent = (props) => {
             dispatch(recentTradesFetch(currentMarket));
         }
     }, [dispatch, currentMarket]);
+
+    console.log(recentTrades, 'recent trade');
 
     return (
         <React.Fragment>
@@ -32,36 +35,46 @@ const RecentTradesComponent = (props) => {
                                 <th className="text-right grey-text dark-bg-accent">Time</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {recentTrades?.map((trade, i) => (
-                                <tr key={i}>
-                                    <td>
-                                        <p
-                                            className={`text-sm font-bold mb-0 text-left ${
-                                                trade.taker_type === 'sell' ? 'danger-text' : 'contrast-text'
-                                            }`}>
-                                            {
-                                                numberFormat(+trade.price, 'USD')
-                                                    .toString()
-                                                    .split('.')[0]
-                                            }
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p className="text-sm grey-text-accent font-bold mb-0 text-right">
-                                            <Decimal fixed={currentMarket.amount_precision} thousSep=",">
-                                                {trade.amount}
-                                            </Decimal>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p className="text-sm mb-0 grey-text-accent font-bold text-right">
-                                            {moment(trade.created_at).format('hh:mm:ss')}
-                                        </p>
+                        {!recentTrades || !recentTrades[0] ? (
+                            <tbody>
+                                <tr>
+                                    <td colSpan={3}>
+                                        <NoData text="No data yet" />
                                     </td>
                                 </tr>
-                            ))}
-                        </tbody>
+                            </tbody>
+                        ) : (
+                            <tbody>
+                                {recentTrades?.map((trade, i) => (
+                                    <tr key={i}>
+                                        <td>
+                                            <p
+                                                className={`text-sm font-bold mb-0 text-left ${
+                                                    trade.taker_type === 'sell' ? 'danger-text' : 'contrast-text'
+                                                }`}>
+                                                {
+                                                    numberFormat(+trade.price, 'USD')
+                                                        .toString()
+                                                        .split('.')[0]
+                                                }
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p className="text-sm grey-text-accent font-bold mb-0 text-right">
+                                                <Decimal fixed={currentMarket.amount_precision} thousSep=",">
+                                                    {trade.amount}
+                                                </Decimal>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p className="text-sm mb-0 grey-text-accent font-bold text-right">
+                                                {moment(trade.created_at).format('hh:mm:ss')}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        )}
                     </table>
                 </div>
             </div>

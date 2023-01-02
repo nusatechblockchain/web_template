@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Decimal } from '../../../components';
-import { FilterInput } from '../../../desktop/components';
+import { FilterInput, NoData } from '../../../desktop/components';
 import { useMarketsFetch, useMarketsTickersFetch } from '../../../hooks';
 import { selectCurrencies, selectMarketTickers, selectMarkets, setCurrentMarket, Market } from '../../../modules';
 import { numberFormat } from '../../../helpers';
@@ -102,60 +102,64 @@ const MarketListTradeComponent = (props) => {
                                 <th className="grey-text-accent text-right">Change</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {filteredList.map((item) => (
-                                <tr
-                                    onClick={() => handleRedirectToTrading(item.id)}
-                                    key={item.id}
-                                    className={`cursor-pointer ${item.id === currency && 'active'}`}>
-                                    <td>
-                                        <div className="d-flex justify-content-between">
-                                            <div className="mr-0 d-flex align-items-center">
-                                                <span className="cr-crypto-icon">
-                                                    <img
-                                                        src={item.currency && item.currency.icon_url}
-                                                        className="small-coin-icon"
-                                                        alt="btc icon"
-                                                    />
-                                                </span>
-                                                <div className="name ml-1">
-                                                    <p className="text-sm text-white font-bold mb-0">
-                                                        {item.currency && item.currency.id.toUpperCase()}
-                                                    </p>
-                                                    <span className="text-xs grey-text-accent">
-                                                        {item.currency && item.currency.name.toUpperCase()}
+                        {!filteredList || !filteredList[0] ? (
+                            <NoData text="No data yet" />
+                        ) : (
+                            <tbody>
+                                {filteredList.map((item) => (
+                                    <tr
+                                        onClick={() => handleRedirectToTrading(item.id)}
+                                        key={item.id}
+                                        className={`cursor-pointer ${item.id === currency && 'active'}`}>
+                                        <td>
+                                            <div className="d-flex justify-content-between">
+                                                <div className="mr-0 d-flex align-items-center">
+                                                    <span className="cr-crypto-icon">
+                                                        <img
+                                                            src={item.currency && item.currency.icon_url}
+                                                            className="small-coin-icon"
+                                                            alt="btc icon"
+                                                        />
                                                     </span>
+                                                    <div className="name ml-1">
+                                                        <p className="text-sm text-white font-bold mb-0">
+                                                            {item.currency && item.currency.id.toUpperCase()}
+                                                        </p>
+                                                        <span className="text-xs grey-text-accent">
+                                                            {item.currency && item.currency.name.toUpperCase()}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="py-2">
-                                            <p
-                                                className={`text-xs my-auto  mb-0 text-right ${
-                                                    item.last < item.open ? 'danger-text' : 'green-text'
-                                                }`}>
-                                                {numberFormat(item.last, 'USA').toString().split('.')[0]}
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="py-2">
-                                            <p
-                                                className={`text-xs mb-0 text-right ${
-                                                    item.price_change_percent.includes('+')
-                                                        ? 'green-text'
-                                                        : item.price_change_percent.includes('-')
-                                                        ? 'danger-text'
-                                                        : 'green-text'
-                                                }`}>
-                                                {item.price_change_percent}
-                                            </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                                        </td>
+                                        <td>
+                                            <div className="py-2">
+                                                <p
+                                                    className={`text-xs my-auto  mb-0 text-right ${
+                                                        item.last < item.open ? 'danger-text' : 'green-text'
+                                                    }`}>
+                                                    {numberFormat(item.last, 'USA').toString().split('.')[0]}
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="py-2">
+                                                <p
+                                                    className={`text-xs mb-0 text-right ${
+                                                        item.price_change_percent.includes('+')
+                                                            ? 'green-text'
+                                                            : item.price_change_percent.includes('-')
+                                                            ? 'danger-text'
+                                                            : 'green-text'
+                                                    }`}>
+                                                    {item.price_change_percent}
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        )}
                     </table>
                 </div>
             </div>

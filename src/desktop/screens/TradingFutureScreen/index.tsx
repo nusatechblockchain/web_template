@@ -12,7 +12,6 @@ import {
     MarketListTrade,
     RecentTrades,
     OrderForm,
-    Charts,
     TradingChart,
 } from '../../containers';
 import './TradingFutureScreen.pcss';
