@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomInput } from 'src/desktop/components';
 import { selectCurrencies, Currency, selectBeneficiaries, Beneficiary } from '../../../modules';
 import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
-import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
+import { walletsWithdrawCcyFetch, selectWithdrawSuccess, beneficiariesDelete } from '../../../modules';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
-import { CustomStylesSelect } from 'src/mobile/components';
 import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 import Select from 'react-select';
 import { ModalAddBeneficiaryMobile } from 'src/mobile/components';
 import { ModalBeneficiaryListMobile } from 'src/mobile/components/ModalBeneficiaryListMobile';
 import { beneficiariesCreate } from '../../../modules';
+import { Modal } from 'react-bootstrap';
 
 export const WalletWithdrawMobileScreen: React.FC = () => {
     useBeneficiariesFetch();
@@ -20,37 +20,23 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
     const intl = useIntl();
     const dispatch = useDispatch();
 
-    const defaultSelected = {
-        blockchainKey: '',
-        protocol: '',
-        name: '',
-        id: '',
-        fee: '',
-        minWithdraw: '',
-    };
+    const history = useHistory();
 
     const [amount, setAmount] = React.useState('');
     const [beneficiaryId, setBeneficiaryId] = React.useState(0);
     const [blockchainKey, setBlockchainKey] = React.useState('');
     const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
+    const [showModalConfirmation, setShowModalConfirmation] = React.useState(false);
 
     const [address, setAddress] = React.useState('');
     const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
 
-    const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
-
-    const [coinAddress, setCoinAddress] = React.useState('');
-    const [coinAddressValid, setCoinAddressValid] = React.useState(false);
-    const [coinBeneficiaryName, setCoinBeneficiaryName] = React.useState('');
-    const [coinDescription, setCoinDescription] = React.useState('');
-    const [coinDestinationTag, setCoinDestinationTag] = React.useState('');
-    const [coinBlockchainName, setCoinBlockchainName] = React.useState(defaultSelected);
 
     const blockchainKeyValue =
         currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
@@ -75,56 +61,6 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
     const handleSubmitWithdraw = () => {
         dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
     };
-
-    const optionNetworks =
-        currencyItem &&
-        currencyItem.networks.map((item) => {
-            const customLabel = (
-                <div className="d-flex align-items-center">
-                    <p className="m-0 grey-text-accent text-sm">{item.blockchain_key}</p>
-                </div>
-            );
-
-            return {
-                label: customLabel,
-                value: item.blockchain_key,
-            };
-        });
-
-    const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
-
-    const handleClearModalsInputs = React.useCallback(() => {
-        setCoinAddress('');
-        setCoinBeneficiaryName('');
-        setCoinBlockchainName(defaultSelected);
-        setCoinDescription('');
-        setCoinDestinationTag('');
-    }, []);
-
-    const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
-
-    const handleSubmitAddAddressCoinModal = React.useCallback(() => {
-        const payload = {
-            currency: currency || '',
-            name: coinBeneficiaryName,
-            blockchain_key: coinBlockchainName.blockchainKey,
-            data: JSON.stringify({
-                address: isRipple && coinDestinationTag ? `${coinAddress}?dt=${coinDestinationTag}` : coinAddress,
-            }),
-            ...(coinDescription && { description: coinDescription }),
-        };
-
-        dispatch(beneficiariesCreate(payload));
-        handleClearModalsInputs();
-        //props.handleAddAddress();
-    }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
-
-    // React.useEffect(() => {
-    //     if (withdrawSuccess) {
-    //         setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
-    //         setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully);
-    //     }
-    // }, [withdrawSuccess]);
 
     return (
         <React.Fragment>
@@ -175,12 +111,16 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                             })}
                                             placeholder={address ? address : 'Select'}
                                             defaultLabel="New password"
-                                            inputValue={''}
+                                            inputValue={address}
                                             classNameLabel="d-none"
                                             classNameInput={`cursor-pointer dark-bg-accent`}
                                             autoFocus={false}
                                             labelVisible={false}
                                         />
+                                        {/* <div className="white-text">
+                                            <span>Select</span>
+                                            {address ? address : 'Select'}
+                                        </div> */}
                                     </div>
                                     <span
                                         onClick={() => setShowModalModalAddBeneficiary(!showModalAddBeneficiary)}
@@ -199,7 +139,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                             label={intl.formatMessage({
                                                 id: 'page.body.profile.header.account.content.password.new',
                                             })}
-                                            placeholder={'Add Amount'}
+                                            placeholder={'0.00'}
                                             defaultLabel=""
                                             handleChangeInput={handleChangeAmount}
                                             inputValue={amount}
@@ -253,7 +193,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                             </div>
                         </div>
                         <button
-                            onClick={handleSubmitWithdraw}
+                            onClick={() => setShowModalConfirmation(!showModalConfirmation)}
                             type="button"
                             disabled={
                                 !currency
@@ -268,12 +208,13 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                     ? true
                                     : false
                             }
-                            className="btn btn-primary btn-block">
+                            className="btn btn-primary btn-block mb-3">
                             Withdraw
                         </button>
                     </form>
                 </div>
             </section>
+
             {showModalAddBeneficiary && (
                 <ModalAddBeneficiaryMobile
                     onCloseList={() => ''}
@@ -296,6 +237,43 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                     }}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
                 />
+            )}
+
+            {showModalConfirmation && (
+                <Modal dialogClassName="modal-confirmation-withdraw" show={showModalConfirmation}>
+                    <section className="container p-3 dark-bg-main">
+                        <div className="text-left">
+                            <h6 className="mb-3 white-text text-lg">Withdraw Confirmation</h6>
+                            <p className="white-text">
+                                You've request to withdraw{' '}
+                                <span>
+                                    {' '}
+                                    {amount !== '' ? amount : '0'} {currency.toUpperCase()}{' '}
+                                </span>{' '}
+                                , Are you sure to do Witdrawal?
+                            </p>
+                        </div>
+                        <div className="alert-mobile-warning px-2 py-3 alert d-flex align-items-center justify-content-between show text-xs warning-text font-normal position-relative mb-24">
+                            <span className="text-sm warning-text font-normal">
+                                Please check the target address carefully before confirming the witdrawal.{' '}
+                            </span>
+                            {/* <div className="close-icon">
+                                <CloseIcon fill="#FF9533" className="ml-2" />
+                            </div> */}
+                        </div>
+                        <div className="mb-0">
+                            <button onClick={handleSubmitWithdraw} type="button" className="btn btn-primary btn-block">
+                                Withdraw
+                            </button>
+
+                            <div className="mt-3" onClick={() => setShowModalConfirmation(!showModalConfirmation)}>
+                                <button type="button" className="btn btn-outline-danger btn-block">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </Modal>
             )}
         </React.Fragment>
     );

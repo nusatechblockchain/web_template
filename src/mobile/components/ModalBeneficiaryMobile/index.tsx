@@ -1,17 +1,9 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { CustomInput } from 'src/desktop/components';
 import { ModalMobile } from '../../components';
-import {
-    selectCurrencies,
-    Currency,
-    selectBeneficiaries,
-    Beneficiary,
-    Wallet,
-    beneficiariesCreate,
-    selectWallets,
-} from '../../../modules';
+import { selectCurrencies, beneficiariesCreate } from '../../../modules';
 import Select from 'react-select';
 import { CustomStylesSelect } from '../../components';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
@@ -30,7 +22,6 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
     const dispatch = useDispatch();
 
     const currencies = useSelector(selectCurrencies);
-    const wallets = useSelector(selectWallets);
     const currencyItem = currencies.find((item) => item.id === currency);
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
@@ -123,7 +114,7 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
                         <ArrowLeft className="white-text" />
                     </span>
                 </div>
-                <div className="d-flex justify-content-between align-items-center transfer-head-container">
+                <div className="d-flex mt-2 justify-content-between align-items-center transfer-head-container">
                     <h1 className="navbar-brand white-text">Withdraw Crypto</h1>
                 </div>
             </>
@@ -216,7 +207,7 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
                         disabled={isDisabled}
                         onClick={handleSubmitAddAddressCoinModal}
                         type="button"
-                        className="btn btn-primary btn-block">
+                        className="btn btn-primary btn-block btn-lg">
                         Save Address
                     </button>
                 </div>
