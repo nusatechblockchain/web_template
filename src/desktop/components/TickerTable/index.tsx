@@ -74,7 +74,7 @@ export const TickerTable: React.FC<Props> = ({
                             <p
                                 className="gradient-text font-normal mx-2 text-sm cursor-pointer"
                                 onClick={() => handleToMarket(market.base_unit)}>
-                                detail
+                                Detail
                             </p>
                             <p
                                 onClick={() => handleRedirectToTrading(market.id)}
