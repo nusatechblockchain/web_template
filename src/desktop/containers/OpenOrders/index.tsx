@@ -1,7 +1,11 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { Sell, Buy } from '../../../assets/images/TradeIcon';
+import { selectUserLoggedIn } from '../../../modules';
+import { NoData } from '../../../desktop/components';
 
 const OpenOrdersComponent = (props) => {
+    const isLoggedIn = useSelector(selectUserLoggedIn);
     return (
         <React.Fragment>
             <div className="max-400">
@@ -27,151 +31,155 @@ const OpenOrdersComponent = (props) => {
                         </div>
                     </div>
                 </div>
-                <table
-                    id="example"
-                    className="table table-open-order  hidden-filter table-small"
-                    style={{ width: '100%' }}>
-                    <thead className="open-order-table">
-                        <tr>
-                            <th className="grey-text-accent dark-bg-accent">Date</th>
-                            <th className="grey-text-accent dark-bg-accent">Market</th>
-                            <th className="grey-text-accent dark-bg-accent">Type</th>
-                            <th className="grey-text-accent dark-bg-accent">Price</th>
-                            <th className="grey-text-accent dark-bg-accent">Volume</th>
-                            <th className="grey-text-accent dark-bg-accent">Exceute</th>
-                            <th className="grey-text-accent dark-bg-accent">Unexceute</th>
-                            <th className="grey-text-accent dark-bg-accent content-right">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="white-text text-sm">24-10-2022 - 13:54</td>
-                            <td className="white-text text-sm">Limit Order</td>
-                            <td className="white-text text-sm">
-                                <span className="contrast-text">buy</span>
-                            </td>
-                            <td className="white-text text-sm">$ 252.125.536</td>
-                            <td className="white-text text-sm">1 TRX</td>
-                            <td className="white-text text-sm">0.8 TRX</td>
-                            <td className="white-text text-sm">0.2 TRX</td>
-                            <td className="white-text text-sm content-right">
-                                <button className="btn btn-danger sm text-sm py-1">Cancel</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                {isLoggedIn ? (
+                    <table
+                        id="example"
+                        className="table table-open-order  hidden-filter table-small"
+                        style={{ width: '100%' }}>
+                        <thead className="open-order-table">
+                            <tr>
+                                <th className="grey-text-accent dark-bg-accent">Date</th>
+                                <th className="grey-text-accent dark-bg-accent">Market</th>
+                                <th className="grey-text-accent dark-bg-accent">Type</th>
+                                <th className="grey-text-accent dark-bg-accent">Price</th>
+                                <th className="grey-text-accent dark-bg-accent">Volume</th>
+                                <th className="grey-text-accent dark-bg-accent">Exceute</th>
+                                <th className="grey-text-accent dark-bg-accent">Unexceute</th>
+                                <th className="grey-text-accent dark-bg-accent content-right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="white-text text-sm">24-10-2022 - 13:54</td>
+                                <td className="white-text text-sm">Limit Order</td>
+                                <td className="white-text text-sm">
+                                    <span className="contrast-text">buy</span>
+                                </td>
+                                <td className="white-text text-sm">$ 252.125.536</td>
+                                <td className="white-text text-sm">1 TRX</td>
+                                <td className="white-text text-sm">0.8 TRX</td>
+                                <td className="white-text text-sm">0.2 TRX</td>
+                                <td className="white-text text-sm content-right">
+                                    <button className="btn btn-danger sm text-sm py-1">Cancel</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                ) : (
+                    <NoData text="No Data to show" />
+                )}
             </div>
         </React.Fragment>
     );
