@@ -36,7 +36,13 @@ const RecentTradesComponent = (props) => {
                             </tr>
                         </thead>
                         {!recentTrades || !recentTrades[0] ? (
-                            <NoData text="No data yet" />
+                            <tbody>
+                                <tr>
+                                    <td colSpan={3}>
+                                        <NoData text="No data yet" />
+                                    </td>
+                                </tr>
+                            </tbody>
                         ) : (
                             <tbody>
                                 {recentTrades?.map((trade, i) => (

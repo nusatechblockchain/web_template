@@ -58,7 +58,13 @@ const OrderBookComponent = (props) => {
                             </tr>
                         </thead>
                         {!asks || !asks[0] ? (
-                            <NoData text="No data yet" />
+                            <tbody>
+                                <tr>
+                                    <td colSpan={3}>
+                                        <NoData text="No data yet" />
+                                    </td>
+                                </tr>
+                            </tbody>
                         ) : (
                             <tbody>
                                 {asks &&

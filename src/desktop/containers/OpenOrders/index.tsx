@@ -178,7 +178,7 @@ const OpenOrdersComponent = (props) => {
                         </tbody>
                     </table>
                 ) : (
-                    <NoData text="No Data to show" />
+                    <NoData text="No data to show" />
                 )}
             </div>
         </React.Fragment>
