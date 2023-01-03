@@ -20,6 +20,7 @@ import {
 } from '../../../modules';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router';
+import { numberFormat } from '../../../helpers';
 
 const OrderFormComponent = (props) => {
     const history = useHistory();
@@ -74,7 +75,9 @@ const OrderFormComponent = (props) => {
 
     React.useEffect(() => {
         if (priceSell) {
-            setTotalSell(+priceSell * +amountSell);
+            let temp = +priceSell * +amountSell;
+            let tempToFloat = numberFormat(+temp, 'ID').toString();
+            setTotalSell(+tempToFloat);
         }
     }, [priceSell, amountSell]);
 
@@ -91,7 +94,10 @@ const OrderFormComponent = (props) => {
     }, [priceBuy, orderPrecentageBuy]);
 
     React.useEffect(() => {
-        setAmountSell(+balance * orderPrecentageSell);
+        let temp = +balance * orderPrecentageSell;
+        let tempToFloat = numberFormat(+temp, 'ID').toString();
+
+        setAmountSell(+tempToFloat);
     }, [orderPrecentageSell]);
 
     const handleSubmitBuy = () => {
@@ -259,6 +265,7 @@ const OrderFormComponent = (props) => {
                                 <input
                                     type="text"
                                     defaultValue={amountBuy}
+                                    value={amountBuy}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
@@ -411,6 +418,7 @@ const OrderFormComponent = (props) => {
                                 <input
                                     type="text"
                                     defaultValue={totalBuy}
+                                    value={totalBuy}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
@@ -508,6 +516,7 @@ const OrderFormComponent = (props) => {
                                 <input
                                     type="text"
                                     defaultValue={amountSell}
+                                    value={amountSell}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
@@ -672,6 +681,7 @@ const OrderFormComponent = (props) => {
                                 <input
                                     type="text"
                                     defaultValue={totalSell}
+                                    value={totalSell}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
