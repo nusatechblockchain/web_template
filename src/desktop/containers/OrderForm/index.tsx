@@ -34,7 +34,7 @@ const OrderFormComponent = (props) => {
     // console.log(currentPrice, 'current price');
 
     const { currency = '' } = useParams<{ currency?: string }>();
-    const currencyItem: Currency = currencies.find((item) => item.id === currentMarket?.base_unit);
+    const currencyItem: Currency = currencies.find((item) => item.id === currentMarket?.quote_unit);
     const tickerItem: Ticker = tickers[currency];
     const wallet =
         wallets.length &&
@@ -42,7 +42,14 @@ const OrderFormComponent = (props) => {
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
-    const [orderType, setOrderType] = React.useState('market');
+    const usd =
+        wallets.length &&
+        wallets.find((item) => item.currency.toLowerCase() === currentMarket?.quote_unit?.toLowerCase());
+    const usdt = usd && usd.balance ? usd.balance.toString() : '0';
+    const usdtFixed = (usd || { fixed: 0 }).fixed;
+
+    const [orderTypeBuy, setOrderTypeBuy] = React.useState('market');
+    const [orderTypeSell, setOrderTypeSell] = React.useState('market');
     const [orderPrecentageBuy, setOrderPrecentageBuy] = React.useState(0);
     const [orderPrecentageSell, setOrderPrecentageSell] = React.useState(0);
     const [showModalSell, setShowModalSell] = React.useState(false);
@@ -87,11 +94,16 @@ const OrderFormComponent = (props) => {
         setAmountSell(+balance * orderPrecentageSell);
     }, [orderPrecentageSell]);
 
-    const handleSellOrder = () => {
-        setShowModalSell(false);
-        setTimeout(() => {
-            setShowModalSellSuccess(true);
-        }, 1000);
+    const handleSubmitBuy = () => {
+        dispatch(
+            orderExecuteFetch({
+                market: currentMarket?.id,
+                side: 'buy',
+                volume: amountBuy.toString(),
+                price: orderTypeBuy === 'market' ? tickerItem?.last : priceBuy,
+                ord_type: orderTypeBuy,
+            })
+        );
     };
 
     const handleSubmitSell = () => {
@@ -100,20 +112,8 @@ const OrderFormComponent = (props) => {
                 market: currentMarket?.id,
                 side: 'sell',
                 volume: amountSell.toString(),
-                price: priceSell,
-                ord_type: orderType,
-            })
-        );
-    };
-
-    const handleSubmitBuy = () => {
-        dispatch(
-            orderExecuteFetch({
-                market: currentMarket?.id,
-                side: 'buy',
-                volume: amountBuy.toString(),
-                price: priceBuy,
-                ord_type: orderType,
+                price: orderTypeSell === 'market' ? tickerItem?.last : priceSell,
+                ord_type: orderTypeSell,
             })
         );
     };
@@ -125,9 +125,9 @@ const OrderFormComponent = (props) => {
             </h6>
             <ul className="pl-2 mb-24">
                 <li className="text-ms grey-text-accent font-semibold">
-                    Sell in 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 857,887,545
+                    Sell in {amountSell} {currentMarket?.base_unit?.toUpperCase()} = $ {totalSell}
                 </li>
-                <li className="text-ms grey-text-accent font-semibold">Total spent $ 12,453</li>
+                <li className="text-ms grey-text-accent font-semibold">Total spent $ {totalSell}</li>
             </ul>
             <div className="d-flex">
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalSell(false)}>
@@ -147,9 +147,9 @@ const OrderFormComponent = (props) => {
             </h6>
             <ul className="pl-2 mb-24">
                 <li className="text-ms grey-text-accent font-semibold">
-                    Bought 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 212,642,342
+                    Bought {amountBuy} {currentMarket?.base_unit?.toUpperCase()} = $ {totalBuy}
                 </li>
-                <li className="text-ms grey-text-accent font-semibold">Total spent $ 12,453</li>
+                <li className="text-ms grey-text-accent font-semibold">Total spent $ {totalBuy}</li>
             </ul>
             <div className="d-flex">
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalBuy(false)}>
@@ -202,8 +202,10 @@ const OrderFormComponent = (props) => {
                                 />
                                 <label
                                     htmlFor="market-order-sell"
-                                    onClick={() => setOrderType('market')}
-                                    className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
+                                    onClick={() => setOrderTypeBuy('market')}
+                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
+                                        orderTypeBuy === 'market' ? 'green-text' : 'white-text'
+                                    }`}>
                                     MARKET
                                 </label>
                                 <input
@@ -214,9 +216,11 @@ const OrderFormComponent = (props) => {
                                     defaultValue="limit"
                                 />
                                 <label
-                                    onClick={() => setOrderType('limit')}
+                                    onClick={() => setOrderTypeBuy('limit')}
                                     htmlFor="limit-order-sell"
-                                    className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
+                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
+                                        orderTypeBuy === 'limit' ? 'green-text' : 'white-text'
+                                    }`}>
                                     LIMIT
                                 </label>
                                 <input
@@ -227,16 +231,19 @@ const OrderFormComponent = (props) => {
                                     defaultValue="stop"
                                 />
                                 <label
-                                    onClick={() => setOrderType('spot')}
+                                    onClick={() => setOrderTypeBuy('spot')}
                                     htmlFor="stop-order-sell"
-                                    className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
+                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
+                                        orderTypeBuy === 'spot' ? 'green-text' : 'white-text'
+                                    }`}>
                                     SPOT
                                 </label>
                             </div>
                             <div className="form-group mb-3 position-relative  w-100">
                                 <input
                                     type="text"
-                                    value={priceBuy}
+                                    defaultValue={orderTypeBuy === 'market' ? tickerItem?.last : priceBuy}
+                                    value={orderTypeBuy === 'market' ? tickerItem?.last : priceBuy}
                                     onChange={(e) => handleChangePriceBuy(e.target.value)}
                                     className="form-control input-order-form"
                                     id="input-order"
@@ -417,10 +424,10 @@ const OrderFormComponent = (props) => {
                             <div className="mb-3 d-flex justify-content-between">
                                 <p className="text-sm grey-text-accent"> Avaliable </p>
                                 <p className="text-sm white-text">
-                                    <Decimal fixed={selectedFixed} thousSep=",">
-                                        {balance}
+                                    <Decimal fixed={usdtFixed} thousSep=",">
+                                        {usdt}
                                     </Decimal>{' '}
-                                    {currentMarket?.base_unit?.toUpperCase()}{' '}
+                                    {currentMarket?.quote_unit?.toUpperCase()}{' '}
                                 </p>
                             </div>
                             <button
@@ -444,7 +451,10 @@ const OrderFormComponent = (props) => {
                                 />
                                 <label
                                     htmlFor="market-order"
-                                    className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
+                                    onClick={() => setOrderTypeSell('market')}
+                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
+                                        orderTypeSell === 'market' ? 'green-text' : 'white-text'
+                                    }`}>
                                     MARKET
                                 </label>
                                 <input
@@ -456,7 +466,10 @@ const OrderFormComponent = (props) => {
                                 />
                                 <label
                                     htmlFor="limit-order"
-                                    className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
+                                    onClick={() => setOrderTypeSell('limit')}
+                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
+                                        orderTypeSell === 'limit' ? 'green-text' : 'white-text'
+                                    }`}>
                                     LIMIT
                                 </label>
                                 <input
@@ -468,14 +481,18 @@ const OrderFormComponent = (props) => {
                                 />
                                 <label
                                     htmlFor="stop-order"
-                                    className="btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4">
+                                    onClick={() => setOrderTypeSell('spot')}
+                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
+                                        orderTypeSell === 'spot' ? 'green-text' : 'white-text'
+                                    }`}>
                                     SPOT
                                 </label>
                             </div>
                             <div className="form-group mb-3 position-relative  w-100">
                                 <input
                                     type="text"
-                                    value={priceSell}
+                                    defaultValue={orderTypeSell === 'market' ? tickerItem?.last : priceSell}
+                                    value={orderTypeSell === 'market' ? tickerItem?.last : priceSell}
                                     onChange={(e) => handleChangePriceSell(e.target.value)}
                                     className="form-control input-order-form"
                                     id="input-order"
