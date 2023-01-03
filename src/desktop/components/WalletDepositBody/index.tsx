@@ -33,11 +33,14 @@ const WalletDepositBody = () => {
         min_confirmations: 6,
         deposit_enabled: false,
     };
+
     useWalletsFetch();
     useHistoryFetch({ type: 'deposits', currency: currency, limit: 3, page: 0 });
+
     const [active, setActive] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.protocol : '');
     const [tab, setTab] = useState(currencyItem?.networks ? currencyItem?.networks[0]?.blockchain_key : '');
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [address, setAddress] = React.useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -70,7 +73,11 @@ const WalletDepositBody = () => {
         setCurrentTabIndex(0);
     }, [wallet.currency]);
 
-    console.log(depositAddress);
+    React.useEffect(() => {
+        if (depositAddress && depositAddress.address !== null) {
+            setAddress(depositAddress && depositAddress.address);
+        }
+    }, [depositAddress]);
 
     const handleGenerateAddress = (e) => {
         e.preventDefault();
@@ -84,8 +91,6 @@ const WalletDepositBody = () => {
             tab === blockchain?.blockchain_key
         ) {
             dispatch(walletsAddressFetch({ currency: currency, blockchain_key: tab }));
-        } else {
-            console.log('haaai ini error');
         }
     };
 
@@ -103,8 +108,6 @@ const WalletDepositBody = () => {
             );
         }
     }, [currencyItem]);
-
-    const handleOnCopy = () => ({});
 
     const getTableHeaders = () => {
         return ['Date', 'Transacsion ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
@@ -237,7 +240,7 @@ const WalletDepositBody = () => {
                                     <input
                                         id="address"
                                         className="text-ms blue-text font-extrabold mb-24 address"
-                                        defaultValue={depositAddress && depositAddress.address}
+                                        defaultValue={address}
                                     />
                                     <div className="d-flex">
                                         <button

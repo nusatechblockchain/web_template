@@ -169,7 +169,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                 <RecentTrades />
                             </div>
                             <div className="grid-item open-orders mt-50">
-                                <OpenOrders
+                                {/* <OpenOrders
                                     headersKeys={headersKeys}
                                     headers={renderHeaders}
                                     data={renderData(list)}
@@ -177,7 +177,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
                                     hideOthrerPairs={hideOtherPairs}
-                                />
+                                /> */}
                             </div>
                         </div>
                     </div>
