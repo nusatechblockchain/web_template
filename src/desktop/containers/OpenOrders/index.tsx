@@ -4,8 +4,6 @@ import { CellData, Table } from '../../../components';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { Sell, Buy } from '../../../assets/images/TradeIcon';
 import { Form, Spinner } from 'react-bootstrap';
-import { selectUserLoggedIn } from '../../../modules';
-import { useSelector } from 'react-redux';
 
 export interface OpenOrdersProps {
     /**
@@ -45,7 +43,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
         const { headersKeys = this.defaultHeadersKeys } = this.props;
         const tableData = this.props.data.map(this.renderRow);
         const orderIndex = headersKeys.findIndex((header) => header === 'Order Type');
-        const isLoggedIn = useSelector(selectUserLoggedIn);
 
         if (headersKeys[orderIndex] === 'Order Type') {
             headers[orderIndex] = <span onClick={this.props.function}>Order Type</span>;
@@ -87,7 +84,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                         </div>
                     </div>
                 </div>
-                {isLoggedIn ? <Table header={headers} data={tableData as CellData[][]} /> : ''}
+                <Table header={headers} data={tableData as CellData[][]} />
             </div>
         );
     }
