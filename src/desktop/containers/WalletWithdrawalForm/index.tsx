@@ -23,6 +23,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [showModalWithdrawalSuccessfully, setShowModalWithdrawalSuccessfully] = React.useState(false);
     const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
+    const [showModalBeneficiaryCode, setShowModalBeneficiaryCode] = React.useState(false);
     const [showModalOtp, setShowModalOtp] = React.useState(false);
 
     const [amount, setAmount] = React.useState('');
@@ -166,6 +167,37 @@ export const WalletWithdrawalForm: React.FC = () => {
             </React.Fragment>
         );
     };
+
+    const renderModalBeneficiaryCode = () => (
+        <React.Fragment>
+            <div className="form min-w-400">
+                <div className="form-group mb-24">
+                    <CustomInput
+                        defaultLabel=""
+                        inputValue={otp}
+                        label=""
+                        placeholder="______"
+                        type="text"
+                        labelVisible={false}
+                        classNameInput="text-center spacing-10"
+                        classNameLabel="hidden"
+                        handleChangeInput={handleChangeOtp}
+                    />
+                </div>
+                <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    data-dismiss="modal"
+                    disabled={otp.length < 6 ? true : false}
+                    onClick={() => {
+                        setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
+                        setShowModalOtp(!showModalOtp);
+                    }}>
+                    Send
+                </button>
+            </div>
+        </React.Fragment>
+    );
 
     return (
         <React.Fragment>
