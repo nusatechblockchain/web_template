@@ -254,7 +254,7 @@ class Head extends React.Component<Props, HeaderState> {
                                 </React.Fragment>
                             ) : thisTradingHeader ? (
                                 <React.Fragment>
-                                    <ul className="navbar-nav main-navbar align-items-center">
+                                    <ul className="navbar-nav main-navbar trading-header align-items-center">
                                         <li className="nav-item dropdown market-dropdown ">
                                             <div className="d-flex align-items-center">
                                                 <img
@@ -376,7 +376,6 @@ class Head extends React.Component<Props, HeaderState> {
                             </li>
 
                             {isLoggedIn ? (
-                                // Profile Dropdown
                                 <li className="nav-item dropdown avatar px-3">
                                     <div
                                         className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
