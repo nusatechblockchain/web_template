@@ -161,7 +161,10 @@ class Head extends React.Component<Props, HeaderState> {
                                             <div
                                                 key={index}
                                                 className="dropdown-wallets-item"
-                                                onClick={() => this.setState({ showProfileDropdown: false })}>
+                                                onClick={() => {
+                                                    this.setState({ showProfileDropdown: false });
+                                                    this.setState({ showHeader: false });
+                                                }}>
                                                 <Link to={item.url} className="d-flex">
                                                     {item.icon}
                                                     <div className="pl-3">
@@ -220,22 +223,29 @@ class Head extends React.Component<Props, HeaderState> {
                                             className={`nav-item ${
                                                 (location.pathname == '/profile' || location.pathname == '/') &&
                                                 'active'
-                                            }`}>
+                                            }`}
+                                            onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/'} className="nav-link px-3 text-sm font-bold">
                                                 Home
                                             </Link>
                                         </li>
-                                        <li className={`nav-item ${location.pathname == '/markets' && 'active'}`}>
+                                        <li
+                                            className={`nav-item ${location.pathname == '/markets' && 'active'}`}
+                                            onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/markets'} className="nav-link px-3 text-sm font-bold">
                                                 Market
                                             </Link>
                                         </li>
-                                        <li className={`nav-item ${location.pathname == '/faq' && 'active'}`}>
+                                        <li
+                                            className={`nav-item ${location.pathname == '/faq' && 'active'}`}
+                                            onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/faq'} className="nav-link px-3 text-sm font-bold">
                                                 Support
                                             </Link>
                                         </li>
-                                        <li className={`nav-item ${location.pathname == '/announcement' && 'active'}`}>
+                                        <li
+                                            className={`nav-item ${location.pathname == '/announcement' && 'active'}`}
+                                            onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/announcement'} className="nav-link px-3 text-sm font-bold">
                                                 Announcement
                                             </Link>
@@ -427,7 +437,9 @@ class Head extends React.Component<Props, HeaderState> {
                         </ul>
 
                         {this.state.showHeader && !isLoggedIn && (
-                            <div className="d-flex align-items-center px-24 w-100 justify-content-between">
+                            <div
+                                className="d-flex align-items-center px-24 w-100 justify-content-between"
+                                onClick={() => this.setState({ showHeader: false })}>
                                 <Link to={'/signin'} className="btn btn-primary mx-2 btn-sm btn-block">
                                     Sign In
                                 </Link>
@@ -438,7 +450,7 @@ class Head extends React.Component<Props, HeaderState> {
                         )}
 
                         {isLoggedIn && this.state.showHeader && (
-                            <div className="logout">
+                            <div className="logout" onClick={() => this.setState({ showHeader: false })}>
                                 <p className="nav-link px-3 text-sm white-text font-bold" onClick={logoutButton}>
                                     <Logout /> Logout
                                 </p>
