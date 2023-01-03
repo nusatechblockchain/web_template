@@ -251,7 +251,7 @@ const OrderFormComponent = (props) => {
                             <div className="form-group mb-3 position-relative  w-100">
                                 <input
                                     type="text"
-                                    value={amountBuy}
+                                    defaultValue={amountBuy}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
@@ -403,7 +403,7 @@ const OrderFormComponent = (props) => {
                             <div className="form-group mb-3 position-relative  w-100">
                                 <input
                                     type="text"
-                                    value={totalBuy}
+                                    defaultValue={totalBuy}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
@@ -490,7 +490,7 @@ const OrderFormComponent = (props) => {
                             <div className="form-group mb-3 position-relative  w-100">
                                 <input
                                     type="text"
-                                    value={amountSell}
+                                    defaultValue={amountSell}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
@@ -654,7 +654,7 @@ const OrderFormComponent = (props) => {
                             <div className="form-group mb-3 position-relative  w-100">
                                 <input
                                     type="text"
-                                    value={totalSell}
+                                    defaultValue={totalSell}
                                     className="form-control input-order-form"
                                     id="input-order"
                                 />
