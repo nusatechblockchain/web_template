@@ -6,7 +6,8 @@ import { RouterProps } from 'react-router';
 import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
-import Humberger from '../../../../public/img/humberger.png';
+import Humburger from '../../../../public/img/humburger.png';
+import HumburgerShow from '../../../../public/img/humburger-show.png';
 import '../../../styles/colors.pcss';
 import {
     Market,
@@ -81,6 +82,7 @@ class Head extends React.Component<Props, HeaderState> {
 
         const logoutButton = async () => {
             await this.props.logout();
+            this.setState({ showHeader: false });
             this.props.history.push('/trading');
         };
 
@@ -126,14 +128,6 @@ class Head extends React.Component<Props, HeaderState> {
                 flag: <AmericanFlag className="mr-2" />,
                 name: 'American',
             },
-            {
-                flag: <KoreaFlag className="mr-2" />,
-                name: 'Korean',
-            },
-            {
-                flag: <ChinaFlag className="mr-2" />,
-                name: 'China',
-            },
         ];
 
         const currencyItem: Currency | any =
@@ -151,23 +145,71 @@ class Head extends React.Component<Props, HeaderState> {
                     <Link to="/" className="navbar-brand">
                         <Logo />
                     </Link>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon">
-                            <img
-                                src={Humberger}
-                                className="humberger-icon"
-                                alt="humberger icon"
-                                onClick={() => this.setState({ showHeader: !this.state.showHeader })}
-                            />
-                        </span>
-                    </button>
+                    <div className="d-flex align-items-center">
+                        {this.state.showHeader && isLoggedIn && (
+                            <li className="nav-item dropdown avatar profile-menu px-3">
+                                <div
+                                    className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
+                                    onClick={() => this.setState({ showProfileDropdown: !showProfileDropdown })}>
+                                    <img src={ProfileAvatar} className="avatar-image" alt="" />
+                                </div>
+                                {showProfileDropdown ? (
+                                    <div
+                                        className="dropdown-menu dark-bg-accent p-3 radius-sm"
+                                        aria-labelledby="navbarDropdownMenuLink">
+                                        {ProfileDropdown.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="dropdown-wallets-item"
+                                                onClick={() => {
+                                                    this.setState({ showProfileDropdown: false });
+                                                    this.setState({ showHeader: false });
+                                                }}>
+                                                <Link to={item.url} className="d-flex">
+                                                    {item.icon}
+                                                    <div className="pl-3">
+                                                        <p className="mb-0 text-sm font-bold white-text">{item.name}</p>
+                                                        <span className="text-xs grey-text-accent font-normal">
+                                                            {item.desc}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </div>
+                                        ))}
+                                        <div
+                                            className="dropdown-wallets-item cursor-pointer"
+                                            onClick={() => this.setState({ showProfileDropdown: false })}>
+                                            <div className="d-flex" onClick={logoutButton}>
+                                                <Logout />
+                                                <div className="pl-3">
+                                                    <p className="mb-0 text-sm font-bold white-text">Logout</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </li>
+                        )}
+                        <button
+                            className="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarNavDropdown"
+                            aria-controls="navbarNavDropdown"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon">
+                                <img
+                                    src={this.state.showHeader ? HumburgerShow : Humburger}
+                                    className="humberger-icon"
+                                    alt="humberger icon"
+                                    onClick={() => this.setState({ showHeader: !this.state.showHeader })}
+                                />
+                            </span>
+                        </button>
+                    </div>
                     <div
                         className={`collapse ${
                             this.state.showHeader && 'show'
@@ -175,97 +217,114 @@ class Head extends React.Component<Props, HeaderState> {
                         id="navbarNavDropdown">
                         <div>
                             {!thisAuthHeader ? (
-                                <ul className="navbar-nav main-navbar">
-                                    <li
-                                        className={`nav-item ${
-                                            (location.pathname == '/profile' || location.pathname == '/') && 'active'
-                                        }`}>
-                                        <Link to={'/'} className="nav-link px-3 text-sm font-bold">
-                                            Home
-                                        </Link>
-                                    </li>
-                                    <li className={`nav-item ${location.pathname == '/markets' && 'active'}`}>
-                                        <Link to={'/markets'} className="nav-link px-3 text-sm font-bold">
-                                            Market
-                                        </Link>
-                                    </li>
-                                    <li className={`nav-item ${location.pathname == '/faq' && 'active'}`}>
-                                        <Link to={'/faq'} className="nav-link px-3 text-sm font-bold">
-                                            Support
-                                        </Link>
-                                    </li>
-                                    <li className={`nav-item ${location.pathname == '/announcement' && 'active'}`}>
-                                        <Link to={'/announcement'} className="nav-link px-3 text-sm font-bold">
-                                            Announcement
-                                        </Link>
-                                    </li>
-                                </ul>
+                                <React.Fragment>
+                                    <ul className="navbar-nav main-navbar">
+                                        <li
+                                            className={`nav-item ${
+                                                (location.pathname == '/profile' || location.pathname == '/') &&
+                                                'active'
+                                            }`}
+                                            onClick={() => this.setState({ showHeader: false })}>
+                                            <Link to={'/'} className="nav-link px-3 text-sm font-bold">
+                                                Home
+                                            </Link>
+                                        </li>
+                                        <li
+                                            className={`nav-item ${location.pathname == '/markets' && 'active'}`}
+                                            onClick={() => this.setState({ showHeader: false })}>
+                                            <Link to={'/markets'} className="nav-link px-3 text-sm font-bold">
+                                                Market
+                                            </Link>
+                                        </li>
+                                        <li
+                                            className={`nav-item ${location.pathname == '/faq' && 'active'}`}
+                                            onClick={() => this.setState({ showHeader: false })}>
+                                            <Link to={'/faq'} className="nav-link px-3 text-sm font-bold">
+                                                Support
+                                            </Link>
+                                        </li>
+                                        <li
+                                            className={`nav-item ${location.pathname == '/announcement' && 'active'}`}
+                                            onClick={() => this.setState({ showHeader: false })}>
+                                            <Link to={'/announcement'} className="nav-link px-3 text-sm font-bold">
+                                                Announcement
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </React.Fragment>
                             ) : thisTradingHeader ? (
-                                <ul className="navbar-nav main-navbar align-items-center">
-                                    <li className="nav-item dropdown market-dropdown ">
-                                        <div className="d-flex align-items-center">
-                                            <img
-                                                src={currencyItem && currencyItem.icon_url}
-                                                alt="coin"
-                                                className="small-coin-icon mr-8"
-                                            />
-                                            <h2 className="white-text text-md m-0 p-0">
-                                                {this.props.currentMarket?.name}
-                                            </h2>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item nav-large-display">
-                                        <div className="nav-link px-12">
-                                            <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Change</p>
-                                            <p
-                                                className={`font-bold mb-0 text-sm ${
-                                                    ticker?.price_change_percent.includes('+')
-                                                        ? 'contrast-text'
-                                                        : 'danger-text'
-                                                }`}>
-                                                {ticker?.price_change_percent}
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item nav-large-display">
-                                        <div className="nav-link px-12">
-                                            <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">Price</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">
-                                                {numberFormat(ticker?.last, 'USD').toString().split('.')[0]}
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item nav-large-display">
-                                        <div className="nav-link px-12">
-                                            <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h high</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">
-                                                {numberFormat(ticker?.high, 'USD').toString().split('.')[0]}
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item nav-large-display">
-                                        <div className="nav-link px-12">
-                                            <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Low</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">
-                                                {numberFormat(ticker?.low, 'USD').toString().split('.')[0]}
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item nav-large-display">
-                                        <div className="nav-link px-12">
-                                            <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Volume</p>
-                                            <p className=" font-bold mb-0 white-text text-sm">
-                                                {numberFormat(ticker?.volume, 'USD').toString().split('.')[0]}
-                                            </p>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <React.Fragment>
+                                    <ul className="navbar-nav main-navbar trading-header align-items-center">
+                                        <li className="nav-item dropdown market-dropdown ">
+                                            <div className="d-flex align-items-center">
+                                                <img
+                                                    src={currencyItem && currencyItem.icon_url}
+                                                    alt="coin"
+                                                    className="small-coin-icon mr-8"
+                                                />
+                                                <h2 className="white-text text-md m-0 p-0">
+                                                    {this.props.currentMarket?.name}
+                                                </h2>
+                                            </div>
+                                        </li>
+                                        <li className="nav-item nav-large-display">
+                                            <div className="nav-link px-12">
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">
+                                                    24h Change
+                                                </p>
+                                                <p
+                                                    className={`font-bold mb-0 text-sm ${
+                                                        ticker?.price_change_percent.includes('+')
+                                                            ? 'contrast-text'
+                                                            : 'danger-text'
+                                                    }`}>
+                                                    {ticker?.price_change_percent}
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li className="nav-item nav-large-display">
+                                            <div className="nav-link px-12">
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">Price</p>
+                                                <p className=" font-bold mb-0 white-text text-sm">
+                                                    {numberFormat(ticker?.last, 'USD').toString().split('.')[0]}
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li className="nav-item nav-large-display">
+                                            <div className="nav-link px-12">
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h high</p>
+                                                <p className=" font-bold mb-0 white-text text-sm">
+                                                    {numberFormat(ticker?.high, 'USD').toString().split('.')[0]}
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li className="nav-item nav-large-display">
+                                            <div className="nav-link px-12">
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Low</p>
+                                                <p className=" font-bold mb-0 white-text text-sm">
+                                                    {numberFormat(ticker?.low, 'USD').toString().split('.')[0]}
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li className="nav-item nav-large-display">
+                                            <div className="nav-link px-12">
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">
+                                                    24h Volume
+                                                </p>
+                                                <p className=" font-bold mb-0 white-text text-sm">
+                                                    {numberFormat(ticker?.volume, 'USD').toString().split('.')[0]}
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </React.Fragment>
                             ) : (
                                 ''
                             )}
                         </div>
 
                         {/* right navbar */}
+                        {this.state.showHeader && <div className="devider"></div>}
                         <ul className="navbar-nav align-items-center">
                             <li className="nav-item dropdown px-3">
                                 <a
@@ -317,7 +376,6 @@ class Head extends React.Component<Props, HeaderState> {
                             </li>
 
                             {isLoggedIn ? (
-                                // Profile Dropdown
                                 <li className="nav-item dropdown avatar px-3">
                                     <div
                                         className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
@@ -376,6 +434,27 @@ class Head extends React.Component<Props, HeaderState> {
                                 </React.Fragment>
                             )}
                         </ul>
+
+                        {this.state.showHeader && !isLoggedIn && (
+                            <div
+                                className="d-flex align-items-center px-24 w-100 justify-content-between"
+                                onClick={() => this.setState({ showHeader: false })}>
+                                <Link to={'/signin'} className="btn btn-primary mx-2 btn-sm btn-block">
+                                    Sign In
+                                </Link>
+                                <Link to={'/signup'} className="btn btn-primary mx-2 my-0 btn-outline btn-sm btn-block">
+                                    Sign Up
+                                </Link>
+                            </div>
+                        )}
+
+                        {isLoggedIn && this.state.showHeader && (
+                            <div className="logout" onClick={() => this.setState({ showHeader: false })}>
+                                <p className="nav-link px-3 text-sm white-text font-bold" onClick={logoutButton}>
+                                    <Logout /> Logout
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </nav>
             </React.Fragment>
