@@ -12,7 +12,6 @@ import {
     toggle2faFetch,
     changePasswordReset,
 } from '../../../modules/user/profile';
-import Avatar from '../../../../public/img/avatar.png';
 import { ArrowDownIcon } from '../../../assets/images/ArrowDownIcon';
 
 interface ReduxProps {
@@ -78,7 +77,7 @@ class ProfileAuthDetailsComponent extends React.Component<Props, State> {
             <React.Fragment>
                 <div className="profile-detail px-24 py-4 dark-bg-main mb-24">
                     <div className="d-flex align-items-center">
-                        <img src={Avatar} className="img-profile-detail mr-3" alt="profile avatar detail" />
+                        <img src="img/avatar.png" className="img-profile-detail mr-3" alt="profile avatar detail" />
                         <div className="details">
                             <div className="d-flex align-items-center mb-2">
                                 <h6 className="white-text font-bold text-ms mb-0 mr-3">

@@ -11,20 +11,6 @@ import { toggleColorTheme } from '../../../helpers';
 import { RootState, selectCurrentColorTheme, selectUserLoggedIn } from '../../../modules';
 import { BnbIcon, BtcIcon, DogeIcon, TronIcon } from '../../../assets/images/CoinIcon';
 import { AndroidIcon, AppleStoreIcon, GooglePlayIcon, MacOsIcon, WindowsIcon } from '../../../assets/images/DeviceIcon';
-import BitcoinIcon from '../../../../public/img/Bitcoin.png';
-import EtherumIcon from '../../../../public/img/Etherium.png';
-import LiteIcon from '../../../../public/img/LiteCoin.png';
-import MoneroIcon from '../../../../public/img/Monero.png';
-import MarketAnalysisImage from '../../../../public/img/image-blog.png';
-import MarketAnalysisImage2 from '../../../../public/img/image-blog2.png';
-import LandingAplicationImage from '../../../../public/img/application.png';
-import features1 from '../../../../public/img/features.png';
-import features2 from '../../../../public/img/features2.png';
-import features3 from '../../../../public/img/features3.png';
-import features4 from '../../../../public/img/features4.png';
-import features5 from '../../../../public/img/features5.png';
-import features6 from '../../../../public/img/features6.png';
-import BackgroundLanding from '../../../../public/img/background-landing.png';
 
 interface ReduxProps {
     isLoggedIn: boolean;
@@ -53,14 +39,17 @@ class Landing extends React.Component<Props> {
     }
 
     public render() {
+        console.log(parseFloat('33.98'));
         return (
             <div className="landing-screen dark-bg-accent">
-                <div className="content-wrapper no-sidebar " style={{ backgroundImage: `url(${BackgroundLanding})` }}>
+                <div
+                    className="content-wrapper no-sidebar "
+                    style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     <section className="hero position-relative">
-                        <img src={BitcoinIcon} className="image-coin btc" alt="" />
-                        <img src={EtherumIcon} className="image-coin eth" alt="" />
-                        <img src={LiteIcon} className="image-coin lite" alt="" />
-                        <img src={MoneroIcon} className="image-coin monero" alt="" />
+                        <img src="img/Bitcoin.png" className="image-coin btc" alt="" />
+                        <img src="img/Etherium.png" className="image-coin eth" alt="" />
+                        <img src="img/LiteCoin.png" className="image-coin lite" alt="" />
+                        <img src="img/Monero.png" className="image-coin monero" alt="" />
                         <div className="wrapper d-flex justify-content-around align-items-center flex-column index-2">
                             <div className="my-5">
                                 <h1 className="text-main-title white-text text-center mb-24 max-w-lg">
@@ -112,8 +101,8 @@ class Landing extends React.Component<Props> {
                     <MarketsTable />
 
                     <section className="feature-section position-relative py-5">
-                        <img src={LiteIcon} className="image-coin feature lite" alt="" />
-                        <img src={BitcoinIcon} className="image-coin feature btc" alt="" />
+                        <img src="img/LiteCoin.png" className="image-coin feature lite" alt="" />
+                        <img src="img/Bitcoin.png" className="image-coin feature btc" alt="" />
                         <div className="container index-2">
                             <h2 className="text-title-1 white-text text-center font-extrabold ">Attractive Features</h2>
                             <p className=" mb-24 text-md font-normal grey-text-accent text-center mb-36">
@@ -122,7 +111,7 @@ class Landing extends React.Component<Props> {
                             <div className="row">
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <img src={features1} alt="icon" width={65} height={65} />
+                                        <img src="img/features.png" alt="icon" width={65} height={65} />
                                         <p className="mb-0 ml-2 text-ms white-text">Up to Date Notification</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
@@ -131,7 +120,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <img src={features2} alt="icon" width={65} height={65} />
+                                        <img src="img/features2.png" alt="icon" width={65} height={65} />
                                         <p className="mb-0 ml-2 text-ms white-text">Safe & Secure Trading Platform</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
@@ -140,7 +129,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <img src={features3} alt="icon" width={65} height={65} />
+                                        <img src="img/features3.png" alt="icon" width={65} height={65} />
                                         <p className="mb-0 ml-2 text-ms white-text">Easy to Use</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
@@ -149,7 +138,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <img src={features4} alt="icon" width={65} height={65} />
+                                        <img src="img/features4.png" alt="icon" width={65} height={65} />
                                         <p className="mb-0 ml-2 text-ms white-text">Withdraw Anytime & Anywhere</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
@@ -158,7 +147,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <img src={features5} alt="icon" width={65} height={65} />
+                                        <img src="img/features5.png" alt="icon" width={65} height={65} />
                                         <p className="mb-0 ml-2 text-ms white-text">Transaparent Transactions</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
@@ -167,7 +156,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-4 col-sm-6 mb-24">
                                     <div className="d-flex align-items-center mb-3">
-                                        <img src={features6} alt="icon" width={65} height={65} />
+                                        <img src="img/features6.png" alt="icon" width={65} height={65} />
                                         <p className="mb-0 ml-2 text-ms white-text">Stand by Support Team</p>
                                     </div>
                                     <p className="mb-0 text-ms grey-text-accent">
@@ -183,7 +172,7 @@ class Landing extends React.Component<Props> {
                         <div className="container">
                             <div className="row align-items-center">
                                 <div className="col-lg-6">
-                                    <img src={LandingAplicationImage} className="w-100" alt="" />
+                                    <img src={'img/application.png'} className="w-100" alt="" />
                                 </div>
                                 <div className="col-lg-6">
                                     <h4 className="mb-0 text-title-2 text-white font-extrabold">
@@ -230,9 +219,9 @@ class Landing extends React.Component<Props> {
                     </section>
 
                     <section className="analysis-section position-relative py-5">
-                        <img src={EtherumIcon} className="image-coin analysis eth" alt="" />
-                        <img src={BitcoinIcon} className="image-coin analysis btc" alt="" />
-                        <img src={MoneroIcon} className="image-coin analysis monero" alt="" />
+                        <img src="img/Etherium.png" className="image-coin analysis eth" alt="" />
+                        <img src="img/Bitcoin.png" className="image-coin analysis btc" alt="" />
+                        <img src="img/Monero.png" className="image-coin analysis monero" alt="" />
                         <div className="container index-2">
                             <h2 className="text-title-1 white-text text-center font-extrabold ">
                                 Crypto Market Analysis
@@ -243,7 +232,7 @@ class Landing extends React.Component<Props> {
                             <div className="row mt-5">
                                 <div className="col-lg-6 mb-4">
                                     <div className="d-flex align-items-start">
-                                        <img src={MarketAnalysisImage} className="image-analysis" alt="image" />
+                                        <img src="img/image-blog.png" className="image-analysis" alt="image" />
                                         <div className="ml-4">
                                             <p className="mb-8 text-lg white-text font-bold">
                                                 New Exchange Website Heaven Its Coming!
@@ -259,7 +248,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-6 mb-4">
                                     <div className="d-flex align-items-start">
-                                        <img src={MarketAnalysisImage} className="image-analysis" alt="image" />
+                                        <img src="img/image-blog.png" className="image-analysis" alt="image" />
                                         <div className="ml-4">
                                             <p className="mb-8 text-lg white-text font-bold">
                                                 Tips for Cut Loss in Crypto Trading
@@ -276,7 +265,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-6 mb-4">
                                     <div className="d-flex align-items-start">
-                                        <img src={MarketAnalysisImage2} className="image-analysis" alt="image" />
+                                        <img src={'img/image-blog2.png'} className="image-analysis" alt="image" />
                                         <div className="ml-4">
                                             <p className="mb-8 text-lg white-text font-bold">
                                                 Bitcoin Price Crosses $20K as US Dollar Strength Falls
@@ -292,7 +281,7 @@ class Landing extends React.Component<Props> {
                                 </div>
                                 <div className="col-lg-6 mb-4">
                                     <div className="d-flex align-items-start">
-                                        <img src={MarketAnalysisImage2} className="image-analysis" alt="image" />
+                                        <img src={'img/image-blog2.png'} className="image-analysis" alt="image" />
                                         <div className="ml-4">
                                             <p className="mb-8 text-lg white-text font-bold">
                                                 New Exchange Website Heaven Its Coming!

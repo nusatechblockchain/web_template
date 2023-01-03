@@ -15,8 +15,6 @@ import {
     selectUserInfo,
     selectCurrencies,
 } from '../../../modules';
-import MoneroIcon from '../../../../public/img/Monero.png';
-import card from '../../../../public/img/landing-card.png';
 import { numberFormat } from '../../../helpers';
 
 const defaultTicker = {
@@ -150,7 +148,7 @@ const MarketsTableComponent = (props) => {
     return (
         <React.Fragment>
             <section className="popular-crypto position-relative pb-5">
-                <img src={MoneroIcon} className="image-coin popular monero" alt="" />
+                <img src="img/Monero.png" className="image-coin popular monero" alt="" />
                 <div className="dark-bg-main full-width">
                     <div className="container">
                         <div className="d-flex flex-wrap justify-content-center">
@@ -187,7 +185,7 @@ const MarketsTableComponent = (props) => {
                             {cardBanner &&
                                 cardBanner.map((item, key) => (
                                     <div className="d-flex justify-content-between align-items-center p-2">
-                                        <img src={card} alt="card" className="w-100" />
+                                        <img src="img/landing-card.png" alt="card" className="w-100" />
                                     </div>
                                 ))}
                         </Slider>
