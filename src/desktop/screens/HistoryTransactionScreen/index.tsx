@@ -55,8 +55,15 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         setCurrentPage(Number(page) + 1);
     };
 
-    const getTableHeaders = () => {
-        return ['Date', 'Type', 'Asset', 'Ammount', 'Receiver UID', 'Status'];
+    const getTableHeaders = (data) => {
+        return [
+            'Date',
+            'Type',
+            'Asset',
+            'Ammount',
+            `${historys && historys[0] && historys[0].tid ? 'Transaction ID' : 'Receiver UID'}`,
+            'Status',
+        ];
     };
 
     React.useEffect(() => {
@@ -102,7 +109,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                 <p className="m-0 mr-24 white-text font-bold">{item.currency.toUpperCase()}</p>
             </div>,
             <p className="m-0 text-sm white-text">{item.amount}</p>,
-            <p className="m-0 text-sm white-text text-italic">{item.receiver_uid}</p>,
+            <p className="m-0 text-sm white-text text-italic">{item.tid ? item.tid : item.receiver_uid}</p>,
             <p
                 className={`m-0 text-sm ${
                     item.status === 'Pending'
@@ -117,6 +124,8 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     ? 'Canceled'
                     : item.status === 'completed'
                     ? 'Completed'
+                    : item.state === 'collected'
+                    ? 'Collected'
                     : ''}
             </p>,
         ]);
@@ -217,7 +226,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                             <Tab eventKey="deposits" title="Deposit" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                                    <Table header={getTableHeaders(historys)} data={getTableData(historys)} />
                                     {historys[0] && (
                                         <Pagination
                                             firstElemIndex={firstElemIndex}
@@ -235,7 +244,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                             <Tab eventKey="withdraws" title="Withdrawal" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                                    <Table header={getTableHeaders(historys)} data={getTableData(historys)} />
                                     {historys[0] && (
                                         <Pagination
                                             firstElemIndex={firstElemIndex}
@@ -252,7 +261,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                             <Tab eventKey="transfers" title="Internal Transfer" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
-                                    <Table header={getTableHeaders()} data={getTableData(historys)} />
+                                    <Table header={getTableHeaders(historys)} data={getTableData(historys)} />
                                     {historys[0] && (
                                         <Pagination
                                             firstElemIndex={firstElemIndex}

@@ -19,6 +19,7 @@ import { copy } from '../../../helpers';
 import { Modal } from 'react-bootstrap';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { NoData } from '../../components';
+import moment from 'moment';
 
 const WalletDepositBody = () => {
     const intl = useIntl();
@@ -44,6 +45,8 @@ const WalletDepositBody = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    console.log(historys);
 
     const label = React.useMemo(
         () => intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.address' }),
@@ -115,12 +118,12 @@ const WalletDepositBody = () => {
 
     const getTableData = (data) => {
         return data.map((item) => [
-            item.date,
-            item.transactionId,
+            moment(item.created_at).format('D MMM YYYY - HH:mm'),
+            item.tid,
             item.amount,
-            item.type,
-            item.status,
-            item.confirmation,
+            item.transfer_type,
+            item.state,
+            item.confirmations,
         ]);
     };
 
@@ -276,7 +279,7 @@ const WalletDepositBody = () => {
                         <Table header={getTableHeaders()} data={getTableData(historys)} />
                         {historys.length < 1 && <NoData text="No Data Yet" />}
                         {historys.length > 0 && (
-                            <div className="d-flex justify-content-center">
+                            <div className="d-flex justify-content-center mt-3">
                                 <Link to="/history-transaction" className="font-bold text-center gradient-text text-sm">
                                     View All
                                 </Link>
