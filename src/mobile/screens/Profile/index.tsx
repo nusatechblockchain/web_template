@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { selectUserInfo } from '../../../modules';
 import moment from 'moment';
 import {
@@ -19,12 +20,56 @@ import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { ModalMobile } from '../../components';
 import { ModalResetPassword } from '../../assets/Modal';
 import { titleCase, dateTo12HFormat } from 'src/helpers';
+import { CustomInput } from 'src/desktop/components';
+
 // import { dateTo12HFormat } from 'src/helpers';
 
 const ProfileMobileScreen: React.FC = () => {
-    const [showModalEmail, setShowModalEmail] = React.useState(false);
-    const user = useSelector(selectUserInfo);
     const history = useHistory();
+    const dispatch = useDispatch();
+    const user = useSelector(selectUserInfo);
+    const [showModalEmail, setShowModalEmail] = React.useState(false);
+    const [showModalPhone, setShowModalPhone] = React.useState(false);
+    const [newPhoneValue, setNewPhoneValue] = React.useState('');
+    const [isChangeNumber, setIsChangeNumber] = React.useState(false);
+    const [resendCodeActive, setResendCodeActive] = React.useState(false);
+    const [verificationCode, setVerificationCode] = React.useState('');
+
+    const [seconds, setSeconds] = React.useState(30000);
+    const [timerActive, setTimerActive] = React.useState(false);
+
+    const phone = user.phones.slice(-1);
+
+    React.useEffect(() => {
+        let timer = null;
+        if (timerActive) {
+            timer = setInterval(() => {
+                setSeconds((seconds) => seconds - 1000);
+
+                if (seconds === 0) {
+                    setTimerActive(false);
+                    setSeconds(30000);
+                }
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    });
+
+    const disabledButton = () => {
+        if (phone[0] && !isChangeNumber) {
+            return false;
+        }
+
+        if (newPhoneValue === '') {
+            return true;
+        }
+
+        if (timerActive) {
+            return true;
+        }
+    };
 
     const handleResetPassword = () => {
         history.push('/change-email');
@@ -48,6 +93,88 @@ const ProfileMobileScreen: React.FC = () => {
                 Close
             </button>
         </React.Fragment>
+    );
+
+    const renderModalPhone = () => (
+        <>
+            <div className="mb-24">
+                <div className="d-flex align-items-center mb-5">
+                    <div className="mr-3" onClick={() => setShowModalPhone(!showModalPhone)}>
+                        <ArrowLeft className={'cursor-pointer text-white'} />
+                    </div>
+                    <span className="text-secondary text-lg">Setting Phone Number</span>
+                </div>
+                <p className="text-sm grey-text mb-8">
+                    {!user.phones[0] ? (
+                        'Set Your Phone Number And Verified'
+                    ) : user.phones[0].validated_at === null && !isChangeNumber ? (
+                        'You already add phone number, please verify by click send code button to get OTP number'
+                    ) : user.phones[0] && isChangeNumber ? (
+                        <p className="danger-text">
+                            You only have {5 - user.phones.length} chances to change your phone number
+                        </p>
+                    ) : (
+                        'Set Your New Phone Number And Verified'
+                    )}
+                </p>
+                {user.phones[0] && !isChangeNumber && (
+                    <p className="text-sm grey-text mb-24">{phone[0] && phone[0].number && `+ ${phone[0].number}`}</p>
+                )}
+
+                {/* Form phone */}
+                <form className="form">
+                    {(isChangeNumber || !user.phones[0]) && (
+                        <div className="form-group mb-24">
+                            <CustomInput
+                                defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                inputValue={newPhoneValue}
+                                label={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                placeholder="+6281902912921"
+                                type="text"
+                                labelVisible
+                                classNameLabel="white-text text-sm"
+                                handleChangeInput={(e) => setNewPhoneValue(e)}
+                            />
+                        </div>
+                    )}
+
+                    <div className="mb-5">
+                        <label className="white-text">Verification Code</label>
+                        <div className="d-flex align-items-center">
+                            <CustomInput
+                                defaultLabel=""
+                                inputValue={verificationCode}
+                                label=""
+                                placeholder="_____"
+                                type="text"
+                                labelVisible={false}
+                                classNameLabel="d-none"
+                                classNameInput="spacing-10"
+                                classNameGroup="mb-0 w-100"
+                                handleChangeInput={(e) => setVerificationCode(e)}
+                            />
+                            <button disabled={disabledButton()} className="btn btn-primary ml-2 text-nowrap">
+                                {(!isChangeNumber && phone[0]) || resendCodeActive ? 'Resend Code' : 'Send Code'}
+                            </button>
+                        </div>
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={newPhoneValue === '' && verificationCode === '' ? true : false}
+                        onClick={() => {}}
+                        className="btn btn-primary btn-block"
+                        data-toggle="modal"
+                        data-target="#change-phone"
+                        data-dismiss="modal">
+                        {!user.phones[0]
+                            ? 'Add'
+                            : user.phones[0].validated_at === null && !isChangeNumber
+                            ? 'Veify'
+                            : 'Change'}
+                    </button>
+                </form>
+            </div>
+        </>
     );
 
     return (
@@ -131,7 +258,7 @@ const ProfileMobileScreen: React.FC = () => {
                             <CheckIcon className="check-icon" />
                         </div>
                     </div>
-                    <Link to={'/change-phone'}>
+                    <div onClick={() => setShowModalPhone(!showModalPhone)}>
                         <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <PhoneProfileIcon className="profile-icon" />
@@ -157,7 +284,7 @@ const ProfileMobileScreen: React.FC = () => {
                                 )}
                             </div>
                         </div>
-                    </Link>
+                    </div>
                     <Link to={'/two-fa-activation'}>
                         <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
@@ -204,6 +331,7 @@ const ProfileMobileScreen: React.FC = () => {
                 </div>
             </div>
             <ModalMobile content={renderModal()} show={showModalEmail} />
+            <ModalMobile content={renderModalPhone()} show={showModalPhone} />
         </React.Fragment>
     );
 };

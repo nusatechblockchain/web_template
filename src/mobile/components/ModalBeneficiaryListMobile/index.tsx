@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams, Redirect } from 'react-router';
-
-import { selectBeneficiaries, Beneficiary, beneficiariesDelete } from '../../../modules';
+import { useBeneficiariesFetch } from 'src/hooks';
+import { selectBeneficiaries, Beneficiary, beneficiariesDelete, beneficiariesFetch } from '../../../modules';
 import './ModalBeneficiaryListMobile.pcss';
 import { ModalMobile } from '../Modal';
 import { WalletIcon } from 'src/mobile/assets/Wallets';
@@ -30,11 +30,14 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
     const handleDeleteAddress = React.useCallback(
         (item: Beneficiary) => () => {
             dispatch(beneficiariesDelete({ id: item.id }));
+            // dispatch(beneficiariesFetch());
+
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         },
         []
     );
-
-    React.useEffect(() => {}, []);
 
     const renderHeaderBeneficiaryListMobile = () => {
         return (
@@ -92,7 +95,7 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
                                         Address<span className="ml-2">:</span>
                                     </span>
                                     <span className="white-text text-sm ml-2">
-                                        {item && item.data && item.data.address}
+                                        {item && item.data && item.data.address.slice(0, 35)}...
                                     </span>
                                 </div>
                                 <div className="d-flex ml-2">

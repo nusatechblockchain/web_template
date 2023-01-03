@@ -135,4 +135,58 @@ export const ru = {
     'page.mobile.profile.apiKeys.modal.btn.activate':'Activate',
     'page.mobile.profile.apiKeys.modal.btn.delete':'Delete',
     'page.mobile.profile.apiKeys.modal.title':'Enter 2FA Code from the app',
+
+     // Internal Transfer
+     'page.mobile.internalTransfer.header': 'Внутренний трансфер',
+     'page.mobile.internalTransfer.coins': 'монеты',
+     'page.mobile.internalTransfer.inputAmount': 'Введите сумму для отправки',
+     'page.mobile.internalTransfer.inputUID': 'Введите UID',
+     'page.mobile.internalTransfer.label2FA': 'Код двухфакторной аутентификации',
+     'page.mobile.internalTransfer.placholder2FA': 'Код 2FA',
+     'page.mobile.internalTransfer.continue': 'Продолжить',
+     'page.mobile.internalTransfer.cancel': 'Отмена',
+ 
+     'page.mobile.internalTransfer.modal.confirm': 'подтверждение перевода',
+     'page.mobile.internalTransfer.modal.confirmMessage1': 'Вы уверены, что переносите',
+     'page.mobile.internalTransfer.modal.confirmMessage2': 'другому пользователю? Пожалуйста, проверьте UID пользователя, которого вы хотите передать',
+     
+         
+     // Wallet withdraw
+     'page.mobile.withdraw.header': 'vyvesti kriptovalyutu',
+     'page.mobile.withdraw.addressLabel': 'Адрес вывода',
+     'page.mobile.withdraw.addressPlaceholder': 'Адрес вывода',
+     'page.mobile.withdraw.amountLabel': 'сумма вывода',
+     'page.mobile.withdraw.2FALabel': 'Код двухфакторной аутентификации',
+     'page.mobile.withdraw.2FAPlaceholder': 'Код 2FA',
+     'page.mobile.withdraw.infoAmount': 'Сумма, доступная для вывода ≤ Доступные активы счета Неподтвержденные цифровые активы.',
+     'page.mobile.withdraw.fee': 'Платеж',
+     'page.mobile.withdraw.totalAmount': 'Общая сумма вывода',
+     'page.mobile.withdraw.title': 'Отзывать',
+ 
+     'page.mobile.withdraw.modal.confirm.title': 'Подтверждение отзыва',
+     'page.mobile.withdraw.modal.info1': `Вы запросили отзыв`,
+     'page.mobile.withdraw.modal.info2': `Вы уверены, что хотите сделать вывод?`,
+ 
+     'page.mobile.withdraw.modal.alert': 'Пожалуйста, внимательно проверьте целевой адрес перед подтверждением вывода средств.',
+     
+     
+ 
+ 
+     // History transacrion
+     'page.mobile.historyTransaction.internalTransfer.header': 'История транзакций',
+ 
+     // History trasaction Internal Transfer
+     'page.mobile.historyTransaction.internalTransfer.header.coins' : 'Монеты',
+     'page.mobile.historyTransaction.internalTransfer.header.amount' : 'Количество',
+     'page.mobile.historyTransaction.internalTransfer.header.type' : 'Тип',
+     'page.mobile.historyTransaction.internalTransfer.header.receiver' : 'UID получателя',
+     'page.mobile.historyTransaction.internalTransfer.header.status' : 'Положение дел',
+     
+     'page.mobile.historyTransaction.internalTransfer.type.deposits' : 'Депозиты',
+     'page.mobile.historyTransaction.internalTransfer.type.withdrawl' : 'Вывод',
+     'page.mobile.historyTransaction.internalTransfer.type.transfers' : 'Внутренний трансфер',
+     
+     'page.mobile.historyTransaction.internalTransfer.status.completed' : 'Завершенный',
+     'page.mobile.historyTransaction.internalTransfer.status.canceled' : 'Отменено',
+     'page.mobile.historyTransaction.internalTransfer.status.pending' : 'В ожидании',
 };

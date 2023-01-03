@@ -18,6 +18,7 @@ import {
     Security,
     TradeHistory,
     Wallet,
+    SettingProfile,
 } from '../../assets/Sidebar';
 import { CalendarIcon } from '../../assets/CalendarIcon';
 const HeaderComponent: React.FC = () => {
@@ -44,6 +45,7 @@ const HeaderComponent: React.FC = () => {
             showNotLoggedin: false,
         },
         { icon: <Security />, name: 'Security', path: '/security', showNotLoggedin: false },
+        { icon: <SettingProfile />, name: 'Setting', path: '/setting', showNotLoggedin: false },
         { icon: <Referral />, name: 'Referral', path: '/referral', showNotLoggedin: false },
         { icon: <ApiManagement />, name: 'Api Management', path: '/api-key', showNotLoggedin: false },
         { icon: <Announcement />, name: 'Announcement', path: '/announcement', showNotLoggedin: true },

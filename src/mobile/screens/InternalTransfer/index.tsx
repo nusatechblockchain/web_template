@@ -1,4 +1,5 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
@@ -14,6 +15,7 @@ import { ArrowLeft } from 'src/mobile/assets/Arrow';
 
 const InternalTransferMobileScreen: React.FC = () => {
     const dispatch = useDispatch();
+    const { formatMessage } = useIntl();
     const { currency = '' } = useParams<{ currency?: string }>();
     const [amount, setAmount] = React.useState('');
     const [uid, setUid] = React.useState('');
@@ -69,12 +71,16 @@ const InternalTransferMobileScreen: React.FC = () => {
                     </Link>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-2 transfer-head-container">
-                    <h1 className="navbar-brand p-0 m-0 white-text">Internal Transfer</h1>
+                    <h1 className="navbar-brand p-0 m-0 white-text">
+                        {formatMessage({ id: 'page.mobile.internalTransfer.header' })}
+                    </h1>
                 </div>
 
                 <form className="form-transfer">
                     <div className="d-flex flex-column justify-content-between align-items-start">
-                        <p className="text-sm white-text mb-1">Coins</p>
+                        <p className="text-sm white-text mb-1">
+                            {formatMessage({ id: 'page.mobile.internalTransfer.coins' })}
+                        </p>
                         <div className="w-100 d-flex align-items-center coin-selected">
                             <img
                                 src={currencyItem && currencyItem.icon_url}
@@ -95,9 +101,9 @@ const InternalTransferMobileScreen: React.FC = () => {
                             <div className="mb-3">
                                 <CustomInput
                                     type="text"
-                                    label={'Input Ammount to send'}
+                                    label={formatMessage({ id: 'page.mobile.internalTransfer.inputAmount' })}
                                     placeholder={'0.00000000'}
-                                    defaultLabel={'Input Ammount to send'}
+                                    defaultLabel={formatMessage({ id: 'page.mobile.internalTransfer.inputAmount' })}
                                     handleChangeInput={handleChangeAmount}
                                     inputValue={amount}
                                     classNameLabel="text-ms white-text mb-8"
@@ -113,8 +119,8 @@ const InternalTransferMobileScreen: React.FC = () => {
                             <div className="mb-3">
                                 <CustomInput
                                     type="text"
-                                    label={'Enter UID'}
-                                    placeholder={'Enter UID'}
+                                    label={formatMessage({ id: 'page.mobile.internalTransfer.inputUID' })}
+                                    placeholder={formatMessage({ id: 'page.mobile.internalTransfer.inputUID' })}
                                     defaultLabel={''}
                                     handleChangeInput={handleChangeUid}
                                     inputValue={uid}
@@ -128,11 +134,13 @@ const InternalTransferMobileScreen: React.FC = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label className="m-0 mb-2">Two-factor Authentications Code</label>
+                        <label className="m-0 mb-2">
+                            {formatMessage({ id: 'page.mobile.internalTransfer.label2FA' })}
+                        </label>
                         <CustomInput
                             type="text"
                             label={''}
-                            placeholder={'2FA Code'}
+                            placeholder={formatMessage({ id: 'page.mobile.internalTransfer.placholder2FA' })}
                             defaultLabel={''}
                             handleChangeInput={handleChangeOtp}
                             inputValue={otp}
@@ -152,7 +160,7 @@ const InternalTransferMobileScreen: React.FC = () => {
                         block
                         size="lg"
                         variant="primary">
-                        Continue
+                        {formatMessage({ id: 'page.mobile.internalTransfer.continue' })}
                     </Button>
                 </form>
 
@@ -162,21 +170,24 @@ const InternalTransferMobileScreen: React.FC = () => {
                         <div className="d-flex mb-2 justify-content-center">
                             <KeyConfirmation />
                         </div>
-                        <p className="gradient-text font-weight-bold mb-2">Transfer Confirmation</p>
+                        <p className="gradient-text font-weight-bold mb-2">
+                            {formatMessage({ id: 'page.mobile.internalTransfer.modal.confirm' })}
+                        </p>
                         <div className="">
                             <p className="text-sm text-secondary">
-                                Are you sure to transfer {amount} {currency.toUpperCase()} to another User? Please check
-                                UID of user you want to transfer
+                                {formatMessage({ id: 'page.mobile.internalTransfer.modal.confirmMessage1' })} {amount}{' '}
+                                {currency.toUpperCase()}{' '}
+                                {formatMessage({ id: 'page.mobile.internalTransfer.modal.confirmMessage2' })}
                             </p>
                         </div>
                         <div className="">
                             <button className="btn btn-primary btn-lg btn-block" onClick={handleCreateTransfer}>
-                                Continue
+                                {formatMessage({ id: 'page.mobile.internalTransfer.continue' })}
                             </button>
                             <button
                                 onClick={() => setShowModalConfirmation(!showModalConfirmation)}
-                                className="btn btn-outline-danger py-3 text-sm btn-lg btn-block">
-                                Cancel
+                                className="btn btn-outline-danger btn-block">
+                                {formatMessage({ id: 'page.mobile.internalTransfer.cancel' })}
                             </button>
                         </div>
                     </div>

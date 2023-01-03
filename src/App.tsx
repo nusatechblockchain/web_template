@@ -26,6 +26,9 @@ const AlertsContainer = React.lazy(() => import('./containers/Alerts').then(({ A
 const LayoutContainer = React.lazy(() => import('./routes').then(({ Layout }) => ({ default: Layout })));
 
 /* Mobile components */
+const AlertsMobileContainer = React.lazy(() =>
+    import('./containers/AlertsMobile').then(({ AlertsMobile }) => ({ default: AlertsMobile }))
+);
 const MobileHeader = React.lazy(() => import('./mobile/components/Header').then(({ Header }) => ({ default: Header })));
 const MobileFooter = React.lazy(() => import('./mobile/components/Footer').then(({ Footer }) => ({ default: Footer })));
 
@@ -67,7 +70,7 @@ const RenderDeviceContainers = () => {
     return (
         <div className="pg-mobile-app">
             <MobileHeader />
-            <AlertsContainer />
+            <AlertsMobileContainer />
             <LayoutContainer />
             <MobileFooter />
         </div>

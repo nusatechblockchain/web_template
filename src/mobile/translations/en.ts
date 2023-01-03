@@ -135,4 +135,59 @@ export const en = {
     'page.mobile.profile.apiKeys.modal.btn.delete':'Delete',
     'page.mobile.profile.apiKeys.modal.title':'Enter 2FA Code from the app',
 
+    // Internal Transfer
+    'page.mobile.internalTransfer.header': 'Internal Transfer',
+    'page.mobile.internalTransfer.coins': 'Coins',
+    'page.mobile.internalTransfer.inputAmount': 'Input Amount to Send',
+    'page.mobile.internalTransfer.inputUID': 'Enter UID',
+    'page.mobile.internalTransfer.label2FA': 'Two-factor Authentications Code',
+    'page.mobile.internalTransfer.placholder2FA': '2FA Code',
+    'page.mobile.internalTransfer.continue': 'Continue',
+    'page.mobile.internalTransfer.cancel': 'Cancel',
+
+    'page.mobile.internalTransfer.modal.confirm': 'Transfer Confirmation',
+    'page.mobile.internalTransfer.modal.confirmMessage1': 'Are you sure to transfer',
+    'page.mobile.internalTransfer.modal.confirmMessage2': 'to another User? Please check UID of user you want to transfer',
+    
+        
+    // Wallet withdraw
+    'page.mobile.withdraw.header': 'Withdraw Crypto',
+    'page.mobile.withdraw.addressLabel': 'Withdrawl Address',
+    'page.mobile.withdraw.addressPlaceholder': 'Withdrawl Address',
+    'page.mobile.withdraw.amountLabel': 'Withdrawl Amount',
+    'page.mobile.withdraw.2FALabel': 'Two-factor Authentications code',
+    'page.mobile.withdraw.2FAPlaceholder': '2FA code',
+    'page.mobile.withdraw.infoAmount': 'Amount available for withdrawal ≤ Account available assets Unconfirmed digital assets.',
+    'page.mobile.withdraw.fee': 'Fee',
+    'page.mobile.withdraw.totalAmount': 'Total Withdrawal Amount',
+    'page.mobile.withdraw.title': 'Withdraw',
+
+    'page.mobile.withdraw.modal.confirm.title': 'Withdraw Confirmation',
+    'page.mobile.withdraw.modal.info1': `You've request to withdraw`,
+    'page.mobile.withdraw.modal.info2': `, Are you sure to do Witdrawal?`,
+
+    'page.mobile.withdraw.modal.alert': 'Please check the target address carefully before confirming the witdrawal.',
+    
+    
+
+
+    // History transacrion
+    'page.mobile.historyTransaction.internalTransfer.header': 'Transaction History',
+
+    // History trasaction Internal Transfer
+    'page.mobile.historyTransaction.internalTransfer.header.coins' : 'Coins',
+    'page.mobile.historyTransaction.internalTransfer.header.amount' : 'Amount',
+    'page.mobile.historyTransaction.internalTransfer.header.type' : 'Type',
+    'page.mobile.historyTransaction.internalTransfer.header.receiver' : 'Receiver UID',
+    'page.mobile.historyTransaction.internalTransfer.header.status' : 'Status',
+    
+    'page.mobile.historyTransaction.internalTransfer.type.deposits' : 'Deposits',
+    'page.mobile.historyTransaction.internalTransfer.type.withdrawl' : 'Withdrawl',
+    'page.mobile.historyTransaction.internalTransfer.type.transfers' : 'Internal Transfer',
+    
+    'page.mobile.historyTransaction.internalTransfer.status.completed' : 'Completed',
+    'page.mobile.historyTransaction.internalTransfer.status.canceled' : 'Canceled',
+    'page.mobile.historyTransaction.internalTransfer.status.pending' : 'Pending',
+
+    
 };
