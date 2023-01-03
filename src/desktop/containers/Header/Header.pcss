@@ -9,7 +9,7 @@
     }
 
     .humberger-icon {
-        width: 26px;
+        width: 32px;
     }
 
     .navbar-nav {
@@ -111,5 +111,83 @@
     .small-coin-icon {
         width: 24px;
         height: 24px;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar {
+        .navbar-collapse {
+            position: fixed;
+            right: 0;
+            width: 300px;
+            top: 70px;
+            bottom: 0;
+            background: var(--body-background-color);
+            transform: translateX(100%);
+            transition: 0.4s ease-in all;
+            display: flex;
+            justify-content: start !important;
+            flex-direction: column;
+            align-items: start;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            padding: 1rem 6px;
+
+            &.show {
+                transform: translateX(0);
+            }
+
+            .dropdown {
+                &.avatar {
+                    display: none;
+                }
+            }
+
+            .dropdown-menu {
+                .dropdown-item {
+                    min-width: 100px;
+                }
+            }
+            .nav-link {
+                padding: 1rem;
+                &.dropdown-toggle {
+                    padding: 1rem 0;
+                }
+            }
+            .devider {
+                height: 1px;
+                width: 100%;
+                background: var(--border-color);
+            }
+        }
+        .dropdown {
+            &.avatar {
+                display: flex;
+                padding-right: 0 !important;
+                background: var(--body-background-color);
+                &::marker {
+                    display: none;
+                }
+                .nav-link {
+                    padding: 8px;
+                }
+            }
+        }
+
+        .profile-menu {
+            .dropdown-menu {
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                margin-top: 12px;
+            }
+            &.avatar {
+                .nav-link {
+                    padding: 0 8px;
+                }
+            }
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 0;
+        }
     }
 }
