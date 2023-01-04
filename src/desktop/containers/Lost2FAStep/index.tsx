@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Lost2FAStep.pcss';
-import lostImg from '../../../../public/img/lost-two-fa.svg';
 
 export const Lost2FAStep: React.FC = (): React.ReactElement => {
     return (
@@ -9,7 +8,7 @@ export const Lost2FAStep: React.FC = (): React.ReactElement => {
             <div className="tabs-item" id="tabs-three">
                 <div className="__three  show">
                     <div className="d-flex justify-content-center mb-24">
-                        <img src={lostImg} alt="lost two fa icon" />
+                        <img src="/public/img/lost-two-fa.png" alt="lost two fa icon" />
                     </div>
                     <h3 className="white-text text-center mb-24">Please Contact Support Admin</h3>
                     <p className=" grey-text-accent text-center">

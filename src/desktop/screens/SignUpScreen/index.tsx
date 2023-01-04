@@ -38,7 +38,6 @@ import {
     signUp,
 } from '../../../modules';
 import './SignUpScreen.pcss';
-import bgAuth from '../../../../public/img/bg-auth2.png';
 
 interface ReduxProps {
     requireVerification?: boolean;
@@ -170,7 +169,7 @@ class SignUp extends React.Component<Props> {
             <React.Fragment>
                 <div className="row m-0 sign-up-screen">
                     <div className="col-md-5 dark-bg-accent min-h-full px-0">
-                        <div className="bg-auth" style={{ backgroundImage: `url(${bgAuth})` }}></div>
+                        <div className="bg-auth" style={{ backgroundImage: `url('img/bg-auth2.png')` }}></div>
                     </div>
                     <div className="col-md-7 dark-bg-main min-h-full position-relative">
                         <div className="text-to-signup mb-24">

@@ -61,26 +61,32 @@ export const MarketDetailScreen: FC = (): ReactElement => {
 
     return (
         <React.Fragment>
-            <div className="d-flex pg-market-detail-screen dark-bg-main">
-                <div className="w-70">
-                    <div className="mb-24">
-                        <div className="d-flex align-items-center pg-market-detail-screen__title">
-                            <Link to={`/markets`}>
-                                <ArrowLeftIcon className={'mr-8'} />
-                                <span className="text-ms font-extrabold grey-text-accent pl-3 pr-4 market">Market</span>
-                            </Link>
-                            <p className="text-ms font-extrabold white-text pl-4 mb-0">
-                                {detail && detail.currency && detail.currency.name}
-                            </p>
+            <div className="d-flex justify-content-center pg-market-detail-screen dark-bg-main">
+                <div className="col-lg-10 col-md-11">
+                    <div className="row">
+                        <div className="col-lg-9 col-8">
+                            <div className="mb-24">
+                                <div className="d-flex align-items-center pg-market-detail-screen__title">
+                                    <Link to={`/markets`}>
+                                        <ArrowLeftIcon className={'mr-8'} />
+                                        <span className="text-ms font-extrabold grey-text-accent pl-3 pr-4 market">
+                                            Market
+                                        </span>
+                                    </Link>
+                                    <p className="text-ms font-extrabold white-text pl-4 mb-0">
+                                        {detail && detail.currency && detail.currency.name}
+                                    </p>
+                                </div>
+                            </div>
+                            <MarketDetailInfo detail={detail} />
+                        </div>
+                        <div className="col-lg-3 col-4 d-flex flex-column pg-market-detail-screen__content-right">
+                            <MarketDetailCalculator detail={detail} />
+                            <CardMarketDetail title="Most Tranding" data={dataTranding} />
+                            <CardMarketDetail title="Top 3 Gainers" data={dataGainers} />
+                            <CardMarketDetail title="Top 3 Losers" data={dataLosers} />
                         </div>
                     </div>
-                    <MarketDetailInfo detail={detail} />
-                </div>
-                <div className="w-30 d-flex flex-column pg-market-detail-screen__content-right">
-                    <MarketDetailCalculator detail={detail} />
-                    <CardMarketDetail title="Most Tranding" data={dataTranding} />
-                    <CardMarketDetail title="Top 3 Gainers" data={dataGainers} />
-                    <CardMarketDetail title="Top 3 Losers" data={dataLosers} />
                 </div>
             </div>
         </React.Fragment>

@@ -53,10 +53,6 @@ class FooterContainer extends React.Component<Props, State> {
                         <div className="d-flex justify-content-between flex-wrap">
                             <div className="name px-3">
                                 <Logo className="mb-3" />
-                                <p className="text-ms grey-text-accent">
-                                    Massa blandit semper varius faucibus. Suspendisse viverra venenatis placerat nam ut.
-                                    Pellentesque sit id tempor turpis.
-                                </p>
                             </div>
                             <div className="link px-3">
                                 <p className="text-lg gradient-text mb-36">LINKS</p>

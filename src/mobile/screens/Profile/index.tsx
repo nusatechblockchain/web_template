@@ -12,7 +12,6 @@ import {
     PasswordIcon,
 } from '../../../assets/images/ProfileIcon';
 import { ArrowLeft } from '../../assets/Arrow';
-import Avatar from '/public/img-mobile/avatar.png';
 import { CheckIcon } from '../../../assets/images/ProfileIcon';
 import { WarningIcon } from '../../assets/Nottification';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
@@ -59,7 +58,7 @@ const ProfileMobileScreen: React.FC = () => {
                     </Link>
                 </div>
                 <div className="d-flex align-items-center mb-24">
-                    <img src={Avatar} className="avatar-image" alt="ava" />
+                    <img src="img-mobile/avatar.png" className="avatar-image" alt="ava" />
                     <div className="ml-3 d-flex align-items-center">
                         <h1 className="gradient-text text-md font-bold mb-2 mr-3">
                             Hi, {user && user.username !== null ? user.username : 'The Awesome Member'}

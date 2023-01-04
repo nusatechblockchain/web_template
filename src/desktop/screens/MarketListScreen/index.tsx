@@ -14,13 +14,17 @@ export const MarketListScreen: FC = (): ReactElement => {
 
     return (
         <React.Fragment>
-            <div className="pg-market-list-screen">
-                <div className="dark-bg-main container py-3">
-                    <MarketListHeader />
+            <div className="pg-market-list-screen dark-bg-main">
+                <div className="dark-bg-main pt-4">
+                    <div className="container py-3">
+                        <MarketListHeader />
+                    </div>
                 </div>
 
-                <div className="dark-bg-accent container">
-                    <MarketListTable />
+                <div className="list-market dark-bg-accent ">
+                    <div className="container ">
+                        <MarketListTable />
+                    </div>
                 </div>
             </div>
         </React.Fragment>

@@ -11,7 +11,13 @@ import { CustomStylesSelect } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
-import { beneficiariesCreate, selectCurrencies, selectWallets, Wallet } from '../../../modules';
+import {
+    beneficiariesCreate,
+    selectCurrencies,
+    selectWallets,
+    Wallet,
+    selectBeneficiariesCreateError,
+} from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
@@ -41,6 +47,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
     const currencies = useSelector(selectCurrencies);
     const wallets = useSelector(selectWallets);
+    // const error = useSelector(selectBeneficiariesCreateError);
     const currencyItem = currencies.find((item) => item.id === currency);
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
@@ -88,7 +95,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setCoinDescription(value);
     };
 
-    const handleSubmitAddAddressCoinModal = React.useCallback(() => {
+    const handleSubmitAddAddressCoinModal = React.useCallback(async () => {
         const payload = {
             currency: currency || '',
             name: coinBeneficiaryName,
@@ -99,9 +106,19 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
             ...(coinDescription && { description: coinDescription }),
         };
 
-        dispatch(beneficiariesCreate(payload));
+        await dispatch(beneficiariesCreate(payload));
         handleClearModalsInputs();
-        props.handleAddAddress();
+
+        const error = await useSelector(selectBeneficiariesCreateError);
+
+        console.log(error);
+
+        // if (error) {
+        //     console.log('errrorr');
+        // } else {
+        //     console.log('tidak error');
+        //     props.handleAddAddress();
+        // }
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
 
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
