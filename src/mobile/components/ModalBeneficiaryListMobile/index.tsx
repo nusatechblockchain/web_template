@@ -6,6 +6,7 @@ import { selectBeneficiaries, Beneficiary, beneficiariesDelete, beneficiariesFet
 import './ModalBeneficiaryListMobile.pcss';
 import { ModalMobile } from '../Modal';
 import { WalletIcon } from 'src/mobile/assets/Wallets';
+import { ArrowLeft } from 'src/mobile/assets/Arrow';
 
 export interface ModalBeneficiaryListMobileProps {
     showModalBeneficiaryList: boolean;
@@ -32,9 +33,9 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
             dispatch(beneficiariesDelete({ id: item.id }));
             // dispatch(beneficiariesFetch());
 
-            setTimeout(() => {
-                location.reload();
-            }, 500);
+            // setTimeout(() => {
+            //     location.reload();
+            // }, 500);
         },
         []
     );
@@ -43,9 +44,9 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
         return (
             <React.Fragment>
                 <div>
-                    <div className="text-right">
+                    <div className="mt-3">
                         <span onClick={() => props.onCloseList()} className="cursor-pointer text-secondary">
-                            close
+                            <ArrowLeft className={''} />
                         </span>
                     </div>
                     <h5 className="font-semibold white-text mt-5">Select Form Address Book</h5>

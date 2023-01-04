@@ -52,6 +52,8 @@ export const ru = {
     'page.mobile.wallets.withdraw.history': 'Withdraw history',
     'page.mobile.wallets.banner.total': 'Total',
     'page.mobile.wallets.banner.available': 'Available',
+    'page.mobile.wallets.banner.locked': 'Locked',
+    'page.mobile.wallets.banner.estimated': 'Estimated IDR',
 
     'page.mobile.copy.text': 'Copy Address',
     'page.mobile.wallet.deposit.generate': 'Generate deposit address',
@@ -135,6 +137,26 @@ export const ru = {
     'page.mobile.profile.apiKeys.modal.btn.activate':'Activate',
     'page.mobile.profile.apiKeys.modal.btn.delete':'Delete',
     'page.mobile.profile.apiKeys.modal.title':'Enter 2FA Code from the app',
+
+    // Wallet
+    'page.mobile.wallets.balance': 'Balances',
+    'page.mobile.wallets.estimatedBalance': 'Estimated Total Balance',
+    'page.mobile.wallets.estimatedAvailable': 'Estimated Total Available',
+
+    'page.mobile.wallets.deposit': 'Deposit',
+    'page.mobile.wallets.withdraw': 'Withdraw',
+    'page.mobile.wallets.transfer': 'Transfer',
+
+    'page.mobile.wallets.hideSmallBalance':'Hide small balances',
+    
+    'page.mobile.wallets.modal.2FA': 'Two-factor Authentication Needed',
+    'page.mobile.wallets.modal.body.2FA': 'Please turn on Two-factor authentication',
+    'page.mobile.wallets.modal.body.2FA.enable': 'Enable 2FA',
+    'page.mobile.wallets.modal.body.2FA.cancel': 'Cancel',
+
+    // Wallet detail
+    'page.mobile.wallet.detail.empty':`Empty Data You don't have any transaction yet`,
+
 
      // Internal Transfer
      'page.mobile.internalTransfer.header': 'Внутренний трансфер',

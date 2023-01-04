@@ -314,12 +314,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={EmailVerificationMobileScreen}
                         />
 
-                        <PrivateRoute
+                        {/* <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
                             path="/setting"
                             component={SettingProfileMobileScreen}
-                        />
+                        /> */}
 
                         <PrivateRoute
                             loading={userLoading}

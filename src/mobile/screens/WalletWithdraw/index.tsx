@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomInput } from 'src/desktop/components';
-import { selectCurrencies, Currency, selectBeneficiaries, Beneficiary } from '../../../modules';
+import { selectCurrencies, Currency, selectBeneficiaries, Beneficiary, beneficiariesDelete } from '../../../modules';
 import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
 import { walletsWithdrawCcyFetch } from '../../../modules';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
@@ -11,6 +11,8 @@ import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 import { ModalAddBeneficiaryMobile } from 'src/mobile/components';
 import { ModalBeneficiaryListMobile } from 'src/mobile/components/ModalBeneficiaryListMobile';
 import { Modal } from 'react-bootstrap';
+import Select from 'react-select';
+import { CustomStylesSelect } from 'src/mobile/components';
 
 export const WalletWithdrawMobileScreen: React.FC = () => {
     useBeneficiariesFetch();
@@ -64,6 +66,10 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
             return true;
         }
     };
+
+    // React.useEffect(() => {
+    //     setAddress('');
+    // }, [address]);
 
     return (
         <>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 import { Link, useParams, useHistory } from 'react-router-dom';
@@ -25,6 +26,7 @@ import { InfoModalNetworkIcon } from '../../../assets/images/InfoIcon';
 const DEFAULT_LIMIT = 5;
 const WalletDetailMobileScreen: React.FC = () => {
     const history = useHistory();
+    const { formatMessage } = useIntl();
     const { currency = '' } = useParams<{ currency?: string }>();
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
@@ -159,16 +161,22 @@ const WalletDetailMobileScreen: React.FC = () => {
                 <div className="detail-assets-container w-100 mb-4">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex flex-column justify-content-center align-items-center">
-                            <h3 className="text-sm grey-text">Available</h3>
+                            <h3 className="text-sm grey-text">
+                                {formatMessage({ id: 'page.mobile.wallets.banner.available' })}
+                            </h3>
                             <h2 className="text-sm grey-text font-extrabold">0</h2>
                         </div>
                         <div className="d-flex flex-column justify-content-center align-items-center">
-                            <h3 className="text-sm grey-text">Locked</h3>
+                            <h3 className="text-sm grey-text">
+                                {formatMessage({ id: 'page.mobile.wallets.banner.available' })}
+                            </h3>
                             <h2 className="text-sm grey-text font-extrabold">0</h2>
                         </div>
 
                         <div className="d-flex flex-column justify-content-center align-items-center">
-                            <h3 className="text-sm grey-text">Estimated IDR</h3>
+                            <h3 className="text-sm grey-text">
+                                {formatMessage({ id: 'page.mobile.wallets.banner.estimated' })}
+                            </h3>
                             <h2 className="text-sm grey-text font-extrabold">0</h2>
                         </div>
                     </div>
@@ -181,21 +189,21 @@ const WalletDetailMobileScreen: React.FC = () => {
                         onClick={() => setShowNetwork(true)}
                         className="btn btn-primary btn-sm font-normal m-1">
                         <DepositIcon className={''} />
-                        Deposit
+                        {formatMessage({ id: 'page.mobile.wallets.deposit' })}
                     </button>
                     <button
                         type="button"
                         onClick={() => history.push(`/wallets/${currency}/withdraw`)}
                         className="btn btn-primary btn-sm font-normal m-1">
                         <WithdrawlIcon className={''} />
-                        Withdraw
+                        {formatMessage({ id: 'page.mobile.wallets.withdraw' })}
                     </button>
                     <button
                         type="button"
                         onClick={() => history.push(`/wallets/${currency}/transfer`)}
                         className="btn btn-primary btn-sm font-normal m-1">
                         <TransferIcon className={''} />
-                        Transfer
+                        {formatMessage({ id: 'page.mobile.wallets.transfer' })}
                     </button>
                 </div>
 
@@ -211,7 +219,7 @@ const WalletDetailMobileScreen: React.FC = () => {
                             {!historys[0] || historys === null ? (
                                 <div className="empty-data d-flex flex-column align-items-center mb-5 w-100">
                                     <DocIcon className={''} />
-                                    <h1>Empty Data You don’t have any transaction yet</h1>
+                                    <h1>{formatMessage({ id: 'page.mobile.wallet.detail.empty' })}</h1>
                                 </div>
                             ) : (
                                 <Table data={getTableData(historys)} />
@@ -223,7 +231,7 @@ const WalletDetailMobileScreen: React.FC = () => {
                         {!historys[0] || historys === null ? (
                             <div className="empty-data d-flex flex-column align-items-center mb-5 w-100">
                                 <DocIcon className={''} />
-                                <h1>Empty Data You don’t have any transaction yet</h1>
+                                <h1>{formatMessage({ id: 'page.mobile.wallet.detail.empty' })}</h1>
                             </div>
                         ) : (
                             <Table data={getTableData(historys)} />
@@ -234,7 +242,7 @@ const WalletDetailMobileScreen: React.FC = () => {
                         {!historys[0] || historys === null ? (
                             <div className="empty-data d-flex flex-column align-items-center mb-5 w-100">
                                 <DocIcon className={''} />
-                                <h1>Empty Data You don’t have any transaction yet</h1>
+                                <h1>{formatMessage({ id: 'page.mobile.wallet.detail.empty' })}</h1>
                             </div>
                         ) : (
                             <Table data={getTableData(historys)} />
