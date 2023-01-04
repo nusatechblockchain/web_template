@@ -410,12 +410,12 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                         <p>Filled</p>
                         <p>Total</p>
                     </div>
-                    <a href="./History/index.html">
+                    <Link to="/history-transaction">
                         <div className="d-flex align-items-center all-order">
                             <p className="mb-0">All Order</p>
                             <HistoryIcon />
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div className="no-order text-center"> You have no order</div>
 

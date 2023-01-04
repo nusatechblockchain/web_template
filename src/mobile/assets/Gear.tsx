@@ -20,8 +20,8 @@ export const GearIcon = () => {
                     x2="59.3317"
                     y2="63.272"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
                 <linearGradient
                     id="paint1_linear_567_7535"
@@ -30,8 +30,8 @@ export const GearIcon = () => {
                     x2="96.6226"
                     y2="92.3799"
                     gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#02C3BD" />
-                    <stop offset="1" stop-color="#4062BB" />
+                    <stop stopColor="#02C3BD" />
+                    <stop offset="1" stopColor="#4062BB" />
                 </linearGradient>
             </defs>
         </svg>

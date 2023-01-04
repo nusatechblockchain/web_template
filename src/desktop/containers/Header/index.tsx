@@ -19,10 +19,12 @@ import {
     selectCurrencies,
     Currency,
     selectMarketTickers,
+    changeColorTheme,
 } from '../../../modules';
 import { numberFormat } from '../../../helpers';
 import { Logo } from '../../../assets/images/Logo';
 import { IndonesianFlag, AmericanFlag } from '../../../assets/images/Flags';
+import { MoonIcon, SunIcon } from 'src/assets/images/SwitchTheme';
 import { Api, Dashboard, Logout, Referral, Security, Wallet } from '../../../assets/images/ProfileDropdown';
 
 interface ReduxProps {
@@ -40,6 +42,7 @@ interface OwnProps {
 interface DispatchProps {
     setMobileWalletUi: typeof setMobileWalletUi;
     logout: typeof logoutFetch;
+    changeColorTheme: typeof changeColorTheme;
 }
 
 interface LocationProps extends RouterProps {
@@ -430,6 +433,16 @@ class Head extends React.Component<Props, HeaderState> {
                                     </li>
                                 </React.Fragment>
                             )}
+
+                            <span
+                                className="cursor-pointer"
+                                onClick={(e) =>
+                                    this.handleChangeCurrentStyleMode(
+                                        this.props.colorTheme === 'light' ? 'dark' : 'light'
+                                    )
+                                }>
+                                {this.props.colorTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
+                            </span>
                         </ul>
 
                         {this.state.showHeader && !isLoggedIn && (
@@ -457,6 +470,10 @@ class Head extends React.Component<Props, HeaderState> {
             </React.Fragment>
         );
     }
+
+    private handleChangeCurrentStyleMode = (value: string) => {
+        this.props.changeColorTheme(value);
+    };
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => ({
@@ -471,6 +488,7 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispa
     setMobileWalletUi: (payload) => dispatch(setMobileWalletUi(payload)),
     toggleMarketSelector: () => dispatch(toggleMarketSelector()),
     logout: () => dispatch(logoutFetch()),
+    changeColorTheme: (payload) => dispatch(changeColorTheme(payload)),
 });
 
 export const Header = compose(

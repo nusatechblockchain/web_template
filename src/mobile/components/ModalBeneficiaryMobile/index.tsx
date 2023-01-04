@@ -73,6 +73,10 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
         setCoinDescription(value);
     };
 
+    // const handleDeleteAddress  = (value: string) => {
+
+    // }
+
     const handleSubmitAddAddressCoinModal = React.useCallback(() => {
         const payload = {
             currency: currency || '',

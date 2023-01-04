@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Modal } from '../../components';
+import { Modal, OrderFormComponent } from '../../components';
 import { Decimal } from '../../../components';
 import {
     selectUserLoggedIn,
     selectCurrencies,
-    Currency,
     selectMarketTickers,
     selectCurrentMarket,
     Ticker,
@@ -19,39 +18,28 @@ import {
     setOrderType,
 } from '../../../modules';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router';
+import { useParams } from 'react-router';
+import { numberFormat } from '../../../helpers';
 
-const OrderFormComponent = (props) => {
-    const history = useHistory();
+export const OrderForm = () => {
     const dispatch = useDispatch();
     const isLoggedin = useSelector(selectUserLoggedIn);
-    const currencies = useSelector(selectCurrencies);
     const tickers = useSelector(selectMarketTickers);
     const currentMarket = useSelector(selectCurrentMarket);
-    const currentPrice = useSelector(selectCurrentPrice);
     const wallets = useSelector(selectWallets);
 
-    // console.log(currentPrice, 'current price');
-
     const { currency = '' } = useParams<{ currency?: string }>();
-    const currencyItem: Currency = currencies.find((item) => item.id === currentMarket?.quote_unit);
     const tickerItem: Ticker = tickers[currency];
     const wallet =
         wallets.length &&
         wallets.find((item) => item.currency.toLowerCase() === currentMarket?.base_unit?.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
-    const selectedFixed = (wallet || { fixed: 0 }).fixed;
-
-    const usd =
-        wallets.length &&
-        wallets.find((item) => item.currency.toLowerCase() === currentMarket?.quote_unit?.toLowerCase());
-    const usdt = usd && usd.balance ? usd.balance.toString() : '0';
-    const usdtFixed = (usd || { fixed: 0 }).fixed;
 
     const [orderTypeBuy, setOrderTypeBuy] = React.useState('market');
     const [orderTypeSell, setOrderTypeSell] = React.useState('market');
-    const [orderPrecentageBuy, setOrderPrecentageBuy] = React.useState(0);
-    const [orderPrecentageSell, setOrderPrecentageSell] = React.useState(0);
+    const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
+    const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
+
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
     const [showModalSellSuccess, setShowModalSellSuccess] = React.useState(false);
@@ -74,7 +62,9 @@ const OrderFormComponent = (props) => {
 
     React.useEffect(() => {
         if (priceSell) {
-            setTotalSell(+priceSell * +amountSell);
+            let temp = +priceSell * +amountSell;
+            let tempToFloat = numberFormat(+temp, 'ID').toString();
+            setTotalSell(+tempToFloat);
         }
     }, [priceSell, amountSell]);
 
@@ -86,13 +76,16 @@ const OrderFormComponent = (props) => {
 
     React.useEffect(() => {
         if (priceBuy) {
-            setAmountBuy((+balance / +priceBuy) * orderPrecentageBuy);
+            setAmountBuy((+balance / +priceBuy) * orderPercentageBuy);
         }
-    }, [priceBuy, orderPrecentageBuy]);
+    }, [priceBuy, orderPercentageBuy]);
 
     React.useEffect(() => {
-        setAmountSell(+balance * orderPrecentageSell);
-    }, [orderPrecentageSell]);
+        let temp = (+balance * orderPercentageSell) / 100;
+        let tempToFloat = numberFormat(+temp, 'ID').toString();
+
+        setAmountSell(+tempToFloat);
+    }, [orderPercentageSell]);
 
     const handleSubmitBuy = () => {
         dispatch(
@@ -191,514 +184,46 @@ const OrderFormComponent = (props) => {
                 <p className="white-text font-bold text-sm mb-3">Order Form</p>
                 <div className={isLoggedin ? 'row ' : 'row blur-effect'}>
                     <div className="col-6">
-                        <form action="">
-                            <div className="d-flex mb-1 order-tab">
-                                <input
-                                    type="radio"
-                                    id="market-order-sell"
-                                    className="d-none"
-                                    name="order-form"
-                                    defaultValue="market"
-                                />
-                                <label
-                                    htmlFor="market-order-sell"
-                                    onClick={() => setOrderTypeBuy('market')}
-                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                                        orderTypeBuy === 'market' ? 'green-text' : 'white-text'
-                                    }`}>
-                                    MARKET
-                                </label>
-                                <input
-                                    type="radio"
-                                    id="limit-order-sell"
-                                    className="d-none"
-                                    name="order-form"
-                                    defaultValue="limit"
-                                />
-                                <label
-                                    onClick={() => setOrderTypeBuy('limit')}
-                                    htmlFor="limit-order-sell"
-                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                                        orderTypeBuy === 'limit' ? 'green-text' : 'white-text'
-                                    }`}>
-                                    LIMIT
-                                </label>
-                                <input
-                                    type="radio"
-                                    id="stop-order-sell"
-                                    className="d-none"
-                                    name="order-form"
-                                    defaultValue="stop"
-                                />
-                                <label
-                                    onClick={() => setOrderTypeBuy('spot')}
-                                    htmlFor="stop-order-sell"
-                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                                        orderTypeBuy === 'spot' ? 'green-text' : 'white-text'
-                                    }`}>
-                                    SPOT
-                                </label>
-                            </div>
-                            <div className="form-group mb-3 position-relative  w-100">
-                                <input
-                                    type="text"
-                                    defaultValue={orderTypeBuy === 'market' ? tickerItem?.last : priceBuy}
-                                    value={orderTypeBuy === 'market' ? tickerItem?.last : priceBuy}
-                                    onChange={(e) => handleChangePriceBuy(e.target.value)}
-                                    className="form-control input-order-form"
-                                    id="input-order"
-                                />
-                                <label htmlFor="input-order" className="input-order-label-left">
-                                    Price
-                                </label>
-                                <label htmlFor="input-order" className="input-order-label-right">
-                                    {currentMarket?.quote_unit?.toUpperCase()}
-                                </label>
-                            </div>
-                            <div className="form-group mb-3 position-relative  w-100">
-                                <input
-                                    type="text"
-                                    defaultValue={amountBuy}
-                                    className="form-control input-order-form"
-                                    id="input-order"
-                                />
-                                <label htmlFor="input-order" className="input-order-label-left">
-                                    Amount
-                                </label>
-                                <label htmlFor="input-order" className="input-order-label-right">
-                                    {currentMarket?.base_unit?.toUpperCase()}
-                                </label>
-                            </div>
-                            <div className="input-timeline mb-24 position-relative">
-                                <div className="line-wrap">
-                                    <div className="line" id="line-order" style={{ width: orderPrecentageBuy + '%' }} />
-                                </div>
-                                <div className="main-input">
-                                    <div className="d-flex justify-content-between">
-                                        <div className="input-item start" onClick={() => setOrderPrecentageBuy(0)}>
-                                            <label htmlFor="percent-buy-buy-0" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageBuy == 0 ? 'active' : 'check'
-                                                    }`}>
-                                                    <div className={`dots ${orderPrecentageBuy == 0 ? '' : 'check'}`} />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                id="percent-buy-0"
-                                                name="order-form"
-                                                defaultValue="market"
-                                                className="d-none"
-                                            />
-                                            <label
-                                                htmlFor="percent-buy-0"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                0%
-                                            </label>
-                                        </div>
-                                        <div className="input-item" onClick={() => setOrderPrecentageBuy(25)}>
-                                            <label htmlFor="percent-buy-25" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageBuy == 25
-                                                            ? 'active'
-                                                            : orderPrecentageBuy > 25
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div className={`dots ${orderPrecentageBuy > 25 ? 'check' : ''}`} />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-buy-25"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-buy-25"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                25%
-                                            </label>
-                                        </div>
-                                        <div className="input-item" onClick={() => setOrderPrecentageBuy(50)}>
-                                            <label htmlFor="percent-buy-50" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageBuy == 50
-                                                            ? 'active'
-                                                            : orderPrecentageBuy > 50
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div className={`dots ${orderPrecentageBuy > 50 ? 'check' : ''}`} />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-buy-50"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-buy-50"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                50%
-                                            </label>
-                                        </div>
-                                        <div className="input-item" onClick={() => setOrderPrecentageBuy(75)}>
-                                            <label htmlFor="percent-buy-75" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageBuy == 75
-                                                            ? 'active'
-                                                            : orderPrecentageBuy > 75
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div className={`dots ${orderPrecentageBuy > 75 ? 'check' : ''}`} />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-buy-75"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-buy-75"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                75%
-                                            </label>
-                                        </div>
-                                        <div className="input-item end" onClick={() => setOrderPrecentageBuy(100)}>
-                                            <label htmlFor="percent-buy-100" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageBuy == 100
-                                                            ? 'active'
-                                                            : orderPrecentageBuy > 100
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div
-                                                        className={`dots ${orderPrecentageBuy == 100 ? 'check' : ''}`}
-                                                    />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-buy-100"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-buy-100"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                100%
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group mb-3 position-relative  w-100">
-                                <input
-                                    type="text"
-                                    defaultValue={totalBuy}
-                                    className="form-control input-order-form"
-                                    id="input-order"
-                                />
-                                <label htmlFor="input-order" className="input-order-label-left">
-                                    Total
-                                </label>
-                                <label htmlFor="input-order" className="input-order-label-right">
-                                    {currentMarket?.base_unit?.toUpperCase()}
-                                </label>
-                            </div>
-                            <div className="mb-3 d-flex justify-content-between">
-                                <p className="text-sm grey-text-accent"> Avaliable </p>
-                                <p className="text-sm white-text">
-                                    <Decimal fixed={usdtFixed} thousSep=",">
-                                        {usdt}
-                                    </Decimal>{' '}
-                                    {currentMarket?.quote_unit?.toUpperCase()}{' '}
-                                </p>
-                            </div>
-                            <button
-                                type="button"
-                                className="btn btn-success btn-block"
-                                onClick={() => setShowModalBuy(true)}
-                                disabled={!isLoggedin}>
-                                Buy {currentMarket?.base_unit?.toUpperCase()}
-                            </button>
-                        </form>
+                        <OrderFormComponent
+                            side={'Buy'}
+                            orderType={orderTypeBuy}
+                            handleSelectType={(e) => setOrderTypeBuy(e)}
+                            orderPercentage={orderPercentageBuy}
+                            handleSelectPercentage={(e) => setOrderPercentageBuy(e)}
+                            labelPercent0={'label-buy-0'}
+                            labelPercent25={'label-buy-25'}
+                            labelPercent50={'label-buy-50'}
+                            labelPercent75={'label-buy-75'}
+                            labelPercent100={'label-buy-100'}
+                            amount={amountBuy}
+                            handleChangeAmount={(e) => setAmountBuy(e)}
+                            total={totalBuy}
+                            handleChangeTotal={(e) => setTotalBuy(e)}
+                            price={priceBuy}
+                            handleChangePrice={handleChangePriceBuy}
+                            handleSubmit={() => setShowModalBuy(true)}
+                        />
                     </div>
                     <div className="col-6">
-                        <form action="">
-                            <div className="d-flex mb-1 order-tab">
-                                <input
-                                    type="radio"
-                                    id="market-order"
-                                    className="d-none"
-                                    name="order-form"
-                                    defaultValue="market"
-                                />
-                                <label
-                                    htmlFor="market-order"
-                                    onClick={() => setOrderTypeSell('market')}
-                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                                        orderTypeSell === 'market' ? 'green-text' : 'white-text'
-                                    }`}>
-                                    MARKET
-                                </label>
-                                <input
-                                    type="radio"
-                                    id="limit-order"
-                                    className="d-none"
-                                    name="order-form"
-                                    defaultValue="limit"
-                                />
-                                <label
-                                    htmlFor="limit-order"
-                                    onClick={() => setOrderTypeSell('limit')}
-                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                                        orderTypeSell === 'limit' ? 'green-text' : 'white-text'
-                                    }`}>
-                                    LIMIT
-                                </label>
-                                <input
-                                    type="radio"
-                                    id="stop-order"
-                                    className="d-none"
-                                    name="order-form"
-                                    defaultValue="stop"
-                                />
-                                <label
-                                    htmlFor="stop-order"
-                                    onClick={() => setOrderTypeSell('spot')}
-                                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                                        orderTypeSell === 'spot' ? 'green-text' : 'white-text'
-                                    }`}>
-                                    SPOT
-                                </label>
-                            </div>
-                            <div className="form-group mb-3 position-relative  w-100">
-                                <input
-                                    type="text"
-                                    defaultValue={orderTypeSell === 'market' ? tickerItem?.last : priceSell}
-                                    value={orderTypeSell === 'market' ? tickerItem?.last : priceSell}
-                                    onChange={(e) => handleChangePriceSell(e.target.value)}
-                                    className="form-control input-order-form"
-                                    id="input-order"
-                                />
-                                <label htmlFor="input-order" className="input-order-label-left">
-                                    Price
-                                </label>
-                                <label htmlFor="input-order" className="input-order-label-right">
-                                    {currentMarket?.quote_unit?.toUpperCase()}
-                                </label>
-                            </div>
-                            <div className="form-group mb-3 position-relative  w-100">
-                                <input
-                                    type="text"
-                                    defaultValue={amountSell}
-                                    className="form-control input-order-form"
-                                    id="input-order"
-                                />
-                                <label htmlFor="input-order" className="input-order-label-left">
-                                    Amount
-                                </label>
-                                <label htmlFor="input-order" className="input-order-label-right">
-                                    {currentMarket?.base_unit?.toUpperCase()}
-                                </label>
-                            </div>
-                            <div className="input-timeline mb-24 position-relative">
-                                <div className="line-wrap">
-                                    <div
-                                        className="line"
-                                        id="line-order"
-                                        style={{ width: orderPrecentageSell + '%' }}
-                                    />
-                                </div>
-                                <div className="main-input">
-                                    <div className="d-flex justify-content-between">
-                                        <div className="input-item start" onClick={() => setOrderPrecentageSell(0)}>
-                                            <label htmlFor="percent-sell-buy-0" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageSell == 0 ? 'active' : 'check'
-                                                    }`}>
-                                                    <div
-                                                        className={`dots ${orderPrecentageSell == 0 ? '' : 'check'}`}
-                                                    />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                id="percent-sell-0"
-                                                name="order-form"
-                                                defaultValue="market"
-                                                className="d-none"
-                                            />
-                                            <label
-                                                htmlFor="percent-sell-0"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                0%
-                                            </label>
-                                        </div>
-                                        <div className="input-item" onClick={() => setOrderPrecentageSell(25)}>
-                                            <label htmlFor="percent-sell-25" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageSell == 25
-                                                            ? 'active'
-                                                            : orderPrecentageSell > 25
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div
-                                                        className={`dots ${orderPrecentageSell > 25 ? 'check' : ''}`}
-                                                    />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-sell-25"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-sell-25"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                25%
-                                            </label>
-                                        </div>
-                                        <div className="input-item" onClick={() => setOrderPrecentageSell(50)}>
-                                            <label htmlFor="percent-sell-50" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageSell == 50
-                                                            ? 'active'
-                                                            : orderPrecentageSell > 50
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div
-                                                        className={`dots ${orderPrecentageSell > 50 ? 'check' : ''}`}
-                                                    />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-sell-50"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-sell-50"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                50%
-                                            </label>
-                                        </div>
-                                        <div className="input-item" onClick={() => setOrderPrecentageSell(75)}>
-                                            <label htmlFor="percent-sell-75" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageSell == 75
-                                                            ? 'active'
-                                                            : orderPrecentageSell > 75
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div
-                                                        className={`dots ${orderPrecentageSell > 75 ? 'check' : ''}`}
-                                                    />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-sell-75"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-sell-75"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                75%
-                                            </label>
-                                        </div>
-                                        <div className="input-item end" onClick={() => setOrderPrecentageSell(100)}>
-                                            <label htmlFor="percent-sell-100" className="cursor-pointer">
-                                                <div
-                                                    className={`dots-wrap ${
-                                                        orderPrecentageSell == 100
-                                                            ? 'active'
-                                                            : orderPrecentageSell > 100
-                                                            ? 'check'
-                                                            : ''
-                                                    }`}>
-                                                    <div
-                                                        className={`dots ${orderPrecentageSell == 100 ? 'check' : ''}`}
-                                                    />
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="radio"
-                                                className="d-none"
-                                                id="percent-sell-100"
-                                                name="order-form"
-                                                defaultValue="market"
-                                            />
-                                            <label
-                                                htmlFor="percent-sell-100"
-                                                className="btn btn-transparent dark-text w-auto text-xs font-bold cursor-pointer p-0 d-block">
-                                                100%
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group mb-3 position-relative  w-100">
-                                <input
-                                    type="text"
-                                    defaultValue={totalSell}
-                                    className="form-control input-order-form"
-                                    id="input-order"
-                                />
-                                <label htmlFor="input-order" className="input-order-label-left">
-                                    Total
-                                </label>
-                                <label htmlFor="input-order" className="input-order-label-right">
-                                    {currentMarket?.base_unit?.toUpperCase()}
-                                </label>
-                            </div>
-                            <div className="mb-3 d-flex justify-content-between">
-                                <p className="text-sm grey-text-accent"> Avaliable </p>
-                                <p className="text-sm white-text">
-                                    <Decimal fixed={selectedFixed} thousSep=",">
-                                        {balance}
-                                    </Decimal>{' '}
-                                    {currentMarket?.base_unit?.toUpperCase()}{' '}
-                                </p>
-                            </div>
-                            <button
-                                type="button"
-                                className="btn btn-danger btn-block"
-                                disabled={!isLoggedin}
-                                onClick={() => setShowModalSell(true)}>
-                                Sell {currentMarket?.base_unit?.toUpperCase()}
-                            </button>
-                        </form>
+                        <OrderFormComponent
+                            side={'Sell'}
+                            orderType={orderTypeSell}
+                            handleSelectType={(e) => setOrderTypeSell(e)}
+                            orderPercentage={orderPercentageSell}
+                            handleSelectPercentage={(e) => setOrderPercentageSell(e)}
+                            labelPercent0={'label-sell-0'}
+                            labelPercent25={'label-sell-25'}
+                            labelPercent50={'label-sell-50'}
+                            labelPercent75={'label-sell-75'}
+                            labelPercent100={'label-sell-100'}
+                            amount={amountSell}
+                            handleChangeAmount={(e) => setAmountSell(e)}
+                            total={totalSell}
+                            handleChangeTotal={(e) => setTotalSell(e)}
+                            price={priceSell}
+                            handleChangePrice={handleChangePriceSell}
+                            handleSubmit={() => setShowModalSell(true)}
+                        />
                     </div>
                 </div>
             </div>
@@ -709,5 +234,3 @@ const OrderFormComponent = (props) => {
         </React.Fragment>
     );
 };
-
-export const OrderForm = React.memo(OrderFormComponent);

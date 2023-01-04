@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { injectIntl, useIntl } from 'react-intl';
 import Tab from 'react-bootstrap/Tab';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -26,6 +27,8 @@ import { PaginationMobile } from 'src/mobile/components';
 import { Link } from 'react-router-dom';
 
 const HistoryTransactionMobileScreen: React.FC = () => {
+    const intl = useIntl();
+    const { formatMessage } = useIntl();
     const currencies = useSelector(selectCurrencies);
     const page = useSelector(selectCurrentPage);
     const list = useSelector(selectHistory);
@@ -95,11 +98,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     const getTypeHistoryTransaction = (typeHistoryTransaction: string) => {
         switch (typeHistoryTransaction) {
             case 'deposits':
-                return 'Deposit';
+                return `${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.type.deposits' })}`;
             case 'withdrawl':
-                return 'Withdrawl';
+                return `${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.type.withdrawl' })}`;
             case 'transfers':
-                return 'Internal Transfer';
+                return `${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.type.transfers' })}`;
             default:
                 return;
         }
@@ -121,11 +124,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     const getStatusTransaction = (statusCode: string) => {
         switch (statusCode) {
             case 'Pending':
-                return 'Pending';
+                return `${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.status.pending' })}`;
             case 'Canceled':
-                return 'Canceled';
+                return `${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.status.canceled' })}`;
             case 'completed':
-                return 'Completed';
+                return `${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.status.completed' })}`;
             default:
                 return;
         }
@@ -145,11 +148,21 @@ const HistoryTransactionMobileScreen: React.FC = () => {
 
     // Render header table for internal history transaction
     const getTableHeadersInternalTransaction = () => [
-        <p className="mb-0 text-sm grey-text">Coins</p>,
-        <p className="mb-0 text-sm grey-text">Amount</p>,
-        <p className="mb-0 text-sm grey-text">Type</p>,
-        <p className="mb-0 text-sm grey-text">Receiver UID</p>,
-        <p className="mb-0 text-sm grey-text">Status</p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.coins' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.amount' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.type' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.receiver' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.status' })}
+        </p>,
     ];
 
     // Render data table for internal transaction history
@@ -383,7 +396,9 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                 <Link to={'/profile'} className="cursor-pointer position-absolute">
                     <ArrowLeft className={'back'} />
                 </Link>
-                <h1 className="text-center text-md grey-text-accent font-bold">History Transaction</h1>
+                <h1 className="text-center text-md grey-text-accent font-bold">
+                    {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header' })}
+                </h1>
                 <div className="handle-filter text-right index-0 test-class">
                     <span className="cursor-pointer" onClick={() => setShowFilter(true)}>
                         <FilterIcon className="filter-icon" />
@@ -398,17 +413,27 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                 defaultActiveKey="deposits"
                 onSelect={(e) => handleChangeType(e)}
                 className="justify-content-between">
-                <Tab eventKey="deposits" title="Deposit">
+                <Tab
+                    eventKey="deposits"
+                    title={`${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.type.deposits' })}`}>
                     <div className="table-mobile-wrapper">
                         <Table data={renderDataTable(dataDeposit)} header={renderTableHeader} />
                     </div>
                 </Tab>
-                <Tab eventKey="withdraws" title="Withdrawal">
+                <Tab
+                    eventKey="withdraws"
+                    title={`${formatMessage({
+                        id: 'page.mobile.historyTransaction.internalTransfer.type.withdrawl',
+                    })}`}>
                     <div className="table-mobile-wrapper">
                         <Table data={renderDataTable(dataWithdrawal)} header={renderTableHeader} />
                     </div>
                 </Tab>
-                <Tab eventKey="transfers" title="Internal Transfer">
+                <Tab
+                    eventKey="transfers"
+                    title={`${formatMessage({
+                        id: 'page.mobile.historyTransaction.internalTransfer.type.transfers',
+                    })}`}>
                     <div className="table-responsive">
                         <Table
                             className="table table-borderless"
