@@ -11,13 +11,7 @@ import { CustomStylesSelect } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
-import {
-    beneficiariesCreate,
-    selectCurrencies,
-    selectWallets,
-    Wallet,
-    selectBeneficiariesCreateError,
-} from '../../../modules';
+import { beneficiariesCreate, selectCurrencies, selectWallets, Wallet } from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
@@ -108,17 +102,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
         await dispatch(beneficiariesCreate(payload));
         handleClearModalsInputs();
-
-        const error = await useSelector(selectBeneficiariesCreateError);
-
-        console.log(error);
-
-        // if (error) {
-        //     console.log('errrorr');
-        // } else {
-        //     console.log('tidak error');
-        //     props.handleAddAddress();
-        // }
+        props.handleAddAddress();
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
 
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;

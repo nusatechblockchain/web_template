@@ -80,7 +80,7 @@ class Landing extends React.Component<Props> {
                                             </p>
                                             <p className="mb-0 font-semibold white-text mr-4">
                                                 <BnbIcon className="mr-2 small-coin-icon" />
-                                                BINANCE
+                                                BNB
                                             </p>
                                             <p className="mb-0 font-semibold white-text mr-4">
                                                 <DogeIcon className="mr-2 small-coin-icon" />
@@ -88,7 +88,7 @@ class Landing extends React.Component<Props> {
                                             </p>
                                             <p className="mb-0 font-semibold white-text mr-4">
                                                 <TronIcon className="mr-2 small-coin-icon" />
-                                                BNB
+                                                TRX
                                             </p>
                                         </div>
                                     </div>

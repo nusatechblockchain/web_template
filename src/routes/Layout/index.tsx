@@ -501,9 +501,15 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/wallets/:currency/withdraw"
                         component={WalletWitdrawal}
                     />
-                    <PrivateRoute
+                    {/* <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
+                        path="/wallets"
+                        component={WalletsScreen}
+                    /> */}
+                    <PublicRoute
+                        loading={userLoading}
+                        // isLogged={isLoggedIn}
                         path="/wallets"
                         component={WalletsScreen}
                     />
