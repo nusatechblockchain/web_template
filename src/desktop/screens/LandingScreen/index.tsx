@@ -39,7 +39,6 @@ class Landing extends React.Component<Props> {
     }
 
     public render() {
-        console.log(parseFloat('33.98'));
         return (
             <div className="landing-screen dark-bg-accent">
                 <div

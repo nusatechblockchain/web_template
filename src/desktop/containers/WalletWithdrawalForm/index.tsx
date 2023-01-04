@@ -5,12 +5,21 @@ import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import './WalletWithdrawalForm.pcss';
 import { CustomInput, Modal, ModalAddBeneficiary, ModalBeneficiaryList } from '../../components';
-import { selectCurrencies, selectBeneficiaries, Beneficiary, Currency, BlockchainCurrencies } from '../../../modules';
+import {
+    selectCurrencies,
+    selectBeneficiaries,
+    Beneficiary,
+    Currency,
+    BlockchainCurrencies,
+    selectBeneficiariesCreateError,
+    selectBeneficiariesCreateSuccess,
+} from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
 import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
 import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
+import PinInput from 'react-pin-input';
 
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
@@ -32,12 +41,16 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [address, setAddress] = React.useState('');
     const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
+    const [beneficiaryCode, setBeneficiaryCode] = React.useState('');
 
     const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
+    const beneficiariesError = useSelector(selectBeneficiariesCreateError);
+    const beneficiariesSuccess = useSelector(selectBeneficiariesCreateSuccess);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
+    const [errorBeneficiary, setErrorBeneficiary] = React.useState(beneficiariesError);
 
     // const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     // const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
@@ -65,6 +78,14 @@ export const WalletWithdrawalForm: React.FC = () => {
     const handleSubmitWithdraw = () => {
         dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
     };
+
+    // React.useEffect(() => {
+    //     if (bene) {
+    //         setErrorBeneficiary(beneficiariesError);
+    //         console.log(beneficiariesError);
+    //         console.log(beneficiariesSuccess);
+    //     }
+    // }, [beneficiariesError]);
 
     React.useEffect(() => {
         if (withdrawSuccess) {
@@ -168,36 +189,57 @@ export const WalletWithdrawalForm: React.FC = () => {
         );
     };
 
-    const renderModalBeneficiaryCode = () => (
-        <React.Fragment>
-            <div className="form min-w-400">
-                <div className="form-group mb-24">
-                    <CustomInput
-                        defaultLabel=""
-                        inputValue={otp}
-                        label=""
-                        placeholder="______"
-                        type="text"
-                        labelVisible={false}
-                        classNameInput="text-center spacing-10"
-                        classNameLabel="hidden"
-                        handleChangeInput={handleChangeOtp}
-                    />
+    const handleChangeBeneficiaryCode = (value) => {
+        setBeneficiaryCode(value);
+    };
+
+    const renderHeaderModalBeneficiaryCode = () => {
+        return <h3 className="text-md contrast-text font-bold text-center mx-auto"> Confirmation New Address</h3>;
+    };
+
+    const renderModalBeneficiaryCode = () => {
+        return (
+            <React.Fragment>
+                <div className="form min-w-400">
+                    <p className="mb-3 text-sm grey-text text-center">
+                        We have sent you an email containing a confirmation code pin, please enter it below to save the
+                        new address:
+                    </p>
+                    <div className="form-group mb-24">
+                        <PinInput
+                            length={6}
+                            onChange={handleChangeBeneficiaryCode}
+                            onComplete={handleChangeBeneficiaryCode}
+                            type="numeric"
+                            inputMode="number"
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                marginBottom: '8px',
+                            }}
+                            inputStyle={{
+                                background: 'var(-body-background-color)',
+                                borderRadius: '4px',
+                                fontSize: '20px',
+                            }}
+                            inputFocusStyle={{ fontSize: '20px' }}
+                            autoSelect={true}
+                            regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-primary btn-block"
+                        data-dismiss="modal"
+                        disabled={beneficiaryCode.length < 6 ? true : false}
+                        onClick={() => setShowModalBeneficiaryList(true)}>
+                        Confirm
+                    </button>
+                    <p className="text-right text-xs grey-text mt-2">Resend Code</p>
                 </div>
-                <button
-                    type="button"
-                    className="btn btn-primary btn-block"
-                    data-dismiss="modal"
-                    disabled={otp.length < 6 ? true : false}
-                    onClick={() => {
-                        setShowModalWithdrawalConfirmation(!showModalWithdrawalConfirmation);
-                        setShowModalOtp(!showModalOtp);
-                    }}>
-                    Send
-                </button>
-            </div>
-        </React.Fragment>
-    );
+            </React.Fragment>
+        );
+    };
 
     return (
         <React.Fragment>
@@ -326,11 +368,21 @@ export const WalletWithdrawalForm: React.FC = () => {
                     showModalAddBeneficiary={showModalAddBeneficiary}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
-                        setShowModalBeneficiaryList(true);
-                        setShowModalModalAddBeneficiary(false);
+                        console.log(beneficiariesError);
+                        if (beneficiariesError) {
+                        } else {
+                            setShowModalModalAddBeneficiary(false);
+                            setShowModalBeneficiaryCode(true);
+                        }
                     }}
                 />
             )}
+
+            <Modal
+                content={renderModalBeneficiaryCode()}
+                header={renderHeaderModalBeneficiaryCode()}
+                show={showModalBeneficiaryCode}
+            />
         </React.Fragment>
     );
 };
