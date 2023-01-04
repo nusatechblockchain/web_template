@@ -17,6 +17,9 @@ interface ParentProps {
  */
 export const WalletsHeader: React.FunctionComponent<ParentProps> = (props: ParentProps) => {
     const { wallets, nonZeroSelected } = props;
+
+    const [active, setActive] = React.useState(false);
+
     const intl = useIntl();
 
     const searchFilter = (row: Wallet, searchKey: string) => {

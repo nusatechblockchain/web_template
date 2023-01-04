@@ -22,7 +22,7 @@ import {
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
-import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
+import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector } from '../../../hooks';
 import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
 import PinInput from 'react-pin-input';
 
@@ -50,7 +50,7 @@ export const WalletWithdrawalForm: React.FC = () => {
 
     const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
-    const beneficiariesError = useSelector(selectBeneficiariesCreateError);
+    const beneficiariesError = useReduxSelector(selectBeneficiariesCreateError);
     const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
     const beneficiariesSuccess = useSelector(selectBeneficiariesCreateSuccess);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
@@ -102,14 +102,6 @@ export const WalletWithdrawalForm: React.FC = () => {
             setShowModalBeneficiaryList(true);
         }
     };
-
-    // React.useEffect(() => {
-    //     if (bene) {
-    //         setErrorBeneficiary(beneficiariesError);
-    //         console.log(beneficiariesError);
-    //         console.log(beneficiariesSuccess);
-    //     }
-    // }, [beneficiariesError]);
 
     React.useEffect(() => {
         if (withdrawSuccess) {
@@ -396,9 +388,10 @@ export const WalletWithdrawalForm: React.FC = () => {
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
                         if (beneficiariesError) {
+                            alert('error');
                         } else {
-                            setShowModalModalAddBeneficiary(false);
                             setShowModalBeneficiaryCode(true);
+                            setShowModalModalAddBeneficiary(false);
                         }
                     }}
                 />
