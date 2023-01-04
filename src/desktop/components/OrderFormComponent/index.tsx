@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Modal, OrderPercentage, OrderType } from '../../components';
+import { OrderPercentage, OrderType } from '../../components';
 import { Decimal } from '../../../components';
 import { selectUserLoggedIn, selectMarketTickers, selectCurrentMarket, Ticker, selectWallets } from '../../../modules';
 import { useSelector } from 'react-redux';
@@ -53,6 +53,11 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const tickerItem: Ticker = tickers[currency];
+    const wallet =
+        wallets.length &&
+        wallets.find((item) => item.currency.toLowerCase() === currentMarket?.base_unit?.toLowerCase());
+    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+    const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
     const usd =
         wallets.length &&
@@ -123,16 +128,27 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="mb-3 d-flex justify-content-between">
                     <p className="text-sm grey-text-accent"> Avaliable </p>
                     <p className="text-sm white-text">
-                        <Decimal fixed={usdtFixed} thousSep=",">
-                            {usdt}
-                        </Decimal>{' '}
-                        {currentMarket?.quote_unit?.toUpperCase()}{' '}
+                        {side === 'Buy' ? (
+                            <>
+                                <Decimal fixed={usdtFixed} thousSep=",">
+                                    {usdt}
+                                </Decimal>{' '}
+                                {currentMarket?.quote_unit?.toUpperCase()}{' '}
+                            </>
+                        ) : (
+                            <>
+                                <Decimal fixed={selectedFixed} thousSep=",">
+                                    {balance}
+                                </Decimal>{' '}
+                                {currentMarket?.base_unit?.toUpperCase()}{' '}
+                            </>
+                        )}
                     </p>
                 </div>
                 <button
                     type="button"
                     className={`btn btn-block ${side === 'Buy' ? 'btn-success' : 'btn-danger'}`}
-                    onClick={() => handleSubmit}
+                    onClick={handleSubmit}
                     disabled={!isLoggedin}>
                     {side} {currentMarket?.base_unit?.toUpperCase()}
                 </button>
