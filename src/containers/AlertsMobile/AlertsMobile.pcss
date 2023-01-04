@@ -1,0 +1,35 @@
+.alert-mobile-component {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 99999999999;
+    .alert-wrapper {
+        .alert-content {
+            padding: 5px 10px;
+            border-radius: 8px;
+            display: flex;
+        }
+
+        .alert-danger {
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 15px;
+            display: inline-block;
+            background: var(--text-danger-color);
+            color: var(--text-primary-color);
+            border-color: var(--text-danger-color);
+        }
+
+        .alert-success {
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 15px;
+            display: inline-block;
+            background: var(--text-success-color);
+            color: var(--text-primary-color);
+            border-color: var(--text-success-color);
+        }
+    }
+}

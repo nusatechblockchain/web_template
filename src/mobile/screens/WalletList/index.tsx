@@ -160,7 +160,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
 
             return (
                 <div className="total-container w-50 d-flex flex-column">
-                    <h3 className="text-md grey-text font-bold  mb-0">Estimated Total Available</h3>
+                    <h3 className="text-md grey-text font-bold  mb-0">
+                        {formatMessage({ id: 'page.mobile.wallets.estimatedAvailable' })}
+                    </h3>
                     <div className="total-value d-flex justify-content-between align-items-center">
                         <h4 className="text-sm grey-text-accent font-bold">
                             0BTC = {formatWithSeparators(estimatedValueSecondary, ',')}{' '}
@@ -195,15 +197,17 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
 
     const handleClickWithdraw = React.useCallback(() => {
         user.otp ? setShowModal(true) : setShowModalLocked(!showModalLocked);
-    }, [history]);
+    }, []);
 
     return (
         <React.Fragment>
             <div className="mobile-container wallet-list no-header dark-bg-main">
-                <h1 className="w-100 heading-one mb-24 mt-0">Balances</h1>
+                <h1 className="w-100 heading-one mb-24 mt-0">{formatMessage({ id: 'page.mobile.wallets.balance' })}</h1>
                 <div className="estimate-container d-flex flex-column w-100">
                     <div className="total-container w-50 d-flex flex-column">
-                        <h3 className="text-md grey-text font-bold  mb-0">Estimated Total Balance</h3>
+                        <h3 className="text-md grey-text font-bold  mb-0">
+                            {formatMessage({ id: 'page.mobile.wallets.estimatedBalance' })}
+                        </h3>
                         <div className="total-value d-flex justify-content-between align-items-center">
                             <h4 className="text-sm grey-text-accent font-bold">
                                 0BTC = {formatWithSeparators(estimatedValue, ',')}{' '}
@@ -222,7 +226,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             }}
                             className="btn btn-primary btn-sm">
                             <DepositIcon className={'mr-2'} />
-                            Deposit
+                            {formatMessage({ id: 'page.mobile.wallets.deposit' })}
                         </button>
                         <button
                             onClick={() => {
@@ -233,7 +237,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             data-toggle="modal"
                             data-target="#modal-withdraw">
                             <WithdrawlIcon className={'mr-2'} />
-                            Withdraw
+                            {formatMessage({ id: 'page.mobile.wallets.withdraw' })}
                         </button>
                         <button
                             onClick={() => {
@@ -242,7 +246,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             }}
                             className="btn btn-primary btn-sm">
                             <TransferIcon className={'mr-2'} />
-                            Transfer
+                            {formatMessage({ id: 'page.mobile.wallets.transfer' })}
                         </button>
                     </div>
                 </div>
@@ -256,7 +260,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             className="form-check-input"
                         />
                         <label className="form-check-label text-sm font-semibold white-text" htmlFor="nonZeroSelected">
-                            Hide small balances
+                            {formatMessage({ id: 'page.mobile.wallets.hideSmallBalance' })}
                         </label>
                     </form>
                     {/* <SearchIcon /> */}
@@ -283,20 +287,22 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                             <GearIcon />
                         </div>
                         <div className="text-center">
-                            <p className="gradient-text mb-3">Two-factor Authentication Needed</p>
+                            <p className="gradient-text mb-3">
+                                {formatMessage({ id: 'page.mobile.wallets.modal.2FA' })}
+                            </p>
                             <p className="text-secondary text-sm">
-                                Please turn on Two-factor authentication before make a withdrawal
+                                {formatMessage({ id: 'page.mobile.wallets.modal.body.2FA' })}
                             </p>
                         </div>
                         <div className="mb-0">
                             <Link to={`/two-fa-activation`}>
                                 <button type="button" className="btn btn-primary btn-block">
-                                    Enable 2FA
+                                    {formatMessage({ id: 'page.mobile.wallets.modal.body.2FA.enable' })}
                                 </button>
                             </Link>
                             <div className="mt-3" onClick={() => setShowModalLocked(!showModalLocked)}>
                                 <button type="button" className="btn btn-outline-primary btn-block">
-                                    Cancel
+                                    {formatMessage({ id: 'page.mobile.wallets.modal.body.2FA.cancel' })}
                                 </button>
                             </div>
                         </div>
@@ -315,7 +321,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                     <section className="internal-transfer-mobile-screen">
                         <div className="container-fluid w-100 p-0 m-0 position-relative">
                             <div onClick={() => setShowModal(!showModal)} className="white-text text-right mb-3">
-                                <span className="text-sm cursor-pointer text-secondary">Cancel</span>
+                                <span className="text-sm cursor-pointer text-secondary">
+                                    {formatMessage({ id: 'page.mobile.wallets.modal.body.2FA.cancel' })}
+                                </span>
                             </div>
                             <div className="table-mobile-wrapper">
                                 <CoinTransfer type={modalType} />

@@ -19,6 +19,8 @@ import {
 
 interface ChangeForgottenPasswordState {
     confirmToken: string;
+    seconds: number;
+    timerActive: boolean;
 }
 
 interface ReduxProps {
@@ -52,20 +54,9 @@ class PasswordResetComponent extends React.Component<Props, ChangeForgottenPassw
 
         this.state = {
             confirmToken: '',
+            seconds: 30000,
+            timerActive: false,
         };
-    }
-
-    public componentDidMount() {
-        setDocumentTitle('Change forgotten password');
-        const { history } = this.props;
-        const lang = new URLSearchParams(history.location.search).get('lang');
-        if (lang) {
-            this.props.changeLanguage(lang.toLowerCase());
-        }
-        const state = history.location.state;
-        if (!state || (state && !state.email)) {
-            this.props.history.push('/signin');
-        }
     }
 
     public componentWillReceiveProps(next: Props) {
@@ -80,7 +71,7 @@ class PasswordResetComponent extends React.Component<Props, ChangeForgottenPassw
             <React.Fragment>
                 <div className="row sign-up-screen">
                     <div className="col-md-5 dark-bg-accent min-h-full px-0">
-                        <div className="bg-auth" style={{ backgroundImage: `url('img/bg-auth1.png')` }}></div>
+                        <div className="bg-auth" style={{ backgroundImage: `url('/img/bg-auth1.png')` }}></div>
                     </div>
                     <div className="col-md-7 dark-bg-main min-h-full position-relative">
                         <div className="text-to-signup mb-24">

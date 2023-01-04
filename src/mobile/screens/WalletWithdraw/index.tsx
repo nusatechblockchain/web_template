@@ -3,24 +3,23 @@ import { useIntl } from 'react-intl';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomInput } from 'src/desktop/components';
-import { selectCurrencies, Currency, selectBeneficiaries, Beneficiary } from '../../../modules';
+import { selectCurrencies, Currency, selectBeneficiaries, Beneficiary, beneficiariesDelete } from '../../../modules';
 import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
-import { walletsWithdrawCcyFetch, selectWithdrawSuccess, beneficiariesDelete } from '../../../modules';
+import { walletsWithdrawCcyFetch } from '../../../modules';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
 import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
-import Select from 'react-select';
 import { ModalAddBeneficiaryMobile } from 'src/mobile/components';
 import { ModalBeneficiaryListMobile } from 'src/mobile/components/ModalBeneficiaryListMobile';
-import { beneficiariesCreate } from '../../../modules';
 import { Modal } from 'react-bootstrap';
+import Select from 'react-select';
+import { CustomStylesSelect } from 'src/mobile/components';
 
 export const WalletWithdrawMobileScreen: React.FC = () => {
     useBeneficiariesFetch();
     useWithdrawLimits();
     const intl = useIntl();
+    const { formatMessage } = useIntl();
     const dispatch = useDispatch();
-
-    const history = useHistory();
 
     const [amount, setAmount] = React.useState('');
     const [beneficiaryId, setBeneficiaryId] = React.useState(0);
@@ -62,8 +61,19 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
         dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
     };
 
+    const disabledButton = () => {
+        if (currency === '' || amount === '' || otp === '' || beneficiaryId === 0 || address === '') {
+            return true;
+        }
+    };
+
+    // React.useEffect(() => {
+    //     setAddress('');
+    // }, [address]);
+
     return (
-        <React.Fragment>
+        <>
+            {/* ======== Process  Withdraw Section ========= */}
             <section className="withdraw-mobile-screen pb-5 dark-bg-main">
                 <div className="container-fluid w-100 h-100">
                     <div className="header-link">
@@ -72,12 +82,17 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                         </Link>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-2 transfer-head-container">
-                        <h1 className="navbar-brand p-0 m-0 white-text">Withdraw Crypto</h1>
+                        <h1 className="navbar-brand p-0 m-0 white-text">
+                            {formatMessage({ id: 'page.mobile.withdraw.header' })}
+                        </h1>
                     </div>
 
                     <form className="form-withdraw pb-4">
+                        {/* ====== Coin Informartion ===== */}
                         <div className="d-flex flex-column justify-content-between align-items-start">
-                            <p className="text-sm white-text mb-1">Coins</p>
+                            <p className="text-sm white-text mb-1">
+                                {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.coins' })}
+                            </p>
                             <div className="w-100 d-flex align-items-center coin-selected">
                                 <img
                                     src={currencyItem && currencyItem.icon_url}
@@ -93,9 +108,13 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                             </div>
                         </div>
 
+                        {/* ====== Input withdraw ====== */}
+
                         <div className="withdraw-information">
                             <div className="align-items-start select-container">
-                                <label className="text-sm mt-3 white-text">Select Address</label>
+                                <label className="text-sm mt-3 white-text">
+                                    {formatMessage({ id: 'page.mobile.withdraw.addressLabel' })}
+                                </label>
                                 <div className="position-relative input-add-address">
                                     <div
                                         onClick={() => {
@@ -109,18 +128,20 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                             label={intl.formatMessage({
                                                 id: 'page.body.profile.header.account.content.password.new',
                                             })}
-                                            placeholder={address ? address : 'Select'}
-                                            defaultLabel="New password"
+                                            placeholder={
+                                                address
+                                                    ? address
+                                                    : `${formatMessage({
+                                                          id: 'page.mobile.withdraw.addressPlaceholder',
+                                                      })}`
+                                            }
+                                            defaultLabel=""
                                             inputValue={address}
                                             classNameLabel="d-none"
                                             classNameInput={`cursor-pointer dark-bg-accent`}
                                             autoFocus={false}
                                             labelVisible={false}
                                         />
-                                        {/* <div className="white-text">
-                                            <span>Select</span>
-                                            {address ? address : 'Select'}
-                                        </div> */}
                                     </div>
                                     <span
                                         onClick={() => setShowModalModalAddBeneficiary(!showModalAddBeneficiary)}
@@ -131,14 +152,16 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                             </div>
 
                             <div className="align-items-start">
-                                <label className="text-sm white-text">Add Amount</label>
+                                <label className="text-sm white-text">
+                                    {formatMessage({
+                                        id: 'page.mobile.withdraw.amountLabel',
+                                    })}
+                                </label>
                                 <div className="input-amount">
                                     <div>
                                         <CustomInput
                                             type="text"
-                                            label={intl.formatMessage({
-                                                id: 'page.body.profile.header.account.content.password.new',
-                                            })}
+                                            label={''}
                                             placeholder={'0.00'}
                                             defaultLabel=""
                                             handleChangeInput={handleChangeAmount}
@@ -153,13 +176,19 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                             </div>
 
                             <div className="align-items-start">
-                                <label className="text-sm white-text">Two-factor Authentications Code</label>
+                                <label className="text-sm white-text">
+                                    {formatMessage({
+                                        id: 'page.mobile.withdraw.2FALabel',
+                                    })}
+                                </label>
                                 <div className="input-amount">
                                     <div>
                                         <CustomInput
                                             type="text"
                                             label=""
-                                            placeholder={'2FA Code'}
+                                            placeholder={`${formatMessage({
+                                                id: 'page.mobile.withdraw.2FAPlaceholder',
+                                            })}`}
                                             defaultLabel=""
                                             handleChangeInput={handleChangeOtp}
                                             inputValue={otp}
@@ -175,18 +204,27 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                         <div className="my-3">
                             <p className="grey-text-accent">
                                 <small>
-                                    Amount available for withdrawal ≤ Account available assets Unconfirmed digital
-                                    assets.
+                                    {formatMessage({
+                                        id: 'page.mobile.withdraw.infoAmount',
+                                    })}
                                 </small>
                             </p>
                             <div className="my-3">
-                                <p className="mb-0 text-sm grey-text-accent">Fee</p>
+                                <p className="mb-0 text-sm grey-text-accent">
+                                    {formatMessage({
+                                        id: 'page.mobile.withdraw.fee',
+                                    })}
+                                </p>
                                 <p className="mb-0  text-base grey-text-accent font-bold">
                                     $ {fee !== undefined ? fee : '0'}
                                 </p>
                             </div>
                             <div className="">
-                                <p className="mb-0 text-sm grey-text-accent">Total Withdrawal Amount</p>
+                                <p className="mb-0 text-sm grey-text-accent">
+                                    {formatMessage({
+                                        id: 'page.mobile.withdraw.totalAmount',
+                                    })}
+                                </p>
                                 <p className="mb-0 text-base grey-text-accent font-bold">
                                     {amount !== '' ? amount : '0'} {currency.toUpperCase()}
                                 </p>
@@ -195,25 +233,17 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                         <button
                             onClick={() => setShowModalConfirmation(!showModalConfirmation)}
                             type="button"
-                            disabled={
-                                !currency
-                                    ? true
-                                    : !amount
-                                    ? true
-                                    : !otp
-                                    ? true
-                                    : !beneficiaryId
-                                    ? true
-                                    : !address
-                                    ? true
-                                    : false
-                            }
+                            disabled={disabledButton()}
                             className="btn btn-primary btn-block mb-3">
-                            Withdraw
+                            {formatMessage({
+                                id: 'page.mobile.withdraw.title',
+                            })}
                         </button>
                     </form>
                 </div>
             </section>
+
+            {/* ========== Modal for Add Beneficiary Address ========== */}
 
             {showModalAddBeneficiary && (
                 <ModalAddBeneficiaryMobile
@@ -223,6 +253,8 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                     showModalAddBeneficiary={showModalAddBeneficiary}
                 />
             )}
+
+            {/* =========== Modal if user have Beneficiary Address list ====== */}
 
             {showModalBeneficiaryList && (
                 <ModalBeneficiaryListMobile
@@ -239,42 +271,54 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                 />
             )}
 
+            {/* ========= Modal for confirmation withdraw ========== */}
             {showModalConfirmation && (
                 <Modal dialogClassName="modal-confirmation-withdraw" show={showModalConfirmation}>
                     <section className="container p-3 dark-bg-main">
                         <div className="text-left">
-                            <h6 className="mb-3 white-text text-lg">Withdraw Confirmation</h6>
+                            <h6 className="mb-3 white-text text-lg">
+                                {formatMessage({
+                                    id: 'page.mobile.withdraw.modal.confirm.title',
+                                })}
+                            </h6>
                             <p className="white-text">
-                                You've request to withdraw{' '}
+                                {formatMessage({
+                                    id: 'page.mobile.withdraw.modal.info1',
+                                })}{' '}
                                 <span>
                                     {' '}
                                     {amount !== '' ? amount : '0'} {currency.toUpperCase()}{' '}
                                 </span>{' '}
-                                , Are you sure to do Witdrawal?
+                                {formatMessage({
+                                    id: 'page.mobile.withdraw.modal.info2',
+                                })}
                             </p>
                         </div>
                         <div className="alert-mobile-warning px-2 py-3 alert d-flex align-items-center justify-content-between show text-xs warning-text font-normal position-relative mb-24">
                             <span className="text-sm warning-text font-normal">
-                                Please check the target address carefully before confirming the witdrawal.{' '}
+                                {formatMessage({
+                                    id: 'page.mobile.withdraw.modal.alert',
+                                })}
                             </span>
-                            {/* <div className="close-icon">
-                                <CloseIcon fill="#FF9533" className="ml-2" />
-                            </div> */}
                         </div>
                         <div className="mb-0">
                             <button onClick={handleSubmitWithdraw} type="button" className="btn btn-primary btn-block">
-                                Withdraw
+                                {formatMessage({
+                                    id: 'page.mobile.withdraw.title',
+                                })}
                             </button>
 
                             <div className="mt-3" onClick={() => setShowModalConfirmation(!showModalConfirmation)}>
                                 <button type="button" className="btn btn-outline-danger btn-block">
-                                    Cancel
+                                    {formatMessage({
+                                        id: 'page.mobile.internalTransfer.cancel',
+                                    })}
                                 </button>
                             </div>
                         </div>
                     </section>
                 </Modal>
             )}
-        </React.Fragment>
+        </>
     );
 };

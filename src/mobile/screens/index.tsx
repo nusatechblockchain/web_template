@@ -25,3 +25,4 @@ export * from './InternalTransfer';
 export * from './WalletDeposit';
 export * from './WalletWithdraw';
 export * from './TwoFaLost';
+export * from './SettingProfile';

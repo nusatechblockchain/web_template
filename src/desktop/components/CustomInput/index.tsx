@@ -94,7 +94,7 @@ class CustomInput extends React.Component<Props, State> {
 
                         {type == 'password' ? (
                             <div className="eye-password-icon" onClick={this.handleShowPassword}>
-                                {this.state.showPassword ? (
+                                {!this.state.showPassword ? (
                                     <EyeOpen className="password-icon" />
                                 ) : (
                                     <EyeClose className="password-icon" />

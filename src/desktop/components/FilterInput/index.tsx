@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import * as React from 'react';
-import SearchIcon from './Search.svg';
+// import SearchIcon from './Search.svg';
 import './FilterInput.pcss';
+import { SearchIcon } from '../../../assets/images/ProfileIcon';
 
 interface OnChangeEvent {
     target: {
@@ -67,7 +68,7 @@ export class FilterInput extends React.Component<FilterInputProps, SearchInputSt
         return (
             <div className="position-relative input-container">
                 <span className="position-absolute search-icon">
-                    <img alt="search-icon" src={SearchIcon} className="grey-text" />
+                    <SearchIcon />
                 </span>
                 <input
                     type={'text'}

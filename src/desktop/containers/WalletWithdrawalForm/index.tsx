@@ -13,11 +13,16 @@ import {
     BlockchainCurrencies,
     selectBeneficiariesCreateError,
     selectBeneficiariesCreateSuccess,
+    BeneficiariesActivate,
+    selectBeneficiariesActivateError,
+    beneficiariesResendPin,
+    beneficiariesActivate,
+    beneficiariesActivateError,
 } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
-import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
+import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector } from '../../../hooks';
 import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
 import PinInput from 'react-pin-input';
 
@@ -45,7 +50,8 @@ export const WalletWithdrawalForm: React.FC = () => {
 
     const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
-    const beneficiariesError = useSelector(selectBeneficiariesCreateError);
+    const beneficiariesError = useReduxSelector(selectBeneficiariesCreateError);
+    const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
     const beneficiariesSuccess = useSelector(selectBeneficiariesCreateSuccess);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -79,13 +85,23 @@ export const WalletWithdrawalForm: React.FC = () => {
         dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
     };
 
-    // React.useEffect(() => {
-    //     if (bene) {
-    //         setErrorBeneficiary(beneficiariesError);
-    //         console.log(beneficiariesError);
-    //         console.log(beneficiariesSuccess);
-    //     }
-    // }, [beneficiariesError]);
+    const handleResendCode = () => {
+        dispatch(beneficiariesResendPin({ id: 111 }));
+    };
+
+    const handlePendingStatus = () => {
+        dispatch(beneficiariesResendPin({ id: 111 }));
+        setShowModalBeneficiaryCode(true);
+    };
+
+    const handleActivateBeneficiary = () => {
+        dispatch(beneficiariesActivate({ id: 111, pin: '123456' }));
+
+        if (beneficiariesActivateError) {
+            setShowModalBeneficiaryCode(false);
+            setShowModalBeneficiaryList(true);
+        }
+    };
 
     React.useEffect(() => {
         if (withdrawSuccess) {
@@ -232,10 +248,12 @@ export const WalletWithdrawalForm: React.FC = () => {
                         className="btn btn-primary btn-block"
                         data-dismiss="modal"
                         disabled={beneficiaryCode.length < 6 ? true : false}
-                        onClick={() => setShowModalBeneficiaryList(true)}>
+                        onClick={() => handleActivateBeneficiary()}>
                         Confirm
                     </button>
-                    <p className="text-right text-xs grey-text mt-2">Resend Code</p>
+                    <p className="text-right text-xs grey-text mt-2" onClick={handleResendCode}>
+                        Resend Code
+                    </p>
                 </div>
             </React.Fragment>
         );
@@ -357,6 +375,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                         setShowModalBeneficiaryList(false);
                         setShowModalModalAddBeneficiary(true);
                     }}
+                    handlePendingStatus={() => handlePendingStatus()}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
                 />
             )}
@@ -368,11 +387,11 @@ export const WalletWithdrawalForm: React.FC = () => {
                     showModalAddBeneficiary={showModalAddBeneficiary}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
-                        console.log(beneficiariesError);
                         if (beneficiariesError) {
+                            alert('error');
                         } else {
-                            setShowModalModalAddBeneficiary(false);
                             setShowModalBeneficiaryCode(true);
+                            setShowModalModalAddBeneficiary(false);
                         }
                     }}
                 />

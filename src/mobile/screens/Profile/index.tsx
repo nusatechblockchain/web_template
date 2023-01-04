@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { selectUserInfo } from '../../../modules';
+import { useDispatch } from 'react-redux';
+import { Modal } from 'react-bootstrap';
+import { selectUserInfo, resendCode, sendCode, verifyPhone } from '../../../modules';
+import { selectApiKeys } from 'src/modules/user/apiKeys/selectors';
 import moment from 'moment';
 import {
     EmailProfileIcon,
@@ -18,12 +21,85 @@ import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { ModalMobile } from '../../components';
 import { ModalResetPassword } from '../../assets/Modal';
 import { titleCase, dateTo12HFormat } from 'src/helpers';
+import { CustomInput } from 'src/desktop/components';
+import { GearIcon } from 'src/mobile/assets/Gear';
+
 // import { dateTo12HFormat } from 'src/helpers';
 
 const ProfileMobileScreen: React.FC = () => {
-    const [showModalEmail, setShowModalEmail] = React.useState(false);
-    const user = useSelector(selectUserInfo);
     const history = useHistory();
+    const dispatch = useDispatch();
+    const user = useSelector(selectUserInfo);
+    const apiKey = useSelector(selectApiKeys);
+
+    const TIME_RESEND = 300000;
+
+    const [showModalEmail, setShowModalEmail] = React.useState(false);
+    const [showModalPhone, setShowModalPhone] = React.useState(false);
+    const [newPhoneValue, setNewPhoneValue] = React.useState('');
+    const [isChangeNumber, setIsChangeNumber] = React.useState(false);
+    const [resendCodeActive, setResendCodeActive] = React.useState(false);
+    const [verificationCode, setVerificationCode] = React.useState('');
+    const [showModalLocked, setShowModalLocked] = React.useState(false);
+    const [seconds, setSeconds] = React.useState(TIME_RESEND);
+    const [timerActive, setTimerActive] = React.useState(false);
+
+    React.useEffect(() => {
+        let timer = null;
+        if (timerActive) {
+            timer = setInterval(() => {
+                setSeconds((seconds) => seconds - 1000);
+
+                if (seconds === 0) {
+                    setTimerActive(false);
+                    setSeconds(30000);
+                }
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    });
+
+    const phone = user.phones.slice(-1);
+
+    const handleModalChangePhone = React.useCallback(() => {
+        user.otp ? setShowModalPhone(true) : setShowModalLocked(!showModalLocked);
+    }, []);
+
+    const handleSendCodePhone = () => {
+        if (user.phones[0] && !isChangeNumber) {
+            dispatch(resendCode({ phone_number: `+${phone[0].number}` }));
+            setTimerActive(true);
+            setResendCodeActive(true);
+        } else {
+            dispatch(sendCode({ phone_number: newPhoneValue }));
+            setTimerActive(true);
+            setResendCodeActive(true);
+        }
+    };
+
+    const handleChangePhone = () => {
+        if (user.phones[0] && !isChangeNumber) {
+            dispatch(verifyPhone({ phone_number: `+${phone[0].number}`, verification_code: verificationCode }));
+        } else {
+            dispatch(verifyPhone({ phone_number: newPhoneValue, verification_code: verificationCode }));
+        }
+    };
+
+    const disabledButton = () => {
+        if (phone[0] && !isChangeNumber) {
+            return false;
+        }
+
+        if (newPhoneValue === '') {
+            return true;
+        }
+
+        if (timerActive) {
+            return true;
+        }
+    };
 
     const handleResetPassword = () => {
         history.push('/change-email');
@@ -47,6 +123,109 @@ const ProfileMobileScreen: React.FC = () => {
                 Close
             </button>
         </React.Fragment>
+    );
+
+    const renderModalPhone = () => (
+        <>
+            <div className="mb-24">
+                <div className="d-flex align-items-center mb-5">
+                    <div className="mr-3" onClick={() => setShowModalPhone(!showModalPhone)}>
+                        <ArrowLeft className={'cursor-pointer text-white'} />
+                    </div>
+                    <span className="text-secondary text-lg">Setting Phone Number</span>
+                </div>
+                <p className="text-sm grey-text mb-8">
+                    {!user.phones[0] ? (
+                        'Set Your Phone Number And Verified'
+                    ) : user.phones[0].validated_at === null && !isChangeNumber ? (
+                        'You already add phone number, please verify by click send code button to get OTP number'
+                    ) : user.phones[0] && isChangeNumber ? (
+                        <p className="danger-text">
+                            You only have {5 - user.phones.length} chances to change your phone number
+                        </p>
+                    ) : (
+                        'Set Your New Phone Number And Verified'
+                    )}
+                </p>
+                {user.phones[0] && !isChangeNumber && (
+                    <p className="text-sm grey-text mb-24">{phone[0] && phone[0].number && `+ ${phone[0].number}`}</p>
+                )}
+
+                {/* Input change phone */}
+                <div className="form">
+                    {(isChangeNumber || !user.phones[0]) && (
+                        <div className="form-group mb-24">
+                            <CustomInput
+                                defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                inputValue={newPhoneValue}
+                                label={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                placeholder="+6281902912921"
+                                type="text"
+                                labelVisible
+                                classNameLabel="white-text text-sm"
+                                handleChangeInput={(e) => setNewPhoneValue(e)}
+                            />
+                        </div>
+                    )}
+
+                    <div className="mb-5">
+                        <label className="white-text">Verification Code</label>
+                        <div className="d-flex align-items-center">
+                            <CustomInput
+                                defaultLabel=""
+                                inputValue={verificationCode}
+                                label=""
+                                placeholder="_____"
+                                type="text"
+                                labelVisible={false}
+                                classNameLabel="d-none"
+                                classNameInput="spacing-10"
+                                classNameGroup="mb-0 w-100"
+                                handleChangeInput={(e) => setVerificationCode(e)}
+                            />
+                            <button
+                                disabled={disabledButton()}
+                                onClick={handleSendCodePhone}
+                                className="btn btn-primary ml-2 text-nowrap">
+                                {(!isChangeNumber && phone[0]) || resendCodeActive ? 'Resend Code' : 'Send Code'}
+                            </button>
+                        </div>
+                        <div className="mt-2">
+                            <p
+                                className={`text-right text-xs cursor-pointer ${
+                                    timerActive ? 'white-text' : 'grey-text'
+                                }`}>
+                                {moment(seconds).format('mm:ss')}
+                            </p>
+                            {(!isChangeNumber || !user.phones[0]) && (
+                                <p
+                                    onClick={() => {
+                                        setIsChangeNumber(true);
+                                        setTimerActive(false);
+                                    }}
+                                    className="text-right white-text text-xs cursor-pointer text-underline">
+                                    Change Phone
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={newPhoneValue === '' && verificationCode === '' ? true : false}
+                        onClick={handleChangePhone}
+                        className="btn btn-primary btn-block"
+                        data-toggle="modal"
+                        data-target="#change-phone"
+                        data-dismiss="modal">
+                        {!user.phones[0]
+                            ? 'Add'
+                            : user.phones[0].validated_at === null && !isChangeNumber
+                            ? 'Veify'
+                            : 'Change'}
+                    </button>
+                </div>
+            </div>
+        </>
     );
 
     return (
@@ -130,7 +309,7 @@ const ProfileMobileScreen: React.FC = () => {
                             <CheckIcon className="check-icon" />
                         </div>
                     </div>
-                    <Link to={'/change-phone'}>
+                    <div onClick={() => handleModalChangePhone()}>
                         <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
                                 <PhoneProfileIcon className="profile-icon" />
@@ -156,7 +335,7 @@ const ProfileMobileScreen: React.FC = () => {
                                 )}
                             </div>
                         </div>
-                    </Link>
+                    </div>
                     <Link to={'/two-fa-activation'}>
                         <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">
@@ -195,7 +374,9 @@ const ProfileMobileScreen: React.FC = () => {
                             <div className="d-flex justify-content-between align-items-center w-100">
                                 <div>
                                     <h4 className="mb-0 text-sm font-bold grey-text-accent">API</h4>
-                                    <p className="mb-0 text-xs grey-text-accent">0 API Enable</p>
+                                    <p className="mb-0 text-xs grey-text-accent">
+                                        {apiKey && apiKey.length} API Enable
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -203,6 +384,35 @@ const ProfileMobileScreen: React.FC = () => {
                 </div>
             </div>
             <ModalMobile content={renderModal()} show={showModalEmail} />
+            <ModalMobile content={renderModalPhone()} show={showModalPhone} />
+
+            {/* ========= Show Modal Locked 2FA =========== */}
+
+            {showModalLocked && (
+                <Modal onHide={() => {}} show={showModalLocked}>
+                    <section className="container p-3 dark-bg-main">
+                        <div className="d-flex justify-content-center my-2">
+                            <GearIcon />
+                        </div>
+                        <div className="text-center">
+                            <p className="gradient-text mb-3">Two-factor Authentication Needed</p>
+                            <p className="text-secondary text-sm">Please turn on Two-factor authentication</p>
+                        </div>
+                        <div className="mb-0">
+                            <Link to={`/two-fa-activation`}>
+                                <button type="button" className="btn btn-primary btn-block">
+                                    Enable 2FA
+                                </button>
+                            </Link>
+                            <div className="mt-3" onClick={() => setShowModalLocked(!showModalLocked)}>
+                                <button type="button" className="btn btn-outline-primary btn-block">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </Modal>
+            )}
         </React.Fragment>
     );
 };

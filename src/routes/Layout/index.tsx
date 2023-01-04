@@ -58,6 +58,7 @@ import {
     WalletDepositMobileScreen,
     LostTwoFaMobileScreen,
     WalletWithdrawMobileScreen,
+    SettingProfileMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -313,6 +314,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={EmailVerificationMobileScreen}
                         />
 
+                        {/* <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/setting"
+                            component={SettingProfileMobileScreen}
+                        /> */}
+
                         <PrivateRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
@@ -493,9 +501,15 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/wallets/:currency/withdraw"
                         component={WalletWitdrawal}
                     />
-                    <PrivateRoute
+                    {/* <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
+                        path="/wallets"
+                        component={WalletsScreen}
+                    /> */}
+                    <PublicRoute
+                        loading={userLoading}
+                        // isLogged={isLoggedIn}
                         path="/wallets"
                         component={WalletsScreen}
                     />
@@ -590,6 +604,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         path="/markets-open"
                         component={MarketOpen}
                     />
+
                     <PublicRoute loading={userLoading} path="/markets" component={MarketListScreen} />
 
                     <PrivateRoute
