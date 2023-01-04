@@ -17,6 +17,7 @@ import {
     Security,
     TradeHistory,
     Wallet,
+    SettingProfile,
 } from '../../assets/Sidebar';
 import { CalendarIcon } from '../../assets/CalendarIcon';
 const HeaderComponent: React.FC = () => {
@@ -43,6 +44,7 @@ const HeaderComponent: React.FC = () => {
             showNotLoggedin: false,
         },
         { icon: <Security />, name: 'Security', path: '/security', showNotLoggedin: false },
+        // { icon: <SettingProfile />, name: 'Setting', path: '/setting', showNotLoggedin: false },
         { icon: <Referral />, name: 'Referral', path: '/referral', showNotLoggedin: false },
         { icon: <ApiManagement />, name: 'Api Management', path: '/api-key', showNotLoggedin: false },
         { icon: <Announcement />, name: 'Announcement', path: '/announcement', showNotLoggedin: true },
@@ -116,7 +118,7 @@ const HeaderComponent: React.FC = () => {
 
                             {sidebarMenu &&
                                 sidebarMenu.map((item, key) => (
-                                    <React.Fragment>
+                                    <div key={key}>
                                         {userLoggedIn ? (
                                             <React.Fragment>
                                                 {key % 3 == 0 && <div className="divider" />}
@@ -153,7 +155,7 @@ const HeaderComponent: React.FC = () => {
                                         ) : (
                                             ''
                                         )}
-                                    </React.Fragment>
+                                    </div>
                                 ))}
 
                             {userLoggedIn && (
