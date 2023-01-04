@@ -9,14 +9,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-import Background1 from '/public/img-mobile/background-1.png';
-import Background2 from '/public/img-mobile/background-2.png';
-import Background3 from '/public/img-mobile/background-3.png';
-import Background4 from '/public/img-mobile/background-4.png';
-import ImgCard from '/public/img-mobile/img-card.png';
 import { BgCardSmall } from '../../assets/BackgroundCard';
 import { Table } from '../../../components';
-import GrapUp from '/public/img-mobile/grap-up.png';
 import { ArrowRight } from '../../assets/Arrow';
 
 const noHeaderRoutes = ['/'];
@@ -73,10 +67,10 @@ const HomeMobileScreen: React.FC = () => {
     const dataVolume = marketList && marketList.sort((a, b) => +a.volume - +b.volume);
 
     const banner = [
-        { background: Background1 },
-        { background: Background2 },
-        { background: Background3 },
-        { background: Background4 },
+        { background: 'img-mobile/background-1.png' },
+        { background: 'img-mobile/background-2.png' },
+        { background: 'img-mobile/background-3.png' },
+        { background: 'img-mobile/background-4.png' },
     ];
 
     const bannerSmall = [
@@ -118,7 +112,7 @@ const HomeMobileScreen: React.FC = () => {
                 </p>
             </div>,
             <div>
-                <img src={GrapUp} alt="grap" />
+                <img src="img-mobile/grap-up.png" alt="grap" />
             </div>,
             <p className={`badge white-text font-bold ${item.change.includes('-') ? 'badge-danger' : 'badge-success'}`}>
                 {item && item.price_change_percent}
@@ -156,7 +150,7 @@ const HomeMobileScreen: React.FC = () => {
                                         <div className="card-item position-relative">
                                             <BgCardSmall className={'bg-card'} />
                                             <div className="w-100 d-flex justify-content-center align-items-center mb-8">
-                                                <img src={ImgCard} alt="card" className="text-center" />
+                                                <img src="img-mobile/img-card.png" alt="card" className="text-center" />
                                             </div>
                                             <div className=" d-flex justify-content-between align-items-center">
                                                 <div>

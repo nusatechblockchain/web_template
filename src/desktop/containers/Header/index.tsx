@@ -6,8 +6,6 @@ import { RouterProps } from 'react-router';
 import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
-import Humburger from '../../../../public/img/humburger.png';
-import HumburgerShow from '../../../../public/img/humburger-show.png';
 import '../../../styles/colors.pcss';
 import {
     Market,
@@ -24,9 +22,8 @@ import {
 } from '../../../modules';
 import { numberFormat } from '../../../helpers';
 import { Logo } from '../../../assets/images/Logo';
-import ProfileAvatar from '../../../../public/img/avatar.png';
-import { IndonesianFlag, AmericanFlag, ChinaFlag, KoreaFlag } from '../../../assets/images/Flags';
-import { Api, Dashboard, Logout, Referral, Security, Setting, Wallet } from '../../../assets/images/ProfileDropdown';
+import { IndonesianFlag, AmericanFlag } from '../../../assets/images/Flags';
+import { Api, Dashboard, Logout, Referral, Security, Wallet } from '../../../assets/images/ProfileDropdown';
 
 interface ReduxProps {
     currentMarket: Market | undefined;
@@ -151,7 +148,7 @@ class Head extends React.Component<Props, HeaderState> {
                                 <div
                                     className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
                                     onClick={() => this.setState({ showProfileDropdown: !showProfileDropdown })}>
-                                    <img src={ProfileAvatar} className="avatar-image" alt="" />
+                                    <img src="img/avatar.png" className="avatar-image" alt="" />
                                 </div>
                                 {showProfileDropdown ? (
                                     <div
@@ -202,7 +199,7 @@ class Head extends React.Component<Props, HeaderState> {
                             aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon">
                                 <img
-                                    src={this.state.showHeader ? HumburgerShow : Humburger}
+                                    src={this.state.showHeader ? 'img/humburger-show.png' : 'img/humburger.png'}
                                     className="humberger-icon"
                                     alt="humberger icon"
                                     onClick={() => this.setState({ showHeader: !this.state.showHeader })}
@@ -380,7 +377,7 @@ class Head extends React.Component<Props, HeaderState> {
                                     <div
                                         className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
                                         onClick={() => this.setState({ showProfileDropdown: !showProfileDropdown })}>
-                                        <img src={ProfileAvatar} className="avatar-image" alt="" />
+                                        <img src="img/avatar.png" className="avatar-image" alt="" />
                                     </div>
                                     {showProfileDropdown ? (
                                         <div

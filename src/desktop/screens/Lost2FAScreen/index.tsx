@@ -1,11 +1,10 @@
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import './Lost2FAScreen.pcss';
-import bgImage from '../../../../public/img/background.png';
 import { ArrowLeftGradient } from 'src/assets/images/ArrowLeftIcon';
 import { Lost2FAStep } from '../../containers';
 
@@ -17,7 +16,7 @@ export const Lost2FAScreen: React.FC = () => {
     return (
         <React.Fragment>
             <div className="container-fluid lost-two-fa-screen dark-bg-accent">
-                <div className="background-image" style={{ backgroundImage: `url(${bgImage})` }}>
+                <div className="background-image" style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     {/* main content */}
                     <div className="content-wrapper pb-5">
                         <div className="container">

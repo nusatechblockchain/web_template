@@ -35,7 +35,6 @@ import { selectApiKeys } from 'src/modules/user/apiKeys/selectors';
 import { Modal, CustomInput } from '../../components';
 import { ModalCloseIcon } from '../../../assets/images/CloseIcon';
 import moment from 'moment';
-import bgProfile from '../../../../public/img/background-landing.png';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
@@ -310,7 +309,9 @@ export const ProfileScreen: FC = (): ReactElement => {
     return (
         <React.Fragment>
             <div className="profile-screen">
-                <div className="content-wrapper dark-bg-accent pb-5" style={{ backgroundImage: `url(${bgProfile})` }}>
+                <div
+                    className="content-wrapper dark-bg-accent pb-5"
+                    style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     <ProfileAuthDetails />
 
                     <div className="profile-menu px-24">

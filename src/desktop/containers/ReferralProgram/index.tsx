@@ -5,7 +5,6 @@ import { IntlProps } from '../../../';
 import { CopyableTextField, Table } from '../../../components';
 import { copy } from '../../../helpers';
 import { alertPush, RootState, selectUserInfo, User } from '../../../modules';
-import ReferralImage from '../../../../public/img/referral.png';
 import { NoData } from '../../components';
 
 interface ReduxProps {
@@ -81,7 +80,7 @@ class ReferralProgramClass extends React.Component<Props> {
                 </div>
                 <div className="px-24">
                     <div className="d-flex mt-3 mb-48">
-                        <img src={ReferralImage} className="referral-image" alt="referral-image" />
+                        <img src="img/referral.png" className="referral-image" alt="referral-image" />
                         <div className="ml-4">
                             <h6 className="text-sm white-text font-bold">Your total rewards</h6>
                             <h2 className="gradient-text text-xl font-bold">00 USDT</h2>

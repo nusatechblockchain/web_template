@@ -7,7 +7,6 @@ import { ScanIcon } from '../../assets/ScanIcon';
 import { UserIcon } from '../../assets/UserIcon';
 import { ArrowLeft, ArrowRight } from '../../assets/Arrow';
 import { CopyableTextField } from '../../../components';
-import Avatar from '/public/img-mobile/avatar.png';
 import {
     Announcement,
     ApiManagement,
@@ -72,7 +71,7 @@ const HeaderComponent: React.FC = () => {
                             {userLoggedIn ? (
                                 <Link to={'/profile'} onClick={() => setShowSidebar(false)}>
                                     <div className="card-user-info d-flex align-items-center px-24 mb-24">
-                                        <img src={Avatar} className="avatar-image" alt="ava" />
+                                        <img src="img-mobile/avatar.png" className="avatar-image" alt="ava" />
                                         <div className="user-info d-flex justify-content-between align-items-center ml-2 w-100">
                                             <div>
                                                 <div className="user-name d-flex align-items-center">

@@ -23,7 +23,6 @@ import {
     selectRecaptchaSuccess,
 } from '../../../modules';
 import { CommonError } from '../../../modules/types';
-import bgAuth from '../../../../public/img/bg-auth1.png';
 
 interface ReduxProps {
     success: boolean;
@@ -73,9 +72,9 @@ class ForgotPasswordComponent extends React.Component<Props, ForgotPasswordState
         const { captcha_response, reCaptchaSuccess, geetestCaptchaSuccess } = this.props;
         return (
             <React.Fragment>
-                <div className="row sign-up-screen">
+                <div className="row sign-up-screen ">
                     <div className="col-md-5 dark-bg-accent min-h-full px-0">
-                        <div className="bg-auth" style={{ backgroundImage: `url(${bgAuth})` }}></div>
+                        <div className="bg-auth" style={{ backgroundImage: `url('img/bg-auth1.png')` }}></div>
                     </div>
                     <div className="col-md-7 dark-bg-main min-h-full position-relative">
                         <div className="text-to-signup mb-24">

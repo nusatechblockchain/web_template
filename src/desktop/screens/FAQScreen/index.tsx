@@ -1,6 +1,5 @@
 import React, { FC, ReactElement } from 'react';
 import { useDocumentTitle } from 'src/hooks';
-import Background from '../../../../public/img/background.png';
 import { Logo } from '../../../assets/images/Logo';
 
 export const FAQScreen: FC = (): ReactElement => {
@@ -54,8 +53,10 @@ export const FAQScreen: FC = (): ReactElement => {
     ];
     return (
         <React.Fragment>
-            <div className="content-wrapper no-sidebar dark-bg-accent pb-5">
-                <div className="overflow-auto py-lg-5" style={{ backgroundImage: `url(${Background})` }}>
+            <div className="content-wrapper no-sidebar faq-screen dark-bg-accent pb-5">
+                <div
+                    className="overflow-auto py-lg-5 background"
+                    style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     <div className="d-flex justify-content-center align-items-center">
                         <h3 className="title-1 white-text py-5 font-bold">Heaven Exchange FAQ</h3>
                     </div>
