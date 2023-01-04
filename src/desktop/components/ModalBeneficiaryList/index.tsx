@@ -27,6 +27,7 @@ export interface ModalBeneficiaryListProps {
     onCloseList: () => void;
     onCloseAdd: () => void;
     handleAddAddress: () => void;
+    handlePendingStatus?: () => void;
     beneficiaryId?: string;
     handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string) => void;
 }

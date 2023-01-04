@@ -41,7 +41,7 @@ export const WalletsHeader: React.FunctionComponent<ParentProps> = (props: Paren
 
     return (
         <div className="cr-wallets-header d-flex align-items-center mb-24">
-            <div className="cr-wallets-header__search">
+            <div className="cr-wallets-header__search ">
                 <FilterInput
                     data={wallets}
                     onFilter={handleFilter}
@@ -51,7 +51,11 @@ export const WalletsHeader: React.FunctionComponent<ParentProps> = (props: Paren
                 />
             </div>
 
-            <Form as={Row} className="mb-3 min-w-400" controlId="formHorizontalCheck" onClick={handleToggleCheckbox}>
+            <Form
+                as={Row}
+                className="mb-1 ml-2 min-w-400"
+                controlId="formHorizontalCheck"
+                onClick={handleToggleCheckbox}>
                 <Col sm={{ span: 20, offset: 0 }}>
                     <Form.Check
                         type="checkbox"
