@@ -3,7 +3,6 @@ import { Modal, OrderFormComponent } from '../../components';
 import { Decimal } from '../../../components';
 import {
     selectUserLoggedIn,
-    selectCurrencies,
     selectMarketTickers,
     selectCurrentMarket,
     Ticker,
@@ -35,8 +34,8 @@ export const OrderForm = () => {
         wallets.find((item) => item.currency.toLowerCase() === currentMarket?.base_unit?.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
 
-    const [orderTypeBuy, setOrderTypeBuy] = React.useState('market');
-    const [orderTypeSell, setOrderTypeSell] = React.useState('market');
+    const [orderTypeBuy, setOrderTypeBuy] = React.useState('limit');
+    const [orderTypeSell, setOrderTypeSell] = React.useState('limit');
     const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
     const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
 
@@ -63,8 +62,13 @@ export const OrderForm = () => {
     React.useEffect(() => {
         if (priceSell) {
             let temp = +priceSell * +amountSell;
-            let tempToFloat = numberFormat(+temp, 'ID').toString();
-            setTotalSell(+tempToFloat);
+            let tempToFloat = numberFormat(+temp, 'ID')
+                .toString()
+                .split(',')[0];
+            console.log(temp, 'temp total');
+            console.log(tempToFloat, 'total');
+
+            setTotalSell(temp);
         }
     }, [priceSell, amountSell]);
 
@@ -81,10 +85,14 @@ export const OrderForm = () => {
     }, [priceBuy, orderPercentageBuy]);
 
     React.useEffect(() => {
-        let temp = (+balance * orderPercentageSell) / 100;
-        let tempToFloat = numberFormat(+temp, 'ID').toString();
+        let temp = (+balance * orderPercentageSell) / 1000;
+        let tempToFloat = numberFormat(+temp, 'ID')
+            .toString()
+            .split(',')[0];
+        console.log(temp, 'temp amount');
+        console.log(tempToFloat, 'amount');
 
-        setAmountSell(+tempToFloat);
+        setAmountSell(temp);
     }, [orderPercentageSell]);
 
     const handleSubmitBuy = () => {

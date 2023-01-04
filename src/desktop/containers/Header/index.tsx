@@ -73,6 +73,10 @@ class Head extends React.Component<Props, HeaderState> {
         };
     }
 
+    public translate = (e: string) => {
+        return this.props.intl.formatMessage({ id: e });
+    };
+
     public render() {
         const thisAuthHeader = authHeader.some((r) => location.pathname.includes(r)) && location.pathname !== '/';
         const thisTradingHeader = tradingHeader.some((r) => location.pathname.includes(r));
@@ -182,7 +186,9 @@ class Head extends React.Component<Props, HeaderState> {
                                             <div className="d-flex" onClick={logoutButton}>
                                                 <Logout />
                                                 <div className="pl-3">
-                                                    <p className="mb-0 text-sm font-bold white-text">Logout</p>
+                                                    <p className="mb-0 text-sm font-bold white-text">
+                                                        {this.translate('page.header.navbar.logout')}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,28 +232,28 @@ class Head extends React.Component<Props, HeaderState> {
                                             }`}
                                             onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/'} className="nav-link px-3 text-sm font-bold">
-                                                Home
+                                                {this.translate('page.header.navbar.home')}
                                             </Link>
                                         </li>
                                         <li
                                             className={`nav-item ${location.pathname == '/markets' && 'active'}`}
                                             onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/markets'} className="nav-link px-3 text-sm font-bold">
-                                                Market
+                                                {this.translate('page.header.navbar.market')}
                                             </Link>
                                         </li>
                                         <li
                                             className={`nav-item ${location.pathname == '/faq' && 'active'}`}
                                             onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/faq'} className="nav-link px-3 text-sm font-bold">
-                                                Support
+                                                {this.translate('page.header.navbar.support')}
                                             </Link>
                                         </li>
                                         <li
                                             className={`nav-item ${location.pathname == '/announcement' && 'active'}`}
                                             onClick={() => this.setState({ showHeader: false })}>
                                             <Link to={'/announcement'} className="nav-link px-3 text-sm font-bold">
-                                                Announcement
+                                                {this.translate('page.header.navbar.announcement')}
                                             </Link>
                                         </li>
                                     </ul>
@@ -270,7 +276,7 @@ class Head extends React.Component<Props, HeaderState> {
                                         <li className="nav-item nav-large-display">
                                             <div className="nav-link px-12">
                                                 <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">
-                                                    24h Change
+                                                    {this.translate('page.header.navbar.trade.24change')}
                                                 </p>
                                                 <p
                                                     className={`font-bold mb-0 text-sm ${
@@ -292,7 +298,9 @@ class Head extends React.Component<Props, HeaderState> {
                                         </li>
                                         <li className="nav-item nav-large-display">
                                             <div className="nav-link px-12">
-                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h high</p>
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">
+                                                    {this.translate('page.header.navbar.trade.24high')}
+                                                </p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
                                                     {numberFormat(ticker?.high, 'USD').toString().split('.')[0]}
                                                 </p>
@@ -300,7 +308,9 @@ class Head extends React.Component<Props, HeaderState> {
                                         </li>
                                         <li className="nav-item nav-large-display">
                                             <div className="nav-link px-12">
-                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">24h Low</p>
+                                                <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">
+                                                    {this.translate('page.header.navbar.trade.24low')}
+                                                </p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
                                                     {numberFormat(ticker?.low, 'USD').toString().split('.')[0]}
                                                 </p>
@@ -309,7 +319,7 @@ class Head extends React.Component<Props, HeaderState> {
                                         <li className="nav-item nav-large-display">
                                             <div className="nav-link px-12">
                                                 <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">
-                                                    24h Volume
+                                                    {this.translate('page.header.navbar.trade.24volume')}
                                                 </p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
                                                     {numberFormat(ticker?.volume, 'USD').toString().split('.')[0]}
@@ -344,7 +354,9 @@ class Head extends React.Component<Props, HeaderState> {
                                         aria-labelledby="navbarDropdownMenuLink">
                                         <div className="d-flex">
                                             <div className="language">
-                                                <p className="text-xs font-bold mb-3 grey-text-accent">Language</p>
+                                                <p className="text-xs font-bold mb-3 grey-text-accent">
+                                                    {this.translate('page.header.navbar.dropdown.language')}
+                                                </p>
                                                 {LanguageDropdown.map((item, key) => (
                                                     <div
                                                         key={`language-${key}`}
@@ -358,14 +370,16 @@ class Head extends React.Component<Props, HeaderState> {
                                             <div
                                                 className="currency"
                                                 onClick={() => this.setState({ showLanguage: false })}>
-                                                <p className="text-xs font-bold mb-3 grey-text-accent">Currency</p>
+                                                <p className="text-xs font-bold mb-3 grey-text-accent">
+                                                    {this.translate('page.header.navbar.dropdown.currency')}
+                                                </p>
                                                 <div className="dropdown-item grey-text-accent text-sm active cursor-pointer">
                                                     <div className="dots" />
-                                                    USD
+                                                    {this.translate('page.header.navbar.dropdown.language.usd')}
                                                 </div>
                                                 <div className="dropdown-item grey-text-accent text-sm cursor-pointer">
                                                     <div className="dots" />
-                                                    IDR
+                                                    {this.translate('page.header.navbar.dropdown.language.idr')}
                                                 </div>
                                             </div>
                                         </div>
@@ -410,7 +424,9 @@ class Head extends React.Component<Props, HeaderState> {
                                                 <div className="d-flex" onClick={logoutButton}>
                                                     <Logout />
                                                     <div className="pl-3">
-                                                        <p className="mb-0 text-sm font-bold white-text">Logout</p>
+                                                        <p className="mb-0 text-sm font-bold white-text">
+                                                            {this.translate('page.header.navbar.logout')}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -423,12 +439,12 @@ class Head extends React.Component<Props, HeaderState> {
                                 <React.Fragment>
                                     <li className="nav-item dropdown avatar px-3">
                                         <Link to={'/signin'} className="gradient-text text-sm font-bold mr-3">
-                                            Sign In
+                                            {this.translate('page.header.navbar.signIn')}
                                         </Link>
                                     </li>
                                     <li className="nav-item dropdown avatar px-3">
                                         <Link to={'/signup'} className="btn btn-primary">
-                                            Sign Up
+                                            {this.translate('page.header.navbar.signUp')}
                                         </Link>
                                     </li>
                                 </React.Fragment>
@@ -450,10 +466,10 @@ class Head extends React.Component<Props, HeaderState> {
                                 className="d-flex align-items-center px-24 w-100 justify-content-between"
                                 onClick={() => this.setState({ showHeader: false })}>
                                 <Link to={'/signin'} className="btn btn-primary mx-2 btn-sm btn-block">
-                                    Sign In
+                                    {this.translate('page.header.navbar.signIn')}
                                 </Link>
                                 <Link to={'/signup'} className="btn btn-primary mx-2 my-0 btn-outline btn-sm btn-block">
-                                    Sign Up
+                                    {this.translate('page.header.navbar.signUp')}
                                 </Link>
                             </div>
                         )}
@@ -461,7 +477,7 @@ class Head extends React.Component<Props, HeaderState> {
                         {isLoggedIn && this.state.showHeader && (
                             <div className="logout" onClick={() => this.setState({ showHeader: false })}>
                                 <p className="nav-link px-3 text-sm white-text font-bold" onClick={logoutButton}>
-                                    <Logout /> Logout
+                                    <Logout /> {this.translate('page.header.navbar.logout')}
                                 </p>
                             </div>
                         )}

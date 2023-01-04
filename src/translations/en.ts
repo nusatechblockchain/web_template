@@ -4,6 +4,7 @@ import { nationalitiesNames } from './nationalities';
 
 export const en = {
     'page.header.navbar.signIn': 'Sign In',
+    'page.header.navbar.signUp': 'Sign Up',
     'page.header.navbar.quick.exchange': 'Quick exchange',
     'page.header.navbar.trade': 'Trade',
     'page.header.navbar.wallets': 'Wallets',
@@ -12,9 +13,24 @@ export const en = {
     'page.header.navbar.api': 'API Documentation',
     'page.header.navbar.internal.transfer': 'Internal transfer',
     'page.header.navbar.p2p': 'P2P',
+    'page.header.navbar.home': 'Home',
+    'page.header.navbar.market': 'Market',
+    'page.header.navbar.support': 'Support',
+    'page.header.navbar.announcement': 'Announcement',
 
     'page.header.navbar.profile': 'Profile',
     'page.header.navbar.logout': 'Logout',
+
+    'page.header.navbar.trade.24change': '24 Change',
+    'page.header.navbar.trade.24high': '24 High',
+    'page.header.navbar.trade.24low': '24 Low',
+    'page.header.navbar.trade.24volume': '24 Volume',
+
+    'page.header.navbar.dropdown.language': 'Language',
+
+    'page.header.navbar.dropdown.currency': 'Currency',
+    'page.header.navbar.dropdown.usd': 'USD',
+    'page.header.navbar.dropdown.idr': 'IDR',
 
     'page.sidebar.group.text': 'Fee Group:',
     'page.sidebar.group.value': 'Base',
@@ -118,7 +134,7 @@ export const en = {
     'page.body.landing.header.button2': 'log in',
     'page.body.landing.header.button3': 'register',
 
-    'page.body.landing.marketInfo.title.text1': 'Welcome to NusaExchange.',
+    'page.body.landing.marketInfo.title.text1': 'Welcome to Heaven Exchange.',
     'page.body.landing.marketInfo.title.text2': 'Buy, sell and trade digital currency.',
     'page.body.landing.marketInfo.title.button': 'start trading',
 
@@ -131,10 +147,10 @@ export const en = {
 
     'page.body.landing.register.item.title': 'No matter your experience level',
     'page.body.landing.register.item.text':
-        'NusaExchange offers an intuitive interface with real time orderbooks, charting tools, trade history, and a simple order process so you can trade from day one.',
+        'Heaven Exchange offers an intuitive interface with real time orderbooks, charting tools, trade history, and a simple order process so you can trade from day one.',
     'page.body.landing.register.item.button': 'register',
 
-    'page.body.landing.features.title': 'NusaExchange platform features',
+    'page.body.landing.features.title': 'Heaven Exchange platform features',
     'page.body.landing.features.features.item1.title': 'Exchange',
     'page.body.landing.features.features.item2.title': 'Order Types',
     'page.body.landing.features.features.item3.title': 'Customizable Interface',
@@ -142,9 +158,9 @@ export const en = {
     'page.body.landing.features.features.item5.title': 'Community',
     'page.body.landing.features.features.item6.title': 'Industry leading API',
     'page.body.landing.features.features.item1.text':
-        'NusaExchange offers the most liquid order book in the world, allowing users to easily exchange Bitcoin, Ethereum, EOS, Litecoin, Ripple, NEO and many other digital assets with minimal slippage.',
+        'Heaven Exchange offers the most liquid order book in the world, allowing users to easily exchange Bitcoin, Ethereum, EOS, Litecoin, Ripple, NEO and many other digital assets with minimal slippage.',
     'page.body.landing.features.features.item2.text':
-        'NusaExchange offers a suite of order types to give traders the tools they need for every scenario. Discover more about our most advanced Algorithmic orders types.',
+        'Heaven Exchange offers a suite of order types to give traders the tools they need for every scenario. Discover more about our most advanced Algorithmic orders types.',
     'page.body.landing.features.features.item3.text':
         'Organize your workspace according to your needs: compose your layout, choose between themes, set up notifications and data preferences.',
     'page.body.landing.features.features.item4.text':
@@ -157,12 +173,29 @@ export const en = {
     'page.body.landing.tradeOnTheGo.item.text1': 'Our platform is optimized for trading on any device.',
     'page.body.landing.tradeOnTheGo.item.text2': 'And you don’t need to download any additional applications.',
     'page.body.landing.tradeOnTheGo.item.text3':
-        'All the power of NusaExchange cryptocurrency exchange, in the palm of your hand.',
+        'All the power of Heaven Exchange cryptocurrency exchange, in the palm of your hand.',
     'page.body.landing.tradeOnTheGo.item.button': 'let’s try',
 
     'page.body.landing.startTrading.title': 'Start trading now',
     'page.body.landing.startTrading.button1': 'register',
     'page.body.landing.startTrading.button2': 'Start trading',
+
+    'page.body.landing.footer.links': 'Links',
+    'page.body.landing.footer.links.how': 'How it works',
+    'page.body.landing.footer.links.cryptos': 'Cryptos',
+    'page.body.landing.footer.links.features': 'Features',
+    'page.body.landing.footer.links.testimonial': 'Testimonial',
+    'page.body.landing.footer.links.blogs': 'Blogs',
+
+    'page.body.landing.footer.legal': 'Legal',
+    'page.body.landing.footer.legal.tos': 'Term of use',
+    'page.body.landing.footer.legal.toc': 'Term of conditions',
+    'page.body.landing.footer.legal.privacy': 'Privacy Policy',
+    'page.body.landing.footer.legal.cookie': 'Cookie Policy',
+
+    'page.body.landing.footer.newsletter': 'Newsletter',
+    'page.body.landing.footer.subscribe': 'Subscribe',
+    'page.body.landing.footer.newsletter.email': 'We don’t sell your email and spam',
 
     'page.body.landing.footer.exchange': 'Exchange',
     'page.body.landing.footer.wallets': 'Wallets',
@@ -173,7 +206,7 @@ export const en = {
     'page.body.landing.footer.about': 'About us',
     'page.body.landing.footer.community': 'Community',
     'page.body.landing.footer.info': 'Info',
-    'page.body.landing.footer.rights': 'NusaExchange © All rights reserved.',
+    'page.body.landing.footer.rights': 'Heaven Exchange © All rights reserved.',
 
     'pagy.body.footer.powered_by': 'Powered by',
 
