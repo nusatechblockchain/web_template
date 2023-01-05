@@ -155,7 +155,7 @@ class Head extends React.Component<Props, HeaderState> {
                                 <div
                                     className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
                                     onClick={() => this.setState({ showProfileDropdown: !showProfileDropdown })}>
-                                    <img src="img/avatar.png" className="avatar-image" alt="" />
+                                    <img src="/img/avatar.png" className="avatar-image" alt="" />
                                 </div>
                                 {showProfileDropdown ? (
                                     <div
@@ -208,7 +208,7 @@ class Head extends React.Component<Props, HeaderState> {
                             aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon">
                                 <img
-                                    src={this.state.showHeader ? 'img/humburger-show.png' : 'img/humburger.png'}
+                                    src={this.state.showHeader ? '/img/humburger-show.png' : '/img/humburger.png'}
                                     className="humberger-icon"
                                     alt="humberger icon"
                                     onClick={() => this.setState({ showHeader: !this.state.showHeader })}
@@ -394,7 +394,7 @@ class Head extends React.Component<Props, HeaderState> {
                                     <div
                                         className="nav-link cursor-pointer dropdown-toggle grey-text-accent text-sm"
                                         onClick={() => this.setState({ showProfileDropdown: !showProfileDropdown })}>
-                                        <img src="img/avatar.png" className="avatar-image" alt="" />
+                                        <img src="/img/avatar.png" className="avatar-image" alt="" />
                                     </div>
                                     {showProfileDropdown ? (
                                         <div
