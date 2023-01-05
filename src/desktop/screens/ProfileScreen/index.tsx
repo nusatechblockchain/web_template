@@ -94,6 +94,12 @@ export const ProfileScreen: FC = (): ReactElement => {
         }
     };
 
+    useEffect(() => {
+        if (verifyPhoneSuccess) {
+            setShowModalChangePhone(false);
+        }
+    }, [verifyPhoneSuccess]);
+
     const handleFetchTwoFaGoogle = () => {
         user.otp ? setShowModal2FAGoogle(!showModal2FaGoogle) : history.push('/two-fa-activation');
     };
