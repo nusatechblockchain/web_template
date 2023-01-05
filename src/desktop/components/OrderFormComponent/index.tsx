@@ -19,9 +19,9 @@ export interface OrderFormProps {
     amount: number;
     handleChangeAmount: (e: number) => void;
     total: number;
-    handleChangeTotal: (e: number) => void;
-    price: string;
-    handleChangePrice: (e: string) => void;
+    // handleChangeTotal: (e: number) => void;
+    price: number;
+    handleChangePrice: (e: number) => void;
     handleSubmit: () => void;
 }
 
@@ -40,7 +40,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
         amount,
         handleChangeAmount,
         total,
-        handleChangeTotal,
+        // handleChangeTotal,
         price,
         handleChangePrice,
         handleSubmit,
@@ -74,7 +74,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         type="text"
                         defaultValue={orderType === 'market' ? tickerItem?.last : price}
                         value={orderType === 'market' ? tickerItem?.last : price}
-                        onChange={(e) => handleChangePrice(e.target.value)}
+                        onChange={(e) => handleChangePrice(+e.target.value)}
                         className="form-control input-order-form"
                         id="input-order"
                     />
@@ -90,6 +90,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         type="text"
                         defaultValue={amount}
                         value={amount}
+                        onChange={(e) => handleChangeAmount(+e.target.value)}
                         className="form-control input-order-form"
                         id="input-order"
                     />
@@ -113,8 +114,8 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={total}
                         value={total}
+                        readOnly
                         className="form-control input-order-form"
                         id="input-order"
                     />
@@ -130,16 +131,14 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <p className="text-sm white-text">
                         {side === 'Buy' ? (
                             <>
-                                <Decimal fixed={usdtFixed} thousSep=",">
-                                    {usdt}
-                                </Decimal>{' '}
+                                {/* <Decimal fixed={usdtFixed} thousSep=","> */}
+                                {usdt} {/* </Decimal> */}
                                 {currentMarket?.quote_unit?.toUpperCase()}{' '}
                             </>
                         ) : (
                             <>
-                                <Decimal fixed={selectedFixed} thousSep=",">
-                                    {balance}
-                                </Decimal>{' '}
+                                {/* <Decimal fixed={selectedFixed} thousSep=","> */}
+                                {balance} {/* </Decimal>{' '} */}
                                 {currentMarket?.base_unit?.toUpperCase()}{' '}
                             </>
                         )}

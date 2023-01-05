@@ -59,6 +59,7 @@ interface ProfileSecurityState {
     timerActive: boolean;
     phone: any;
     timer: any;
+    kyc: any;
 }
 
 interface OwnProps {
@@ -113,6 +114,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             timerActive: false,
             phone: this.props.user.phones.slice(-1),
             timer: null,
+            kyc: this.props.user.profiles.slice(-1),
         };
     }
 
@@ -177,24 +179,28 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                     <div className="px-24">
                         <div className="d-flex mb-24">
                             <div className="status d-flex align-items-center">
-                                {twoFaStatus ? <CheckIcon /> : ''}
-                                <p className="mb-0 white-text text-sm ml-3">Two-Factor Authentication (2FA)</p>
+                                <p className="mb-0 white-text text-sm mr-3">Two-Factor Authentication (2FA)</p>
+                                {this.props.user.otp && <CheckIcon />}
                             </div>
                             <div className="status d-flex align-items-center ml-4">
-                                <CheckIcon />
-                                <p className="mb-0 white-text text-sm ml-3">Identity Verification</p>
+                                <p className="mb-0 white-text text-sm ml-3 mr-3">Identity Verification</p>
+                                {this.state.kyc[0].state === 'verified' && <CheckIcon />}
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-lg-8">
-                                <div className="notification-warning alert show text-sm white-text font-normal position-relative mb-24">
-                                    <Notification className="mr-2" />
-                                    To ensure the security of your account, use a combination of Google Verification +
-                                    Email Binding or Phone Number Binding
-                                    <div className="close-icon pl-3">
-                                        <CloseIcon fill="#fff" />
+                                {this.props.user.labels.length === 5 ? (
+                                    ''
+                                ) : (
+                                    <div className="notification-warning alert show text-sm white-text font-normal position-relative mb-24">
+                                        <Notification className="mr-2" />
+                                        To ensure the security of your account, use a combination of Google Verification
+                                        + Email Binding or Phone Number Binding
+                                        <div className="close-icon pl-3">
+                                            <CloseIcon fill="#fff" />
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                         <h3 className="text-md font-bold white-text mb-4">Authentication</h3>
@@ -244,11 +250,9 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                                 Protect your account and transactions.
                                             </span>
                                             <div className="d-flex mt-3">
-                                                <Link
-                                                    to={'/change-email'}
-                                                    className="btn btn-transparent gradient-text font-bold text-sm w-auto px-0 mr-3">
-                                                    Change
-                                                </Link>
+                                                <button className="btn btn-transparent gradient-text font-bold text-sm w-auto px-0 mr-3">
+                                                    Verified
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

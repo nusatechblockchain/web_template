@@ -64,7 +64,7 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
                 <p className="text-ms grey-text-accent font-extrabold mb-12">Available</p>
                 <div className="d-flex align-items-center">
                     <span className="value-container text-md white-text">
-                        <span className="value">{formatWithSeparators(estimatedValue, ',')}</span>
+                        <span className="value">{formatWithSeparators(estimatedValue, ',')} </span>
                         <span className="value-sign mr-24">{VALUATION_PRIMARY_CURRENCY.toUpperCase()}</span>
                     </span>
                 </div>

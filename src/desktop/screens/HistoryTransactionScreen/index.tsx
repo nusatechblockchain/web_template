@@ -43,6 +43,8 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     useDocumentTitle('Transaction History');
     useWalletsFetch();
 
+    console.log(historys);
+
     const handleChangeType = (e) => {
         setType(e);
         setCurrency('');
@@ -61,7 +63,13 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
             'Type',
             'Asset',
             'Ammount',
-            `${historys && historys[0] && historys[0].tid ? 'Transaction ID' : 'Receiver UID'}`,
+            `${
+                historys && historys[0] && historys[0].tid
+                    ? 'Transaction ID'
+                    : historys && historys[0] && historys[0].rid
+                    ? 'Address'
+                    : 'Receiver UID'
+            }`,
             'Status',
         ];
     };
@@ -105,14 +113,16 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     : ''}
             </p>,
             <div className="d-flex align-items-center text-sm">
-                <span className="mr-12">{item.icon}</span>
-                <p className="m-0 mr-24 white-text font-bold">{item.currency.toUpperCase()}</p>
+                {/* <span className="mr-12">{item.icon}</span> */}
+                <p className="m-0 mr-12 white-text font-bold">{item.currency.toUpperCase()}</p>
             </div>,
             <p className="m-0 text-sm white-text">{item.amount}</p>,
-            <p className="m-0 text-sm white-text text-italic">{item.tid ? item.tid : item.receiver_uid}</p>,
+            <p className="m-0 text-sm white-text text-italic">
+                {item.tid ? item.tid : item.blockchain_txid ? item.blockchain_txid : item.receiver_uid}
+            </p>,
             <p
                 className={`m-0 text-sm ${
-                    item.status === 'Pending'
+                    item.status === 'Pending' || item.state === 'processing'
                         ? 'warning-text'
                         : item.status === 'Canceled'
                         ? 'danger-text'
@@ -126,6 +136,8 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     ? 'Completed'
                     : item.state === 'collected'
                     ? 'Collected'
+                    : item.state === 'processing'
+                    ? 'Processing'
                     : ''}
             </p>,
         ]);

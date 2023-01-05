@@ -11,6 +11,7 @@ import { WalletWithdrawalForm, WalletWithdrawalInfo } from '../../containers';
 import { ModalInternalTransfer } from '../../components';
 import { Table } from '../../../components';
 import { NoData } from '../../components';
+import moment from 'moment';
 
 export const WalletWitdrawal: React.FC = () => {
     const intl = useIntl();
@@ -23,17 +24,17 @@ export const WalletWitdrawal: React.FC = () => {
     useHistoryFetch({ type: 'withdraws', currency: currency, limit: 3, page: 0 });
 
     const getTableHeaders = () => {
-        return ['Date', 'Transacsion ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
+        return ['Date', 'Transaction ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
     };
 
     const getTableData = (data) => {
         return data.map((item) => [
-            item.date,
-            item.transactionId,
+            moment(item.created_at).format('D MMM YYYY - HH:mm'),
+            item.rid,
             item.amount,
             item.type,
-            item.status,
-            item.confirmation,
+            item.state,
+            item.confirmations,
         ]);
     };
 
@@ -76,7 +77,7 @@ export const WalletWitdrawal: React.FC = () => {
                         <Table header={getTableHeaders()} data={getTableData(historys)} />
                         {historys.length < 1 && <NoData text="No Data Yet" />}
                         {historys.length > 0 && (
-                            <div className="d-flex justify-content-center">
+                            <div className="d-flex justify-content-center mt-3">
                                 <Link to="/history-transaction" className="font-bold text-center gradient-text text-sm">
                                     View All
                                 </Link>
