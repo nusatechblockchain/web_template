@@ -11,10 +11,12 @@ import {
     Beneficiary,
     Currency,
     BlockchainCurrencies,
+    selectBeneficiariesCreateLoading,
     selectBeneficiariesCreateError,
     selectBeneficiariesCreateSuccess,
     BeneficiariesActivate,
     selectBeneficiariesActivateError,
+    selectBeneficiariesCreate,
     beneficiariesResendPin,
     beneficiariesActivate,
     beneficiariesActivateError,
@@ -25,6 +27,7 @@ import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
 import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector } from '../../../hooks';
 import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
 import PinInput from 'react-pin-input';
+import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
@@ -50,17 +53,23 @@ export const WalletWithdrawalForm: React.FC = () => {
 
     const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
-    const beneficiariesError = useReduxSelector(selectBeneficiariesCreateError);
+    const beneficiariesCreate = useSelector(selectBeneficiariesCreate);
+    const beneficiariesError = useSelector(selectBeneficiariesCreateError);
     const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
-    const beneficiariesSuccess = useSelector(selectBeneficiariesCreateSuccess);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
-    const [errorBeneficiary, setErrorBeneficiary] = React.useState(beneficiariesError);
 
     // const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
     // const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
     // console.log(uniqueBlockchainKeysValues);
+
+    React.useEffect(() => {
+        if (beneficiariesError != undefined) {
+            setShowModalBeneficiaryCode(false);
+            setShowModalModalAddBeneficiary(true);
+        }
+    }, [beneficiariesError]);
 
     const blockchainKeyValue =
         currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
@@ -95,9 +104,13 @@ export const WalletWithdrawalForm: React.FC = () => {
     };
 
     const handleActivateBeneficiary = () => {
-        dispatch(beneficiariesActivate({ id: 111, pin: '123456' }));
+        const payload = {
+            id: beneficiariesCreate.id,
+            pin: beneficiaryCode,
+        };
+        dispatch(beneficiariesActivate(payload));
 
-        if (beneficiariesActivateError) {
+        if (!beneficiariesActivateError) {
             setShowModalBeneficiaryCode(false);
             setShowModalBeneficiaryList(true);
         }
@@ -121,11 +134,11 @@ export const WalletWithdrawalForm: React.FC = () => {
     const renderContentModalWithdrawalConfirmation = () => {
         return (
             <React.Fragment>
-                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10 min-w-500">
+                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10 w-100">
                     Please check the target address carefully before confirming the withdrawal.
                 </div>
                 <p className="text-ms grey-text-accent font-semibold mb-24">
-                    You've requested to withdraw 0.0233 ETH, Are you sure to do Withdraw?
+                    You've requested to withdraw {amount} {currency.toUpperCase()}, Are you sure to do Withdraw?
                 </p>
                 <div className="d-flex">
                     <button
@@ -152,12 +165,14 @@ export const WalletWithdrawalForm: React.FC = () => {
     const renderContentModalWithdrawalSuccessfully = () => {
         return (
             <React.Fragment>
-                <p className="text-ms grey-text-accent font-semibold mb-24">You success to withdraw 0.002 BTC</p>
+                <p className="text-ms grey-text-accent font-semibold mb-24">
+                    You success to withdraw {amount} {currency.toUpperCase}
+                </p>
                 <div className="d-flex">
                     <button
                         className="btn btn-danger sm px-5 mr-3"
                         onClick={() => setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully)}>
-                        Cancel
+                        Close
                     </button>
                 </div>
             </React.Fragment>
@@ -210,7 +225,14 @@ export const WalletWithdrawalForm: React.FC = () => {
     };
 
     const renderHeaderModalBeneficiaryCode = () => {
-        return <h3 className="text-md contrast-text font-bold text-center mx-auto"> Confirmation New Address</h3>;
+        return (
+            <React.Fragment>
+                <h3 className="text-md contrast-text font-bold text-center mx-auto"> Confirmation New Address</h3>
+                <span onClick={() => setShowModalBeneficiaryCode(false)} className="cursor-pointer">
+                    <CircleCloseIcon />
+                </span>{' '}
+            </React.Fragment>
+        );
     };
 
     const renderModalBeneficiaryCode = () => {
@@ -387,12 +409,8 @@ export const WalletWithdrawalForm: React.FC = () => {
                     showModalAddBeneficiary={showModalAddBeneficiary}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
-                        if (beneficiariesError) {
-                            alert('error');
-                        } else {
-                            setShowModalBeneficiaryCode(true);
-                            setShowModalModalAddBeneficiary(false);
-                        }
+                        setShowModalBeneficiaryCode(true);
+                        setShowModalModalAddBeneficiary(false);
                     }}
                 />
             )}

@@ -11,7 +11,15 @@ import { CustomStylesSelect } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
-import { beneficiariesCreate, selectCurrencies, selectWallets, Wallet } from '../../../modules';
+import {
+    beneficiariesCreate,
+    selectCurrencies,
+    selectWallets,
+    Wallet,
+    selectBeneficiariesCreateError,
+    selectBeneficiariesCreate,
+    selectBeneficiariesCreateLoading,
+} from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
@@ -41,7 +49,8 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
     const currencies = useSelector(selectCurrencies);
     const wallets = useSelector(selectWallets);
-    // const error = useSelector(selectBeneficiariesCreateError);
+    const errorCreate = useSelector(selectBeneficiariesCreateError);
+    const createLoading = useSelector(selectBeneficiariesCreateLoading);
     const currencyItem = currencies.find((item) => item.id === currency);
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
@@ -103,7 +112,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         await dispatch(beneficiariesCreate(payload));
         handleClearModalsInputs();
         props.handleAddAddress();
-    }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
+    }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName, errorCreate, createLoading]);
 
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
 
