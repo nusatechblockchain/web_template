@@ -174,6 +174,8 @@ export const ru: LangType = {
     'page.body.landing.footer.info': 'Info',
     'page.body.landing.footer.rights': 'NusaExchange © All rights reserved.',
 
+    'page.body.landing.footer.email': 'We don’t sell your email and spam',
+
     'pagy.body.footer.powered_by': 'Сделано',
 
     /* Error pages */

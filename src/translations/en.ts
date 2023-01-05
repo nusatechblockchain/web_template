@@ -208,6 +208,8 @@ export const en = {
     'page.body.landing.footer.info': 'Info',
     'page.body.landing.footer.rights': 'Heaven Exchange © All rights reserved.',
 
+    'page.body.landing.footer.email': 'We don’t sell your email and spam',
+
     'pagy.body.footer.powered_by': 'Powered by',
 
     /* Wallets */
