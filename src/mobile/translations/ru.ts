@@ -227,6 +227,8 @@ export const ru = {
     'page.header.navbar.dropdown.currency': 'Currency',
     'page.header.navbar.dropdown.usd': 'USD',
     'page.header.navbar.dropdown.idr': 'IDR',
+    'page.header.navbar.dropdown.language.usd': 'USDT',
+    'page.header.navbar.dropdown.language.idr': 'IDR',
 
     'page.body.landing.footer.links': 'Links',
     'page.body.landing.footer.links.how': 'How it works',

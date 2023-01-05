@@ -31,6 +31,8 @@ export const en = {
     'page.header.navbar.dropdown.currency': 'Currency',
     'page.header.navbar.dropdown.usd': 'USD',
     'page.header.navbar.dropdown.idr': 'IDR',
+    'page.header.navbar.dropdown.language.usd': 'USDT',
+    'page.header.navbar.dropdown.language.idr': 'IDR',
 
     'page.sidebar.group.text': 'Fee Group:',
     'page.sidebar.group.value': 'Base',
