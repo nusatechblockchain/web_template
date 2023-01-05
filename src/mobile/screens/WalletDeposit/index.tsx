@@ -4,7 +4,7 @@ import { Link, useHistory, useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { alertPush, Currency, selectCurrencies, walletsAddressFetch, selectWallets, Wallet } from '../../../modules';
 import { useWalletsFetch, useDocumentTitle } from '../../../hooks';
-import { QRCode, Decimal } from '../../../components';
+import { QRCode } from '../../../components';
 import { copy } from '../../../helpers';
 import { DEFAULT_WALLET } from '../../../constants';
 import { ArrowLeft, ArrowRight } from 'src/mobile/assets/Arrow';
@@ -19,18 +19,18 @@ type LocationProps = {
 };
 
 const WalletDepositMobileScreen: React.FC = () => {
+    const { currency = '' } = useParams<{ currency?: string }>();
+    useWalletsFetch();
+    useDocumentTitle(`Deposit ${currency.toUpperCase()}`);
     const { formatMessage } = useIntl();
     const history = useHistory();
     const dispatch = useDispatch();
     const location = (useLocation() as unknown) as LocationProps;
 
     const wallets = useSelector(selectWallets) || [];
-    const { currency = '' } = useParams<{ currency?: string }>();
     const blockchain_key = location.state?.blockchain_key;
     const protocol = location.state?.protocol;
-
-    useWalletsFetch();
-    useDocumentTitle(`Deposit ${currency.toUpperCase()}`);
+    const [address, setAddress] = React.useState('');
 
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -47,7 +47,6 @@ const WalletDepositMobileScreen: React.FC = () => {
     };
 
     const blockchainKey = blockchain && blockchain.blockchain_key;
-    const minDepositAmount = (blockchain && blockchain.min_deposit_amount) || '0';
 
     const depositAddress =
         (wallet &&
@@ -74,6 +73,12 @@ const WalletDepositMobileScreen: React.FC = () => {
         dispatch(alertPush({ message: ['Link has been copied'], type: 'success' }));
     };
 
+    React.useEffect(() => {
+        if (depositAddress && depositAddress.address !== null) {
+            setAddress(depositAddress && depositAddress.address);
+        }
+    }, [depositAddress]);
+
     return (
         <React.Fragment>
             <section className="wallet-deposit-mobile-screen pb-5 dark-bg-main">
@@ -89,11 +94,13 @@ const WalletDepositMobileScreen: React.FC = () => {
                         </h1>
                     </div>
 
+                    {/* ========= Render if address has been generated =========== */}
                     {depositAddress && depositAddress.address !== null && (
                         <React.Fragment>
-                            {' '}
                             <div className="d-flex justify-content-center align-items-center radius-lg dark-bg-accent w-100 qr-container mb-16">
-                                <QRCode dimensions={116} data={depositAddress && depositAddress.address} />
+                                <div className="card p-1">
+                                    <QRCode dimensions={150} data={depositAddress && depositAddress.address} />
+                                </div>
                             </div>
                             <h2 className="p-0 m-0 text-sm grey-text-accent font-bold mb-8">Network</h2>
                             <div className="d-flex justify-content-between align-items-center mb-16">
@@ -106,7 +113,6 @@ const WalletDepositMobileScreen: React.FC = () => {
                                         {currencyItem && currencyItem.id && currencyItem.id.toUpperCase()}
                                     </h3>
                                 </div>
-
                                 <ArrowRight className={''} />
                             </div>
                             <h2 className="p-0 m-0 text-sm grey-text-accent font-bold mb-8">Address</h2>
@@ -114,9 +120,8 @@ const WalletDepositMobileScreen: React.FC = () => {
                                 <input
                                     id="address"
                                     className="p-0 m-0 text-sm grey-text-accent font-bold address w-90"
-                                    defaultValue={'121331233'}
+                                    defaultValue={address}
                                 />
-
                                 <button
                                     className="btn-transparent w-10"
                                     type="button"
@@ -127,9 +132,35 @@ const WalletDepositMobileScreen: React.FC = () => {
                                     <CopyButton />
                                 </button>
                             </div>
-                            <button className="btn-primary w-100">Save Address</button>
+                            {depositAddress === null ? (
+                                <button
+                                    onClick={(e) => handleGenerateAddress(e)}
+                                    className="w-100 btn-primary cursor-pointer"
+                                    disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
+                                    type="button">
+                                    {'Generate Address'}
+                                </button>
+                            ) : (
+                                depositAddress &&
+                                depositAddress.address === null && (
+                                    <button
+                                        className="w-100 btn-primary cursor-pointer"
+                                        disabled={depositAddress && depositAddress.state === 'pending' ? true : false}
+                                        type="button">
+                                        {'Creating ...'}
+                                    </button>
+                                )
+                            )}
+                            <button
+                                disabled={depositAddress && depositAddress.address && depositAddress.address === null}
+                                onClick={() => doCopy('address')}
+                                className="btn-primary w-100">
+                                Copy Address
+                            </button>
                         </React.Fragment>
                     )}
+
+                    {/* ======= Render if address has not been generated ======= */}
 
                     {depositAddress === null || (depositAddress && depositAddress.address === null) ? (
                         <React.Fragment>
@@ -149,7 +180,6 @@ const WalletDepositMobileScreen: React.FC = () => {
                                         </p>
                                     </div>
                                 </div>
-
                                 <span>
                                     <ArrowRight className={''} />
                                 </span>
@@ -161,7 +191,7 @@ const WalletDepositMobileScreen: React.FC = () => {
                                         <InfoWarningIcon />
                                     </span>
                                     <p className="m-0 p-0 grey-text-accent text-xxs">
-                                        Please don’t deposit any other digital asset except BTC to the address below.
+                                        Please don't deposit any other digital asset except BTC to the address below.
                                         Otherwise, you may lose your assets permanently
                                     </p>
                                 </div>
