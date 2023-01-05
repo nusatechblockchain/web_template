@@ -12,8 +12,8 @@ export interface OrderExecution {
     market: string;
     side: OrderSide;
     volume: string;
-    price?: string;
-    ord_type?: string;
+    price: string;
+    ord_type: string;
     trigger_price?: string;
 }
 
@@ -47,18 +47,17 @@ export interface SetOrderType {
 }
 
 export type OrdersAction =
-    OrderExecuteFetch
+    | OrderExecuteFetch
     | OrderExecuteData
     | OrderExecuteError
     | SetCurrentPrice
     | SetAmount
     | SetOrderType;
 
-export const orderExecuteFetch =
-    (payload: OrderExecuteFetch['payload']): OrderExecuteFetch => ({
-        type: ORDER_EXECUTE_FETCH,
-        payload,
-    });
+export const orderExecuteFetch = (payload: OrderExecuteFetch['payload']): OrderExecuteFetch => ({
+    type: ORDER_EXECUTE_FETCH,
+    payload,
+});
 
 export const orderExecuteData = (): OrderExecuteData => ({
     type: ORDER_EXECUTE_DATA,
@@ -69,20 +68,17 @@ export const orderExecuteError = (error: CommonError): OrderExecuteError => ({
     error,
 });
 
-export const setCurrentPrice =
-  (payload: SetCurrentPrice['payload']): SetCurrentPrice => ({
+export const setCurrentPrice = (payload: SetCurrentPrice['payload']): SetCurrentPrice => ({
     type: ORDERS_SET_CURRENT_PRICE,
     payload,
-  });
+});
 
-export const setAmount =
-    (payload: SetAmount['payload']): SetAmount => ({
-        type: ORDERS_SET_AMOUNT,
-        payload,
-    });
+export const setAmount = (payload: SetAmount['payload']): SetAmount => ({
+    type: ORDERS_SET_AMOUNT,
+    payload,
+});
 
-export const setOrderType =
-    (payload: SetOrderType['payload']): SetOrderType => ({
-        type: ORDERS_SET_ORDER_TYPE,
-        payload,
-    });
+export const setOrderType = (payload: SetOrderType['payload']): SetOrderType => ({
+    type: ORDERS_SET_ORDER_TYPE,
+    payload,
+});

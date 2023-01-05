@@ -32,19 +32,19 @@ export const TradingScreen: FC = (): ReactElement => {
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
 
     const headersKeys = useMemo(
-        () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', ''],
+        () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', 'Side', 'Action'],
         []
     );
 
     const renderHeaders = useMemo(
-        () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', ''],
+        () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', 'Side', 'Action'],
         []
     );
 
     const renderData = useCallback(
         (data) => {
             if (!data.length) {
-                return [[[''], [''], [''], [''], translate('page.noDataToShow'), [''], [''], [''], ['']]];
+                return [[[''], [''], [''], [''], [''], translate('page.noDataToShow'), [''], [''], [''], ['']]];
             }
 
             return data.map((item: OrderCommon) => {
@@ -112,6 +112,9 @@ export const TradingScreen: FC = (): ReactElement => {
                         %
                     </span>,
                     side,
+                    <button className="btn-danger" type="button" onClick={() => handleCancel(id)}>
+                        Cancel
+                    </button>,
                 ];
             });
         },
@@ -169,7 +172,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                 <RecentTrades />
                             </div>
                             <div className="grid-item open-orders mt-50">
-                                {/* <OpenOrders
+                                <OpenOrders
                                     headersKeys={headersKeys}
                                     headers={renderHeaders}
                                     data={renderData(list)}
@@ -177,7 +180,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
                                     hideOthrerPairs={hideOtherPairs}
-                                /> */}
+                                />
                             </div>
                         </div>
                     </div>
