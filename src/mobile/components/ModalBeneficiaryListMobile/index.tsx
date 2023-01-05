@@ -15,7 +15,9 @@ export interface ModalBeneficiaryListMobileProps {
     onCloseList: () => void;
     onCloseAdd: () => void;
     handleAddAddress: () => void;
+    handlePendingStatus?: (id: number) => void;
     beneficiaryId?: string;
+    handleDelete?: () => void;
     handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string) => void;
 }
 
@@ -31,11 +33,7 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
     const handleDeleteAddress = React.useCallback(
         (item: Beneficiary) => () => {
             dispatch(beneficiariesDelete({ id: item.id }));
-            // dispatch(beneficiariesFetch());
-
-            // setTimeout(() => {
-            //     location.reload();
-            // }, 500);
+            props.handleDelete();
         },
         []
     );
@@ -64,9 +62,17 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
                     ) : (
                         beneficiariesList.map((item, i) => (
                             <div
-                                onClick={() =>
-                                    props.handleChangeBeneficiaryId(item.id, item.data.address, item.blockchain_key)
-                                }
+                                onClick={() => {
+                                    if (item.state === 'pending') {
+                                        props.handlePendingStatus(item.id);
+                                    } else {
+                                        props.handleChangeBeneficiaryId(
+                                            item.id,
+                                            item.data.address,
+                                            item.blockchain_key
+                                        );
+                                    }
+                                }}
                                 className="my-2 content-list-mobile pb-2 cursor-pointer"
                                 key={i}>
                                 <div className="d-flex align-items-center mb-1 justify-content-between">
