@@ -10,16 +10,11 @@ import {
     selectBeneficiaries,
     Beneficiary,
     Currency,
-    BlockchainCurrencies,
-    selectBeneficiariesCreateLoading,
     selectBeneficiariesCreateError,
-    selectBeneficiariesCreateSuccess,
-    BeneficiariesActivate,
     selectBeneficiariesActivateError,
     selectBeneficiariesCreate,
     beneficiariesResendPin,
     beneficiariesActivate,
-    beneficiariesActivateError,
 } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
@@ -28,6 +23,7 @@ import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector } from '../.
 import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
 import PinInput from 'react-pin-input';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
+import moment from 'moment';
 
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
@@ -61,6 +57,26 @@ export const WalletWithdrawalForm: React.FC = () => {
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
 
+    const [seconds, setSeconds] = React.useState(5000);
+    const [timerActive, setTimerActive] = React.useState(false);
+
+    React.useEffect(() => {
+        let timer = null;
+        if (timerActive) {
+            timer = setInterval(() => {
+                setSeconds((seconds) => seconds - 1000);
+
+                if (seconds === 0) {
+                    setTimerActive(false);
+                    setSeconds(0);
+                }
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    });
+
     React.useEffect(() => {
         if (beneficiariesError != undefined) {
             setShowModalBeneficiaryCode(false);
@@ -78,6 +94,7 @@ export const WalletWithdrawalForm: React.FC = () => {
         setBlockchainKey(blockchainKey);
         setShowModalBeneficiaryList(false);
     };
+
     const handleChangeAmount = (e) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmount(value);
@@ -92,7 +109,13 @@ export const WalletWithdrawalForm: React.FC = () => {
     };
 
     const handleResendCode = () => {
-        dispatch(beneficiariesResendPin({ id: 111 }));
+        if (beneficiaryActivateId) {
+            dispatch(beneficiariesResendPin({ id: beneficiaryActivateId }));
+        } else {
+            dispatch(beneficiariesResendPin({ id: beneficiariesCreate.id }));
+        }
+        setSeconds(5000);
+        setTimerActive(true);
     };
 
     const handlePendingStatus = (id: number) => {
@@ -100,6 +123,8 @@ export const WalletWithdrawalForm: React.FC = () => {
         setShowModalBeneficiaryList(false);
         setShowModalBeneficiaryCode(true);
         setBeneficiaryActivateId(id);
+        setSeconds(5000);
+        setTimerActive(true);
     };
 
     const handleActivateBeneficiary = () => {
@@ -235,10 +260,15 @@ export const WalletWithdrawalForm: React.FC = () => {
     const renderHeaderModalBeneficiaryCode = () => {
         return (
             <React.Fragment>
-                <h3 className="text-md contrast-text font-bold text-center mx-auto"> Confirmation New Address</h3>
-                <span onClick={() => setShowModalBeneficiaryCode(false)} className="cursor-pointer">
+                <h3 className="text-md white-text font-bold text-center mx-auto"> Confirmation New Address</h3>
+                <span
+                    onClick={() => {
+                        setShowModalBeneficiaryCode(false);
+                        setBeneficiaryCode('');
+                    }}
+                    className="cursor-pointer">
                     <CircleCloseIcon />
-                </span>{' '}
+                </span>
             </React.Fragment>
         );
     };
@@ -281,8 +311,12 @@ export const WalletWithdrawalForm: React.FC = () => {
                         onClick={() => handleActivateBeneficiary()}>
                         Confirm
                     </button>
-                    <p className="text-right text-xs grey-text mt-2" onClick={handleResendCode}>
-                        Resend Code
+                    <p
+                        className={`text-right text-xs  mt-2 ${
+                            timerActive ? 'grey-text' : 'grey-text-accent cursor-pointer'
+                        }`}
+                        onClick={!timerActive && handleResendCode}>
+                        {moment(seconds).format('mm:ss')} Resend Code
                     </p>
                 </div>
             </React.Fragment>
@@ -407,6 +441,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                     }}
                     handlePendingStatus={(id) => handlePendingStatus(id)}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
+                    handleDelete={() => setAddress('')}
                 />
             )}
 
@@ -419,6 +454,8 @@ export const WalletWithdrawalForm: React.FC = () => {
                     handleAddAddress={() => {
                         setShowModalBeneficiaryCode(true);
                         setShowModalModalAddBeneficiary(false);
+                        setBeneficiaryCode('');
+                        setTimerActive(true);
                     }}
                 />
             )}

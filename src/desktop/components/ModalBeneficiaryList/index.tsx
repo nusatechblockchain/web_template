@@ -28,6 +28,7 @@ export interface ModalBeneficiaryListProps {
     onCloseAdd: () => void;
     handleAddAddress: () => void;
     handlePendingStatus?: (id: number) => void;
+    handleDelete?: () => void;
     beneficiaryId?: string;
     handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string) => void;
 }
@@ -61,6 +62,7 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
     const handleDeleteAddress = React.useCallback(
         (item: Beneficiary) => () => {
             dispatch(beneficiariesDelete({ id: item.id }));
+            props.handleDelete();
         },
         []
     );
@@ -116,7 +118,6 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                                             onClick={() => {
                                                 if (el.state === 'pending') {
                                                     props.handlePendingStatus(el.id);
-                                                    console.log(el.id);
                                                 } else {
                                                     props.handleChangeBeneficiaryId(
                                                         el.id,
