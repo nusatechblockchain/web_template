@@ -20,6 +20,7 @@ export const OrderForm = () => {
     const tickers = useSelector(selectMarketTickers);
     const currentMarket = useSelector(selectCurrentMarket);
     const wallets = useSelector(selectWallets);
+    const orderError = useSelector(orderExecuteError);
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const tickerItem: Ticker = tickers[currency];
@@ -43,8 +44,6 @@ export const OrderForm = () => {
     const [priceSell, setPriceSell] = React.useState(0);
     const [amountSell, setAmountSell] = React.useState(0);
     const [totalSell, setTotalSell] = React.useState(0);
-
-    console.log(orderExecuteError);
 
     const handleChangePriceBuy = (e: number) => {
         setPriceBuy(e);
@@ -111,9 +110,14 @@ export const OrderForm = () => {
             })
         );
 
-        if (!orderExecuteError) {
-            setShowModalSell(false);
-        }
+        setShowModalSell(false);
+        setAmountSell(0);
+        setTotalSell(0);
+        setPriceSell(0);
+
+        // if (!orderExecuteError) {
+        //     setShowModalSell(false);
+        // }
     };
 
     const renderModalContentSell = () => (

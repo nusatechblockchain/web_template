@@ -57,7 +57,7 @@ export const WalletsHeader: React.FunctionComponent<ParentProps> = (props: Paren
             <Form
                 as={Row}
                 className="mb-1 ml-2 min-w-400"
-                controlId="formHorizontalCheck"
+                controlid="formHorizontalCheck"
                 onClick={handleToggleCheckbox}>
                 <Col sm={{ span: 20, offset: 0 }}>
                     <Form.Check

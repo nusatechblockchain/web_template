@@ -3,7 +3,17 @@ import { useIntl } from 'react-intl';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomInput } from 'src/desktop/components';
-import { selectCurrencies, Currency, selectBeneficiaries, Beneficiary, beneficiariesDelete } from '../../../modules';
+import moment from 'moment';
+import {
+    selectCurrencies,
+    Currency,
+    selectBeneficiaries,
+    Beneficiary,
+    beneficiariesActivate,
+    selectBeneficiariesCreate,
+    selectBeneficiariesCreateError,
+} from '../../../modules';
+import { beneficiariesResendPin } from '../../../modules';
 import { useBeneficiariesFetch, useWithdrawLimits } from '../../../hooks';
 import { walletsWithdrawCcyFetch } from '../../../modules';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
@@ -11,8 +21,8 @@ import { CirclePlusIcon } from 'src/assets/images/CirclePlusIcon';
 import { ModalAddBeneficiaryMobile } from 'src/mobile/components';
 import { ModalBeneficiaryListMobile } from 'src/mobile/components/ModalBeneficiaryListMobile';
 import { Modal } from 'react-bootstrap';
-import Select from 'react-select';
-import { CustomStylesSelect } from 'src/mobile/components';
+import PinInput from 'react-pin-input';
+import { KeyConfirmation } from 'src/mobile/assets/KeyConfirmation';
 
 export const WalletWithdrawMobileScreen: React.FC = () => {
     useBeneficiariesFetch();
@@ -21,18 +31,29 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
     const { formatMessage } = useIntl();
     const dispatch = useDispatch();
 
+    const TIME_RESEND = 30000;
+
     const [amount, setAmount] = React.useState('');
     const [beneficiaryId, setBeneficiaryId] = React.useState(0);
     const [blockchainKey, setBlockchainKey] = React.useState('');
     const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
     const [showModalConfirmation, setShowModalConfirmation] = React.useState(false);
+    const [showModalConfirmationBeneficiary, setShowModalConfirmationBeneficiary] = React.useState(false);
+    const [seconds, setSeconds] = React.useState(TIME_RESEND);
+    const beneficiariesError = useSelector(selectBeneficiariesCreateError);
+    const [timerActive, setTimerActive] = React.useState(false);
+
+    const [beneficiaryActivateId, setBeneficiaryActivateId] = React.useState(0);
+    const [beneficiaryCode, setBeneficiaryCode] = React.useState('');
 
     const [address, setAddress] = React.useState('');
     const [otp, setOtp] = React.useState('');
+
     const { currency = '' } = useParams<{ currency?: string }>();
 
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
+    const beneficiariesCreate = useSelector(selectBeneficiariesCreate);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
@@ -41,6 +62,23 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
         currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
     const fee = blockchainKeyValue && blockchainKeyValue.withdraw_fee;
 
+    React.useEffect(() => {
+        let timer = null;
+        if (timerActive) {
+            timer = setInterval(() => {
+                setSeconds((seconds) => seconds - 1000);
+
+                if (seconds === 0) {
+                    setTimerActive(false);
+                    setSeconds(0);
+                }
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    });
+
     const handleChangeBeneficiaryId = (id: number, address: string, blockchainKey: string) => {
         setBeneficiaryId(id);
         setAddress(address);
@@ -48,17 +86,76 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
         setShowModalBeneficiaryList(false);
     };
 
+    React.useEffect(() => {
+        if (beneficiariesError != undefined) {
+            setShowModalConfirmationBeneficiary(false);
+            setShowModalModalAddBeneficiary(true);
+        }
+    }, [beneficiariesError]);
+
     const handleChangeAmount = (e) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmount(value);
+    };
+
+    const handleResendCode = () => {
+        if (beneficiaryActivateId) {
+            dispatch(beneficiariesResendPin({ id: beneficiaryActivateId }));
+        } else {
+            dispatch(beneficiariesResendPin({ id: beneficiariesCreate.id }));
+        }
+        setSeconds(TIME_RESEND);
+        setTimerActive(true);
+    };
+
+    const handlePendingStatus = (id: number) => {
+        dispatch(beneficiariesResendPin({ id: id }));
+        setShowModalBeneficiaryList(false);
+        setShowModalConfirmationBeneficiary(true);
+        setBeneficiaryActivateId(id);
+        setSeconds(TIME_RESEND);
+        setTimerActive(true);
     };
 
     const handleChangeOtp = (value: string) => {
         setOtp(value);
     };
 
+    const handleChangeBeneficiaryCode = (value) => {
+        setBeneficiaryCode(value);
+    };
+
     const handleSubmitWithdraw = () => {
         dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
+        setShowModalConfirmation(false);
+    };
+
+    const isValidForm = () => {
+        if (beneficiaryCode.length < 6) {
+            return true;
+        }
+    };
+
+    const handleActivateBeneficiary = () => {
+        if (beneficiaryActivateId) {
+            const payload = {
+                id: beneficiaryActivateId,
+                pin: beneficiaryCode,
+            };
+            dispatch(beneficiariesActivate(payload));
+            setBeneficiaryActivateId(0);
+        } else {
+            const payload = {
+                id: beneficiariesCreate.id,
+                pin: beneficiaryCode,
+            };
+            dispatch(beneficiariesActivate(payload));
+        }
+
+        if (!beneficiariesError) {
+            setShowModalConfirmationBeneficiary(false);
+            setShowModalBeneficiaryList(true);
+        }
     };
 
     const disabledButton = () => {
@@ -66,10 +163,6 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
             return true;
         }
     };
-
-    // React.useEffect(() => {
-    //     setAddress('');
-    // }, [address]);
 
     return (
         <>
@@ -136,7 +229,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                                       })}`
                                             }
                                             defaultLabel=""
-                                            inputValue={address}
+                                            inputValue={''}
                                             classNameLabel="d-none"
                                             classNameInput={`cursor-pointer dark-bg-accent`}
                                             autoFocus={false}
@@ -249,7 +342,10 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                 <ModalAddBeneficiaryMobile
                     onCloseList={() => ''}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
-                    handleAddAddress={() => setShowModalModalAddBeneficiary(false)}
+                    handleAddAddress={() => {
+                        setShowModalModalAddBeneficiary(false);
+                        setShowModalConfirmationBeneficiary(true);
+                    }}
                     showModalAddBeneficiary={showModalAddBeneficiary}
                 />
             )}
@@ -264,9 +360,10 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                     showModalAddBeneficiary={showModalAddBeneficiary}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
-                        setShowModalBeneficiaryList(false);
                         setShowModalModalAddBeneficiary(true);
+                        setShowModalBeneficiaryList(false);
                     }}
+                    handlePendingStatus={(id) => handlePendingStatus(id)}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
                 />
             )}
@@ -316,6 +413,64 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                 </button>
                             </div>
                         </div>
+                    </section>
+                </Modal>
+            )}
+
+            {showModalConfirmationBeneficiary && (
+                <Modal
+                    // style={{ zIndex: '99999999999999px' }}
+                    // onHide={setShowModalConfirmationBeneficiary(!showModalConfirmationBeneficiary)}
+                    dialogClassName="modal-confirmation-withdraw"
+                    show={showModalConfirmationBeneficiary}>
+                    <section className="container p-3 dark-bg-main">
+                        <div className="d-flex justify-content-center my-2">
+                            <KeyConfirmation />
+                        </div>
+                        <div className="text-center">
+                            <p className="gradient-text mb-3">Confirmation New Address</p>
+                            <p className="text-secondary text-sm">
+                                We have sent you an email containing a confirmation code pin, please enter it below to
+                                save the new address:
+                            </p>
+                        </div>
+                        <div className="mb-0">
+                            <PinInput
+                                length={6}
+                                onChange={handleChangeBeneficiaryCode}
+                                onComplete={handleChangeBeneficiaryCode}
+                                type="numeric"
+                                inputMode="number"
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    marginBottom: '8px',
+                                }}
+                                inputStyle={{
+                                    background: '#15191D',
+                                    borderRadius: '4px',
+                                    borderColor: '#15191D',
+                                    fontSize: '20px',
+                                    color: ' #DEDEDE',
+                                }}
+                                inputFocusStyle={{ fontSize: '20px', color: 'color: #23262F' }}
+                                autoSelect={true}
+                                regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+                            />
+                        </div>
+                        <button
+                            disabled={isValidForm()}
+                            onClick={handleActivateBeneficiary}
+                            className="btn btn-primary btn-block mt-3">
+                            Confirm
+                        </button>
+                        <p
+                            className={`text-right text-xs  mt-2 ${
+                                timerActive ? 'grey-text' : 'grey-text-accent cursor-pointer'
+                            }`}
+                            onClick={!timerActive && handleResendCode}>
+                            {moment(seconds).format('mm:ss')} Resend Code
+                        </p>
                     </section>
                 </Modal>
             )}
