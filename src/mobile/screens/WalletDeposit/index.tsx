@@ -66,8 +66,6 @@ const WalletDepositMobileScreen: React.FC = () => {
             blockchain?.status !== ' disabled'
         ) {
             dispatch(walletsAddressFetch({ currency, blockchain_key }));
-        } else {
-            console.log('haaai ini error');
         }
     };
 

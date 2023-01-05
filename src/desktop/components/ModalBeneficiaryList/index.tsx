@@ -57,8 +57,6 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
-    // console.log(beneficiariesList);
-
     const handleDeleteAddress = React.useCallback(
         (item: Beneficiary) => () => {
             dispatch(beneficiariesDelete({ id: item.id }));

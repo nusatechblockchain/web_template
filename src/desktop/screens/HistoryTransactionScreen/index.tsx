@@ -43,8 +43,6 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     useDocumentTitle('Transaction History');
     useWalletsFetch();
 
-    console.log(historys);
-
     const handleChangeType = (e) => {
         setType(e);
         setCurrency('');
