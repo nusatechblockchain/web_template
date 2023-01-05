@@ -47,6 +47,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [beneficiaryId, setBeneficiaryId] = React.useState(0);
     const [blockchainKey, setBlockchainKey] = React.useState('');
     const [address, setAddress] = React.useState('');
+    const [beneficiaryActivateId, setBeneficiaryActivateId] = React.useState(0);
     const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
     const [beneficiaryCode, setBeneficiaryCode] = React.useState('');
@@ -59,10 +60,6 @@ export const WalletWithdrawalForm: React.FC = () => {
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
-
-    // const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
-    // const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
-    // console.log(uniqueBlockchainKeysValues);
 
     React.useEffect(() => {
         if (beneficiariesError != undefined) {
@@ -98,17 +95,28 @@ export const WalletWithdrawalForm: React.FC = () => {
         dispatch(beneficiariesResendPin({ id: 111 }));
     };
 
-    const handlePendingStatus = () => {
-        dispatch(beneficiariesResendPin({ id: 111 }));
+    const handlePendingStatus = (id: number) => {
+        dispatch(beneficiariesResendPin({ id: id }));
+        setShowModalBeneficiaryList(false);
         setShowModalBeneficiaryCode(true);
+        setBeneficiaryActivateId(id);
     };
 
     const handleActivateBeneficiary = () => {
-        const payload = {
-            id: beneficiariesCreate.id,
-            pin: beneficiaryCode,
-        };
-        dispatch(beneficiariesActivate(payload));
+        if (beneficiaryActivateId) {
+            const payload = {
+                id: beneficiaryActivateId,
+                pin: beneficiaryCode,
+            };
+            dispatch(beneficiariesActivate(payload));
+            setBeneficiaryActivateId(0);
+        } else {
+            const payload = {
+                id: beneficiariesCreate.id,
+                pin: beneficiaryCode,
+            };
+            dispatch(beneficiariesActivate(payload));
+        }
 
         if (!beneficiariesActivateError) {
             setShowModalBeneficiaryCode(false);
@@ -397,7 +405,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                         setShowModalBeneficiaryList(false);
                         setShowModalModalAddBeneficiary(true);
                     }}
-                    handlePendingStatus={() => handlePendingStatus()}
+                    handlePendingStatus={(id) => handlePendingStatus(id)}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
                 />
             )}
