@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { CustomInput } from 'src/desktop/components';
 import { ModalMobile } from '../../components';
-import { selectCurrencies, beneficiariesCreate } from '../../../modules';
+import { selectCurrencies, beneficiariesCreate, beneficiariesCreateError } from '../../../modules';
 import Select from 'react-select';
+import { useWalletsFetch } from 'src/hooks';
 import { CustomStylesSelect } from '../../components';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
+import { Modal } from 'react-bootstrap';
 
 export interface ModalBeneficiaryMobileProps {
     showModalAddBeneficiary: boolean;
@@ -73,11 +75,7 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
         setCoinDescription(value);
     };
 
-    // const handleDeleteAddress  = (value: string) => {
-
-    // }
-
-    const handleSubmitAddAddressCoinModal = React.useCallback(() => {
+    const handleSubmitAddAddressCoinModal = React.useCallback(async () => {
         const payload = {
             currency: currency || '',
             name: coinBeneficiaryName,
@@ -128,93 +126,95 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
     const renderContentModalBeneficiary = () => {
         return (
             <>
-                <div className="align-items-start">
-                    <label className="text-sm white-text">Blockchain Address</label>
-                    <div className="input-amount">
-                        <div>
-                            <CustomInput
-                                type="text"
-                                label=""
-                                placeholder={'Input Blockchain Address'}
-                                defaultLabel=""
-                                handleChangeInput={handleChangeCoinAddress}
-                                inputValue={coinAddress}
-                                classNameLabel="d-none"
-                                classNameInput={`dark-bg-accent`}
-                                autoFocus={false}
-                                labelVisible={false}
-                            />
-                            <div className="mb-3">
-                                {coinAddress != '' && !coinAddressValid && (
-                                    <span className="text-xs danger-text">Invalid Address</span>
-                                )}
+                <form>
+                    <div className="align-items-start">
+                        <label className="text-sm white-text">Blockchain Address</label>
+                        <div className="input-amount">
+                            <div>
+                                <CustomInput
+                                    type="text"
+                                    label=""
+                                    placeholder={'Input Blockchain Address'}
+                                    defaultLabel=""
+                                    handleChangeInput={handleChangeCoinAddress}
+                                    inputValue={coinAddress}
+                                    classNameLabel="d-none"
+                                    classNameInput={`dark-bg-accent`}
+                                    autoFocus={false}
+                                    labelVisible={false}
+                                />
+                                <div className="mb-3">
+                                    {coinAddress != '' && !coinAddressValid && (
+                                        <span className="text-xs danger-text">Invalid Address</span>
+                                    )}
+                                </div>
+                                <p className="text-xs grey-text ">
+                                    Do not send Tether USD unless you are certain the destination supports TRC-20
+                                    transactions. If it does not, you could permanently lose access to your coins.
+                                </p>
                             </div>
-                            <p className="text-xs grey-text ">
-                                Do not send Tether USD unless you are certain the destination supports TRC-20
-                                transactions. If it does not, you could permanently lose access to your coins.
-                            </p>
                         </div>
                     </div>
-                </div>
-                <div className="align-items-start">
-                    <p className="text-sm white-text mb-8">Select Networks</p>
-                    <Select
-                        styles={CustomStylesSelect}
-                        options={optionNetworks}
-                        value={optionNetworks.filter(function (option) {
-                            return option.value === coinBlockchainName.blockchainKey;
-                        })}
-                        onChange={(e) => setCoinBlockchainName({ ...coinBlockchainName, blockchainKey: e.value })}
-                    />
-                </div>
-                <div className="align-items-start">
-                    <label className="text-sm white-text">Beneficiary Name</label>
-                    <div className="input-amount">
-                        <div>
-                            <CustomInput
-                                type="text"
-                                label=""
-                                placeholder={'Input Beneficiary Name'}
-                                defaultLabel=""
-                                handleChangeInput={handleChangeBeneficiaryName}
-                                inputValue={coinBeneficiaryName}
-                                classNameLabel="d-none"
-                                classNameInput={`dark-bg-accent`}
-                                autoFocus={false}
-                                labelVisible={false}
-                            />
+                    <div className="align-items-start">
+                        <p className="text-sm white-text mb-8">Select Networks</p>
+                        <Select
+                            styles={CustomStylesSelect}
+                            options={optionNetworks}
+                            value={optionNetworks.filter(function (option) {
+                                return option.value === coinBlockchainName.blockchainKey;
+                            })}
+                            onChange={(e) => setCoinBlockchainName({ ...coinBlockchainName, blockchainKey: e.value })}
+                        />
+                    </div>
+                    <div className="align-items-start">
+                        <label className="text-sm white-text">Beneficiary Name</label>
+                        <div className="input-amount">
+                            <div>
+                                <CustomInput
+                                    type="text"
+                                    label=""
+                                    placeholder={'Input Beneficiary Name'}
+                                    defaultLabel=""
+                                    handleChangeInput={handleChangeBeneficiaryName}
+                                    inputValue={coinBeneficiaryName}
+                                    classNameLabel="d-none"
+                                    classNameInput={`dark-bg-accent`}
+                                    autoFocus={false}
+                                    labelVisible={false}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="align-items-start">
-                    <label className="text-sm white-text">Description (Optional)</label>
-                    <div className="input-amount">
-                        <div>
-                            <CustomInput
-                                type="textarea"
-                                label=""
-                                placeholder={'Input Description'}
-                                defaultLabel=""
-                                handleChangeInput={handleChangeCoinDescription}
-                                inputValue={coinDescription}
-                                classNameLabel="d-none"
-                                classNameInput={`dark-bg-accent`}
-                                autoFocus={false}
-                                labelVisible={false}
-                            />
+                    <div className="align-items-start">
+                        <label className="text-sm white-text">Description (Optional)</label>
+                        <div className="input-amount">
+                            <div>
+                                <CustomInput
+                                    type="textarea"
+                                    label=""
+                                    placeholder={'Input Description'}
+                                    defaultLabel=""
+                                    handleChangeInput={handleChangeCoinDescription}
+                                    inputValue={coinDescription}
+                                    classNameLabel="d-none"
+                                    classNameInput={`dark-bg-accent`}
+                                    autoFocus={false}
+                                    labelVisible={false}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="py-3">
-                    <button
-                        disabled={isDisabled}
-                        onClick={handleSubmitAddAddressCoinModal}
-                        type="button"
-                        className="btn btn-primary btn-block btn-lg">
-                        Save Address
-                    </button>
-                </div>
+                    <div className="py-3">
+                        <button
+                            disabled={isDisabled}
+                            onClick={handleSubmitAddAddressCoinModal}
+                            type="button"
+                            className="btn btn-primary btn-block btn-lg">
+                            Save Address
+                        </button>
+                    </div>
+                </form>
             </>
         );
     };
