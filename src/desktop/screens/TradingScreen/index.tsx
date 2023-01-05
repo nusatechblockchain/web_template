@@ -1,10 +1,8 @@
 import classnames from 'classnames';
 import React, { FC, ReactElement, useMemo, useCallback, useState } from 'react';
-import { Form, Spinner } from 'react-bootstrap';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOpenOrdersFetch } from 'src/hooks';
-import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { Decimal } from '../../../components';
 import { localeDate, setTradeColor } from '../../../helpers';
 import {
