@@ -1,9 +1,10 @@
 import { History } from 'history';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { RouteProps, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import { IntlProps } from '../../../';
 import {
     changeLanguage,
     changeUserDataFetch,
@@ -41,9 +42,13 @@ interface OwnProps {
     changeUserDataFetch: typeof changeUserDataFetch;
 }
 
-type Props = OwnProps & ReduxProps & RouteProps & DispatchProps;
+type Props = OwnProps & ReduxProps & RouteProps & DispatchProps & IntlProps;
 
 class FooterContainer extends React.Component<Props, State> {
+    public translate = (e: string) => {
+        return this.props.intl.formatMessage({ id: e });
+    };
+
     public render() {
         const { isLoggedIn, lang } = this.props;
         return (
@@ -55,40 +60,46 @@ class FooterContainer extends React.Component<Props, State> {
                                 <Logo className="mb-3" />
                             </div>
                             <div className="link px-3">
-                                <p className="text-lg gradient-text mb-36">LINKS</p>
+                                <p className="text-lg gradient-text mb-36">
+                                    {this.translate('page.body.landing.footer.links').toUpperCase()}
+                                </p>
                                 <a href="#" className="mb-8 d-block text-ms grey-text-accent">
-                                    How it works
+                                    {this.translate('page.body.landing.footer.links.how')}
                                 </a>
                                 <a href="#" className="mb-8 d-block text-ms grey-text-accent">
-                                    Cryapos
+                                    {this.translate('page.body.landing.footer.links.cryptos')}
                                 </a>
                                 <a href="#" className="mb-8 d-block text-ms grey-text-accent">
-                                    Features
+                                    {this.translate('page.body.landing.footer.links.features')}
                                 </a>
                                 <a href="#" className="mb-8 d-block text-ms grey-text-accent">
-                                    Testimonial
+                                    {this.translate('page.body.landing.footer.links.testimonial')}
                                 </a>
                                 <a href="#" className="mb-8 d-block text-ms grey-text-accent">
-                                    Blogs
+                                    {this.translate('page.body.landing.footer.links.blogs')}
                                 </a>
                             </div>
                             <div className="legal px-3">
-                                <p className="text-lg gradient-text mb-36">LEGAL</p>
+                                <p className="text-lg gradient-text mb-36">
+                                    {this.translate('page.body.landing.footer.legal').toUpperCase()}
+                                </p>
                                 <a href="#" className="mb-8 text-ms d-block grey-text-accent">
-                                    Terms of use
+                                    {this.translate('page.body.landing.footer.legal.tos')}
                                 </a>
                                 <a href="#" className="mb-8 text-ms d-block grey-text-accent">
-                                    Terms of conditions
+                                    {this.translate('page.body.landing.footer.legal.toc')}
                                 </a>
                                 <a href="#" className="mb-8 text-ms d-block grey-text-accent">
-                                    Privecy policy
+                                    {this.translate('page.body.landing.footer.legal.privacy')}
                                 </a>
                                 <a href="#" className="mb-8 text-ms d-block grey-text-accent">
-                                    Cookie policy
+                                    {this.translate('page.body.landing.footer.legal.cookie')}
                                 </a>
                             </div>
                             <div className="newsletter px-3">
-                                <p className="text-lg gradient-text mb-36">NEWSLETTER</p>
+                                <p className="text-lg gradient-text mb-36">
+                                    {this.translate('page.body.landing.footer.newsletter').toUpperCase()}
+                                </p>
                                 <p className="mb-12 text-ms d-block grey-text">Over 25000 people have subscribed</p>
                                 <div className="input-group mb-0">
                                     <input
@@ -97,10 +108,12 @@ class FooterContainer extends React.Component<Props, State> {
                                         placeholder="Enter Your Email"
                                     />
                                     <label htmlFor="newslatter" className=" newsletter-input-label">
-                                        SUBSCRIBE
+                                        {this.translate('page.body.landing.footer.subscribe')}
                                     </label>
                                 </div>
-                                <span className=" text-sm grey-text-accent">We don’t sell your email and spam</span>
+                                <span className=" text-sm grey-text-accent">
+                                    {this.translate('page.body.landing.footer.email')}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -157,6 +170,7 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispa
 });
 
 export const Footer = compose(
+    injectIntl,
     withRouter,
     connect(mapStateToProps, mapDispatchToProps)
 )(FooterContainer) as React.ComponentClass;

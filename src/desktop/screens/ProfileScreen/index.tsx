@@ -137,7 +137,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                         'Set Your Phone Number And Verified'
                     ) : user.phones[0].validated_at === null && !isChangeNumber ? (
                         'You already add phone number, please verify by click send code button to get OTP number'
-                    ) : user.phones[0] && isChangeNumber ? (
+                    ) : (user.phones[0] && isChangeNumber) || user.phones[0] !== null ? (
                         <p className="danger-text">
                             You only have {5 - user.phones.length} chances to change your phone number
                         </p>
@@ -150,7 +150,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                 )}
 
                 <div className="form">
-                    {(isChangeNumber || !user.phones[0]) && (
+                    {(isChangeNumber || !user.phones[0] || user.phones[0] !== null) && (
                         <div className="form-group mb-24">
                             <CustomInput
                                 defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
@@ -184,7 +184,9 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 disabled={disabledButton()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
-                                {(!isChangeNumber && phone[0]) || resendCodeActive ? 'Resend Code' : 'Send Code'}
+                                {(!isChangeNumber && phone[0].validated_at === null) || resendCodeActive
+                                    ? 'Resend Code'
+                                    : 'Send Code'}
                             </button>
                         </div>
 
@@ -192,7 +194,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                             {moment(seconds).format('mm:ss')}
                         </p>
 
-                        {(!isChangeNumber || !user.phones[0]) && (
+                        {(!isChangeNumber || !user.phones[0] || phone[0].validated_at === null) && (
                             <p
                                 onClick={() => {
                                     setIsChangeNumber(true);
@@ -230,7 +232,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                         ? 'Add Phone Number'
                         : user.phones[0].validated_at === null && !isChangeNumber
                         ? 'Veirify Phone Number'
-                        : user.phones[0] && isChangeNumber
+                        : user.phones[0] !== null || isChangeNumber
                         ? 'Change Phone Number'
                         : ''}
                 </h6>
