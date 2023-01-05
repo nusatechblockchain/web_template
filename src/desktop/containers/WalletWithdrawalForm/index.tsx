@@ -57,7 +57,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
 
-    const [seconds, setSeconds] = React.useState(5000);
+    const [seconds, setSeconds] = React.useState(30000);
     const [timerActive, setTimerActive] = React.useState(false);
 
     React.useEffect(() => {
@@ -114,7 +114,7 @@ export const WalletWithdrawalForm: React.FC = () => {
         } else {
             dispatch(beneficiariesResendPin({ id: beneficiariesCreate.id }));
         }
-        setSeconds(5000);
+        setSeconds(30000);
         setTimerActive(true);
     };
 
@@ -123,7 +123,7 @@ export const WalletWithdrawalForm: React.FC = () => {
         setShowModalBeneficiaryList(false);
         setShowModalBeneficiaryCode(true);
         setBeneficiaryActivateId(id);
-        setSeconds(5000);
+        setSeconds(30000);
         setTimerActive(true);
     };
 
