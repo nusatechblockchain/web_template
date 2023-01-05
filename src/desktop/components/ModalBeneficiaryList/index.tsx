@@ -27,7 +27,8 @@ export interface ModalBeneficiaryListProps {
     onCloseList: () => void;
     onCloseAdd: () => void;
     handleAddAddress: () => void;
-    handlePendingStatus?: () => void;
+    handlePendingStatus?: (id: number) => void;
+    handleDelete?: () => void;
     beneficiaryId?: string;
     handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string) => void;
 }
@@ -61,6 +62,7 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
     const handleDeleteAddress = React.useCallback(
         (item: Beneficiary) => () => {
             dispatch(beneficiariesDelete({ id: item.id }));
+            props.handleDelete();
         },
         []
     );
@@ -113,13 +115,17 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                                 beneficiariesList.map((el, i) => (
                                     <tr key={i}>
                                         <td
-                                            onClick={() =>
-                                                props.handleChangeBeneficiaryId(
-                                                    el.id,
-                                                    el.data.address,
-                                                    el.blockchain_key
-                                                )
-                                            }
+                                            onClick={() => {
+                                                if (el.state === 'pending') {
+                                                    props.handlePendingStatus(el.id);
+                                                } else {
+                                                    props.handleChangeBeneficiaryId(
+                                                        el.id,
+                                                        el.data.address,
+                                                        el.blockchain_key
+                                                    );
+                                                }
+                                            }}
                                             className="text-sm grey-text-accent pr-2 cursor-pointer">
                                             {el && el.data && el.data.address}
                                         </td>

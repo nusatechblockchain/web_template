@@ -10,14 +10,11 @@ import {
     selectBeneficiaries,
     Beneficiary,
     Currency,
-    BlockchainCurrencies,
     selectBeneficiariesCreateError,
-    selectBeneficiariesCreateSuccess,
-    BeneficiariesActivate,
     selectBeneficiariesActivateError,
+    selectBeneficiariesCreate,
     beneficiariesResendPin,
     beneficiariesActivate,
-    beneficiariesActivateError,
 } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
@@ -25,6 +22,8 @@ import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
 import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector } from '../../../hooks';
 import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
 import PinInput from 'react-pin-input';
+import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
+import moment from 'moment';
 
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
@@ -44,23 +43,46 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [beneficiaryId, setBeneficiaryId] = React.useState(0);
     const [blockchainKey, setBlockchainKey] = React.useState('');
     const [address, setAddress] = React.useState('');
+    const [beneficiaryActivateId, setBeneficiaryActivateId] = React.useState(0);
     const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
     const [beneficiaryCode, setBeneficiaryCode] = React.useState('');
 
     const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
-    const beneficiariesError = useReduxSelector(selectBeneficiariesCreateError);
+    const beneficiariesCreate = useSelector(selectBeneficiariesCreate);
+    const beneficiariesError = useSelector(selectBeneficiariesCreateError);
     const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
-    const beneficiariesSuccess = useSelector(selectBeneficiariesCreateSuccess);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
-    const [errorBeneficiary, setErrorBeneficiary] = React.useState(beneficiariesError);
 
-    // const uniqueBlockchainKeys = new Set(beneficiaries.map((item) => item.blockchain_key));
-    // const uniqueBlockchainKeysValues = [...uniqueBlockchainKeys.values()];
-    // console.log(uniqueBlockchainKeysValues);
+    const [seconds, setSeconds] = React.useState(5000);
+    const [timerActive, setTimerActive] = React.useState(false);
+
+    React.useEffect(() => {
+        let timer = null;
+        if (timerActive) {
+            timer = setInterval(() => {
+                setSeconds((seconds) => seconds - 1000);
+
+                if (seconds === 0) {
+                    setTimerActive(false);
+                    setSeconds(0);
+                }
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    });
+
+    React.useEffect(() => {
+        if (beneficiariesError != undefined) {
+            setShowModalBeneficiaryCode(false);
+            setShowModalModalAddBeneficiary(true);
+        }
+    }, [beneficiariesError]);
 
     const blockchainKeyValue =
         currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
@@ -72,6 +94,7 @@ export const WalletWithdrawalForm: React.FC = () => {
         setBlockchainKey(blockchainKey);
         setShowModalBeneficiaryList(false);
     };
+
     const handleChangeAmount = (e) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmount(value);
@@ -86,18 +109,41 @@ export const WalletWithdrawalForm: React.FC = () => {
     };
 
     const handleResendCode = () => {
-        dispatch(beneficiariesResendPin({ id: 111 }));
+        if (beneficiaryActivateId) {
+            dispatch(beneficiariesResendPin({ id: beneficiaryActivateId }));
+        } else {
+            dispatch(beneficiariesResendPin({ id: beneficiariesCreate.id }));
+        }
+        setSeconds(5000);
+        setTimerActive(true);
     };
 
-    const handlePendingStatus = () => {
-        dispatch(beneficiariesResendPin({ id: 111 }));
+    const handlePendingStatus = (id: number) => {
+        dispatch(beneficiariesResendPin({ id: id }));
+        setShowModalBeneficiaryList(false);
         setShowModalBeneficiaryCode(true);
+        setBeneficiaryActivateId(id);
+        setSeconds(5000);
+        setTimerActive(true);
     };
 
     const handleActivateBeneficiary = () => {
-        dispatch(beneficiariesActivate({ id: 111, pin: '123456' }));
+        if (beneficiaryActivateId) {
+            const payload = {
+                id: beneficiaryActivateId,
+                pin: beneficiaryCode,
+            };
+            dispatch(beneficiariesActivate(payload));
+            setBeneficiaryActivateId(0);
+        } else {
+            const payload = {
+                id: beneficiariesCreate.id,
+                pin: beneficiaryCode,
+            };
+            dispatch(beneficiariesActivate(payload));
+        }
 
-        if (beneficiariesActivateError) {
+        if (!beneficiariesActivateError) {
             setShowModalBeneficiaryCode(false);
             setShowModalBeneficiaryList(true);
         }
@@ -121,11 +167,11 @@ export const WalletWithdrawalForm: React.FC = () => {
     const renderContentModalWithdrawalConfirmation = () => {
         return (
             <React.Fragment>
-                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10 min-w-500">
+                <div className="mb-24 white-text text-ms bg-warning radius-sm p-10 w-100">
                     Please check the target address carefully before confirming the withdrawal.
                 </div>
                 <p className="text-ms grey-text-accent font-semibold mb-24">
-                    You've requested to withdraw 0.0233 ETH, Are you sure to do Withdraw?
+                    You've requested to withdraw {amount} {currency.toUpperCase()}, Are you sure to do Withdraw?
                 </p>
                 <div className="d-flex">
                     <button
@@ -152,12 +198,14 @@ export const WalletWithdrawalForm: React.FC = () => {
     const renderContentModalWithdrawalSuccessfully = () => {
         return (
             <React.Fragment>
-                <p className="text-ms grey-text-accent font-semibold mb-24">You success to withdraw 0.002 BTC</p>
+                <p className="text-ms grey-text-accent font-semibold mb-24">
+                    You success to withdraw {amount} {currency.toUpperCase}
+                </p>
                 <div className="d-flex">
                     <button
                         className="btn btn-danger sm px-5 mr-3"
                         onClick={() => setShowModalWithdrawalSuccessfully(!showModalWithdrawalSuccessfully)}>
-                        Cancel
+                        Close
                     </button>
                 </div>
             </React.Fragment>
@@ -210,7 +258,19 @@ export const WalletWithdrawalForm: React.FC = () => {
     };
 
     const renderHeaderModalBeneficiaryCode = () => {
-        return <h3 className="text-md contrast-text font-bold text-center mx-auto"> Confirmation New Address</h3>;
+        return (
+            <React.Fragment>
+                <h3 className="text-md white-text font-bold text-center mx-auto"> Confirmation New Address</h3>
+                <span
+                    onClick={() => {
+                        setShowModalBeneficiaryCode(false);
+                        setBeneficiaryCode('');
+                    }}
+                    className="cursor-pointer">
+                    <CircleCloseIcon />
+                </span>
+            </React.Fragment>
+        );
     };
 
     const renderModalBeneficiaryCode = () => {
@@ -251,8 +311,12 @@ export const WalletWithdrawalForm: React.FC = () => {
                         onClick={() => handleActivateBeneficiary()}>
                         Confirm
                     </button>
-                    <p className="text-right text-xs grey-text mt-2" onClick={handleResendCode}>
-                        Resend Code
+                    <p
+                        className={`text-right text-xs  mt-2 ${
+                            timerActive ? 'grey-text' : 'grey-text-accent cursor-pointer'
+                        }`}
+                        onClick={!timerActive && handleResendCode}>
+                        {moment(seconds).format('mm:ss')} Resend Code
                     </p>
                 </div>
             </React.Fragment>
@@ -375,8 +439,9 @@ export const WalletWithdrawalForm: React.FC = () => {
                         setShowModalBeneficiaryList(false);
                         setShowModalModalAddBeneficiary(true);
                     }}
-                    handlePendingStatus={() => handlePendingStatus()}
+                    handlePendingStatus={(id) => handlePendingStatus(id)}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
+                    handleDelete={() => setAddress('')}
                 />
             )}
 
@@ -387,12 +452,10 @@ export const WalletWithdrawalForm: React.FC = () => {
                     showModalAddBeneficiary={showModalAddBeneficiary}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
-                        if (beneficiariesError) {
-                            alert('error');
-                        } else {
-                            setShowModalBeneficiaryCode(true);
-                            setShowModalModalAddBeneficiary(false);
-                        }
+                        setShowModalBeneficiaryCode(true);
+                        setShowModalModalAddBeneficiary(false);
+                        setBeneficiaryCode('');
+                        setTimerActive(true);
                     }}
                 />
             )}

@@ -11,7 +11,16 @@ import { CustomStylesSelect } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
-import { beneficiariesCreate, selectCurrencies, selectWallets, Wallet } from '../../../modules';
+import {
+    beneficiariesCreate,
+    selectCurrencies,
+    selectWallets,
+    Wallet,
+    selectBeneficiariesCreateError,
+    selectBeneficiariesCreate,
+    selectBeneficiariesCreateLoading,
+    alertPush,
+} from '../../../modules';
 import Select from 'react-select';
 
 export interface ModalAddBeneficiaryProps {
@@ -41,7 +50,8 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
     const currencies = useSelector(selectCurrencies);
     const wallets = useSelector(selectWallets);
-    // const error = useSelector(selectBeneficiariesCreateError);
+    const errorCreate = useSelector(selectBeneficiariesCreateError);
+    const createLoading = useSelector(selectBeneficiariesCreateLoading);
     const currencyItem = currencies.find((item) => item.id === currency);
     const isRipple = React.useMemo(() => currency === 'xrp', [currency]);
 
@@ -90,6 +100,10 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
     };
 
     const handleSubmitAddAddressCoinModal = React.useCallback(async () => {
+        const filterCurrency = wallets.find((curr) => curr.currency == currency);
+        const addressExist =
+            filterCurrency && filterCurrency.deposit_addresses.find((item) => item.address == coinAddress);
+
         const payload = {
             currency: currency || '',
             name: coinBeneficiaryName,
@@ -100,10 +114,18 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
             ...(coinDescription && { description: coinDescription }),
         };
 
-        await dispatch(beneficiariesCreate(payload));
-        handleClearModalsInputs();
-        props.handleAddAddress();
-    }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName]);
+        if (!addressExist) {
+            await dispatch(beneficiariesCreate(payload));
+            handleClearModalsInputs();
+            props.handleAddAddress();
+        } else {
+            dispatch(alertPush({ message: [`You can't add your own beneficiary address`], type: 'error' }));
+            setCoinAddress('');
+            setCoinBlockchainName(defaultSelected);
+            setCoinBeneficiaryName('');
+            setCoinDescription('');
+        }
+    }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName, errorCreate, createLoading]);
 
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
 

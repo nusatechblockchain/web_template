@@ -46,8 +46,6 @@ const WalletDepositBody = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    console.log(historys);
-
     const label = React.useMemo(
         () => intl.formatMessage({ id: 'page.body.wallets.tabs.deposit.ccy.message.address' }),
         [intl]
