@@ -190,7 +190,7 @@ export const TradingFutureScreen: FC = (): ReactElement => {
                                     headersKeys={headersKeys}
                                     headers={renderHeaders}
                                     data={renderData(list)}
-                                    onCancel={handleCancel}
+                                    // onCancel={handleCancel}
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
                                     hideOthrerPairs={hideOtherPairs}

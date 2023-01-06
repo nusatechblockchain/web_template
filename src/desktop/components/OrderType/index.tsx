@@ -29,15 +29,6 @@ export const OrderType: React.FunctionComponent<OrderTypeProps> = (props) => {
                     }`}>
                     MARKET
                 </label>
-                <input type="radio" id="stop-order-sell" className="d-none" name="order-form" defaultValue="stop" />
-                <label
-                    onClick={() => handleSelectType('spot')}
-                    htmlFor="stop-order-sell"
-                    className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
-                        orderType === 'spot' ? 'green-text' : 'white-text'
-                    }`}>
-                    SPOT
-                </label>
             </div>
         </React.Fragment>
     );
