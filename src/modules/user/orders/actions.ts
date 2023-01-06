@@ -12,8 +12,8 @@ export interface OrderExecution {
     market: string;
     side: OrderSide;
     volume: string;
-    price: string;
-    ord_type: string;
+    price?: string;
+    ord_type?: string;
     trigger_price?: string;
 }
 

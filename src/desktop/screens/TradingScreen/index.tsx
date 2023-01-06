@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, ReactElement, useMemo, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOpenOrdersFetch } from 'src/hooks';
@@ -12,22 +13,57 @@ import {
     selectMarkets,
     selectOpenOrdersFetching,
     selectOpenOrdersList,
+    userOpenOrdersFetch,
+    setCurrentMarket,
+    Market,
 } from 'src/modules';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
 import { OrderCommon } from '../../../modules/types';
 import { getTriggerSign } from './helpers';
 
 export const TradingScreen: FC = (): ReactElement => {
-    const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(true);
+    const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
     const currentMarket = useSelector(selectCurrentMarket);
+
+    const { currency = '' } = useParams<{ currency?: string }>();
     const { formatMessage } = useIntl();
     const dispatch = useDispatch();
-    const list = useSelector(selectOpenOrdersList);
+
+    const listOrder = useSelector(selectOpenOrdersList);
     const fetching = useSelector(selectOpenOrdersFetching);
     const markets = useSelector(selectMarkets);
     const translate = React.useCallback((id: string) => formatMessage({ id: id }), [formatMessage]);
 
+    const list = listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
+
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
+
+    const current: Market | undefined = markets.find((item) => item.id === currency);
+
+    React.useEffect(() => {
+        if (current) {
+            dispatch(setCurrentMarket(current));
+        }
+    }, [current]);
+
+    const handleCancel = (order: OrderCommon) => {
+        dispatch(openOrdersCancelFetch({ order, list }));
+        setTimeout(() => {
+            if (currentMarket) {
+                dispatch(userOpenOrdersFetch({ market: currentMarket }));
+            }
+        }, 1000);
+    };
+
+    const handleCancelAll = useCallback(() => {
+        currentMarket && dispatch(ordersCancelAllFetch({ market: currentMarket.id }));
+
+        setTimeout(() => {
+            if (currentMarket) {
+                dispatch(userOpenOrdersFetch({ market: currentMarket }));
+            }
+        }, 1000);
+    }, [currentMarket]);
 
     const headersKeys = useMemo(
         () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', 'Side', 'Action'],
@@ -110,7 +146,7 @@ export const TradingScreen: FC = (): ReactElement => {
                         %
                     </span>,
                     side,
-                    <button className="btn-danger" type="button" onClick={() => handleCancel(id)}>
+                    <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
                         Cancel
                     </button>,
                 ];
@@ -118,18 +154,6 @@ export const TradingScreen: FC = (): ReactElement => {
         },
         [markets]
     );
-
-    const handleCancel = useCallback(
-        (index: number) => {
-            const orderToDelete = list[index];
-            dispatch(openOrdersCancelFetch({ order: orderToDelete, list }));
-        },
-        [list]
-    );
-
-    const handleCancelAll = useCallback(() => {
-        currentMarket && dispatch(ordersCancelAllFetch({ market: currentMarket.id }));
-    }, [currentMarket]);
 
     const classNames = useMemo(
         () =>
@@ -174,7 +198,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                     headersKeys={headersKeys}
                                     headers={renderHeaders}
                                     data={renderData(list)}
-                                    onCancel={handleCancel}
+                                    // onCancel={handleCancel}
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
                                     hideOthrerPairs={hideOtherPairs}

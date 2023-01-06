@@ -36,7 +36,7 @@ export const HistoryTrade: FC = (): ReactElement => {
     const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
     const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, DEFAULT_LIMIT));
     useDocumentTitle('Trade History');
-    useHistoryFetch({ type: 'transfers', limit: DEFAULT_LIMIT, currency, page: currentPage });
+    useHistoryFetch({ type: 'trades', limit: DEFAULT_LIMIT, currency, page: currentPage });
 
     const onClickPrevPage = () => {
         setCurrentPage(Number(page) - 1);

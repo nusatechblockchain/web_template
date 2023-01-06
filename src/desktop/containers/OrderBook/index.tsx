@@ -1,6 +1,15 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentMarket, selectDepthBids, selectDepthAsks, selectLastRecentTrade } from '../../../modules';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    selectCurrentMarket,
+    selectDepthBids,
+    selectDepthAsks,
+    selectLastRecentTrade,
+    setCurrentMarket,
+    Market,
+    selectMarkets,
+} from '../../../modules';
+import { useParams } from 'react-router-dom';
 import { useOpenOrdersFetch } from '../../../hooks';
 import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
 import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers';
@@ -10,10 +19,21 @@ import { NoData } from '../../../desktop/components';
 const OrderBookComponent = (props) => {
     useOpenOrdersFetch();
 
+    const dispatch = useDispatch();
+    const { currency = '' } = useParams<{ currency?: string }>();
+
+    const markets = useSelector(selectMarkets);
     const currentMarket = useSelector(selectCurrentMarket);
     const lastTrade = useSelector(selectLastRecentTrade);
     const ask = useSelector(selectDepthAsks);
     const bid = useSelector(selectDepthBids);
+
+    const current = markets.find((item) => item.id === currency);
+    React.useEffect(() => {
+        if (current) {
+            dispatch(setCurrentMarket(current));
+        }
+    }, [current]);
 
     const mapValues = (maxVolume?: number, data?: number[]) => {
         const resultData =

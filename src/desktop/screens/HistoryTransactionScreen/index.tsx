@@ -112,7 +112,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
             </p>,
             <div className="d-flex align-items-center text-sm">
                 {/* <span className="mr-12">{item.icon}</span> */}
-                <p className="m-0 mr-12 white-text font-bold">{item.currency.toUpperCase()}</p>
+                <p className="m-0 mr-12 white-text font-bold">{item?.currency?.toUpperCase()}</p>
             </div>,
             <p className="m-0 text-sm white-text">{item.amount}</p>,
             <p className="m-0 text-sm white-text text-italic">

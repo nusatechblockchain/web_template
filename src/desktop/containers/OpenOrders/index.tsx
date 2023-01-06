@@ -4,6 +4,7 @@ import { CellData, Table } from '../../../components';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import { Sell, Buy } from '../../../assets/images/TradeIcon';
 import { Form, Spinner } from 'react-bootstrap';
+import { OrderCommon } from 'src/modules/types';
 
 export interface OpenOrdersProps {
     /**
@@ -13,7 +14,7 @@ export interface OpenOrdersProps {
     /**
      * Callback that is called when cancel button of order row is clicked
      */
-    onCancel: (index: number) => void;
+    // onCancel: (order: OrderCommon) => void;
     /**
      * List of headers for open orders table
      */
@@ -99,8 +100,8 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                 return this.renderAction(row[actionIndex] as string, row[buySellIndex] as string);
             case orderIndex:
                 return this.renderOrder(row[buySellIndex] as string);
-            case buySellIndex:
-                return this.renderCancelButton(rowIndex);
+            // case buySellIndex:
+            //     return this.renderCancelButton(row);
             default:
                 return cell;
         }
@@ -131,11 +132,11 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
         return <span className={classNames}>{orderType}</span>;
     }
 
-    public renderCancelButton = (index: number) => {
-        return <CloseIcon onClick={this.handleCancel(index)} />;
-    };
+    // public renderCancelButton = (order) => {
+    //     return <CloseIcon onClick={this.handleCancel(order)} />;
+    // };
 
-    private handleCancel = (index: number) => () => {
-        this.props.onCancel(index);
-    };
+    // private handleCancel = (order: OrderCommon) => () => {
+    //     this.props.onCancel(order);
+    // };
 }

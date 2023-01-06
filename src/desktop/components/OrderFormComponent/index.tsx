@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 export interface OrderFormProps {
+    loading: boolean;
     side: string;
     orderType: string;
-    handleSelectType: (e: string) => void;
     orderPercentage: number;
     handleSelectPercentage: (e: number) => void;
     labelPercent0: string;
@@ -16,10 +16,9 @@ export interface OrderFormProps {
     labelPercent50: string;
     labelPercent75: string;
     labelPercent100: string;
-    amount: number;
-    handleChangeAmount: (e: number) => void;
-    total: number;
-    // handleChangeTotal: (e: number) => void;
+    amount: string;
+    handleChangeAmount: (e: string) => void;
+    total: string;
     price: number;
     handleChangePrice: (e: number) => void;
     handleSubmit: () => void;
@@ -27,9 +26,9 @@ export interface OrderFormProps {
 
 export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (props) => {
     const {
+        loading,
         side,
         orderType,
-        handleSelectType,
         orderPercentage,
         handleSelectPercentage,
         labelPercent0,
@@ -40,7 +39,6 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
         amount,
         handleChangeAmount,
         total,
-        // handleChangeTotal,
         price,
         handleChangePrice,
         handleSubmit,
@@ -65,10 +63,23 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
     const usdt = usd && usd.balance ? usd.balance.toString() : '0';
     const usdtFixed = (usd || { fixed: 0 }).fixed;
 
+    const disabledButton = () => {
+        if (!isLoggedin) {
+            return true;
+        }
+
+        if (loading) {
+            return true;
+        }
+
+        if (!currentMarket?.id || !side || !orderType || !amount || !total) {
+            return true;
+        }
+    };
+
     return (
         <React.Fragment>
             <form action="">
-                <OrderType orderType={orderType} handleSelectType={(e) => handleSelectType(e)} />
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
@@ -90,7 +101,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         type="text"
                         defaultValue={amount}
                         value={amount}
-                        onChange={(e) => handleChangeAmount(+e.target.value)}
+                        onChange={(e) => handleChangeAmount(e.target.value)}
                         className="form-control input-order-form"
                         id="input-order"
                     />
@@ -131,14 +142,12 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <p className="text-sm white-text">
                         {side === 'Buy' ? (
                             <>
-                                {/* <Decimal fixed={usdtFixed} thousSep=","> */}
-                                {usdt} {/* </Decimal> */}
+                                {usdt}
                                 {currentMarket?.quote_unit?.toUpperCase()}{' '}
                             </>
                         ) : (
                             <>
-                                {/* <Decimal fixed={selectedFixed} thousSep=","> */}
-                                {balance} {/* </Decimal>{' '} */}
+                                {balance}
                                 {currentMarket?.base_unit?.toUpperCase()}{' '}
                             </>
                         )}
@@ -148,7 +157,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     type="button"
                     className={`btn btn-block ${side === 'Buy' ? 'btn-success' : 'btn-danger'}`}
                     onClick={handleSubmit}
-                    disabled={!isLoggedin}>
+                    disabled={disabledButton()}>
                     {side} {currentMarket?.base_unit?.toUpperCase()}
                 </button>
             </form>
