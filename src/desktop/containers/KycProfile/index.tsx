@@ -99,13 +99,13 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
             city,
             dateOfBirth,
             firstName,
-            lastName,
+            // lastName,
             postcode,
             residentialAddress,
-            district,
+            // district,
             country,
-            placeOfBirth,
-            province,
+            // placeOfBirth,
+            // province,
         } = this.state;
         /* tslint:disable */
         languages.map((l: string) => countries.registerLocale(require(`i18n-iso-countries/langs/${l}.json`)));
@@ -152,7 +152,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         handleChangeInput={(e) => this.handleChange(e, 'residentialAddress')}
                                     />
                                 </div>
-                                <div className="col-md-6">
+                                {/* <div className="col-md-6">
                                     <CustomInput
                                         defaultLabel="District"
                                         label="District"
@@ -164,7 +164,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         inputValue={district}
                                         handleChangeInput={(e) => this.handleChange(e, 'district')}
                                     />
-                                </div>
+                                </div> */}
                                 <div className="col-md-6">
                                     <CustomInput
                                         defaultLabel="City"
@@ -178,7 +178,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         handleChangeInput={(e) => this.handleChange(e, 'city')}
                                     />
                                 </div>
-                                <div className="col-md-6">
+                                {/* <div className="col-md-6">
                                     <CustomInput
                                         defaultLabel="Province"
                                         label="Province"
@@ -190,7 +190,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         inputValue={province}
                                         handleChangeInput={(e) => this.handleChange(e, 'province')}
                                     />
-                                </div>
+                                </div> */}
                                 <div className="col-md-6">
                                     <label className="text-sm mb-8 white-text">Country</label>
                                     <SearchDropdown
@@ -211,7 +211,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         />
                                     </div>
                                 </div>
-                                <div className="col-md-6">
+                                {/* <div className="col-md-6">
                                     <CustomInput
                                         defaultLabel="Place of Birth"
                                         label="Place of Birth"
@@ -223,7 +223,7 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
                                         inputValue={placeOfBirth}
                                         handleChangeInput={(e) => this.handleChange(e, 'placeOfBirth')}
                                     />
-                                </div>
+                                </div> */}
                                 <div className="col-md-6">
                                     <CustomInput
                                         defaultLabel="Postal Code"
@@ -347,9 +347,9 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
             residentialAddress,
             city,
             country,
-            district,
-            placeOfBirth,
-            province,
+            // district,
+            // placeOfBirth,
+            // province,
         } = this.state;
 
         const fullNameValid = this.handleValidateInput('fullName', firstName);
@@ -357,20 +357,11 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const postcodeValid = this.handleValidateInput('postcode', postcode);
         const dateOfBirthValid = this.handleValidateInput('dateOfBirth', dateOfBirth);
         const cityValid = this.handleValidateInput('city', city);
-        const districtValid = this.handleValidateInput('district', district);
-        const provinceValid = this.handleValidateInput('province', province);
-        const placeOfBirthValid = this.handleValidateInput('placeOfBirth', placeOfBirth);
+        // const districtValid = this.handleValidateInput('district', district);
+        // const provinceValid = this.handleValidateInput('province', province);
+        // const placeOfBirthValid = this.handleValidateInput('placeOfBirth', placeOfBirth);
 
-        return (
-            !fullNameValid ||
-            !residentialAddressValid ||
-            !cityValid ||
-            !districtValid ||
-            !provinceValid ||
-            !placeOfBirthValid ||
-            !postcodeValid ||
-            !dateOfBirthValid
-        );
+        return !fullNameValid || !residentialAddressValid || !cityValid || !postcodeValid || !dateOfBirthValid;
     };
 
     private sendData = (event) => {
@@ -378,12 +369,20 @@ class IdentityComponent extends React.Component<Props, IdentityState> {
         const { labels, user } = this.props;
         const dob = !isDateInFuture(this.state.dateOfBirth) ? this.state.dateOfBirth : '';
         const profileInfo: IdentityData = {
+            // first_name: this.state.firstName,
+            // last_name: '',
+            // dob: dob,
+            // address: `${this.state.residentialAddress + '/' + this.state.district}`,
+            // postcode: this.state.postcode,
+            // city: `${this.state.city + ' ' + this.state.province}`,
+            // country: this.state.country,
+            // confirm: true,
             first_name: this.state.firstName,
-            last_name: '',
-            dob: `${dob + '-' + this.state.placeOfBirth}`,
-            address: `${this.state.residentialAddress + '/' + this.state.district}`,
+            last_name: this.state.lastName,
+            dob,
+            address: this.state.residentialAddress,
             postcode: this.state.postcode,
-            city: `${this.state.city + ' ' + this.state.province}`,
+            city: this.state.city,
             country: this.state.country,
             confirm: true,
         };
