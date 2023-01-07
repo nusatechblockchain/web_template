@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
 import { accountUploadSizeMaxRange, accountUploadSizeMinRange, languages } from '../../../api/config';
-import { CustomInput, UploadFile } from '../../components';
+import { CustomInput, UploadFile, SearchDropdown } from '../../components';
 import { formatDate, isDateInFuture, randomSecureHex } from '../../../helpers';
 import {
     alertPush,
@@ -21,12 +21,11 @@ import {
     selectUserInfo,
     User,
     sendDocuments,
+    sendDocumentsError,
     UserOffersData,
 } from '../../../modules';
-import { DrivingLlicenseIcon, NationalIDIcon, PasportIcon, UploadFileIcon } from '../../../assets/images/KycIcon';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import DocumentFrontExample from 'src/assets/images/kyc/DocumentFrontExample.svg';
-import DocumentBackExample from 'src/assets/images/kyc/DocumentBackExample.svg';
 import DocumentSelfieExample from 'src/assets/images/kyc/DocumentSelfieExample.svg';
 
 interface ReduxProps {
@@ -66,6 +65,9 @@ interface DocumentsState {
     city: string;
     province: string;
     step: string;
+    country: string;
+    showNotification: boolean;
+    kycStatus: string;
 }
 
 type Props = ReduxProps & DispatchProps & RouterProps & IntlProps;
@@ -99,42 +101,53 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         birthDate: '',
         placeBirth: '',
         step: 'profile',
+        country: '',
+        showNotification: true,
+        kycStatus: '',
     };
 
     public UNSAFE_componentWillReceiveProps(next: Props) {
-        if (next.success && !this.props.success) {
-            this.props.history.push('/profile');
+        this.checkStatusKyc(next);
+    }
+
+    public componentDidMount() {
+        const kycData = this.props.user;
+        const kycLabel = kycData.labels[0];
+
+        if (kycLabel.key == 'document') {
+            const kycStatus = kycLabel.value;
+            this.setState({ kycStatus: kycStatus });
         }
     }
 
     public render() {
-        const { isMobileDevice } = this.props;
+        const { isMobileDevice, lang } = this.props;
         const {
-            documentsType,
             fileFront,
-            fileBack,
             fileSelfie,
-            issuedDate,
-            expireDate,
             idNumber,
             frontFileSizeErrorMessage,
-            backFileSizeErrorMessage,
             selfieFileSizeErrorMessage,
-            name,
             address,
             district,
             city,
             province,
             birthDate,
             placeBirth,
-            step,
+            showNotification,
+            kycStatus,
         }: DocumentsState = this.state;
 
         /* tslint:disable */
         languages.map((l: string) => countries.registerLocale(require(`i18n-iso-countries/langs/${l}.json`)));
         /* tslint:enable */
 
+        console.log(kycStatus);
+
         const onSelect = (value) => this.handleChangeDocumentsType(this.data[value]);
+        const dataCountries = Object.values(countries.getNames(lang)).map((item) => {
+            return { label: item, value: item };
+        });
 
         return (
             <React.Fragment>
@@ -145,301 +158,254 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                     <h6 className="text-lg white-text font-bold mb-24">Get Verifed your Government Issued ID</h6>
                     <div className="row">
                         <div className="col-lg-10 col-12">
-                            <div className="notification-warning notification alert show text-ms white-text font-normal position-relative mb-24">
-                                Complete your identity verify to start trading with heaven exchange
-                                <div className="close-icon">
-                                    <CloseIcon fill="#fff" />
+                            {showNotification && kycStatus != 'pending' && (
+                                <div className="notification-warning notification alert show text-ms white-text font-normal position-relative mb-24">
+                                    Complete your identity verify to start trading with heaven exchange
+                                    <div className="close-icon">
+                                        <CloseIcon
+                                            fill="#fff"
+                                            onClick={() => this.setState({ showNotification: false })}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <form action="">
-                                {/* <ul className="nav nav-tabs" id="myTab" role="tablist">
-                                    <li className="nav-item" onClick={() => this.handleChangeDocumentsType('Passport')}>
-                                        <a className={`nav-link ${documentsType == 'Passport' ? 'active' : ''}`}>
-                                            <PasportIcon
-                                                className="mr-2"
-                                                fill={documentsType == 'Passport' ? '#fff' : '#B5B3BC'}
-                                            />
-                                            Passport
-                                        </a>
-                                    </li>
-                                    <li
-                                        className="nav-item"
-                                        onClick={() => this.handleChangeDocumentsType('Identity card')}>
-                                        <a className={`nav-link ${documentsType == 'Identity card' ? 'active' : ''}`}>
-                                            <NationalIDIcon
-                                                className="mr-2"
-                                                fill={documentsType == 'Identity card' ? '#fff' : '#B5B3BC'}
-                                            />
-                                            National
-                                        </a>
-                                    </li>
-                                    <li
-                                        className="nav-item"
-                                        onClick={() => this.handleChangeDocumentsType('Driver license')}>
-                                        <a className={`nav-link ${documentsType == 'Driver license' ? 'active' : ''}`}>
-                                            <DrivingLlicenseIcon
-                                                className="mr-2"
-                                                fill={documentsType == 'Driver license' ? '#fff' : '#B5B3BC'}
-                                            />
-                                            Driving License
-                                        </a>
-                                    </li>
-                                </ul> */}
-                                {this.state.step == 'profile' && (
-                                    <div className="row">
-                                        <div className="col-md-6">
-                                            <CustomInput
-                                                defaultLabel="Full name"
-                                                label="Full name"
-                                                placeholder="Full name"
-                                                type="text"
-                                                labelVisible
-                                                classNameLabel="white-text text-sm"
-                                                classNameGroup="mb-24"
-                                                inputValue={this.state.name}
-                                                handleChangeInput={this.handleChangeName}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <CustomInput
-                                                defaultLabel="Your Home Address"
-                                                label="Your Home Address"
-                                                placeholder="Your Home Address"
-                                                type="text"
-                                                labelVisible
-                                                classNameLabel="white-text text-sm"
-                                                classNameGroup="mb-24"
-                                                inputValue={address}
-                                                handleChangeInput={this.handleChangeAddress}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <CustomInput
-                                                defaultLabel="District"
-                                                label="District"
-                                                placeholder="District"
-                                                type="text"
-                                                labelVisible
-                                                classNameLabel="white-text text-sm"
-                                                classNameGroup="mb-24"
-                                                inputValue={district}
-                                                handleChangeInput={this.handleChangedistrict}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <CustomInput
-                                                defaultLabel="City"
-                                                label="City"
-                                                placeholder="City"
-                                                type="text"
-                                                labelVisible
-                                                classNameLabel="white-text text-sm"
-                                                classNameGroup="mb-24"
-                                                inputValue={city}
-                                                handleChangeInput={this.handleChangecity}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <CustomInput
-                                                defaultLabel="Province"
-                                                label="Province"
-                                                placeholder="Province"
-                                                type="text"
-                                                labelVisible
-                                                classNameLabel="white-text text-sm"
-                                                classNameGroup="mb-24"
-                                                inputValue={province}
-                                                handleChangeInput={this.handleChangeprovince}
-                                            />
-                                        </div>
-                                        {/* <div className="col-md-6">
-                                            <label className="text-sm mb-8 white-text">Country</label>
-                                            <SearchDropdown
-                                                className="pg-confirm__content-identity__forms__row__content-number-dropdown"
-                                                options={dataCountries}
-                                                onSelect={this.selectCountry}
-                                                placeholder={this.translate('page.body.kyc.identity.CoR')}
-                                            />
-                                        </div> */}
-                                        <div className="col-md-6">
-                                            <div className="input-date-document">
-                                                <label className="text-sm mb-8 white-text">Date of Birth</label>
-                                                <MaskInput
-                                                    maskString="00/00/0000"
-                                                    mask="00/00/0000"
-                                                    onChange={this.handleChangeBirthDate}
-                                                    value={birthDate}
+                            )}
+                            {kycStatus != 'pending' && (
+                                <form action="">
+                                    {this.state.step == 'profile' && (
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <CustomInput
+                                                    defaultLabel="Full name"
+                                                    label="Full name"
+                                                    placeholder="Full name"
+                                                    type="text"
+                                                    labelVisible
+                                                    classNameLabel="white-text text-sm"
+                                                    classNameGroup="mb-24"
+                                                    inputValue={this.state.name}
+                                                    handleChangeInput={this.handleChangeName}
                                                 />
                                             </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <CustomInput
-                                                defaultLabel="Place of Birth"
-                                                label="Place of Birth"
-                                                placeholder="Place of Birth"
-                                                type="text"
-                                                labelVisible
-                                                classNameLabel="white-text text-sm"
-                                                classNameGroup="mb-24"
-                                                inputValue={placeBirth}
-                                                handleChangeInput={this.handleChangePlaceBirth}
-                                            />
-                                        </div>
-
-                                        <div className="col-12">
-                                            <div className="mt-3">
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-primary px-5"
-                                                    onClick={() => this.setState({ step: 'document' })}>
-                                                    Next
-                                                </button>
+                                            <div className="col-md-6">
+                                                <CustomInput
+                                                    defaultLabel="Your Home Address"
+                                                    label="Your Home Address"
+                                                    placeholder="Your Home Address"
+                                                    type="text"
+                                                    labelVisible
+                                                    classNameLabel="white-text text-sm"
+                                                    classNameGroup="mb-24"
+                                                    inputValue={address}
+                                                    handleChangeInput={this.handleChangeAddress}
+                                                />
                                             </div>
-                                        </div>
-                                    </div>
-                                )}
-                                {this.state.step == 'document' && (
-                                    <React.Fragment>
-                                        <div className="information mt-5">
-                                            <p className="font-bold white-text text-ms mb-3">
-                                                To avoid delays when verifying account, Please make sure bellow:
-                                            </p>
-                                            <ul className="pl-3">
-                                                <li className="grey-text-accent mb-1 font-normal text-sm">
-                                                    You can use Pasport / Driving License / National Id
-                                                </li>
-                                                <li className="grey-text-accent mb-1 font-normal text-sm">
-                                                    Chosen credential must not be expired.
-                                                </li>
-                                                <li className="grey-text-accent mb-1 font-normal text-sm">
-                                                    Document should be good condition and clearly visible.
-                                                </li>
-                                                <li className="grey-text-accent mb-1 font-normal text-sm">
-                                                    Make sure that there is no light glare on the card.
-                                                </li>
-                                            </ul>
-                                            <div className="row">
-                                                <div className="col-lg-5 col-6">
-                                                    <CustomInput
-                                                        defaultLabel="ID Number"
-                                                        label="ID Number"
-                                                        placeholder="ID Number"
-                                                        type="text"
-                                                        labelVisible
-                                                        classNameLabel="white-text text-sm"
-                                                        inputValue={idNumber}
-                                                        handleChangeInput={this.handleChangeIdNumber}
+                                            <div className="col-md-6">
+                                                <CustomInput
+                                                    defaultLabel="District"
+                                                    label="District"
+                                                    placeholder="District"
+                                                    type="text"
+                                                    labelVisible
+                                                    classNameLabel="white-text text-sm"
+                                                    classNameGroup="mb-24"
+                                                    inputValue={district}
+                                                    handleChangeInput={this.handleChangedistrict}
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <CustomInput
+                                                    defaultLabel="City"
+                                                    label="City"
+                                                    placeholder="City"
+                                                    type="text"
+                                                    labelVisible
+                                                    classNameLabel="white-text text-sm"
+                                                    classNameGroup="mb-24"
+                                                    inputValue={city}
+                                                    handleChangeInput={this.handleChangecity}
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <CustomInput
+                                                    defaultLabel="Province"
+                                                    label="Province"
+                                                    placeholder="Province"
+                                                    type="text"
+                                                    labelVisible
+                                                    classNameLabel="white-text text-sm"
+                                                    classNameGroup="mb-24"
+                                                    inputValue={province}
+                                                    handleChangeInput={this.handleChangeprovince}
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <label className="text-sm mb-8 white-text">Country</label>
+                                                <SearchDropdown
+                                                    className="pg-confirm__content-identity__forms__row__content-number-dropdown"
+                                                    options={dataCountries}
+                                                    onSelect={this.selectCountry}
+                                                    placeholder={this.translate('page.body.kyc.identity.CoR')}
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="input-date-document">
+                                                    <label className="text-sm mb-8 white-text">Date of Birth</label>
+                                                    <MaskInput
+                                                        maskString="00/00/0000"
+                                                        mask="00/00/0000"
+                                                        onChange={this.handleChangeBirthDate}
+                                                        value={birthDate}
                                                     />
                                                 </div>
-                                                {/* <div className="col-lg-5 col-6">
-                                                    <div className="input-date-document">
-                                                        <label className="text-sm mb-8 white-text">Issued Date</label>
-                                                        <MaskInput
-                                                            maskString="00/00/0000"
-                                                            mask="00/00/0000"
-                                                            onChange={this.handleChangeIssuedDate}
-                                                            value={issuedDate}
+                                            </div>
+                                            <div className="col-md-6">
+                                                <CustomInput
+                                                    defaultLabel="Place of Birth"
+                                                    label="Place of Birth"
+                                                    placeholder="Place of Birth"
+                                                    type="text"
+                                                    labelVisible
+                                                    classNameLabel="white-text text-sm"
+                                                    classNameGroup="mb-24"
+                                                    inputValue={placeBirth}
+                                                    handleChangeInput={this.handleChangePlaceBirth}
+                                                />
+                                            </div>
+
+                                            <div className="col-12">
+                                                <div className="mt-3">
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-primary px-5"
+                                                        onClick={() => this.setState({ step: 'document' })}>
+                                                        Next
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {this.state.step == 'document' && (
+                                        <React.Fragment>
+                                            <div className="information mt-5">
+                                                <p className="font-bold white-text text-ms mb-3">
+                                                    To avoid delays when verifying account, Please make sure bellow:
+                                                </p>
+                                                <ul className="pl-3">
+                                                    <li className="grey-text-accent mb-1 font-normal text-sm">
+                                                        You can use Pasport / Driving License / National Id
+                                                    </li>
+                                                    <li className="grey-text-accent mb-1 font-normal text-sm">
+                                                        Chosen credential must not be expired.
+                                                    </li>
+                                                    <li className="grey-text-accent mb-1 font-normal text-sm">
+                                                        Document should be good condition and clearly visible.
+                                                    </li>
+                                                    <li className="grey-text-accent mb-1 font-normal text-sm">
+                                                        Make sure that there is no light glare on the card.
+                                                    </li>
+                                                </ul>
+                                                <div className="row">
+                                                    <div className="col-lg-5 col-6">
+                                                        <CustomInput
+                                                            defaultLabel="ID Number"
+                                                            label="ID Number"
+                                                            placeholder="ID Number"
+                                                            type="text"
+                                                            labelVisible
+                                                            classNameLabel="white-text text-sm"
+                                                            inputValue={idNumber}
+                                                            handleChangeInput={this.handleChangeIdNumber}
                                                         />
                                                     </div>
-                                                </div> */}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="row">
-                                            {/* {this.state.documentsType ? ( */}
-                                            <div className="col-lg-6">
-                                                <UploadFile
-                                                    isMobileDevice={isMobileDevice}
-                                                    id="fileFront"
-                                                    title={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.front.title'
-                                                    )}
-                                                    label={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.front.label'
-                                                    )}
-                                                    buttonText={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.front.button'
-                                                    )}
-                                                    sizesText={this.uploadFileSizeGuide()}
-                                                    formatsText={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.front.formats'
-                                                    )}
-                                                    handleUploadScan={(uploadEvent) =>
-                                                        this.handleUploadScan(uploadEvent, 'front')
-                                                    }
-                                                    exampleImagePath={DocumentFrontExample}
-                                                    uploadedFile={fileFront[0] && (fileFront[0] as File).name}
-                                                    fileSizeErrorMessage={frontFileSizeErrorMessage}
-                                                />
+                                            <div className="row">
+                                                <div className="col-lg-6">
+                                                    <UploadFile
+                                                        isMobileDevice={isMobileDevice}
+                                                        id="fileFront"
+                                                        title={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.front.title'
+                                                        )}
+                                                        label={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.front.label'
+                                                        )}
+                                                        buttonText={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.front.button'
+                                                        )}
+                                                        sizesText={this.uploadFileSizeGuide()}
+                                                        formatsText={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.front.formats'
+                                                        )}
+                                                        handleUploadScan={(uploadEvent) =>
+                                                            this.handleUploadScan(uploadEvent, 'front')
+                                                        }
+                                                        exampleImagePath={DocumentFrontExample}
+                                                        uploadedFile={fileFront[0] && (fileFront[0] as File).name}
+                                                        fileSizeErrorMessage={frontFileSizeErrorMessage}
+                                                    />
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <UploadFile
+                                                        isMobileDevice={isMobileDevice}
+                                                        id="fileSelfie"
+                                                        title={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.selfie.title'
+                                                        )}
+                                                        label={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.selfie.label'
+                                                        )}
+                                                        buttonText={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.selfie.button'
+                                                        )}
+                                                        sizesText={this.uploadFileSizeGuide()}
+                                                        formatsText={this.translate(
+                                                            'page.body.kyc.documents.uploadFile.selfie.formats'
+                                                        )}
+                                                        handleUploadScan={(uploadEvent) =>
+                                                            this.handleUploadScan(uploadEvent, 'selfie')
+                                                        }
+                                                        exampleImagePath={DocumentSelfieExample}
+                                                        uploadedFile={fileSelfie[0] && (fileSelfie[0] as File).name}
+                                                        fileSizeErrorMessage={selfieFileSizeErrorMessage}
+                                                    />
+                                                </div>
                                             </div>
-                                            {/* ) : null} */}
-                                            {/* {this.state.documentsType && this.state.documentsType !== 'Passport' ? (
-                                        <div className="col-lg-6">
-                                            <UploadFile
-                                                isMobileDevice={isMobileDevice}
-                                                id="fileBack"
-                                                title={this.translate('page.body.kyc.documents.uploadFile.back.title')}
-                                                label={this.translate('page.body.kyc.documents.uploadFile.back.label')}
-                                                buttonText={this.translate(
-                                                    'page.body.kyc.documents.uploadFile.back.button'
-                                                )}
-                                                sizesText={this.uploadFileSizeGuide()}
-                                                formatsText={this.translate(
-                                                    'page.body.kyc.documents.uploadFile.back.formats'
-                                                )}
-                                                handleUploadScan={(uploadEvent) =>
-                                                    this.handleUploadScan(uploadEvent, 'back')
-                                                }
-                                                exampleImagePath={DocumentBackExample}
-                                                uploadedFile={fileBack[0] && (fileBack[0] as File).name}
-                                                fileSizeErrorMessage={backFileSizeErrorMessage}
-                                            />
-                                        </div>
-                                    ) : null} */}
-                                            {/* {this.state.documentsType ? ( */}
-                                            <div className="col-lg-6">
-                                                <UploadFile
-                                                    isMobileDevice={isMobileDevice}
-                                                    id="fileSelfie"
-                                                    title={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.selfie.title'
-                                                    )}
-                                                    label={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.selfie.label'
-                                                    )}
-                                                    buttonText={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.selfie.button'
-                                                    )}
-                                                    sizesText={this.uploadFileSizeGuide()}
-                                                    formatsText={this.translate(
-                                                        'page.body.kyc.documents.uploadFile.selfie.formats'
-                                                    )}
-                                                    handleUploadScan={(uploadEvent) =>
-                                                        this.handleUploadScan(uploadEvent, 'selfie')
-                                                    }
-                                                    exampleImagePath={DocumentSelfieExample}
-                                                    uploadedFile={fileSelfie[0] && (fileSelfie[0] as File).name}
-                                                    fileSizeErrorMessage={selfieFileSizeErrorMessage}
-                                                />
+                                            <div className="d-flex align-items-center mt-4">
+                                                <button
+                                                    className="btn btn-secondary mr-3 px-5"
+                                                    onClick={() => this.setState({ step: 'profile' })}>
+                                                    Back
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary px-lg"
+                                                    onClick={this.sendDocuments}
+                                                    disabled={this.handleCheckButtonDisabled()}>
+                                                    Submit
+                                                </button>
                                             </div>
-                                            {/* ) : null} */}
-                                        </div>
-                                        <div className="d-flex align-items-center mt-4">
-                                            <button
-                                                className="btn btn-secondary mr-3 px-5"
-                                                onClick={() => this.setState({ step: 'profile' })}>
-                                                Back
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary px-lg"
-                                                onClick={this.sendDocuments}
-                                                disabled={this.handleCheckButtonDisabled()}>
-                                                Submit
-                                            </button>
-                                        </div>
-                                    </React.Fragment>
-                                )}
-                            </form>
+                                        </React.Fragment>
+                                    )}
+                                </form>
+                            )}
+
+                            {kycStatus == 'pending' && (
+                                <div className="py-5">
+                                    <div className="d-flex align-items-center flex-column">
+                                        <img src="/img/pending.png" alt="Pending Icon" />
+                                        <h6 className="text-center white-text font-bold text-lg m-3">
+                                            Waiting For Review
+                                        </h6>
+                                        <p className="text-sm text-center grey-text-accent">
+                                            We will complete the verification within 1 to 3 business days and notify the
+                                            result to you through SMS and email. <br /> To ensure your account security,
+                                            the withdrawal services on KuCoin and Futures will be temporarily closed for
+                                            24 hours after the setting is approved.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -453,6 +419,18 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
             </React.Fragment>
         );
     }
+
+    private checkStatusKyc = (next: Props) => {
+        if (next.success && !this.props.success) {
+            this.props.history.push('/profile');
+        }
+    };
+
+    private selectCountry = (option) => {
+        this.setState({
+            country: countries.getAlpha2Code(option.value, this.props.lang),
+        });
+    };
 
     private uploadFileSizeGuide = () => {
         if (accountUploadSizeMinRange) {
@@ -521,9 +499,9 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         });
     };
 
-    private handleChangeBirthDate = (value: string) => {
+    private handleChangeBirthDate = (e: OnChangeEvent) => {
         this.setState({
-            birthDate: value,
+            birthDate: formatDate(e.target.value),
         });
     };
 
@@ -547,39 +525,17 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                     this.setState({
                         frontFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooBig', sizeKB),
                     });
-                } else if (additionalFileList[0].size < accountUploadSizeMinRange * 1024 * 1024) {
-                    this.setState({
-                        frontFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooSmall', sizeKB),
-                    });
                 } else {
                     this.setState({ frontFileSizeErrorMessage: '' });
                 }
 
                 this.setState({ fileFront: additionalFileList });
                 break;
-            // case 'back':
-            //     if (additionalFileList[0].size > accountUploadSizeMaxRange * 1024 * 1024) {
-            //         this.setState({
-            //             backFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooBig', sizeKB),
-            //         });
-            //     } else if (additionalFileList[0].size < accountUploadSizeMinRange * 1024 * 1024) {
-            //         this.setState({
-            //             backFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooSmall', sizeKB),
-            //         });
-            //     } else {
-            //         this.setState({ backFileSizeErrorMessage: '' });
-            //     }
 
-            //     this.setState({ fileBack: additionalFileList });
-            //     break;
             case 'selfie':
                 if (additionalFileList[0].size > accountUploadSizeMaxRange * 1024 * 1024) {
                     this.setState({
                         selfieFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooBig', sizeKB),
-                    });
-                } else if (additionalFileList[0].size < accountUploadSizeMinRange * 1024 * 1024) {
-                    this.setState({
-                        selfieFileSizeErrorMessage: this.translate('page.body.kyc.uploadFile.error.tooSmall', sizeKB),
                     });
                 } else {
                     this.setState({ selfieFileSizeErrorMessage: '' });
@@ -635,13 +591,10 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                   backFileSizeErrorMessage === '' &&
                   selfieFileSizeErrorMessage === '';
 
-        return (
-            !this.handleValidateInput('idNumber', idNumber) || !this.handleValidateInput('issuedDate', issuedDate)
-            // !filesValid
-        );
+        return !this.handleValidateInput('idNumber', idNumber) || !this.handleValidateInput('issuedDate', issuedDate);
     };
 
-    private sendDocuments = () => {
+    private sendDocuments = async () => {
         const { documentsType, fileBack, fileFront, fileSelfie } = this.state;
         const identificator = randomSecureHex(32);
 
@@ -649,32 +602,16 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
             return;
         }
 
-        this.props.sendDocuments(this.createFormData(identificator));
-
-        // if (documentsType !== 'Passport') {
-        //     this.props.sendDocuments(this.createFormData('back_side', fileBack, identificator));
-        // }
-
-        // this.props.sendDocuments(this.createFormData(identificator));
+        await this.props.sendDocuments(this.createFormData(identificator));
+        const userLevel = this.props.user.labels;
+        console.log(userLevel);
     };
 
-    // private createFormData = (docCategory: string, upload: File[], identificator: string) => {
     private createFormData = (identificator: string) => {
         const { documentsType, issuedDate, idNumber, fileFront, fileSelfie }: DocumentsState = this.state;
         const typeOfDocuments = this.getDocumentsType(documentsType);
 
         const request = new FormData();
-
-        // if (expireDate) {
-        //     request.append('doc_expire', expireDate);
-        // }
-
-        // request.append('doc_issue', issuedDate);
-        // request.append('doc_type', typeOfDocuments);
-        // request.append('doc_number', idNumber);
-        // request.append('identificator', identificator);
-        // request.append('doc_category', docCategory);
-        // request.append('upload[]', upload[0]);
 
         request.append('birthDate', '14/01/2000');
         request.append('idNumber', idNumber);
@@ -683,7 +620,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         request.append('district', this.state.district);
         request.append('city', this.state.city);
         request.append('province', this.state.province);
-        request.append('country', 'ID');
+        request.append('country', this.state.country);
         request.append('place_of_birth', this.state.placeBirth);
         request.append('selfie_image', fileSelfie[0]);
         request.append('identity_image', fileFront[0]);

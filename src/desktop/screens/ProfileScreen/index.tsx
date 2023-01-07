@@ -49,6 +49,10 @@ export const ProfileScreen: FC = (): ReactElement => {
 
     const [seconds, setSeconds] = useState(30000);
     const [timerActive, setTimerActive] = useState(false);
+    const [kycStatus, setKycStatus] = useState('');
+    const [profilekycStatus, setProfileKycStatus] = useState('');
+    const phone = user.phones.slice(-1);
+    const kyc = user.profiles.slice(-1);
 
     useEffect(() => {
         let timer = null;
@@ -67,8 +71,18 @@ export const ProfileScreen: FC = (): ReactElement => {
         };
     });
 
-    const phone = user.phones.slice(-1);
-    const kyc = user.profiles.slice(-1);
+    useEffect(() => {
+        const kycData = user?.labels[0];
+        if (kycData.key == 'document') {
+            const kycStatus = kycData.value;
+            setKycStatus(kycStatus);
+            console.log(kycStatus);
+        } else {
+            setKycStatus('');
+        }
+
+        setProfileKycStatus(user.profiles[0].state);
+    }, []);
 
     const handleFetchTwoFaPhone = async () => {
         user.otp ? setShowModalChangePhone(!showModalChangePhone) : history.push('/two-fa-activation');
@@ -290,26 +304,31 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const renderKycStatus = () => {
-        const kycData = user.profiles.length;
-        if (kycData > 0) {
-            const kycReverse = user.profiles.slice(-1);
-            const kycStatus = kycReverse[0].state;
-            switch (kycStatus) {
-                case '':
-                    return <span className="d-block p-1 warning-text text-xs font-normal ">Profile Unverified</span>;
-                    break;
-                case 'submitted':
-                    return <span className="d-block p-1 grey-text text-xs font-normal ">Profile Pending</span>;
-                    break;
-                case 'verified':
-                    return <span className="d-block p-1 contrast-text text-xs font-normal ">Profile Verified</span>;
-                    break;
-                case 'rejected':
-                    return <span className="d-block p-1 danger-text text-xs font-normal ">Profile Unverified</span>;
-                    break;
-            }
-        } else {
-            return <span className="d-block p-1 danger-text text-xs font-normal ">Unverivied</span>;
+        console.log(kycStatus);
+        console.log(profilekycStatus);
+
+        // if (kycStatus == '') {
+        //     return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
+        // } else if (kycStatus == 'pending') {
+        //     return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
+        // } else if (kycStatus == 'verified' || profilekycStatus == 'verified') {
+        //     return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
+        // } else if (kycStatus == 'rejected') {
+        //     return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
+        // }
+        switch (kycStatus) {
+            case '':
+                return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
+                break;
+            case 'pending':
+                return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
+                break;
+            case 'verified':
+                return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
+                break;
+            case 'rejected':
+                return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
+                break;
         }
     };
 
@@ -356,7 +375,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                         </Link>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={'/profile/kyc'}>
+                                        <Link to={kycStatus == 'verified' ? '/profile' : '/profile/kyc'}>
                                             <div className="d-flex align-items-center position-relative">
                                                 <div className="icon-bg">
                                                     <KycProfileIcon />
@@ -368,7 +387,7 @@ export const ProfileScreen: FC = (): ReactElement => {
 
                                                     {renderKycStatus()}
                                                 </div>
-                                                {kyc && kyc[0] && kyc[0].state === 'verified' && (
+                                                {kycStatus === 'verified' && (
                                                     <div className="check">
                                                         <CheckIcon />
                                                     </div>
