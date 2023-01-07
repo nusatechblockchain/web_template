@@ -1,6 +1,6 @@
-import { API_URL,SOCKET_URL } from '../config';
+import { API_URL, SOCKET_URL } from '../config';
 const hostUrl = API_URL;
-const rangerHostUrl =  SOCKET_URL;
+const rangerHostUrl = SOCKET_URL;
 
 export const defaultConfig: Config = {
     api: {
@@ -29,16 +29,10 @@ export const defaultConfig: Config = {
     passwordEntropyStep: '14',
     storage: {
         defaultStorageLimit: '50',
-        orderBookSideLimit: '25'
+        orderBookSideLimit: '25',
     },
     languages: ['en'],
-    kycSteps: [
-        'email',
-        'phone',
-        'profile',
-        'document',
-        'address'
-    ],
+    kycSteps: ['email', 'phone', 'profile', 'document', 'address'],
     captcha_type: 'none',
     password_min_entropy: 0,
     wizard_step: undefined,
@@ -56,7 +50,7 @@ Cryptobase.config.storage = { ...defaultConfig.storage, ...Cryptobase.config.sto
 
 const convertToBoolean = (value: any): boolean => {
     return String(value) === 'true';
-}
+};
 
 export const tradeUrl = () => Cryptobase.config.api.tradeUrl;
 export const authUrl = () => Cryptobase.config.api.authUrl;
@@ -81,13 +75,14 @@ export const msPricesUpdates = () => Cryptobase.config.msPricesUpdates;
 export const defaultStorageLimit = () => Number(Cryptobase.config.storage.defaultStorageLimit);
 export const orderBookSideLimit = () => Number(Cryptobase.config.storage.orderBookSideLimit);
 export const passwordEntropyStep = () => Number(Cryptobase.config.passwordEntropyStep);
-export const languages = (Cryptobase.config.languages && Cryptobase.config.languages.length > 0) ? Cryptobase.config.languages : ['en'];
+export const languages =
+    Cryptobase.config.languages && Cryptobase.config.languages.length > 0 ? Cryptobase.config.languages : ['en'];
 export const kycSteps = () => Cryptobase.config.kycSteps;
 export const isUsernameEnabled = () => convertToBoolean(Cryptobase.config.usernameEnabled);
 export const captchaType = () => Cryptobase.config.captcha_type;
 export const captchaId = () => Cryptobase.config.captcha_id;
 export const passwordMinEntropy = () => Number(Cryptobase.config.password_min_entropy);
 export const wizardStep = () => String(Cryptobase.config.wizard_step || '1');
-export const accountUploadSizeMinRange = Number(Cryptobase.config.account_upload_size_min_range || '1');
-export const accountUploadSizeMaxRange = Number(Cryptobase.config.account_upload_size_max_range || '20');
+export const accountUploadSizeMinRange = Number('0');
+export const accountUploadSizeMaxRange = Number('5');
 export const themeSwitcher = () => Cryptobase.config.themeSwitcher;
