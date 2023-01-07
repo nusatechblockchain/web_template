@@ -138,7 +138,7 @@ const MarketListTradeComponent = (props) => {
                                                     className={`text-xs my-auto  mb-0 text-right ${
                                                         item.last < item.open ? 'danger-text' : 'green-text'
                                                     }`}>
-                                                    {numberFormat(item.last, 'USA').toString().split('.')[0]}
+                                                    {numberFormat(item.last, 'USA').toString()}
                                                 </p>
                                             </div>
                                         </td>

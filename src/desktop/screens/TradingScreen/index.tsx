@@ -23,6 +23,7 @@ import { getTriggerSign } from './helpers';
 
 export const TradingScreen: FC = (): ReactElement => {
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
+    const [data, setData] = useState([]);
     const currentMarket = useSelector(selectCurrentMarket);
 
     const { currency = '' } = useParams<{ currency?: string }>();
@@ -35,6 +36,8 @@ export const TradingScreen: FC = (): ReactElement => {
     const translate = React.useCallback((id: string) => formatMessage({ id: id }), [formatMessage]);
 
     const list = listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
+    const listSell = list.length && list.filter((item) => item.side === 'sell');
+    const listBuy = list.length && list.filter((item) => item.side === 'buy');
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
 
@@ -201,7 +204,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                     // onCancel={handleCancel}
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
-                                    hideOthrerPairs={hideOtherPairs}
+                                    hideOtherPair={hideOtherPairs}
                                 />
                             </div>
                         </div>

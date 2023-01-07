@@ -50,11 +50,7 @@ const RecentTradesComponent = (props) => {
                                                 className={`text-sm font-bold mb-0 text-left ${
                                                     trade.taker_type === 'sell' ? 'danger-text' : 'contrast-text'
                                                 }`}>
-                                                {
-                                                    numberFormat(+trade.price, 'USD')
-                                                        .toString()
-                                                        .split('.')[0]
-                                                }
+                                                {numberFormat(+trade.price, 'USA').toString()}
                                             </p>
                                         </td>
                                         <td>

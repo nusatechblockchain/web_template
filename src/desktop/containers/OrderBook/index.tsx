@@ -9,8 +9,9 @@ import {
     Market,
     selectMarkets,
 } from '../../../modules';
+import { selectRanger } from 'src/modules/public/ranger/selectors';
 import { useParams } from 'react-router-dom';
-import { useOpenOrdersFetch } from '../../../hooks';
+import { useOpenOrdersFetch, useDepthFetch } from '../../../hooks';
 import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
 import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers';
 import { Decimal } from '../../../components';
@@ -18,15 +19,21 @@ import { NoData } from '../../../desktop/components';
 
 const OrderBookComponent = (props) => {
     useOpenOrdersFetch();
+    useDepthFetch();
 
     const dispatch = useDispatch();
     const { currency = '' } = useParams<{ currency?: string }>();
+    const [asks, setAsks] = React.useState([]);
+    const [bids, setBids] = React.useState([]);
 
     const markets = useSelector(selectMarkets);
     const currentMarket = useSelector(selectCurrentMarket);
     const lastTrade = useSelector(selectLastRecentTrade);
     const ask = useSelector(selectDepthAsks);
     const bid = useSelector(selectDepthBids);
+    const rangerConnect = useSelector(selectRanger);
+
+    // console.log(rangerConnect, 'ini ranger');
 
     const current = markets.find((item) => item.id === currency);
     React.useEffect(() => {
@@ -34,6 +41,16 @@ const OrderBookComponent = (props) => {
             dispatch(setCurrentMarket(current));
         }
     }, [current]);
+
+    React.useEffect(() => {
+        if (ask) {
+            setAsks([...ask].sort((a, b) => Number(b[0]) - Number(a[0])));
+        }
+
+        if (bid) {
+            setBids([...bid].sort((a, b) => Number(b[0]) - Number(a[0])));
+        }
+    }, [bid, ask]);
 
     const mapValues = (maxVolume?: number, data?: number[]) => {
         const resultData =
@@ -46,9 +63,6 @@ const OrderBookComponent = (props) => {
 
         return resultData;
     };
-
-    const asks = [...ask].sort((a, b) => Number(b[0]) - Number(a[0]));
-    const bids = [...bid].sort((a, b) => Number(b[0]) - Number(a[0]));
 
     const bgWitdhBids = mapValues(calcMaxVolume(bids, asks), accumulateVolume(bids, false));
     const bgWidthAsk = mapValues(calcMaxVolume(bids, asks), accumulateVolume(asks, false));
@@ -92,7 +106,7 @@ const OrderBookComponent = (props) => {
                                             <td>
                                                 <p className="text-sm danger-text font-bold m-0 p-0 text-left">
                                                     {
-                                                        numberFormat(+item[0], 'USD')
+                                                        numberFormat(+item[0], 'USA')
                                                             .toString()
                                                             .split('.')[0]
                                                     }
@@ -107,11 +121,7 @@ const OrderBookComponent = (props) => {
                                             </td>
                                             <td>
                                                 <p className="text-sm m-0 p-0 grey-text-accent font-bold text-right">
-                                                    {
-                                                        numberFormat(+item[0] * +item[1], 'USD')
-                                                            .toString()
-                                                            .split('.')[0]
-                                                    }
+                                                    {numberFormat(+item[0] * +item[1], 'USA').toString()}
                                                 </p>
                                             </td>
                                         </tr>
@@ -125,11 +135,7 @@ const OrderBookComponent = (props) => {
                         className={`text-md font-bold m-0 p-0 ${
                             lastTrade && +lastTrade.price_change > 0 ? 'green-text' : 'danger-text'
                         }`}>
-                        {
-                            numberFormat(lastTrade && +lastTrade.price, 'USD')
-                                .toString()
-                                .split('.')[0]
-                        }
+                        {numberFormat(lastTrade && +lastTrade.price, 'USA').toString()}
                         {lastTrade && +lastTrade.price_change > 0 ? <TradeUp /> : <TradeDown />}
                     </h3>
                     <p
@@ -160,7 +166,7 @@ const OrderBookComponent = (props) => {
                                         <td>
                                             <p className="text-sm green-text font-bold m-0 p-0 text-left">
                                                 {
-                                                    numberFormat(+item[0], 'USD')
+                                                    numberFormat(+item[0], 'USA')
                                                         .toString()
                                                         .split('.')[0]
                                                 }
@@ -175,11 +181,7 @@ const OrderBookComponent = (props) => {
                                         </td>
                                         <td>
                                             <p className="text-sm m-0 p-0 grey-text-accent font-bold text-right">
-                                                {
-                                                    numberFormat(+item[0] * +item[1], 'USD')
-                                                        .toString()
-                                                        .split('.')[0]
-                                                }
+                                                {numberFormat(+item[0] * +item[1], 'USA')}
                                             </p>
                                         </td>
                                     </tr>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { OrderPercentage, OrderType } from '../../components';
+import { OrderPercentage } from '../../components';
 import { Decimal } from '../../../components';
 import { selectUserLoggedIn, selectMarketTickers, selectCurrentMarket, Ticker, selectWallets } from '../../../modules';
 import { useSelector } from 'react-redux';
@@ -11,6 +11,9 @@ export interface OrderFormProps {
     orderType: string;
     orderPercentage: number;
     handleSelectPercentage: (e: number) => void;
+    labelAmount: string;
+    labelPrice: string;
+    labelTotal: string;
     labelPercent0: string;
     labelPercent25: string;
     labelPercent50: string;
@@ -19,8 +22,10 @@ export interface OrderFormProps {
     amount: string;
     handleChangeAmount: (e: string) => void;
     total: string;
-    price: number;
-    handleChangePrice: (e: number) => void;
+    price: string;
+    totalPrice: number;
+    handleChangePrice: (e: string) => void;
+    handleSide: (e: string) => void;
     handleSubmit: () => void;
 }
 
@@ -31,6 +36,9 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
         orderType,
         orderPercentage,
         handleSelectPercentage,
+        labelAmount,
+        labelPrice,
+        labelTotal,
         labelPercent0,
         labelPercent25,
         labelPercent50,
@@ -40,14 +48,18 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
         handleChangeAmount,
         total,
         price,
+        totalPrice,
         handleChangePrice,
+        handleSide,
         handleSubmit,
     } = props;
 
-    const isLoggedin = useSelector(selectUserLoggedIn);
+    const isLoggedIn = useSelector(selectUserLoggedIn);
     const tickers = useSelector(selectMarketTickers);
     const currentMarket = useSelector(selectCurrentMarket);
     const wallets = useSelector(selectWallets);
+
+    const [disabled, setDisabled] = React.useState(true);
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const tickerItem: Ticker = tickers[currency];
@@ -55,27 +67,32 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
         wallets.length &&
         wallets.find((item) => item.currency.toLowerCase() === currentMarket?.base_unit?.toLowerCase());
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
-    const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
     const usd =
         wallets.length &&
         wallets.find((item) => item.currency.toLowerCase() === currentMarket?.quote_unit?.toLowerCase());
     const usdt = usd && usd.balance ? usd.balance.toString() : '0';
-    const usdtFixed = (usd || { fixed: 0 }).fixed;
 
-    const disabledButton = () => {
-        if (!isLoggedin) {
-            return true;
+    const handleSetValue = (value: string | number | undefined, defaultValue: string) => value || defaultValue;
+    const safePrice = totalPrice / Number(amount) || price;
+
+    React.useEffect(() => {
+        if (!isLoggedIn) {
+            setDisabled(true);
         }
 
         if (loading) {
-            return true;
+            setDisabled(true);
         }
 
-        if (!currentMarket?.id || !side || !orderType || !amount || !total) {
-            return true;
+        if (currentMarket) {
+            if (amount < currentMarket?.min_amount) {
+                setDisabled(true);
+            } else {
+                setDisabled(false);
+            }
         }
-    };
+    }, [amount, total, loading, isLoggedIn]);
 
     return (
         <React.Fragment>
@@ -83,34 +100,59 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={orderType === 'market' ? tickerItem?.last : price}
-                        value={orderType === 'market' ? tickerItem?.last : price}
-                        onChange={(e) => handleChangePrice(+e.target.value)}
+                        disabled={orderType === 'market'}
+                        defaultValue={
+                            orderType === 'market'
+                                ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
+                                : price
+                        }
+                        value={
+                            orderType === 'market'
+                                ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
+                                : price
+                        }
+                        onChange={(e) => handleChangePrice(e.target.value)}
                         className="form-control input-order-form"
-                        id="input-order"
+                        id={labelPrice}
                     />
-                    <label htmlFor="input-order" className="input-order-label-left">
+                    <label htmlFor={labelPrice} className="input-order-label-left">
                         Price
                     </label>
-                    <label htmlFor="input-order" className="input-order-label-right">
+                    <label htmlFor={labelPrice} className="input-order-label-right">
                         {currentMarket?.quote_unit?.toUpperCase()}
                     </label>
+                    {orderType === 'limit' && isLoggedIn && (
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div className="text-xs danger-text mt-1">Min price: {currentMarket?.min_price}</div>
+                            <div className="text-xs contrast-text mt-1">Max price: {currentMarket?.max_price}</div>
+                        </div>
+                    )}
                 </div>
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={amount}
+                        defaultValue={
+                            orderType === 'market'
+                                ? handleSetValue(Decimal.format(amount, currentMarket?.amount_precision, ','), '0')
+                                : amount
+                        }
                         value={amount}
-                        onChange={(e) => handleChangeAmount(e.target.value)}
+                        onChange={(e) => {
+                            handleChangeAmount(e.target.value);
+                            handleSide(side === 'Sell' ? 'sell' : 'buy');
+                        }}
                         className="form-control input-order-form"
-                        id="input-order"
+                        id={labelAmount}
                     />
-                    <label htmlFor="input-order" className="input-order-label-left">
+                    <label htmlFor={labelAmount} className="input-order-label-left">
                         Amount
                     </label>
-                    <label htmlFor="input-order" className="input-order-label-right">
+                    <label htmlFor={labelAmount} className="input-order-label-right">
                         {currentMarket?.base_unit?.toUpperCase()}
                     </label>
+                    {orderType === 'limit' && isLoggedIn && (
+                        <div className="text-xs grey-text mt-1">Min amount: {currentMarket?.min_amount}</div>
+                    )}
                 </div>
                 <OrderPercentage
                     orderPercentage={orderPercentage}
@@ -125,15 +167,15 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        value={total}
+                        defaultValue={total}
                         readOnly
                         className="form-control input-order-form"
-                        id="input-order"
+                        id={labelTotal}
                     />
-                    <label htmlFor="input-order" className="input-order-label-left">
+                    <label htmlFor={labelTotal} className="input-order-label-left">
                         Total
                     </label>
-                    <label htmlFor="input-order" className="input-order-label-right">
+                    <label htmlFor={labelTotal} className="input-order-label-right">
                         {currentMarket?.base_unit?.toUpperCase()}
                     </label>
                 </div>
@@ -142,13 +184,11 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <p className="text-sm white-text">
                         {side === 'Buy' ? (
                             <>
-                                {usdt}
-                                {currentMarket?.quote_unit?.toUpperCase()}{' '}
+                                {usdt} {currentMarket?.quote_unit?.toUpperCase()}
                             </>
                         ) : (
                             <>
-                                {balance}
-                                {currentMarket?.base_unit?.toUpperCase()}{' '}
+                                {balance} {currentMarket?.base_unit?.toUpperCase()}
                             </>
                         )}
                     </p>
@@ -157,7 +197,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     type="button"
                     className={`btn btn-block ${side === 'Buy' ? 'btn-success' : 'btn-danger'}`}
                     onClick={handleSubmit}
-                    disabled={disabledButton()}>
+                    disabled={disabled}>
                     {side} {currentMarket?.base_unit?.toUpperCase()}
                 </button>
             </form>
