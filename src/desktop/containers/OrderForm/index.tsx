@@ -8,7 +8,6 @@ import {
     Ticker,
     selectWallets,
     orderExecuteFetch,
-    orderExecuteError,
     selectOrderExecuteLoading,
     selectDepthAsks,
     selectDepthBids,
@@ -16,7 +15,7 @@ import {
 import { OrderSide } from 'src/modules/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { numberFormat, getTotalPrice } from '../../../helpers';
+import { getTotalPrice } from '../../../helpers';
 
 export const OrderForm = () => {
     const dispatch = useDispatch();
@@ -40,102 +39,21 @@ export const OrderForm = () => {
         wallets.find((item) => item.currency.toLowerCase() === currentMarket?.quote_unit?.toLowerCase());
     const usdt = usd && usd.balance ? usd.balance.toString() : '0';
 
-    const [orderTypeBuy, setOrderTypeBuy] = React.useState('limit');
-    const [orderTypeSell, setOrderTypeSell] = React.useState('limit');
     const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
     const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
 
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
-    const [showModalSellSuccess, setShowModalSellSuccess] = React.useState(false);
-    const [priceBuy, setPriceBuy] = React.useState(0);
+    const [priceBuy, setPriceBuy] = React.useState('');
     const [amountBuy, setAmountBuy] = React.useState('');
     const [totalBuy, setTotalBuy] = React.useState('');
 
-    const [priceSell, setPriceSell] = React.useState(0);
+    const [priceSell, setPriceSell] = React.useState('');
     const [amountSell, setAmountSell] = React.useState('');
     const [totalSell, setTotalSell] = React.useState('');
 
-    // new function start
     const [orderType, setOrderType] = React.useState('limit');
-    const [side, setSide] = React.useState<OrderSide>();
-    const [price, setPrice] = React.useState('');
-    const [amount, setAmount] = React.useState('');
-    const [total, setTotal] = React.useState('');
-
-    const handleChangePrice = (value: string) => {
-        setPrice(value);
-    };
-
-    const handleChangeAmount = (value: string) => {
-        setAmount(value);
-    };
-
-    React.useEffect(() => {
-        if (side === 'sell') {
-            let sell = Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision);
-            setAmount(sell);
-        } else {
-            let buy = Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.amount_precision);
-            setAmount(buy);
-        }
-    }, [price, orderPercentageBuy, orderPercentageSell, side]);
-
-    React.useEffect(() => {
-        if (side === 'sell') {
-            let limit = Decimal.format(+price * +amount, currentMarket?.price_precision);
-            let market = Decimal.format(+tickerItem?.last * +amount, currentMarket?.price_precision);
-            setTotal(orderType === 'market' ? market : limit);
-        } else {
-            let limit = Decimal.format(+price * +amount, currentMarket?.price_precision);
-            let market = Decimal.format(+tickerItem?.last * +amount, currentMarket?.price_precision);
-            setTotal(orderType === 'market' ? market : limit);
-        }
-    }, [price, orderType, amount, side]);
-
-    const handleSubmit = () => {
-        const payloadLimit = {
-            market: currentMarket?.id,
-            side: side,
-            volume: amount,
-            price: price,
-            ord_type: orderType,
-        };
-
-        const payloadMarket = {
-            market: currentMarket?.id,
-            side: side,
-            volume: amount,
-            ord_type: orderType,
-        };
-
-        dispatch(orderExecuteFetch(orderType === 'limit' ? payloadLimit : payloadMarket));
-
-        setShowModalSell(false);
-        setAmount('');
-        setTotal('');
-        setPrice('');
-        setOrderPercentageSell(0);
-        setOrderPercentageBuy(0);
-    };
-
-    // new function end
-
-    const handleChangePriceBuy = (e: number) => {
-        setPriceBuy(e);
-    };
-
-    const handleChangePriceSell = (e: number) => {
-        setPriceSell(e);
-    };
-
-    const handleChangeAmountBuy = (e: string) => {
-        setAmountBuy(e);
-    };
-
-    const handleChangeAmounSell = (e: string) => {
-        setAmountSell(e);
-    };
+    const [side, setSide] = React.useState<OrderSide>('buy');
 
     React.useEffect(() => {
         let temp = Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision);
@@ -143,63 +61,78 @@ export const OrderForm = () => {
     }, [orderPercentageSell]);
 
     React.useEffect(() => {
-        if (priceSell) {
-            let limit = Decimal.format(+priceSell * +amountSell, currentMarket?.price_precision);
-            let market = Decimal.format(+tickerItem?.last * +amountSell, currentMarket?.price_precision);
-            setTotalSell(orderTypeSell === 'market' ? market : limit);
-        }
+        let limit = Decimal.format(+priceSell * +amountSell, currentMarket?.price_precision);
+        let market = Decimal.format(+tickerItem?.last * +amountSell, currentMarket?.price_precision);
+        setTotalSell(orderType === 'market' ? market : limit);
     }, [priceSell, amountSell]);
 
     React.useEffect(() => {
-        if (priceBuy) {
-            let limit = Decimal.format(+priceBuy * +amountBuy, currentMarket?.price_precision);
-            let market = Decimal.format(+tickerItem?.last * +amountBuy, currentMarket?.price_precision);
-            setTotalBuy(orderTypeBuy === 'market' ? market : limit);
-        }
+        let limit = Decimal.format(+priceBuy * +amountBuy, currentMarket?.price_precision);
+        let market = Decimal.format(+tickerItem?.last * +amountBuy, currentMarket?.price_precision);
+        setTotalBuy(orderType === 'market' ? market : limit);
     }, [priceBuy, amountBuy]);
 
     React.useEffect(() => {
         let temp = Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.amount_precision);
-
-        if (priceBuy) {
-            setAmountBuy(temp);
-        }
+        setAmountBuy(temp);
     }, [priceBuy, orderPercentageBuy]);
 
-    const handleSubmitBuy = () => {
-        dispatch(
-            orderExecuteFetch({
-                market: currentMarket?.id,
-                side: 'buy',
-                volume: amountBuy.toString(),
-                price: orderType === 'market' ? tickerItem?.last : priceBuy.toString(),
-                ord_type: orderType,
-            })
-        );
-
+    const resetForm = () => {
+        setShowModalSell(false);
         setShowModalBuy(false);
         setAmountBuy('');
+        setAmountSell('');
+        setPriceBuy('');
+        setPriceSell('');
         setTotalBuy('');
-        setPriceBuy(0);
+        setTotalSell('');
+        setOrderPercentageSell(0);
         setOrderPercentageBuy(0);
     };
 
-    const handleSubmitSell = () => {
-        dispatch(
-            orderExecuteFetch({
-                market: currentMarket.id,
-                side: 'sell',
-                volume: amountSell,
-                ord_type: orderType,
-                price: priceSell.toString(),
-            })
-        );
+    const handleSubmit = () => {
+        const payloadLimit = {
+            market: currentMarket?.id,
+            side: side,
+            volume: side === 'sell' ? amountSell : amountBuy,
+            price: side === 'sell' ? priceSell : priceBuy,
+            ord_type: orderType,
+        };
 
-        setShowModalSell(false);
-        setAmountSell('');
-        setTotalSell('');
-        setPriceSell(0);
-        setOrderPercentageSell(0);
+        const payloadMarket = {
+            market: currentMarket?.id,
+            side: side,
+            volume: side === 'sell' ? amountSell : amountBuy,
+            ord_type: orderType,
+        };
+
+        dispatch(orderExecuteFetch(orderType === 'limit' ? payloadLimit : payloadMarket));
+
+        resetForm();
+    };
+
+    const handleSide = (value: OrderSide) => {
+        setSide(value);
+    };
+
+    const handleChangePriceBuy = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setPriceBuy(value);
+    };
+
+    const handleChangePriceSell = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setPriceSell(value);
+    };
+
+    const handleChangeAmountBuy = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setAmountBuy(value);
+    };
+
+    const handleChangeAmounSell = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setAmountSell(value);
     };
 
     const renderModalContentSell = () => (
@@ -217,7 +150,7 @@ export const OrderForm = () => {
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalSell(false)}>
                     Cancel
                 </button>
-                <button onClick={handleSubmitSell} type="button" className="btn btn-success sm px-5">
+                <button onClick={handleSubmit} type="button" className="btn btn-success sm px-5">
                     Sell
                 </button>
             </div>
@@ -239,31 +172,8 @@ export const OrderForm = () => {
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalBuy(false)}>
                     Cancel
                 </button>
-                <button onClick={handleSubmitBuy} type="button" className="btn btn-success sm px-5">
+                <button onClick={handleSubmit} type="button" className="btn btn-success sm px-5">
                     Buy
-                </button>
-            </div>
-        </React.Fragment>
-    );
-
-    const renderModalContentSellSuccess = () => (
-        <React.Fragment>
-            <h6 className="text-md white-text font-semibold mb-24">
-                Sell {currentMarket?.base_unit?.toUpperCase()} has Succesfully{' '}
-            </h6>
-            <ul className="pl-2">
-                <li className="text-ms grey-text-accent font-semibold">
-                    Bought 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 212,642,342
-                </li>
-                <li className="text-ms grey-text-accent font-semibold">
-                    Sell in 0.00003324 {currentMarket?.base_unit?.toUpperCase()} = $ 857,887,545
-                </li>
-                <li className="text-ms grey-text-accent font-semibold">Fee $ 64</li>
-                <li className="text-ms grey-text-accent font-semibold">Amount Received : 0.000002154</li>
-            </ul>
-            <div className="d-flex">
-                <button className="btn btn-success sm px-5 mr-3" onClick={() => setShowModalSellSuccess(false)}>
-                    Close
                 </button>
             </div>
         </React.Fragment>
@@ -285,7 +195,10 @@ export const OrderForm = () => {
                         />
                         <label
                             htmlFor="limit-order-sell"
-                            onClick={() => setOrderType('limit')}
+                            onClick={() => {
+                                setOrderType('limit');
+                                resetForm();
+                            }}
                             className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
                                 orderType === 'limit' ? 'green-text' : 'white-text'
                             }`}>
@@ -299,7 +212,10 @@ export const OrderForm = () => {
                             defaultValue="market"
                         />
                         <label
-                            onClick={() => setOrderType('market')}
+                            onClick={() => {
+                                setOrderType('market');
+                                resetForm();
+                            }}
                             htmlFor="market-order-sell"
                             className={`btn btn-transparent w-auto text-xs font-bold cursor-pointer px-0 mr-4 ${
                                 orderType === 'market' ? 'green-text' : 'white-text'
@@ -312,9 +228,13 @@ export const OrderForm = () => {
                             <OrderFormComponent
                                 loading={orderLoading}
                                 side={'Buy'}
+                                handleSide={handleSide}
                                 orderType={orderType}
                                 orderPercentage={orderPercentageBuy}
                                 handleSelectPercentage={(e) => setOrderPercentageBuy(e)}
+                                labelAmount={'label-amount-buy'}
+                                labelPrice={'label-price-buy'}
+                                labelTotal={'label-total-buy'}
                                 labelPercent0={'label-buy-0'}
                                 labelPercent25={'label-buy-25'}
                                 labelPercent50={'label-buy-50'}
@@ -324,6 +244,7 @@ export const OrderForm = () => {
                                 handleChangeAmount={handleChangeAmountBuy}
                                 total={totalBuy}
                                 price={priceBuy}
+                                totalPrice={getTotalPrice(amountBuy, +tickerItem?.last, side === 'buy' ? bids : asks)}
                                 handleChangePrice={handleChangePriceBuy}
                                 handleSubmit={() => setShowModalBuy(true)}
                             />
@@ -332,9 +253,13 @@ export const OrderForm = () => {
                             <OrderFormComponent
                                 loading={orderLoading}
                                 side={'Sell'}
+                                handleSide={handleSide}
                                 orderType={orderType}
                                 orderPercentage={orderPercentageSell}
                                 handleSelectPercentage={(e) => setOrderPercentageSell(e)}
+                                labelAmount={'label-amount-sell'}
+                                labelPrice={'label-price-sell'}
+                                labelTotal={'label-total-sell'}
                                 labelPercent0={'label-sell-0'}
                                 labelPercent25={'label-sell-25'}
                                 labelPercent50={'label-sell-50'}
@@ -344,6 +269,7 @@ export const OrderForm = () => {
                                 handleChangeAmount={handleChangeAmounSell}
                                 total={totalSell}
                                 price={priceSell}
+                                totalPrice={getTotalPrice(amountSell, +tickerItem?.last, side === 'buy' ? bids : asks)}
                                 handleChangePrice={handleChangePriceSell}
                                 handleSubmit={() => setShowModalSell(true)}
                             />
@@ -354,7 +280,6 @@ export const OrderForm = () => {
 
             <Modal content={renderModalContentSell()} show={showModalSell} />
             <Modal content={renderModalContentBuy()} show={showModalBuy} />
-            <Modal content={renderModalContentSellSuccess()} show={showModalSellSuccess} />
         </React.Fragment>
     );
 };

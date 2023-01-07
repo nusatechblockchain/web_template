@@ -193,7 +193,7 @@ export const TradingFutureScreen: FC = (): ReactElement => {
                                     // onCancel={handleCancel}
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
-                                    hideOthrerPairs={hideOtherPairs}
+                                    hideOtherPair={hideOtherPairs}
                                 />
                             </div>
                         </div>

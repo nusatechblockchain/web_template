@@ -32,7 +32,7 @@ export interface OpenOrdersProps {
 
     handleCancelAll?: () => void;
 
-    hideOthrerPairs?: boolean;
+    hideOtherPair?: boolean;
 }
 
 export class OpenOrders extends React.Component<OpenOrdersProps> {
@@ -48,6 +48,9 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
         if (headersKeys[orderIndex] === 'Order Type') {
             headers[orderIndex] = <span onClick={this.props.function}>Order Type</span>;
         }
+
+        const listSell = tableData.length && tableData.filter((item) => item[8] === 'sell');
+        const listBuy = tableData.length && tableData.filter((item) => item[8] === 'buy');
 
         return (
             <div className="max-400">
@@ -70,7 +73,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                                         type="checkbox"
                                         custom
                                         id="hideOtherPairs"
-                                        checked={this.props.hideOthrerPairs}
+                                        checked={this.props.hideOtherPair}
                                         readOnly={true}
                                         label={'Hide All Pairs'}
                                         className={'form-check-input'}

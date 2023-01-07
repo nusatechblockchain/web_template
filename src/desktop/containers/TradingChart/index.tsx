@@ -95,7 +95,14 @@ export class TradingChartComponent extends React.PureComponent<Props> {
     }
 
     public render() {
-        return <div id={widgetParams.containerId} className="pg-trading-chart" />;
+        return (
+            <React.Fragment>
+                <div className="position-relative pg-trading-chart">
+                    <div className="pg-trading-chart__bg" style={{ backgroundImage: `url('/img/bg-trade.png')` }}></div>
+                    <div id={widgetParams.containerId} className="pg-trading-chart"></div>
+                </div>
+            </React.Fragment>
+        );
     }
 
     private setChart = (markets: Market[], currentMarket: Market, colorTheme: string) => {
