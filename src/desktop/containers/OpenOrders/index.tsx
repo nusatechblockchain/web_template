@@ -33,6 +33,10 @@ export interface OpenOrdersProps {
     handleCancelAll?: () => void;
 
     hideOtherPair?: boolean;
+
+    handleFilterSell?: () => void;
+
+    handleFilterBuy?: () => void;
 }
 
 export class OpenOrders extends React.Component<OpenOrdersProps> {
@@ -49,9 +53,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
             headers[orderIndex] = <span onClick={this.props.function}>Order Type</span>;
         }
 
-        const listSell = tableData.length && tableData.filter((item) => item[8] === 'sell');
-        const listBuy = tableData.length && tableData.filter((item) => item[8] === 'buy');
-
         return (
             <div className="max-400">
                 <div className="d-flex justify-content-between dark-bg-accent sort-filter">
@@ -59,11 +60,11 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                     <div className="filter">
                         <div className="d-flex align-items-center">
                             <p className="text-sm grey-text font-bold mb-0 mr-2">Sort by: </p>
-                            <button className="btn btn-transparent w-auto danger-text text-sm font-bold">
+                            <button type='button' onClick={this.props.handleFilterSell} className="btn btn-transparent w-auto danger-text text-sm font-bold cursor-pointer">
                                 Sell
                                 <Sell />
                             </button>
-                            <button className="btn btn-transparent w-auto contrast-text text-sm font-bold">
+                            <button type='button' onClick={this.props.handleFilterBuy} className="btn btn-transparent w-auto contrast-text text-sm font-bold cursor-pointer">
                                 Buy
                                 <Buy />
                             </button>
@@ -76,7 +77,7 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                                         checked={this.props.hideOtherPair}
                                         readOnly={true}
                                         label={'Hide All Pairs'}
-                                        className={'form-check-input'}
+                                        className={'form-check-input cursor-pointer'}
                                     />
                                 </Form>
                             </div>
