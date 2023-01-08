@@ -81,7 +81,7 @@ export const ProfileScreen: FC = (): ReactElement => {
             setKycStatus('');
         }
 
-        setProfileKycStatus(user.profiles[0].state);
+        setProfileKycStatus(user.profiles[0]?.state);
     }, []);
 
     const handleFetchTwoFaPhone = async () => {
@@ -124,15 +124,11 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const disabledButton = () => {
-        if (phone[0] && !isChangeNumber) {
+        if (phone[0]?.validated_at === null && !isChangeNumber) {
             return false;
         }
 
         if (newPhoneValue === '') {
-            return true;
-        }
-
-        if (newPhoneValue === '' || phone[0].validated_at !== null) {
             return true;
         }
 
@@ -148,7 +144,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                 <p className="text-sm grey-text mb-8">
                     {!user.phones[0] ? (
                         'Set Your Phone Number And Verified'
-                    ) : user.phones[0].validated_at === null && !isChangeNumber ? (
+                    ) : user.phones[0] && user.phones[0].validated_at === null && !isChangeNumber ? (
                         'You already add phone number, please verify by click send code button to get OTP number'
                     ) : (user.phones[0] && isChangeNumber) || user.phones[0] !== null ? (
                         <p className="danger-text">
@@ -163,7 +159,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                 )}
 
                 <div className="form">
-                    {(isChangeNumber || !user.phones[0] || user.phones[0] !== null) && (
+                    {(isChangeNumber || !user.phones[0] || user.phones[0]?.validated_at !== null) && (
                         <div className="form-group mb-24">
                             <CustomInput
                                 defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
@@ -197,7 +193,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 disabled={disabledButton()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
-                                {(!isChangeNumber && phone[0].validated_at === null) || resendCodeActive
+                                {(!isChangeNumber && phone && phone[0] && phone[0].validated_at === null) || resendCodeActive
                                     ? 'Resend Code'
                                     : 'Send Code'}
                             </button>
@@ -207,7 +203,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                             {moment(seconds).format('mm:ss')}
                         </p>
 
-                        {!isChangeNumber && !user.phones[0] && phone[0].validated_at === null && (
+                        {(!isChangeNumber || !user.phones[0]) && phone[0]?.validated_at === null && (
                             <p
                                 onClick={() => {
                                     setIsChangeNumber(true);
@@ -220,7 +216,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                     </div>
                     <button
                         type="submit"
-                        disabled={newPhoneValue === '' && verificationCode === '' ? true : false}
+                        disabled={phone && phone[0]?.validated_at === null ? verificationCode.length < 5 ? true : false : newPhoneValue === '' || verificationCode.length < 5 ? true : false}
                         onClick={handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
@@ -228,7 +224,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                         data-dismiss="modal">
                         {!user.phones[0]
                             ? 'Add'
-                            : user.phones[0].validated_at === null && !isChangeNumber
+                            : user.phones[0] && user.phones[0].validated_at === null && !isChangeNumber
                             ? 'Veify'
                             : 'Change'}
                     </button>

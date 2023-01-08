@@ -23,8 +23,12 @@ import { getTriggerSign } from './helpers';
 
 export const TradingScreen: FC = (): ReactElement => {
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
-    const [data, setData] = useState([]);
+    const [list, setList] = useState([]);
+    const [filterSell, setFilterSell] = useState(false);
+    const [filterBuy, setFilterBuy]= useState(false)
     const currentMarket = useSelector(selectCurrentMarket);
+
+    useOpenOrdersFetch(currentMarket, hideOtherPairs);
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const { formatMessage } = useIntl();
@@ -35,19 +39,33 @@ export const TradingScreen: FC = (): ReactElement => {
     const markets = useSelector(selectMarkets);
     const translate = React.useCallback((id: string) => formatMessage({ id: id }), [formatMessage]);
 
-    const list = listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
-    const listSell = list.length && list.filter((item) => item.side === 'sell');
-    const listBuy = list.length && list.filter((item) => item.side === 'buy');
-
-    useOpenOrdersFetch(currentMarket, hideOtherPairs);
-
     const current: Market | undefined = markets.find((item) => item.id === currency);
-
     React.useEffect(() => {
         if (current) {
             dispatch(setCurrentMarket(current));
         }
     }, [current]);
+
+    React.useEffect(() => { 
+        if (listOrder) {
+            const data = listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
+            setList(data)
+        }
+        if (list && list[0] && filterSell) {
+            const sell = list.filter((item) => item.side === 'sell');
+            setList(sell);
+        }
+
+        if (list && list[0] && filterBuy) {
+            const buy = list.filter((item) => item.side === 'buy');
+            setList(buy);
+        }
+
+        if (hideOtherPairs) {
+            setList([])
+        }
+        
+    }, [listOrder, filterBuy, filterSell, hideOtherPairs])
 
     const handleCancel = (order: OrderCommon) => {
         dispatch(openOrdersCancelFetch({ order, list }));
@@ -175,6 +193,14 @@ export const TradingScreen: FC = (): ReactElement => {
         [hideOtherPairs]
     );
 
+    const handleFilterSell = () => {
+        setFilterSell(!filterSell);
+    }
+
+   const handleFilterBuy = () => {
+        setFilterBuy(!filterBuy);
+    }
+
     return (
         <React.Fragment>
             <div className="market-trade-screen">
@@ -205,6 +231,8 @@ export const TradingScreen: FC = (): ReactElement => {
                                     handleCancelAll={handleCancelAll}
                                     handleToggle={handleToggleCheckbox}
                                     hideOtherPair={hideOtherPairs}
+                                    handleFilterBuy={handleFilterBuy}
+                                    handleFilterSell={handleFilterSell}
                                 />
                             </div>
                         </div>

@@ -8,6 +8,7 @@ import {
     setCurrentMarket,
     Market,
     selectMarkets,
+    depthFetch, depthDataIncrement
 } from '../../../modules';
 import { selectRanger } from 'src/modules/public/ranger/selectors';
 import { useParams } from 'react-router-dom';
@@ -39,15 +40,16 @@ const OrderBookComponent = (props) => {
     React.useEffect(() => {
         if (current) {
             dispatch(setCurrentMarket(current));
+            // dispatch(depthDataIncrement());
         }
     }, [current]);
 
     React.useEffect(() => {
-        if (ask) {
+        if (ask.length || ask !== undefined) {
             setAsks([...ask].sort((a, b) => Number(b[0]) - Number(a[0])));
         }
 
-        if (bid) {
+        if (bid.length || bid !== undefined) {
             setBids([...bid].sort((a, b) => Number(b[0]) - Number(a[0])));
         }
     }, [bid, ask]);
@@ -90,7 +92,7 @@ const OrderBookComponent = (props) => {
                                 <th className="text-right grey-text">Total</th>
                             </tr>
                         </thead>
-                        {!asks && !asks[0] ? (
+                        {!asks || !asks[0] ? (
                             <tbody>
                                 <tr>
                                     <td colSpan={3}>
@@ -157,7 +159,7 @@ const OrderBookComponent = (props) => {
                             ))}
                     </div>
                     <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
-                        {!bids && !bids[0] ? (
+                        {!bids || !bids[0] ? (
                             <NoData text="No data yet" />
                         ) : (
                             <tbody>
