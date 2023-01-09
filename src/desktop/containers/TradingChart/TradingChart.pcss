@@ -3,13 +3,12 @@
 }
 
 .pg-trading-chart {
-    background: transparent !important;
+    /* background: transparent !important; */
     height: 100%;
     left: 0;
     position: relative !important;
     top: 0;
     width: 100%;
-    z-index: 1;
 
     #tv_chart_container {
         background: transparent !important;
@@ -23,18 +22,23 @@
     .cr-title-component {
         padding: calc(var(--gap) * 2);
     }
-}
 
-.pg-trading-chart__bg {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 2 !important;
-    background-position: center;
-    background-size: 40%;
-    background-repeat: no-repeat;
+    &__widget {
+        height: 100%;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 2 !important;
+    }
+
+    &__bg {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
 }
 
 .pg-trading-chart--error {

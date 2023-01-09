@@ -49,24 +49,6 @@
                 &.open-orders {
                     grid-row: 3/4;
                     grid-column: 1/13;
-
-                    .custom-control-label {
-                        &::after {
-                            border-radius: 4px;
-                            background: 50%/50% 50% no-repeat;
-                            border: 1px solid var(--border-color);
-                            width: 18px;
-                            height: 18px;
-                        }
-
-                        &::before {
-                            border-radius: 4px;
-                            background: var(--body-background-color);
-                            border: 0;
-                            width: 18px;
-                            height: 18px;
-                        }
-                    }
                 }
                 #tradingview_2d0d5 {
                     height: 400px;
@@ -277,6 +259,24 @@
         }
         .custom-control-input {
             min-width: 100px;
+        }
+    }
+
+    .custom-control-label {
+        &::after {
+            border-radius: 4px;
+            background: 50%/50% 50% no-repeat;
+            border: 1px solid var(--border-color);
+            width: 18px;
+            height: 18px;
+        }
+
+        &::before {
+            border-radius: 4px;
+            background: var(--body-background-color);
+            border: 0;
+            width: 18px;
+            height: 18px;
         }
     }
 }

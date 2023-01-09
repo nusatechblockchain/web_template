@@ -8,7 +8,8 @@ import {
     setCurrentMarket,
     Market,
     selectMarkets,
-    depthFetch, depthDataIncrement
+    depthFetch,
+    depthDataIncrement,
 } from '../../../modules';
 import { selectRanger } from 'src/modules/public/ranger/selectors';
 import { useParams } from 'react-router-dom';
@@ -59,7 +60,7 @@ const OrderBookComponent = (props) => {
             data && maxVolume && data.length
                 ? data.map((currentVolume) => {
                       // tslint:disable-next-line:no-magic-numbers
-                      return { value: (currentVolume / maxVolume) * 1000 };
+                      return { value: (currentVolume / maxVolume) * 100 };
                   })
                 : [];
 
