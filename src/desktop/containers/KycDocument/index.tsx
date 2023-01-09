@@ -23,6 +23,7 @@ import {
     sendDocuments,
     sendDocumentsError,
     UserOffersData,
+    userFetch,
 } from '../../../modules';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
 import DocumentFrontExample from 'src/assets/images/kyc/DocumentFrontExample.svg';
@@ -38,6 +39,7 @@ interface ReduxProps {
 interface DispatchProps {
     sendDocuments: typeof sendDocuments;
     fetchAlert: typeof alertPush;
+    userFetch: typeof userFetch;
 }
 
 interface OnChangeEvent {
@@ -68,6 +70,7 @@ interface DocumentsState {
     country: string;
     showNotification: boolean;
     kycStatus: string;
+    documentSuccess: boolean;
 }
 
 type Props = ReduxProps & DispatchProps & RouterProps & IntlProps;
@@ -104,6 +107,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         country: '',
         showNotification: true,
         kycStatus: '',
+        documentSuccess: false,
     };
 
     public UNSAFE_componentWillReceiveProps(next: Props) {
@@ -136,13 +140,12 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
             placeBirth,
             showNotification,
             kycStatus,
+            documentSuccess,
         }: DocumentsState = this.state;
 
         /* tslint:disable */
         languages.map((l: string) => countries.registerLocale(require(`i18n-iso-countries/langs/${l}.json`)));
         /* tslint:enable */
-
-        console.log(kycStatus);
 
         const onSelect = (value) => this.handleChangeDocumentsType(this.data[value]);
         const dataCountries = Object.values(countries.getNames(lang)).map((item) => {
@@ -422,6 +425,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
 
     private checkStatusKyc = (next: Props) => {
         if (next.success && !this.props.success) {
+            this.props.userFetch();
             this.props.history.push('/profile');
         }
     };
@@ -652,6 +656,7 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
     fetchAlert: (payload) => dispatch(alertPush(payload)),
     sendDocuments: (payload) => dispatch(sendDocuments(payload)),
+    userFetch: () => dispatch(userFetch()),
 });
 
 export const KycDocument = compose(

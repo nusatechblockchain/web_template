@@ -15,6 +15,8 @@ import {
     selectBeneficiariesCreate,
     beneficiariesResendPin,
     beneficiariesActivate,
+    selectUserInfo,
+    selectBeneficiariesFetchError,
 } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
@@ -24,6 +26,7 @@ import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules
 import PinInput from 'react-pin-input';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import moment from 'moment';
+import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIcon';
 
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
@@ -38,6 +41,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
     const [showModalBeneficiaryCode, setShowModalBeneficiaryCode] = React.useState(false);
     const [showModalOtp, setShowModalOtp] = React.useState(false);
+    const [showModalLocked, setShowModalLocked] = React.useState(false);
 
     const [amount, setAmount] = React.useState('');
     const [beneficiaryId, setBeneficiaryId] = React.useState(0);
@@ -53,6 +57,8 @@ export const WalletWithdrawalForm: React.FC = () => {
     const beneficiariesCreate = useSelector(selectBeneficiariesCreate);
     const beneficiariesError = useSelector(selectBeneficiariesCreateError);
     const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
+    const beneficiaryPermited = useSelector(selectBeneficiariesFetchError);
+    const user = useSelector(selectUserInfo);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
@@ -84,9 +90,18 @@ export const WalletWithdrawalForm: React.FC = () => {
         }
     }, [beneficiariesError]);
 
+    React.useEffect(() => {
+        if (beneficiaryPermited) {
+            setShowModalLocked(true);
+        }
+    });
+
     const blockchainKeyValue =
         currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
     const fee = blockchainKeyValue && blockchainKeyValue.withdraw_fee;
+    const minWithdraw = blockchainKeyValue && blockchainKeyValue.min_withdraw_amount;
+    const withdrawRecive = Number(amount) - Number(fee);
+    // console.log(withdrawRecive);
 
     const handleChangeBeneficiaryId = (id: number, address: string, blockchainKey: string) => {
         setBeneficiaryId(id);
@@ -146,6 +161,14 @@ export const WalletWithdrawalForm: React.FC = () => {
         if (!beneficiariesActivateError) {
             setShowModalBeneficiaryCode(false);
             setShowModalBeneficiaryList(true);
+        }
+    };
+
+    const handleWithdraw = () => {
+        if (user.labels[0].key == 'document' && user.labels[0].value == 'verified') {
+            setShowModalOtp(!showModalOtp);
+        } else {
+            setShowModalLocked(true);
         }
     };
 
@@ -323,6 +346,34 @@ export const WalletWithdrawalForm: React.FC = () => {
         );
     };
 
+    const renderHeaderModalLocked = () => {
+        return (
+            <React.Fragment>
+                <div className="d-flex justify-content-center align-items-center w-100">
+                    <CircleCloseDangerLargeIcon />
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const renderContentModalLocked = () => {
+        return (
+            <React.Fragment>
+                <h1 className="white-text text-lg mb-24 text-center ">Withdraw Locked</h1>
+                <p className="grey-text text-ms font-extrabold mb-24 text-center">
+                    For withdraw you must verified your document first
+                </p>
+                <div className="d-flex justify-content-center align-items-center w-100 mb-0">
+                    <Link to={`/profile/kyc`}>
+                        <button type="button" className="btn btn-primary sm px-5 mr-3">
+                            Verify Document
+                        </button>
+                    </Link>
+                </div>
+            </React.Fragment>
+        );
+    };
+
     return (
         <React.Fragment>
             <div>
@@ -391,18 +442,37 @@ export const WalletWithdrawalForm: React.FC = () => {
                 </p>
                 <div className="d-flex justify-content-between mb-12">
                     <p className="mb-0 text-ms grey-text-accent">Fee</p>
-                    <p className="mb-0 text-ms grey-text-accent font-bold">$ {fee !== undefined ? fee : '0'}</p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">${fee !== undefined ? fee : '0'}</p>
+                </div>
+                <div className="d-flex justify-content-between mb-12">
+                    <p className="mb-0 text-ms grey-text-accent">Min Withdraw </p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">${minWithdraw ? minWithdraw : '0'}</p>
                 </div>
                 <div className="d-flex justify-content-between mb-24">
-                    <p className="mb-0 text-ms grey-text-accent">Total Withdrawal Amount</p>
+                    <p className="mb-0 text-ms grey-text-accent">You will Recive </p>
                     <p className="mb-0 text-ms grey-text-accent font-bold">
-                        {amount !== '' ? amount : '0'} {currency.toUpperCase()}
+                        <Decimal fixed={currencyItem?.precision} thousSep=",">
+                            {amount !== '' ? withdrawRecive : '0'}
+                        </Decimal>{' '}
+                        {currency.toUpperCase()}
                     </p>
                 </div>
                 <button
                     type="button"
-                    disabled={!currency ? true : !amount ? true : !beneficiaryId ? true : !address ? true : false}
-                    onClick={() => setShowModalOtp(!showModalOtp)}
+                    disabled={
+                        !currency
+                            ? true
+                            : !amount
+                            ? true
+                            : !beneficiaryId
+                            ? true
+                            : !address
+                            ? true
+                            : withdrawRecive < 1
+                            ? true
+                            : false
+                    }
+                    onClick={handleWithdraw}
                     className="btn btn-primary btn-block">
                     Withdraw
                 </button>
@@ -465,6 +535,8 @@ export const WalletWithdrawalForm: React.FC = () => {
                 header={renderHeaderModalBeneficiaryCode()}
                 show={showModalBeneficiaryCode}
             />
+
+            <Modal show={showModalLocked} header={renderHeaderModalLocked()} content={renderContentModalLocked()} />
         </React.Fragment>
     );
 };

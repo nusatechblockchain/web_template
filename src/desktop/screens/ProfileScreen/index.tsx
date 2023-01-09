@@ -24,6 +24,7 @@ import {
     sendCode,
     resendCode,
     verifyPhone,
+    selectBeneficiariesFetchError,
 } from '../../../modules';
 import { selectApiKeys } from 'src/modules/user/apiKeys/selectors';
 import { Modal, CustomInput } from '../../components';
@@ -76,7 +77,6 @@ export const ProfileScreen: FC = (): ReactElement => {
         if (kycData.key == 'document') {
             const kycStatus = kycData.value;
             setKycStatus(kycStatus);
-            console.log(kycStatus);
         } else {
             setKycStatus('');
         }
@@ -300,32 +300,29 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const renderKycStatus = () => {
-        console.log(kycStatus);
-        console.log(profilekycStatus);
-
-        // if (kycStatus == '') {
-        //     return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
-        // } else if (kycStatus == 'pending') {
-        //     return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
-        // } else if (kycStatus == 'verified' || profilekycStatus == 'verified') {
-        //     return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
-        // } else if (kycStatus == 'rejected') {
-        //     return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
-        // }
-        switch (kycStatus) {
-            case '':
-                return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
-                break;
-            case 'pending':
-                return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
-                break;
-            case 'verified':
-                return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
-                break;
-            case 'rejected':
-                return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
-                break;
+        if (kycStatus == '') {
+            return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
+        } else if (kycStatus == 'rejected') {
+            return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
+        } else if (kycStatus == 'verified') {
+            return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
+        } else if (kycStatus == 'pending') {
+            return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
         }
+        // switch (kycStatus) {
+        //     case '':
+        //         return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
+        //         break;
+        //     case 'pending':
+        //         return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
+        //         break;
+        //     case 'verified':
+        //         return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
+        //         break;
+        //     case 'rejected':
+        //         return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
+        //         break;
+        // }
     };
 
     return (
