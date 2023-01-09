@@ -5,6 +5,7 @@ import { ConfigUpdateState, rootConfigUpdateSaga } from './admin/config';
 import { AlertState, rootHandleAlertSaga } from './public/alert';
 import { BlockchainsState } from './public/blockchains';
 import { BlocklistAccessState, rootBlocklistAccessSaga } from './public/blocklistAccess';
+import { BlogsState, rootblogsSaga } from './public/blog';
 import { ConfigsState, rootConfigsSaga } from './public/configs';
 import { CurrenciesState } from './public/currencies';
 import { ErrorHandlerState, rootErrorHandlerSaga } from './public/errorHandler';
@@ -59,6 +60,7 @@ export * from './admin/platform';
 export * from './public/alert';
 export * from './public/blockchains';
 export * from './public/blocklistAccess';
+export * from './public/blog';
 export * from './public/configs';
 export * from './public/currencies';
 export * from './public/errorHandler';
@@ -103,6 +105,7 @@ export interface RootState {
         alerts: AlertState;
         blockchains: BlockchainsState;
         blocklistAccess: BlocklistAccessState;
+        blog: BlogsState;
         colorTheme: ColorThemeState;
         configs: ConfigsState;
         currencies: CurrenciesState;
@@ -175,6 +178,7 @@ export function* rootSaga() {
         call(rootAuthSaga),
         call(rootBeneficiariesSaga),
         call(rootBlocklistAccessSaga),
+        call(rootblogsSaga),
         call(rootConfigUpdateSaga),
         call(rootDocumentationSaga),
         call(rootEmailVerificationSaga),

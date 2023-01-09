@@ -1,9 +1,15 @@
 import React, { FC, ReactElement } from 'react';
 import { useDocumentTitle } from 'src/hooks';
 import { Logo } from '../../../assets/images/Logo';
+import { useSelector } from 'react-redux';
+import { selectBlogs } from 'src/modules';
 
 export const FAQScreen: FC = (): ReactElement => {
     useDocumentTitle('FAQ');
+
+    const blog = useSelector(selectBlogs);
+    console.log(blog, 'ini blog');
+
     const faq = [
         {
             title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
