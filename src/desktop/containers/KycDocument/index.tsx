@@ -608,7 +608,6 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
 
         await this.props.sendDocuments(this.createFormData(identificator));
         const userLevel = this.props.user.labels;
-        console.log(userLevel);
     };
 
     private createFormData = (identificator: string) => {

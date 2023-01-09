@@ -11,6 +11,7 @@ import { CustomStylesSelect } from '../../components';
 import { Decimal } from '../../../components';
 import '../../../styles/colors.pcss';
 import { useWalletsFetch } from '../../../hooks';
+import WAValidator from 'multicoin-address-validator';
 import {
     beneficiariesCreate,
     selectCurrencies,
@@ -29,6 +30,7 @@ export interface ModalAddBeneficiaryProps {
     onCloseAdd: () => void;
     onCloseList: () => void;
     handleAddAddress: () => void;
+    currency_id: string;
 }
 
 const defaultSelected = {
@@ -63,9 +65,8 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
     const [coinBeneficiaryName, setCoinBeneficiaryName] = React.useState('');
     const [coinDescription, setCoinDescription] = React.useState('');
     const [coinDestinationTag, setCoinDestinationTag] = React.useState('');
-
+    const [currencyID, setCurrencyID] = React.useState('');
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
-
     const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
     const selectedFixed = (wallet || { fixed: 0 }).fixed;
 
@@ -77,13 +78,24 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         setCoinDestinationTag('');
     }, []);
 
+    React.useEffect(() => {
+        currencyItem.networks.map((item) => {
+            if (item.blockchain_key == coinBlockchainName.blockchainKey) {
+                if (item.parent_id) {
+                    setCurrencyID(item.parent_id);
+                } else {
+                    setCurrencyID(item.currency_id);
+                }
+            }
+        });
+    }, [coinBlockchainName]);
+
     const validateCoinAddressFormat = React.useCallback(
         (value: string) => {
-            const coinAddressValidator = validateBeneficiaryAddress.cryptocurrency(currency, true);
-
-            setCoinAddressValid(coinAddressValidator.test(value.trim()));
+            var valid = WAValidator.validate(value, currencyID);
+            setCoinAddressValid(valid);
         },
-        [currency]
+        [currencyID]
     );
 
     const handleChangeCoinAddress = (value: string) => {
@@ -181,6 +193,19 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
                     <form>
                         <div>
+                            <p className="text-ms white-text mb-8">Select Networks</p>
+                            <Select
+                                styles={CustomStylesSelect}
+                                options={optionNetworks}
+                                value={optionNetworks.filter(function (option) {
+                                    return option.value === coinBlockchainName.blockchainKey;
+                                })}
+                                onChange={(e) =>
+                                    setCoinBlockchainName({ ...coinBlockchainName, blockchainKey: e.value })
+                                }
+                            />
+                        </div>
+                        <div>
                             <CustomInput
                                 type="text"
                                 label={'Blockchain Address'}
@@ -203,20 +228,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
                                 Do not send Tether USD unless you are certain the destination supports TRC-20
                                 transactions. If it does not, you could permanently lose access to your coins.
                             </p>
-                        </div>
-
-                        <div>
-                            <p className="text-ms white-text mb-8">Select Networks</p>
-                            <Select
-                                styles={CustomStylesSelect}
-                                options={optionNetworks}
-                                value={optionNetworks.filter(function (option) {
-                                    return option.value === coinBlockchainName.blockchainKey;
-                                })}
-                                onChange={(e) =>
-                                    setCoinBlockchainName({ ...coinBlockchainName, blockchainKey: e.value })
-                                }
-                            />
                         </div>
 
                         <div>
