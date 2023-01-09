@@ -191,7 +191,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     const renderHeaderModalLocked = () => {
         return (
             <React.Fragment>
-                <div className="d-flex justify-content-center align-items-center w-100 min-w-500">
+                <div className="d-flex justify-content-center align-items-center w-100">
                     <CircleCloseDangerLargeIcon />
                 </div>
             </React.Fragment>
@@ -201,7 +201,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     const renderContentModalLocked = () => {
         return (
             <React.Fragment>
-                <h1 className="white-text text-lg mb-24 text-center min-w-500">Withdraw Locked</h1>
+                <h1 className="white-text text-lg mb-24 text-center ">Withdraw Locked</h1>
                 <p className="grey-text text-ms font-extrabold mb-24 text-center">To withdraw you have to enable 2FA</p>
                 <div className="d-flex justify-content-center align-items-center w-100 mb-0">
                     <Link to={`/two-fa-activation`}>
