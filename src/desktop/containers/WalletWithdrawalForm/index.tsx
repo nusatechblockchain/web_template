@@ -51,6 +51,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const [otp, setOtp] = React.useState('');
     const { currency = '' } = useParams<{ currency?: string }>();
     const [beneficiaryCode, setBeneficiaryCode] = React.useState('');
+    const [currencyId, setCurrencyId] = React.useState('');
 
     const withdrawSuccess = useSelector(selectWithdrawSuccess);
     const beneficiaries: Beneficiary[] = useSelector(selectBeneficiaries);
@@ -101,13 +102,13 @@ export const WalletWithdrawalForm: React.FC = () => {
     const fee = blockchainKeyValue && blockchainKeyValue.withdraw_fee;
     const minWithdraw = blockchainKeyValue && blockchainKeyValue.min_withdraw_amount;
     const withdrawRecive = Number(amount) - Number(fee);
-    // console.log(withdrawRecive);
 
-    const handleChangeBeneficiaryId = (id: number, address: string, blockchainKey: string) => {
+    const handleChangeBeneficiaryId = (id: number, address: string, blockchainKey: string, currency_id: string) => {
         setBeneficiaryId(id);
         setAddress(address);
         setBlockchainKey(blockchainKey);
         setShowModalBeneficiaryList(false);
+        setCurrencyId(currency_id);
     };
 
     const handleChangeAmount = (e) => {
@@ -527,6 +528,7 @@ export const WalletWithdrawalForm: React.FC = () => {
                         setBeneficiaryCode('');
                         setTimerActive(true);
                     }}
+                    currency_id={currencyId}
                 />
             )}
 

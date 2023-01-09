@@ -30,7 +30,7 @@ export interface ModalBeneficiaryListProps {
     handlePendingStatus?: (id: number) => void;
     handleDelete?: () => void;
     beneficiaryId?: string;
-    handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string) => void;
+    handleChangeBeneficiaryId?: (id: number, address: string, blockchainKey: string, currency_id: string) => void;
 }
 
 export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListProps> = (props) => {
@@ -114,13 +114,24 @@ export const ModalBeneficiaryList: React.FunctionComponent<ModalBeneficiaryListP
                                     <tr key={i}>
                                         <td
                                             onClick={() => {
+                                                var currency_id: string;
                                                 if (el.state === 'pending') {
                                                     props.handlePendingStatus(el.id);
                                                 } else {
+                                                    currencyItem.networks.map((item) => {
+                                                        if (item.blockchain_key == el.blockchain_key) {
+                                                            if (item.parent_id) {
+                                                                currency_id = item.parent_id;
+                                                            } else {
+                                                                currency_id = item.currency_id;
+                                                            }
+                                                        }
+                                                    });
                                                     props.handleChangeBeneficiaryId(
                                                         el.id,
                                                         el.data.address,
-                                                        el.blockchain_key
+                                                        el.blockchain_key,
+                                                        currency_id
                                                     );
                                                 }
                                             }}
