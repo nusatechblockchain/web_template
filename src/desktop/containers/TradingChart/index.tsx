@@ -98,8 +98,11 @@ export class TradingChartComponent extends React.PureComponent<Props> {
         return (
             <React.Fragment>
                 <div className="position-relative pg-trading-chart">
-                    <span className="pg-trading-chart__bg" style={{ backgroundImage: `url('/img/bg-trade.png')` }}></span>
-                    <div id={widgetParams.containerId} className="pg-trading-chart"></div>
+                    <div id={widgetParams.containerId} className="pg-trading-chart__widget"></div>
+
+                    <span className="d-flex justify-content-center align-items-center position-absolute pg-trading-chart__bg">
+                        <img src={`/img/bg-trade.png`} alt="logo" />
+                    </span>
                 </div>
             </React.Fragment>
         );
