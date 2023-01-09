@@ -136,6 +136,10 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     ? 'Collected'
                     : item.state === 'processing'
                     ? 'Processing'
+                    : item.state === 'confirming'
+                    ? 'Success'
+                    : item.state === 'errored'
+                    ? 'Error'
                     : ''}
             </p>,
         ]);

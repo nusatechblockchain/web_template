@@ -25,7 +25,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
     const [list, setList] = useState([]);
     const [filterSell, setFilterSell] = useState(false);
-    const [filterBuy, setFilterBuy]= useState(false)
+    const [filterBuy, setFilterBuy] = useState(false);
     const currentMarket = useSelector(selectCurrentMarket);
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
@@ -46,10 +46,11 @@ export const TradingScreen: FC = (): ReactElement => {
         }
     }, [current]);
 
-    React.useEffect(() => { 
+    React.useEffect(() => {
         if (listOrder) {
-            const data = listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
-            setList(data)
+            const data =
+                listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
+            setList(data);
         }
         if (list && list[0] && filterSell) {
             const sell = list.filter((item) => item.side === 'sell');
@@ -62,37 +63,64 @@ export const TradingScreen: FC = (): ReactElement => {
         }
 
         if (hideOtherPairs) {
-            setList([])
+            setList([]);
         }
-        
-    }, [listOrder, filterBuy, filterSell, hideOtherPairs])
+    }, [listOrder, filterBuy, filterSell, hideOtherPairs]);
 
     const handleCancel = (order: OrderCommon) => {
         dispatch(openOrdersCancelFetch({ order, list }));
         setTimeout(() => {
-            if (currentMarket) {
-                dispatch(userOpenOrdersFetch({ market: currentMarket }));
+            if (current) {
+                dispatch(userOpenOrdersFetch({ market: current }));
             }
         }, 1000);
     };
 
-    const handleCancelAll = useCallback(() => {
-        currentMarket && dispatch(ordersCancelAllFetch({ market: currentMarket.id }));
+    const handleCancelAll = () => {
+        if (currency) {
+            dispatch(ordersCancelAllFetch({ market: currency }));
+        }
 
         setTimeout(() => {
-            if (currentMarket) {
-                dispatch(userOpenOrdersFetch({ market: currentMarket }));
+            if (currency) {
+                dispatch(userOpenOrdersFetch({ market: current }));
             }
         }, 1000);
-    }, [currentMarket]);
+    };
 
     const headersKeys = useMemo(
-        () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', 'Side', 'Action'],
+        () => [
+            'Date',
+            'Market',
+            'Type',
+            'Price',
+            'Amount',
+            'Total',
+            'Trigger',
+            'Filled',
+            'Side',
+            <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
+                Cancel All
+            </p>,
+        ],
         []
     );
 
     const renderHeaders = useMemo(
-        () => ['Date', 'Market', 'Type', 'Price', 'Amount', 'Total', 'Trigger', 'Filled', 'Side', 'Action'],
+        () => [
+            'Date',
+            'Market',
+            'Type',
+            'Price',
+            'Amount',
+            'Total',
+            'Trigger',
+            'Filled',
+            'Side',
+            <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
+                Cancel All
+            </p>,
+        ],
         []
     );
 
@@ -195,11 +223,11 @@ export const TradingScreen: FC = (): ReactElement => {
 
     const handleFilterSell = () => {
         setFilterSell(!filterSell);
-    }
+    };
 
-   const handleFilterBuy = () => {
+    const handleFilterBuy = () => {
         setFilterBuy(!filterBuy);
-    }
+    };
 
     return (
         <React.Fragment>
