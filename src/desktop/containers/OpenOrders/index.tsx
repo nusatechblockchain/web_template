@@ -60,11 +60,17 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                     <div className="filter">
                         <div className="d-flex align-items-center">
                             <p className="text-sm grey-text font-bold mb-0 mr-2">Sort by: </p>
-                            <button type='button' onClick={this.props.handleFilterSell} className="btn btn-transparent w-auto danger-text text-sm font-bold cursor-pointer">
+                            <button
+                                type="button"
+                                onClick={this.props.handleFilterSell}
+                                className="btn btn-transparent w-auto danger-text text-sm font-bold cursor-pointer">
                                 Sell
                                 <Sell />
                             </button>
-                            <button type='button' onClick={this.props.handleFilterBuy} className="btn btn-transparent w-auto contrast-text text-sm font-bold cursor-pointer">
+                            <button
+                                type="button"
+                                onClick={this.props.handleFilterBuy}
+                                className="btn btn-transparent w-auto contrast-text text-sm font-bold cursor-pointer">
                                 Buy
                                 <Buy />
                             </button>
@@ -81,11 +87,6 @@ export class OpenOrders extends React.Component<OpenOrdersProps> {
                                     />
                                 </Form>
                             </div>
-                            <p
-                                className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer"
-                                onClick={this.props.handleCancelAll}>
-                                Cancel All
-                            </p>
                         </div>
                     </div>
                 </div>
