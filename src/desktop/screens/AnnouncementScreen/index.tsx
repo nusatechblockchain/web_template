@@ -1,11 +1,32 @@
 import React, { FC, ReactElement } from 'react';
-import { useDocumentTitle } from 'src/hooks';
+import { useDocumentTitle, useBlogsFetch } from 'src/hooks';
+import { selectBlogs } from 'src/modules';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 export const AnnouncementScreen: FC = (): ReactElement => {
+    const [news, setNews] = React.useState<any[]>([]);
+    const [blog, setBlog] = React.useState<any[]>([]);
+
     useDocumentTitle('Announcement');
+    useBlogsFetch('news');
+
+    const blogs = useSelector(selectBlogs);
+
+    React.useEffect(() => {
+        if (blogs) {
+            setNews(blogs);
+            setBlog(blogs);
+        }
+    }, [blogs]);
+
+    blog.sort(function (a, b) {
+        return new Date(b.published_at).getTime() - new Date(a.published_at).getTime();
+    });
+
     const settings = {
         dots: true,
         infinite: true,
@@ -39,92 +60,25 @@ export const AnnouncementScreen: FC = (): ReactElement => {
         },
     ];
 
-    const announcement = [
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        ,
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            category: 'Heaven News',
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-    ];
     return (
         <React.Fragment>
             <div className="announcement-screen no-sidebar dark-bg-accent pb-5">
                 <div className="py-5 background" style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     <Slider {...settings}>
-                        {bannerAnnouncement &&
-                            bannerAnnouncement.map((item, key) => (
+                        {blog &&
+                            blog.slice(0, 5).map((item, key) => (
                                 <div className="px-3 radius-md" key={key}>
-                                    <div className="slider-item p-3">
-                                        <img src="img/landing-card.png" alt="" className="w-100 h-100" />
-                                    </div>
+                                    <a
+                                        href={item.url}
+                                        target="__blank"
+                                        rel="noopener noreferrer"
+                                        className="slider-item p-3">
+                                        <img
+                                            src={item.feature_image}
+                                            alt={item.title}
+                                            className="w-100 h-100 rounded-lg"
+                                        />
+                                    </a>
                                 </div>
                             ))}
                     </Slider>
@@ -134,21 +88,25 @@ export const AnnouncementScreen: FC = (): ReactElement => {
                         <div className="row justify-content-center">
                             <div className="col-xl-11">
                                 <div className="row">
-                                    {announcement &&
-                                        announcement.map((item, key) => (
+                                    {news &&
+                                        news.map((item, key) => (
                                             <div key={key} className="col-md-4 col-sm-6 col-12 mb-4">
                                                 <div className="article-item">
-                                                    <img src="img/announcement-big.png" className="w-100" alt="" />
-                                                    <p className="blue-text mb-12">{item.category}</p>
+                                                    <img src={item.feature_image} className="w-100" alt={item.title} />
+                                                    <p className="blue-text mb-12">Heaven Exchange</p>
                                                     <h6 className="title mb-24">
-                                                        <a href="/detail-article/" className="grey-text-accent">
+                                                        <a
+                                                            href={item.url}
+                                                            target="__blank"
+                                                            rel="noopener noreferrer"
+                                                            className="grey-text-accent">
                                                             {item.title}
                                                         </a>
                                                     </h6>
                                                     <div className="d-flex">
-                                                        <span className="grey-text">{item.date}</span>
-                                                        <span className="px-3 dots grey-text">.</span>
-                                                        <span className="grey-text">{item.readTime}</span>
+                                                        <span className="grey-text">
+                                                            {moment(item.published_at).startOf('day').fromNow()}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

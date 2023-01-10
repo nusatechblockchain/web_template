@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useState, useEffect } from 'react';
 import { ProfileAuthDetails } from '../../containers';
-import { useDocumentTitle } from 'src/hooks';
+import { useDocumentTitle, useBlogsFetch } from 'src/hooks';
 import { Link, useHistory } from 'react-router-dom';
 import { Notification } from '../../../assets/images/Notification';
 import { CloseIcon } from '../../../assets/images/CloseIcon';
@@ -25,6 +25,7 @@ import {
     resendCode,
     verifyPhone,
     selectBeneficiariesFetchError,
+    selectBlogs,
 } from '../../../modules';
 import { selectApiKeys } from 'src/modules/user/apiKeys/selectors';
 import { Modal, CustomInput } from '../../components';
@@ -35,6 +36,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
     const user = useSelector(selectUserInfo);
     const apiKeys = useSelector(selectApiKeys);
+    const blogs = useSelector(selectBlogs);
 
     const verifyPhoneSuccess = useSelector(selectVerifyPhoneSuccess);
     const history = useHistory();
@@ -47,6 +49,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     const [verificationCode, setVerificationCode] = useState('');
     const [isChangeNumber, setIsChangeNumber] = useState(false);
     const [resendCodeActive, setResendCodeActive] = useState(false);
+    const [news, setNews] = React.useState<any[]>([]);
 
     const [seconds, setSeconds] = useState(30000);
     const [timerActive, setTimerActive] = useState(false);
@@ -54,6 +57,12 @@ export const ProfileScreen: FC = (): ReactElement => {
     const [profilekycStatus, setProfileKycStatus] = useState('');
     const phone = user.phones.slice(-1);
     const kyc = user.profiles.slice(-1);
+
+    React.useEffect(() => {
+        if (blogs) {
+            setNews(blogs);
+        }
+    }, [blogs]);
 
     useEffect(() => {
         let timer = null;
@@ -193,7 +202,8 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 disabled={disabledButton()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
-                                {(!isChangeNumber && phone && phone[0] && phone[0].validated_at === null) || resendCodeActive
+                                {(!isChangeNumber && phone && phone[0] && phone[0].validated_at === null) ||
+                                resendCodeActive
                                     ? 'Resend Code'
                                     : 'Send Code'}
                             </button>
@@ -216,7 +226,15 @@ export const ProfileScreen: FC = (): ReactElement => {
                     </div>
                     <button
                         type="submit"
-                        disabled={phone && phone[0]?.validated_at === null ? verificationCode.length < 5 ? true : false : newPhoneValue === '' || verificationCode.length < 5 ? true : false}
+                        disabled={
+                            phone && phone[0]?.validated_at === null
+                                ? verificationCode.length < 5
+                                    ? true
+                                    : false
+                                : newPhoneValue === '' || verificationCode.length < 5
+                                ? true
+                                : false
+                        }
                         onClick={handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
@@ -523,61 +541,17 @@ export const ProfileScreen: FC = (): ReactElement => {
                                     </div>
                                 </div>
                                 <div className="document">
-                                    <a href="">
-                                        <div className="doc-item">
-                                            <div className="mr-2">
-                                                <DocsIcon />
-                                            </div>
-                                            <p className="text-sm grey-text font-normal mb-0">
-                                                The above address is specific to you, and can be used repeatedly (this
-                                                is a Bitcoin address).
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="">
-                                        <div className="doc-item">
-                                            <div className="mr-2">
-                                                <DocsIcon />
-                                            </div>
-                                            <p className="text-sm grey-text font-normal mb-0">
-                                                The above address is specific to you, and can be used repeatedly (this
-                                                is a Bitcoin address).
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="">
-                                        <div className="doc-item">
-                                            <div className="mr-2">
-                                                <DocsIcon />
-                                            </div>
-                                            <p className="text-sm grey-text font-normal mb-0">
-                                                The above address is specific to you, and can be used repeatedly (this
-                                                is a Bitcoin address).
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="">
-                                        <div className="doc-item">
-                                            <div className="mr-2">
-                                                <DocsIcon />
-                                            </div>
-                                            <p className="text-sm grey-text font-normal mb-0">
-                                                The above address is specific to you, and can be used repeatedly (this
-                                                is a Bitcoin address).
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="">
-                                        <div className="doc-item">
-                                            <div className="mr-2">
-                                                <DocsIcon />
-                                            </div>
-                                            <p className="text-sm grey-text font-normal mb-0">
-                                                The above address is specific to you, and can be used repeatedly (this
-                                                is a Bitcoin address).
-                                            </p>
-                                        </div>
-                                    </a>
+                                    {news &&
+                                        news.slice(0, 5).map((item, i) => (
+                                            <a href={item.url} key={i} target="__blank" rel="noopener noreferrer">
+                                                <div className="doc-item">
+                                                    <div className="mr-2">
+                                                        <DocsIcon />
+                                                    </div>
+                                                    <p className="text-sm grey-text font-normal mb-0">{item.title}</p>
+                                                </div>
+                                            </a>
+                                        ))}
                                 </div>
                             </div>
                         </div>

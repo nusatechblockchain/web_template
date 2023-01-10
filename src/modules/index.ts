@@ -105,7 +105,7 @@ export interface RootState {
         alerts: AlertState;
         blockchains: BlockchainsState;
         blocklistAccess: BlocklistAccessState;
-        blog: BlogsState;
+        blogs: BlogsState;
         colorTheme: ColorThemeState;
         configs: ConfigsState;
         currencies: CurrenciesState;

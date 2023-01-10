@@ -13,6 +13,7 @@ export interface BlogsPayload {
     url: String;
     created_at_f: String;
     loading?: Boolean;
+    published_at: string;
 }
 
 export interface BlogsState extends CommonState {
