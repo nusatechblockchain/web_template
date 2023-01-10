@@ -1,7 +1,7 @@
 import cr from 'classnames';
 import * as countries from 'i18n-iso-countries';
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { injectIntl } from 'react-intl';
 import MaskInput from 'react-maskinput';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
@@ -18,10 +18,10 @@ import {
     selectCurrentLanguage,
     selectMobileDeviceState,
     selectSendDocumentsSuccess,
+    selectSendDocumentsLoading,
     selectUserInfo,
     User,
     sendDocuments,
-    sendDocumentsError,
     UserOffersData,
     userFetch,
 } from '../../../modules';
@@ -34,6 +34,7 @@ interface ReduxProps {
     success?: string;
     isMobileDevice: boolean;
     user: User;
+    isLoading?: boolean;
 }
 
 interface DispatchProps {
@@ -71,6 +72,7 @@ interface DocumentsState {
     showNotification: boolean;
     kycStatus: string;
     documentSuccess: boolean;
+    // isLoading: boolean;
 }
 
 type Props = ReduxProps & DispatchProps & RouterProps & IntlProps;
@@ -108,6 +110,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         showNotification: true,
         kycStatus: '',
         documentSuccess: false,
+        isLoading: false,
     };
 
     public UNSAFE_componentWillReceiveProps(next: Props) {
@@ -141,7 +144,8 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
             showNotification,
             kycStatus,
             documentSuccess,
-        }: DocumentsState = this.state;
+        }: // isLoading,
+        DocumentsState = this.state;
 
         /* tslint:disable */
         languages.map((l: string) => countries.registerLocale(require(`i18n-iso-countries/langs/${l}.json`)));
@@ -157,7 +161,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                 <div className="header dark-bg-main py-4 px-24 mb-24">
                     <h2 className="mb-0 text-xl white-text font-bold pt-2">Document Verification</h2>
                 </div>
-                <div className="px-24">
+                <div className="px-24 kyc-document-screen">
                     <h6 className="text-lg white-text font-bold mb-24">Get Verifed your Government Issued ID</h6>
                     <div className="row">
                         <div className="col-lg-10 col-12">
@@ -251,15 +255,14 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                                                 />
                                             </div>
                                             <div className="col-md-6">
-                                                <div className="input-date-document">
-                                                    <label className="text-sm mb-8 white-text">Date of Birth</label>
-                                                    <MaskInput
-                                                        maskString="00/00/0000"
-                                                        mask="00/00/0000"
-                                                        onChange={this.handleChangeBirthDate}
-                                                        value={birthDate}
-                                                    />
-                                                </div>
+                                                <label className="text-sm mb-8 white-text">Date of Birth</label>
+                                                <input
+                                                    type="date"
+                                                    className="form-control mb-24"
+                                                    onChange={(e) => {
+                                                        this.handleChangeBirthDate(e);
+                                                    }}
+                                                />
                                             </div>
                                             <div className="col-md-6">
                                                 <CustomInput
@@ -385,7 +388,11 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                                                     className="btn btn-primary px-lg"
                                                     onClick={this.sendDocuments}
                                                     disabled={this.handleCheckButtonDisabled()}>
-                                                    Submit
+                                                    {this.props.isLoading ? (
+                                                        <Spinner animation="border" variant="primary" />
+                                                    ) : (
+                                                        'Submit'
+                                                    )}
                                                 </button>
                                             </div>
                                         </React.Fragment>
@@ -427,6 +434,8 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
         if (next.success && !this.props.success) {
             this.props.userFetch();
             this.props.history.push('/profile');
+        } else {
+            // this.setState({ isLoading: false });
         }
     };
 
@@ -570,32 +579,39 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
     private handleCheckButtonDisabled = () => {
         const {
             documentsType,
-            issuedDate,
-            expireDate,
-            fileBack,
             fileFront,
             fileSelfie,
             idNumber,
             frontFileSizeErrorMessage,
             backFileSizeErrorMessage,
             selfieFileSizeErrorMessage,
+            address,
+            birthDate,
+            city,
+            country,
+            district,
+            name,
+            province,
+            placeBirth,
         } = this.state;
 
-        const typeOfDocuments = this.getDocumentsType(documentsType);
-        const filesValid =
-            typeOfDocuments === 'Passport'
-                ? fileFront.length &&
-                  fileSelfie.length &&
-                  frontFileSizeErrorMessage === '' &&
-                  selfieFileSizeErrorMessage === ''
-                : fileSelfie.length &&
-                  fileFront.length &&
-                  fileBack.length &&
-                  frontFileSizeErrorMessage === '' &&
-                  backFileSizeErrorMessage === '' &&
-                  selfieFileSizeErrorMessage === '';
+        const profileValid =
+            address !== '' &&
+            birthDate !== '' &&
+            city !== '' &&
+            country !== '' &&
+            district !== '' &&
+            name !== '' &&
+            province !== '' &&
+            placeBirth !== '';
 
-        return !this.handleValidateInput('idNumber', idNumber) || !this.handleValidateInput('issuedDate', issuedDate);
+        const filesValid =
+            fileFront.length &&
+            fileSelfie.length &&
+            frontFileSizeErrorMessage === '' &&
+            selfieFileSizeErrorMessage === '';
+
+        return !this.handleValidateInput('idNumber', idNumber) || !filesValid || !profileValid;
     };
 
     private sendDocuments = async () => {
@@ -650,6 +666,7 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
     success: selectSendDocumentsSuccess(state),
     isMobileDevice: selectMobileDeviceState(state),
     user: selectUserInfo(state),
+    isLoading: selectSendDocumentsLoading(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
