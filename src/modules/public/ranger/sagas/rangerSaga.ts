@@ -77,7 +77,6 @@ const initRanger = (
             for (const routingKey in payload) {
                 if (payload.hasOwnProperty(routingKey)) {
                     const event = payload[routingKey];
-
                     const currentMarket = selectCurrentMarket(store.getState());
                     const orderBookMatch = routingKey.match(/([^.]*)\.update/);
                     const orderBookMatchSnap = routingKey.match(/([^.]*)\.ob-snap/);
