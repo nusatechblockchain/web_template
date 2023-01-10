@@ -176,7 +176,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         Total
                     </label>
                     <label htmlFor={labelTotal} className="input-order-label-right">
-                        {currentMarket?.base_unit?.toUpperCase()}
+                        {currentMarket?.quote_unit?.toUpperCase()}
                     </label>
                 </div>
                 <div className="mb-3 d-flex justify-content-between">

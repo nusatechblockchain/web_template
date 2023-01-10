@@ -12,7 +12,6 @@ import {
     PhoneProfileIcon,
     SecurityProfileIcon,
     CheckIcon,
-    SearchIcon,
     DocsIcon,
 } from '../../../assets/images/ProfileIcon';
 import { ProfileDeviceTable } from '../../containers';
@@ -24,7 +23,6 @@ import {
     sendCode,
     resendCode,
     verifyPhone,
-    selectBeneficiariesFetchError,
     selectBlogs,
 } from '../../../modules';
 import { selectApiKeys } from 'src/modules/user/apiKeys/selectors';
@@ -34,6 +32,7 @@ import moment from 'moment';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
+    useBlogsFetch('news');
     const user = useSelector(selectUserInfo);
     const apiKeys = useSelector(selectApiKeys);
     const blogs = useSelector(selectBlogs);
@@ -327,20 +326,6 @@ export const ProfileScreen: FC = (): ReactElement => {
         } else if (kycStatus == 'pending') {
             return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
         }
-        // switch (kycStatus) {
-        //     case '':
-        //         return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
-        //         break;
-        //     case 'pending':
-        //         return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
-        //         break;
-        //     case 'verified':
-        //         return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
-        //         break;
-        //     case 'rejected':
-        //         return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
-        //         break;
-        // }
     };
 
     return (
@@ -351,7 +336,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                     style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     <ProfileAuthDetails />
 
-                    <div className="profile-menu px-24">
+                    <div className="profile-menu px-24 mb-24">
                         <div className="row">
                             <div className="col-6 col-lg-8">
                                 {user && user.labels && user.labels.length === 5 ? (
@@ -526,19 +511,6 @@ export const ProfileScreen: FC = (): ReactElement => {
                             <div className="col-6 col-lg-4">
                                 <div className="explore position-relative">
                                     <h6 className="text-ms white-text font-semibold mb-3">Explore</h6>
-                                    <div className="form mb-24">
-                                        <div className="form-group mb-0 position-relative">
-                                            <input
-                                                type="text"
-                                                className="form-control input-search"
-                                                id="search"
-                                                placeholder="Announcement"
-                                            />
-                                            <div className="search-icon">
-                                                <SearchIcon />
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div className="document">
                                     {news &&
@@ -552,6 +524,12 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                 </div>
                                             </a>
                                         ))}
+                                </div>
+
+                                <div className="d-flex justify-content-center mt-3">
+                                    <Link to="/faq" className="font-bold text-center gradient-text text-sm">
+                                        View More
+                                    </Link>
                                 </div>
                             </div>
                         </div>

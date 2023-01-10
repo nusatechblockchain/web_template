@@ -35,8 +35,6 @@ const OrderBookComponent = (props) => {
     const bid = useSelector(selectDepthBids);
     const rangerConnect = useSelector(selectRanger);
 
-    // console.log(rangerConnect, 'ini ranger');
-
     const current = markets.find((item) => item.id === currency);
     React.useEffect(() => {
         if (current) {
