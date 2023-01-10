@@ -20,6 +20,7 @@ import { Modal } from 'react-bootstrap';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { NoData } from '../../components';
 import moment from 'moment';
+import { CopyableTextField } from '../../../components';
 
 const WalletDepositBody = () => {
     const intl = useIntl();
@@ -117,7 +118,15 @@ const WalletDepositBody = () => {
     const getTableData = (data) => {
         return data.map((item) => [
             moment(item.created_at).format('D MMM YYYY - HH:mm'),
-            item.tid,
+            <>
+                {item.tid ? (
+                    <fieldset onClick={() => doCopy('txid')}>
+                        <CopyableTextField value={item.tid} fieldId="txid" className="white-text" />
+                    </fieldset>
+                ) : (
+                    '-'
+                )}
+            </>,
             item.amount,
             item.transfer_type,
             item.state,

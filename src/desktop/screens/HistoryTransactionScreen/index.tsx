@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDocumentTitle, useWalletsFetch, useHistoryFetch } from '../../../hooks';
 import {
     selectCurrencies,
@@ -10,6 +10,7 @@ import {
     selectLastElemIndex,
     selectNextPageExists,
     RootState,
+    alertPush,
 } from '../../../modules';
 import { Table } from '../../../components';
 import { Pagination } from '../../../desktop/components';
@@ -18,18 +19,21 @@ import { Tabs, Tab } from 'react-bootstrap';
 import Select from 'react-select';
 import moment from 'moment';
 import { NoData } from '../../components';
+import { copy } from '../../../components';
+import { CopyableTextField } from '../../../components';
 import './HistoryTransactionScreen.pcss';
 
 const DEFAULT_LIMIT = 5;
 export const HistoryTransactionScreen: FC = (): ReactElement => {
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const dispatch = useDispatch();
     const page = useSelector(selectCurrentPage);
     const list = useSelector(selectHistory);
 
     const [historys, setHistorys] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(0);
     const [currency, setCurrency] = React.useState('');
-    const [type, setType] = React.useState('deposits');
+    const [type, setType] = React.useState('withdraws');
     const [status, setStatus] = React.useState('');
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
@@ -42,6 +46,11 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
 
     useDocumentTitle('Transaction History');
     useWalletsFetch();
+
+    const doCopy = (text: string) => {
+        copy(text);
+        dispatch(alertPush({ message: ['Link has been copied'], type: 'success' }));
+    };
 
     const handleChangeType = (e) => {
         setType(e);
@@ -56,20 +65,13 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     };
 
     const getTableHeaders = (data) => {
-        return [
-            'Date',
-            'Type',
-            'Asset',
-            'Ammount',
-            `${
-                historys && historys[0] && historys[0].tid
-                    ? 'Transaction ID'
-                    : historys && historys[0] && historys[0].rid
-                    ? 'Address'
-                    : 'Receiver UID'
-            }`,
-            'Status',
-        ];
+        if (type == 'withdraws') {
+            return ['Date', 'Type', 'Asset', 'Ammount', `TXID`, `Address`, 'Status'];
+        } else if (type == 'deposits') {
+            return ['Date', 'Type', 'Asset', 'Ammount', `TXID`, 'TID', 'Status'];
+        } else {
+            return ['Date', 'Type', 'Asset', 'Ammount', `Receiver ID`, 'Sender ID', 'Status'];
+        }
     };
 
     React.useEffect(() => {
@@ -116,13 +118,39 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
             </div>,
             <p className="m-0 text-sm white-text">{item.amount}</p>,
             <p className="m-0 text-sm white-text text-italic">
-                {item.tid ? item.tid : item.blockchain_txid ? item.blockchain_txid : item.receiver_uid}
+                {/* {type == 'deposits' && `${item.txid?.slice(0, 15)}...`} */}
+                {type == 'deposits' &&
+                    (item.txid ? (
+                        <fieldset onClick={() => navigator.clipboard.writeText(item.txid)}>
+                            <CopyableTextField value={item.txid} fieldId={'item' + item.id} className="white-text" />
+                        </fieldset>
+                    ) : (
+                        '-'
+                    ))}
+                {type == 'transfers' && item.receiver_uid}
+                {type == 'withdraws' &&
+                    (item.blockchain_txid ? (
+                        <fieldset onClick={() => doCopy('item' + item.id)}>
+                            <CopyableTextField
+                                value={item.blockchain_txid}
+                                fieldId={'item' + item.id}
+                                className="white-text"
+                            />
+                        </fieldset>
+                    ) : (
+                        '-'
+                    ))}
             </p>,
+            <React.Fragment>
+                {type == 'withdraws' && <p className="m-0 text-sm white-text">{item.rid?.slice(0, 15)}...</p>}
+                {type == 'deposits' && <p className="m-0 text-sm white-text">{item.tid}</p>}
+                {type == 'transfers' && <p className="m-0 text-sm white-text">{item.sender_uid}</p>}
+            </React.Fragment>,
             <p
                 className={`m-0 text-sm ${
                     item.status === 'Pending' || item.state === 'processing'
                         ? 'warning-text'
-                        : item.status === 'Canceled'
+                        : item.status === 'Canceled' || item.state === 'errored' || item.state == 'failed'
                         ? 'danger-text'
                         : 'green-text'
                 }`}>
@@ -140,6 +168,10 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     ? 'Success'
                     : item.state === 'errored'
                     ? 'Error'
+                    : item.state == 'succeed'
+                    ? 'Success'
+                    : item.state == 'failed'
+                    ? 'Failed'
                     : ''}
             </p>,
         ]);
@@ -233,10 +265,27 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="transaction-history-tabs">
                         <Tabs
-                            defaultActiveKey="deposits"
+                            defaultActiveKey="withdraws"
                             onSelect={(e) => handleChangeType(e)}
                             id="uncontrolled-tab-example"
                             className="mb-3">
+                            <Tab eventKey="withdraws" title="Withdrawal" className="mb-24">
+                                <div className="mt-24">
+                                    {renderFilter()}
+                                    <Table header={getTableHeaders(historys)} data={getTableData(historys)} />
+                                    {historys[0] && (
+                                        <Pagination
+                                            firstElemIndex={firstElemIndex}
+                                            lastElemIndex={lastElemIndex}
+                                            page={page}
+                                            nextPageExists={nextPageExists}
+                                            onClickPrevPage={onClickPrevPage}
+                                            onClickNextPage={onClickNextPage}
+                                        />
+                                    )}
+                                    {historys.length < 1 && <NoData text="No Data Yet" />}
+                                </div>
+                            </Tab>
                             <Tab eventKey="deposits" title="Deposit" className="mb-24">
                                 <div className="mt-24">
                                     {renderFilter()}
@@ -252,23 +301,6 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                                         />
                                     )}
 
-                                    {historys.length < 1 && <NoData text="No Data Yet" />}
-                                </div>
-                            </Tab>
-                            <Tab eventKey="withdraws" title="Withdrawal" className="mb-24">
-                                <div className="mt-24">
-                                    {renderFilter()}
-                                    <Table header={getTableHeaders(historys)} data={getTableData(historys)} />
-                                    {historys[0] && (
-                                        <Pagination
-                                            firstElemIndex={firstElemIndex}
-                                            lastElemIndex={lastElemIndex}
-                                            page={page}
-                                            nextPageExists={nextPageExists}
-                                            onClickPrevPage={onClickPrevPage}
-                                            onClickNextPage={onClickNextPage}
-                                        />
-                                    )}
                                     {historys.length < 1 && <NoData text="No Data Yet" />}
                                 </div>
                             </Tab>

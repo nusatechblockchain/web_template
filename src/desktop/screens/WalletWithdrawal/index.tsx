@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { useDocumentTitle, useHistoryFetch } from '../../../hooks';
-import { selectHistory } from '../../../modules';
+import { selectHistory, alertPush } from '../../../modules';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
@@ -11,11 +11,16 @@ import { WalletWithdrawalForm, WalletWithdrawalInfo } from '../../containers';
 import { ModalInternalTransfer } from '../../components';
 import { Table } from '../../../components';
 import { NoData } from '../../components';
+import { copy } from '../../../components';
+import { CopyableTextField } from '../../../components';
+import { CopyButton } from '../../../assets/images/CopyButton';
 import moment from 'moment';
 
 export const WalletWitdrawal: React.FC = () => {
     const intl = useIntl();
     const history = useHistory();
+    const dispatch = useDispatch();
+
     const { currency = '' } = useParams<{ currency?: string }>();
     const historys = useSelector(selectHistory);
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
@@ -23,16 +28,36 @@ export const WalletWitdrawal: React.FC = () => {
     useDocumentTitle('Wallet || Withdrawal');
     useHistoryFetch({ type: 'withdraws', currency: currency, limit: 3, page: 0 });
 
-    const getTableHeaders = () => {
-        return ['Date', 'Transaction ID', 'Amount', 'Type Transaction', 'Status', 'Confirmation'];
+    const doCopy = (text: string) => {
+        copy(text);
+        dispatch(alertPush({ message: ['Link has been copied'], type: 'success' }));
     };
+
+    const getTableHeaders = () => {
+        return ['Date', 'Transaction ID', 'Amount', 'Type Transaction', 'Address', 'Status', 'Confirmation'];
+    };
+
+    console.log(historys);
 
     const getTableData = (data) => {
         return data.map((item) => [
             moment(item.created_at).format('D MMM YYYY - HH:mm'),
-            item.rid,
+            <>
+                {item.blockchain_txid ? (
+                    <fieldset onClick={() => doCopy('item' + String(item.id))}>
+                        <CopyableTextField
+                            value={item.blockchain_txid}
+                            fieldId={'item' + String(item.id)}
+                            className="white-text"
+                        />
+                    </fieldset>
+                ) : (
+                    '-'
+                )}
+            </>,
             item.amount,
             item.type,
+            <>{item.rid ? `${item.rid.slice(0, 15)}...` : '-'}</>,
             item.state,
             item.confirmations,
         ]);
