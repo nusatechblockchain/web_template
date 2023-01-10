@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectRecentTrades, recentTradesFetch, selectCurrentMarket } from '../../../modules';
 import { Decimal } from '../../../components';
 import moment from 'moment';
-import { numberFormat } from '../../../helpers';
+import { localeDate, numberFormat } from '../../../helpers';
 import { NoData } from '../../../desktop/components';
 
 const RecentTradesComponent = (props) => {
@@ -62,7 +62,7 @@ const RecentTradesComponent = (props) => {
                                         </td>
                                         <td>
                                             <p className="text-sm mb-0 grey-text-accent font-bold text-right">
-                                                {moment(trade.created_at).format('hh:mm:ss')}
+                                                {String(localeDate(trade.created_at, 'time'))}
                                             </p>
                                         </td>
                                     </tr>
