@@ -11,12 +11,15 @@ export interface BlogsPayload1 {
     slug: String;
     url: String;
     created_at_f: String;
+    published_at: string;
 }
 
 export interface BlogsFetch {
     type: typeof BLOGS_FETCH;
     payload: {
-        type: string;
+        // type: string;
+        limit: string;
+        tag: string;
     };
 }
 

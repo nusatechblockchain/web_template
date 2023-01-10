@@ -9,8 +9,9 @@ export interface BlogsPayload2 {
     slug: String;
     url: String;
     created_at_f: String;
+    published_at: string;
 }
 
-export const selectBlogs = (state: RootState): BlogsPayload2[] | [] => state.public.blog?.data;
+export const selectBlogs = (state: RootState): BlogsPayload2[] | [] => state.public.blogs.data;
 
-export const selectBlogsLoading = (state: RootState): boolean => state.public.blog.loading;
+export const selectBlogsLoading = (state: RootState): boolean => state.public.blogs.loading;
