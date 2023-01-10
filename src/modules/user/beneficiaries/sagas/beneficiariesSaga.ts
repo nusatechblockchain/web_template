@@ -18,12 +18,26 @@ export function* beneficiariesSaga(action: BeneficiariesFetch) {
 
         yield put(beneficiariesData(beneficiaries));
     } catch (error) {
-        yield put(sendError({
-            error,
-            processingType: 'alert',
-            extraOptions: {
-                actionError: beneficiariesError,
-            },
-        }));
+        if (error.code != 403) {
+            yield put(
+                sendError({
+                    error,
+                    processingType: 'alert',
+                    extraOptions: {
+                        actionError: beneficiariesError,
+                    },
+                })
+            );
+        } else {
+            yield put(
+                sendError({
+                    error,
+                    processingType: 'console',
+                    extraOptions: {
+                        actionError: beneficiariesError,
+                    },
+                })
+            );
+        }
     }
 }

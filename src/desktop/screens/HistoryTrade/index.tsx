@@ -53,9 +53,6 @@ export const HistoryTrade: FC = (): ReactElement => {
     React.useEffect(() => {
         if (!loading) {
             setHistorys(list);
-            console.log('berhenti grak');
-        } else {
-            console.log('masih loading');
         }
     }, [loading]);
 
