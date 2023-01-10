@@ -1,62 +1,23 @@
 import React, { FC, ReactElement } from 'react';
-import { useDocumentTitle } from 'src/hooks';
+import { useDocumentTitle, useBlogsFetch } from 'src/hooks';
 import { Logo } from '../../../assets/images/Logo';
 import { useSelector } from 'react-redux';
 import { selectBlogs } from 'src/modules';
+import moment from 'moment';
 
 export const FAQScreen: FC = (): ReactElement => {
     useDocumentTitle('FAQ');
+    useBlogsFetch('news');
+    const [faq, setFaq] = React.useState<any[]>([]);
 
-    const blog = useSelector(selectBlogs);
-    console.log(blog, 'ini blog');
+    const blogs = useSelector(selectBlogs);
 
-    const faq = [
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-        {
-            title: 'Bitcoin Price Crosses $20K as US Dollar Strength Falls',
-            date: '22-02-2022',
-            readTime: '2 min read',
-        },
-    ];
+    React.useEffect(() => {
+        if (blogs) {
+            setFaq(blogs);
+        }
+    }, [blogs]);
+
     return (
         <React.Fragment>
             <div className="content-wrapper no-sidebar faq-screen dark-bg-accent pb-5">
@@ -80,15 +41,17 @@ export const FAQScreen: FC = (): ReactElement => {
                                                     <p className="grey-text-accent text-md mb-12">FAQ </p>
                                                     <h6 className="title mb-24">
                                                         <a
-                                                            href="/detail-article/"
+                                                            href={item.url}
+                                                            target="__blank"
+                                                            rel="noopener noreferrer"
                                                             className="white-text font-normal text-md">
                                                             {item.title}
                                                         </a>
                                                     </h6>
                                                     <div className="d-flex">
-                                                        <span className="grey-text">{item.date}</span>
-                                                        <span className="px-3 dots grey-text">.</span>
-                                                        <span className="grey-text">{item.readTime}</span>
+                                                        <span className="grey-text">
+                                                            {moment(item.published_at).startOf('day').fromNow()}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

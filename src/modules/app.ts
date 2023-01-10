@@ -1,46 +1,41 @@
 import { combineReducers } from 'redux';
 import { configUpdateReducer } from './admin/config';
-import { alertReducer  } from './public/alert';
+import { alertReducer } from './public/alert';
 import { blockchainsReducer } from './public/blockchains';
 import { blocklistAccessReducer } from './public/blocklistAccess';
+import { blogsReducer } from './public/blog';
 import { configsReducer } from './public/configs';
 import { currenciesReducer } from './public/currencies';
 import { errorHandlerReducer } from './public/errorHandler';
-import { changeColorThemeReducer  } from './public/globalSettings';
+import { changeColorThemeReducer } from './public/globalSettings';
 import { gridLayoutReducer } from './public/gridLayout';
-import { changeLanguageReducer  } from './public/i18n';
-import { klineReducer  } from './public/kline';
+import { changeLanguageReducer } from './public/i18n';
+import { klineReducer } from './public/kline';
 import { marketsReducer } from './public/markets';
 import { memberLevelsReducer } from './public/memberLevels';
 import { depthReducer, incrementDepthReducer, orderBookReducer } from './public/orderBook';
-import { rangerReducer  } from './public/ranger/reducer';
-import { recentTradesReducer  } from './public/recentTrades';
-import { withdrawLimitsReducer  } from './public/withdrawLimits';
+import { rangerReducer } from './public/ranger/reducer';
+import { recentTradesReducer } from './public/recentTrades';
+import { withdrawLimitsReducer } from './public/withdrawLimits';
 import { apiKeysReducer } from './user/apiKeys';
 import { abilitiesReducer } from './user/abilities';
-import { authReducer  } from './user/auth';
+import { authReducer } from './user/auth';
 import { beneficiariesReducer } from './user/beneficiaries';
 import { getGeetestCaptchaReducer } from './user/captcha';
 import { documentationReducer } from './user/documentation';
 import { sendEmailVerificationReducer } from './user/emailVerification';
 import { confirmationCodeReducer } from './user/emailVerificationCode';
-import { historyReducer  } from './user/history';
+import { historyReducer } from './user/history';
 import { internalTransfersReducer } from './user/internalTransfers';
-import {
-    addressesReducer,
-    documentsReducer,
-    identityReducer,
-    labelReducer,
-    phoneReducer,
-} from './user/kyc';
+import { addressesReducer, documentsReducer, identityReducer, labelReducer, phoneReducer } from './user/kyc';
 import { openOrdersReducer } from './user/openOrders';
-import { ordersReducer  } from './user/orders';
-import { ordersHistoryReducer  } from './user/ordersHistory';
-import { passwordReducer  } from './user/password';
-import { profileReducer  } from './user/profile';
-import { userActivityReducer  } from './user/userActivity';
-import { walletsReducer  } from './user/wallets';
-import { withdrawLimitReducer  } from './user/withdrawLimit';
+import { ordersReducer } from './user/orders';
+import { ordersHistoryReducer } from './user/ordersHistory';
+import { passwordReducer } from './user/password';
+import { profileReducer } from './user/profile';
+import { userActivityReducer } from './user/userActivity';
+import { walletsReducer } from './user/wallets';
+import { withdrawLimitReducer } from './user/withdrawLimit';
 import { marketsAdminReducer } from './admin/markets';
 import { platformCreateReducer } from './admin/platform';
 import { quickExchangeReducer } from './user/quickExchange';
@@ -56,6 +51,7 @@ export const publicReducer = combineReducers({
     alerts: alertReducer,
     blockchains: blockchainsReducer,
     blocklistAccess: blocklistAccessReducer,
+    blogs: blogsReducer,
     colorTheme: changeColorThemeReducer,
     configs: configsReducer,
     currencies: currenciesReducer,
