@@ -89,11 +89,11 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         }
     }, [startDate, endDate]);
 
-    const filterredStatus = (status) => {
+    const filterredStatus = (id) => {
         let filterredList;
         let temp;
         temp = list;
-        filterredList = temp.filter((item) => item.status === status);
+        filterredList = temp.filter((item) => item.id === id);
         setHistorys(filterredList);
     };
 

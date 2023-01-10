@@ -37,8 +37,6 @@ export const WalletWitdrawal: React.FC = () => {
         return ['Date', 'Transaction ID', 'Amount', 'Type Transaction', 'Address', 'Status', 'Confirmation'];
     };
 
-    console.log(historys);
-
     const getTableData = (data) => {
         return data.map((item) => [
             moment(item.created_at).format('D MMM YYYY - HH:mm'),

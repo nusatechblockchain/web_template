@@ -1,15 +1,17 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import { useDocumentTitle, useWalletsFetch, useHistoryFetch } from 'src/hooks';
+import { useDocumentTitle, useHistoryFetch, useMarketsFetch } from 'src/hooks';
 import {
     selectCurrencies,
     Currency,
     selectHistory,
+    selectHistoryLoading,
     selectFirstElemIndex,
     selectCurrentPage,
     selectLastElemIndex,
     selectNextPageExists,
     RootState,
+    selectMarkets,
 } from 'src/modules';
 import { localeDate } from '../../../helpers';
 import { Table } from 'src/components';
@@ -18,24 +20,27 @@ import Select from 'react-select';
 import moment from 'moment';
 import { NoData } from '../../components';
 
-const DEFAULT_LIMIT = 5;
+const DEFAULT_LIMIT = 7;
 
 export const HistoryTrade: FC = (): ReactElement => {
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const markets = useSelector(selectMarkets);
     const page = useSelector(selectCurrentPage);
     const list = useSelector(selectHistory);
+    const loading = useSelector(selectHistoryLoading);
 
-    const [historys, setHistorys] = React.useState([]);
+    const [historys, setHistorys] = React.useState(list);
     const [currentPage, setCurrentPage] = React.useState(0);
     const [currency, setCurrency] = React.useState('');
-    const [status, setStatus] = React.useState('');
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
 
     const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
     const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
     const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, DEFAULT_LIMIT));
+
     useDocumentTitle('Trade History');
+    useMarketsFetch();
     useHistoryFetch({ type: 'trades', limit: DEFAULT_LIMIT, currency, page: currentPage });
 
     const onClickPrevPage = () => {
@@ -46,16 +51,10 @@ export const HistoryTrade: FC = (): ReactElement => {
     };
 
     React.useEffect(() => {
-        setHistorys(list);
-    }, [list]);
-
-    const filterredStatus = (status) => {
-        let filterredList;
-        let temp;
-        temp = list;
-        filterredList = temp.filter((item) => item.status === status);
-        setHistorys(filterredList);
-    };
+        if (!loading) {
+            setHistorys(list);
+        }
+    }, [loading]);
 
     React.useEffect(() => {
         if (startDate != '' && endDate != '') {
@@ -68,39 +67,47 @@ export const HistoryTrade: FC = (): ReactElement => {
         }
     }, [startDate, endDate]);
 
+    let currentBidUnitMarkets = markets;
+    const formattedMarkets = currentBidUnitMarkets.length
+        ? currentBidUnitMarkets.map((market) => ({
+              ...market,
+              currency: currencies.find((cur) => cur.id == market.base_unit),
+          }))
+        : [];
+
+    const filterredAsset = (id) => {
+        let filterredList;
+        let temp;
+        temp = list;
+        filterredList = temp.filter((item) => item.market === id);
+        setHistorys(id === '' ? list : filterredList);
+    };
+
     const getTableHeaders = () => {
-        return ['Date', 'Type', 'Market', 'Assets', 'Volume', 'Price', 'Total', 'Status'];
+        return ['Date', 'Side', 'Market', 'Type', 'Volume', 'Price', 'Total'];
     };
 
     const getTableData = (data) => {
-        const market = currencies.find((m) => m.id === data.market);
         return data.map((item) => [
             <p className="m-0 text-sm white-text">{localeDate(item.created_at, 'fullDate')}</p>,
-            <p className={`m-0 text-sm ${item.side == 'Buy' ? 'green-text' : 'danger-text'}`}>{item.side}</p>,
-            <p className="m-0 text-sm white-text">{item.market}</p>,
-            <p className="m-0 text-sm white-text">{market}</p>,
+            <p className={`m-0 text-sm ${item.side == 'buy' ? 'green-text' : 'danger-text'}`}>
+                {item.side === 'buy' ? 'Buy' : 'Side'}
+            </p>,
+            <p className="m-0 text-sm white-text">{item.market.toUpperCase()}</p>,
+            <p className="m-0 text-sm white-text">{item.market_type}</p>,
             <p className="m-0 text-sm white-text">{item.amount}</p>,
             <p className="m-0 text-sm white-text">{item.price}</p>,
             <p className="m-0 text-sm white-text">{item.total}</p>,
-            <p className="m-0 text-sm green-text">{item.status}</p>,
-            <p></p>,
         ]);
     };
 
-    const optionStatus = [
-        { label: <p className="m-0 text-sm grey-text-accent">All</p>, value: 'all' },
-        { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
-        { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
-        { label: <p className="m-0 text-sm grey-text-accent">Success</p>, value: 'all' },
-    ];
-
-    const optionAssets = currencies.map((item) => {
+    const optionAssets = formattedMarkets.map((item) => {
         const customLabel = (
             <div className="d-flex align-items-center">
-                <img src={item.icon_url} alt="icon" className="mr-12 small-coin-icon" />
+                <img src={item.currency?.icon_url} alt="icon" className="mr-12 small-coin-icon" />
                 <div>
-                    <p className="m-0 text-sm grey-text-accent">{item.id.toUpperCase()}</p>
-                    <p className="m-0 text-xs grey-text-accent">{item.name}</p>
+                    <p className="m-0 text-sm grey-text-accent">{item.name.toUpperCase()}</p>
+                    <p className="m-0 text-xs grey-text-accent">{item.currency?.name}</p>
                 </div>
             </div>
         );
@@ -145,21 +152,7 @@ export const HistoryTrade: FC = (): ReactElement => {
                         options={optionAssets}
                         onChange={(e) => {
                             setCurrency(e.value);
-                        }}
-                    />
-                </div>
-
-                <div className="w-20 mr-24">
-                    <p className="m-0 white-text text-sm mb-8">Status</p>
-                    <Select
-                        value={optionStatus.filter(function (option) {
-                            return option.value === status;
-                        })}
-                        styles={CustomStylesSelect}
-                        options={optionStatus}
-                        onChange={(e) => {
-                            setStatus(e.value);
-                            filterredStatus(e.value);
+                            filterredAsset(e.value);
                         }}
                     />
                 </div>

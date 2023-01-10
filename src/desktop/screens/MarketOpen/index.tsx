@@ -5,7 +5,6 @@ import { useDocumentTitle, useWalletsFetch, useUserOrdersHistoryFetch, useMarket
 import {
     selectCurrencies,
     Currency,
-    selectCurrentMarket,
     selectMarkets,
     openOrdersCancelFetch,
     ordersCancelAllFetch,
@@ -46,7 +45,6 @@ export const MarketOpen: FC = (): ReactElement => {
     const ordersNextPageExists = useSelector(selectOrdersNextPageExists);
     const markets = useSelector(selectMarkets);
     const currencies: Currency[] = useSelector(selectCurrencies);
-    const currentMarket = useSelector(selectCurrentMarket);
 
     useUserOrdersHistoryFetch(currentPageIndex, tab, 20);
     useDocumentTitle('Market Order');
@@ -57,6 +55,9 @@ export const MarketOpen: FC = (): ReactElement => {
         if (orders) {
             if (tab === 'open') {
                 const filter = orders.filter((o) => ['wait', 'pending'].includes(o.state));
+                setData(filter);
+            } else if (tab === 'close') {
+                const filter = orders.filter((o) => ['done', 'cancel', 'completed', 'error'].includes(o.state));
                 setData(filter);
             } else {
                 setData(orders);
@@ -97,7 +98,11 @@ export const MarketOpen: FC = (): ReactElement => {
         let temp;
         temp = orders;
         filterredList = temp.filter((item) => item.state === status);
-        setData(status === '' ? orders : filterredList);
+        setData(
+            status === ''
+                ? orders.filter((o) => ['done', 'cancel', 'completed', 'error'].includes(o.state))
+                : filterredList
+        );
     };
 
     let currentBidUnitMarkets = markets;
@@ -110,10 +115,15 @@ export const MarketOpen: FC = (): ReactElement => {
 
     const filterredAsset = (id) => {
         let filterredList;
-        let temp;
-        temp = orders;
-        filterredList = temp.filter((item) => item.market === id);
-        setData(id === '' ? orders : filterredList);
+        let open;
+        open = orders.filter((o) => ['wait', 'pending'].includes(o.state));
+
+        let close;
+        close = orders.filter((o) => ['done', 'cancel', 'completed', 'error'].includes(o.state));
+
+        filterredList =
+            tab === 'open' ? open.filter((item) => item.market === id) : close.filter((item) => item.market === id);
+        setData(id === '' ? data : filterredList);
     };
 
     const onClickPrevPage = () => {
@@ -166,7 +176,6 @@ export const MarketOpen: FC = (): ReactElement => {
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">All</p>, value: '' },
         { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'cancel' },
-        { label: <p className="m-0 text-sm grey-text-accent">Waiting</p>, value: 'wait' },
         { label: <p className="m-0 text-sm grey-text-accent">Done</p>, value: 'done' },
     ];
 
@@ -226,20 +235,22 @@ export const MarketOpen: FC = (): ReactElement => {
                     />
                 </div>
 
-                <div className="w-20 mr-24">
-                    <p className="m-0 white-text text-sm mb-8">Status</p>
-                    <Select
-                        value={optionStatus.filter(function (option) {
-                            return option.value === status;
-                        })}
-                        onChange={(e) => {
-                            setStatus(e.value);
-                            filterredStatus(e.value);
-                        }}
-                        styles={CustomStylesSelect}
-                        options={optionStatus}
-                    />
-                </div>
+                {tab === 'close' && (
+                    <div className="w-20 mr-24">
+                        <p className="m-0 white-text text-sm mb-8">Status</p>
+                        <Select
+                            value={optionStatus.filter(function (option) {
+                                return option.value === status;
+                            })}
+                            onChange={(e) => {
+                                setStatus(e.value);
+                                filterredStatus(e.value);
+                            }}
+                            styles={CustomStylesSelect}
+                            options={optionStatus}
+                        />
+                    </div>
+                )}
             </div>
         );
     };
@@ -253,15 +264,22 @@ export const MarketOpen: FC = (): ReactElement => {
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="position-relative">
                         {renderFilter()}
-                        <div className="ml-3 cancel-all-order">
-                            <button type="button" onClick={handleCancelAllOrders} className="btn btn-secondary">
-                                Cancel All Orders <ModalCloseIcon className="small-icon" />
-                            </button>
-                        </div>
+                        {tab === 'open' && (
+                            <div className="ml-3 cancel-all-order">
+                                <button type="button" onClick={handleCancelAllOrders} className="btn btn-secondary">
+                                    Cancel All Orders <ModalCloseIcon className="small-icon" />
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <Tabs
                         defaultActiveKey={tab}
-                        onSelect={(e) => setTab(e)}
+                        onSelect={(e) => {
+                            setTab(e);
+                            setStartDate('');
+                            setEndDate('');
+                            setAsset('');
+                        }}
                         id="uncontrolled-tab-example"
                         className="mb-3">
                         <Tab eventKey="open" title="Open Order" className="mb-24">

@@ -81,7 +81,7 @@ class ProfileAuthDetailsComponent extends React.Component<Props, State> {
                         <div className="details">
                             <div className="d-flex align-items-center mb-2">
                                 <h6 className="white-text font-bold text-ms mb-0 mr-3">
-                                    {isUsernameEnabled() ? <h2>{user.username}</h2> : null}
+                                    {isUsernameEnabled() ? user.username : null}
                                 </h6>
                                 {user.labels[0].value == 'verified' ? (
                                     <div className="badge badge-success test-xs font-normal white-text">
