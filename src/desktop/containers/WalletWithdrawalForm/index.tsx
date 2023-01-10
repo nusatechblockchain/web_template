@@ -17,6 +17,7 @@ import {
     beneficiariesActivate,
     selectUserInfo,
     selectBeneficiariesFetchError,
+    selectWithdrawLimitError,
 } from '../../../modules';
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
@@ -59,6 +60,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     const beneficiariesError = useSelector(selectBeneficiariesCreateError);
     const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
     const beneficiaryPermited = useSelector(selectBeneficiariesFetchError);
+    const withdrawPermited = useSelector(selectWithdrawLimitError);
     const user = useSelector(selectUserInfo);
     const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -92,7 +94,7 @@ export const WalletWithdrawalForm: React.FC = () => {
     }, [beneficiariesError]);
 
     React.useEffect(() => {
-        if (beneficiaryPermited) {
+        if (beneficiaryPermited || withdrawPermited) {
             setShowModalLocked(true);
         }
     });
