@@ -183,22 +183,18 @@ class ApiListMobileScreenComponent extends React.Component<Props, ProfileApiKeys
                 <span className={item.state === 'active' ? 'active' : 'disabled'}>{item.state}</span>
             </div>,
             <div>
-                <Form>
+                <Form onChange={this.handleToggleStateKeyClick(item)}>
                     <Form.Check
-                        className="cursor-pointer"
                         type="switch"
                         id={`apiKeyCheck-${item.kid}`}
                         label=""
-                        onChange={this.handleToggleStateKeyClick(item)}
                         checked={item.state === 'active'}
                     />
                 </Form>
             </div>,
-            <p
-                className="d-flex align-items-center justify-content-center text-sm cursor-pointer"
-                onClick={() => this.handleDeleteKeyClick(item)}>
+            <div onClick={() => this.handleDeleteKeyClick(item)} className="delete-button">
                 <TrashIcon />
-            </p>,
+            </div>,
         ]);
     }
 
