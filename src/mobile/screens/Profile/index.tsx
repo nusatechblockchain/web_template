@@ -32,7 +32,7 @@ const ProfileMobileScreen: React.FC = () => {
     const user = useSelector(selectUserInfo);
     const apiKey = useSelector(selectApiKeys);
 
-    const TIME_RESEND = 300000;
+    const TIME_RESEND = 30000;
 
     const [showModalEmail, setShowModalEmail] = React.useState(false);
     const [showModalPhone, setShowModalPhone] = React.useState(false);
@@ -52,7 +52,7 @@ const ProfileMobileScreen: React.FC = () => {
 
                 if (seconds === 0) {
                     setTimerActive(false);
-                    setSeconds(30000);
+                    setSeconds(0);
                 }
             }, 1000);
         }
