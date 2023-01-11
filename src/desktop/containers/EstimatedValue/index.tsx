@@ -28,32 +28,6 @@ const EstimatedValue: React.FC<Props> = (props: Props): React.ReactElement => {
     useMarketsFetch();
     useWalletsFetch();
 
-    // const renderSecondaryCurrencyValuation = React.useCallback(
-    //     (value: string) => {
-    //         const estimatedValueSecondary = estimateUnitValue(
-    //             VALUATION_SECONDARY_CURRENCY,
-    //             VALUATION_PRIMARY_CURRENCY,
-    //             +value,
-    //             currencies,
-    //             markets,
-    //             tickers
-    //         );
-
-    //         return (
-    //             <div className="pl-5">
-    //                 <p className="text-ms grey-text-accent font-extrabold mb-12">Locked</p>
-    //                 <div className="d-flex align-items-center">
-    //                     <span className="value-container text-md white-text">
-    //                         <span className="value">{formatWithSeparators(estimatedValueSecondary, ',')}</span>
-    //                         <span className="value-sign mr-24"> {VALUATION_SECONDARY_CURRENCY.toUpperCase()}</span>
-    //                     </span>
-    //                 </div>
-    //             </div>
-    //         );
-    //     },
-    //     [currencies, markets, tickers]
-    // );
-
     const estimatedValue = React.useMemo(() => {
         return estimateValue(VALUATION_PRIMARY_CURRENCY, currencies, wallets, markets, tickers);
     }, [currencies, wallets, markets, tickers]);
