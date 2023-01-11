@@ -135,7 +135,7 @@ export const MarketFavoriteTabs: FC = (): ReactElement => {
                         data={favoriteMarketData}
                         onFilter={handleFilter}
                         filter={searchFilter}
-                        placeholder={'Search by assets'}
+                        placeholder={'Search assets'}
                         className="filter-search"
                     />
                 </div>

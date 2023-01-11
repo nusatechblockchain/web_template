@@ -34,6 +34,7 @@ export const HistoryTrade: FC = (): ReactElement => {
     const [currency, setCurrency] = React.useState('');
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
+    const [idFilterAsset, setIdFilterAsset] = React.useState('');
 
     const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
     const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
@@ -50,11 +51,11 @@ export const HistoryTrade: FC = (): ReactElement => {
         setCurrentPage(Number(page) + 1);
     };
 
-    React.useEffect(() => {
-        if (!loading) {
-            setHistorys(list);
-        }
-    }, [loading]);
+    // React.useEffect(() => {
+    //     if (!loading) {
+    //         setHistorys(list);
+    //     }
+    // }, [loading]);
 
     React.useEffect(() => {
         if (startDate != '' && endDate != '') {
@@ -76,6 +77,7 @@ export const HistoryTrade: FC = (): ReactElement => {
         : [];
 
     const filterredAsset = (id) => {
+        setIdFilterAsset(id);
         let filterredList;
         let temp;
         temp = list;
@@ -88,7 +90,13 @@ export const HistoryTrade: FC = (): ReactElement => {
     };
 
     const getTableData = (data) => {
-        return data.map((item) => [
+        let historyData = [];
+        if (idFilterAsset == '') {
+            historyData = list;
+        } else {
+            historyData = data;
+        }
+        return historyData.map((item) => [
             <p className="m-0 text-sm white-text">{localeDate(item.created_at, 'fullDate')}</p>,
             <p className={`m-0 text-sm ${item.side == 'buy' ? 'green-text' : 'danger-text'}`}>
                 {item.side === 'buy' ? 'Buy' : 'Side'}
