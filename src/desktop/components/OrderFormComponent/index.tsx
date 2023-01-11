@@ -104,12 +104,12 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         defaultValue={
                             orderType === 'market'
                                 ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
-                                : price
+                                : +price
                         }
                         value={
                             orderType === 'market'
                                 ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
-                                : price
+                                : +price
                         }
                         onChange={(e) => handleChangePrice(e.target.value)}
                         className="form-control input-order-form"
@@ -121,21 +121,11 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <label htmlFor={labelPrice} className="input-order-label-right">
                         {currentMarket?.quote_unit?.toUpperCase()}
                     </label>
-                    {orderType === 'limit' && isLoggedIn && (
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div className="text-xs danger-text mt-1">Min price: {currentMarket?.min_price}</div>
-                            <div className="text-xs contrast-text mt-1">Max price: {currentMarket?.max_price}</div>
-                        </div>
-                    )}
                 </div>
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={
-                            orderType === 'market'
-                                ? handleSetValue(Decimal.format(amount, currentMarket?.amount_precision, ','), '0')
-                                : amount
-                        }
+                        defaultValue={amount}
                         value={amount}
                         onChange={(e) => {
                             handleChangeAmount(e.target.value);
@@ -162,6 +152,8 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     label50={labelPercent50}
                     label75={labelPercent75}
                     label100={labelPercent100}
+                    handleSide={handleSide}
+                    side={side}
                 />
 
                 <div className="form-group mb-3 position-relative  w-100">
@@ -184,11 +176,13 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <p className="text-sm white-text">
                         {side === 'Buy' ? (
                             <>
-                                {usdt} {currentMarket?.quote_unit?.toUpperCase()}
+                                {Decimal.format(usdt, currentMarket?.price_precision)}{' '}
+                                {currentMarket?.quote_unit?.toUpperCase()}
                             </>
                         ) : (
                             <>
-                                {balance} {currentMarket?.base_unit?.toUpperCase()}
+                                {Decimal.format(balance, currentMarket?.price_precision)}{' '}
+                                {currentMarket?.base_unit?.toUpperCase()}
                             </>
                         )}
                     </p>

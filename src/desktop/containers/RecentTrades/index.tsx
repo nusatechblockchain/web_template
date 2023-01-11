@@ -50,14 +50,12 @@ const RecentTradesComponent = (props) => {
                                                 className={`text-sm font-bold mb-0 text-left ${
                                                     trade.taker_type === 'sell' ? 'danger-text' : 'contrast-text'
                                                 }`}>
-                                                {numberFormat(+trade.price, 'USA').toString()}
+                                                {Decimal.format(trade.price, currentMarket?.price_precision)}
                                             </p>
                                         </td>
                                         <td>
                                             <p className="text-sm grey-text-accent font-bold mb-0 text-right">
-                                                <Decimal fixed={currentMarket.amount_precision} thousSep=",">
-                                                    {trade.amount}
-                                                </Decimal>
+                                                {Decimal.format(trade.amount, currentMarket?.amount_precision)}
                                             </p>
                                         </td>
                                         <td>

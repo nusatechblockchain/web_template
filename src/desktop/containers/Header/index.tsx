@@ -6,6 +6,7 @@ import { RouterProps } from 'react-router';
 import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
+import { Decimal } from 'src/components';
 import '../../../styles/colors.pcss';
 import {
     Market,
@@ -292,7 +293,10 @@ class Head extends React.Component<Props, HeaderState> {
                                             <div className="nav-link px-12">
                                                 <p className="mb-0 text-xs mb-1 font-bold grey-text-accent">Price</p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
-                                                    {numberFormat(ticker?.last, 'USD').toString().split('.')[0]}
+                                                    {Decimal.format(
+                                                        +ticker?.last,
+                                                        this.props.currentMarket?.price_precision
+                                                    )}
                                                 </p>
                                             </div>
                                         </li>
@@ -302,7 +306,10 @@ class Head extends React.Component<Props, HeaderState> {
                                                     {this.translate('page.header.navbar.trade.24high')}
                                                 </p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
-                                                    {numberFormat(ticker?.high, 'USD').toString().split('.')[0]}
+                                                    {Decimal.format(
+                                                        +ticker?.high,
+                                                        this.props.currentMarket?.price_precision
+                                                    )}
                                                 </p>
                                             </div>
                                         </li>
@@ -312,7 +319,10 @@ class Head extends React.Component<Props, HeaderState> {
                                                     {this.translate('page.header.navbar.trade.24low')}
                                                 </p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
-                                                    {numberFormat(ticker?.low, 'USD').toString().split('.')[0]}
+                                                    {Decimal.format(
+                                                        +ticker?.low,
+                                                        this.props.currentMarket?.price_precision
+                                                    )}
                                                 </p>
                                             </div>
                                         </li>
@@ -322,7 +332,10 @@ class Head extends React.Component<Props, HeaderState> {
                                                     {this.translate('page.header.navbar.trade.24volume')}
                                                 </p>
                                                 <p className=" font-bold mb-0 white-text text-sm">
-                                                    {numberFormat(ticker?.volume, 'USD').toString().split('.')[0]}
+                                                    {Decimal.format(
+                                                        +ticker?.volume,
+                                                        this.props.currentMarket?.amount_precision
+                                                    )}
                                                 </p>
                                             </div>
                                         </li>

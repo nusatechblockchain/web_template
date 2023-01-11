@@ -8,10 +8,22 @@ export interface OrderPercentageProps {
     label50: string;
     label75: string;
     label100: string;
+    side: string;
+    handleSide: (e: string) => void;
 }
 
 export const OrderPercentage: React.FunctionComponent<OrderPercentageProps> = (props) => {
-    const { orderPercentage, handleSelectPercentage, label0, label25, label50, label75, label100 } = props;
+    const {
+        orderPercentage,
+        handleSelectPercentage,
+        label0,
+        label25,
+        label50,
+        label75,
+        label100,
+        handleSide,
+        side,
+    } = props;
 
     return (
         <React.Fragment>
@@ -21,7 +33,12 @@ export const OrderPercentage: React.FunctionComponent<OrderPercentageProps> = (p
                 </div>
                 <div className="main-input">
                     <div className="d-flex justify-content-between">
-                        <div className="input-item start" onClick={() => handleSelectPercentage(0)}>
+                        <div
+                            className="input-item start"
+                            onClick={() => {
+                                handleSelectPercentage(0);
+                                handleSide(side === 'Sell' ? 'sell' : 'buy');
+                            }}>
                             <label htmlFor={label0} className="cursor-pointer">
                                 <div className={`dots-wrap ${orderPercentage == 0 ? 'active' : 'check'}`}>
                                     <div className={`dots ${orderPercentage == 0 ? '' : 'check'}`} />
@@ -40,7 +57,12 @@ export const OrderPercentage: React.FunctionComponent<OrderPercentageProps> = (p
                                 0%
                             </label>
                         </div>
-                        <div className="input-item" onClick={() => handleSelectPercentage(25)}>
+                        <div
+                            className="input-item"
+                            onClick={() => {
+                                handleSelectPercentage(25);
+                                handleSide(side === 'Sell' ? 'sell' : 'buy');
+                            }}>
                             <label htmlFor={label25} className="cursor-pointer">
                                 <div
                                     className={`dots-wrap ${
@@ -62,7 +84,12 @@ export const OrderPercentage: React.FunctionComponent<OrderPercentageProps> = (p
                                 25%
                             </label>
                         </div>
-                        <div className="input-item" onClick={() => handleSelectPercentage(50)}>
+                        <div
+                            className="input-item"
+                            onClick={() => {
+                                handleSelectPercentage(50);
+                                handleSide(side === 'Sell' ? 'sell' : 'buy');
+                            }}>
                             <label htmlFor={label50} className="cursor-pointer">
                                 <div
                                     className={`dots-wrap ${
@@ -84,7 +111,12 @@ export const OrderPercentage: React.FunctionComponent<OrderPercentageProps> = (p
                                 50%
                             </label>
                         </div>
-                        <div className="input-item" onClick={() => handleSelectPercentage(75)}>
+                        <div
+                            className="input-item"
+                            onClick={() => {
+                                handleSelectPercentage(75);
+                                handleSide(side === 'Sell' ? 'sell' : 'buy');
+                            }}>
                             <label htmlFor={label75} className="cursor-pointer">
                                 <div
                                     className={`dots-wrap ${
@@ -106,7 +138,12 @@ export const OrderPercentage: React.FunctionComponent<OrderPercentageProps> = (p
                                 75%
                             </label>
                         </div>
-                        <div className="input-item end" onClick={() => handleSelectPercentage(100)}>
+                        <div
+                            className="input-item end"
+                            onClick={() => {
+                                handleSelectPercentage(100);
+                                handleSide(side === 'Sell' ? 'sell' : 'buy');
+                            }}>
                             <label htmlFor={label100} className="cursor-pointer">
                                 <div
                                     className={`dots-wrap ${
