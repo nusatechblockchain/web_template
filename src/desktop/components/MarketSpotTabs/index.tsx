@@ -155,7 +155,7 @@ export const MarketSpotTabs: FC = (): ReactElement => {
                         data={marketList}
                         onFilter={handleFilter}
                         filter={searchFilter}
-                        placeholder={'Search by assets'}
+                        placeholder={'Search assets'}
                         className="filter-search"
                     />
                 </div>
