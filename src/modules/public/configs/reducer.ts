@@ -1,11 +1,7 @@
 import { ConfigsAction } from './actions';
-import {
-    CONFIGS_FETCH,
-    CONFIGS_ERROR,
-    CONFIGS_DATA,
-} from './constants';
+import { CONFIGS_FETCH, CONFIGS_ERROR, CONFIGS_DATA } from './constants';
 
-export interface ConfigsState  {
+export interface ConfigsState {
     loading: boolean;
 }
 

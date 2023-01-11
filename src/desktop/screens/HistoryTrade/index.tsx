@@ -99,7 +99,7 @@ export const HistoryTrade: FC = (): ReactElement => {
         return historyData.map((item) => [
             <p className="m-0 text-sm white-text">{localeDate(item.created_at, 'fullDate')}</p>,
             <p className={`m-0 text-sm ${item.side == 'buy' ? 'green-text' : 'danger-text'}`}>
-                {item.side === 'buy' ? 'Buy' : 'Side'}
+                {item.side === 'buy' ? 'Buy' : 'Sell'}
             </p>,
             <p className="m-0 text-sm white-text">{item.market.toUpperCase()}</p>,
             <p className="m-0 text-sm white-text">{item.market_type}</p>,

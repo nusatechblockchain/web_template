@@ -16,15 +16,16 @@ export function* getConfigsSaga() {
         yield put(currenciesData(currencies));
         yield put(blockchainsData(blockchains));
 
-
         yield put(configsData());
     } catch (error) {
-        yield put(sendError({
-            error,
-            processingType: 'alert',
-            extraOptions: {
-                actionError: configsError,
-            },
-        }));
+        yield put(
+            sendError({
+                error,
+                processingType: 'alert',
+                extraOptions: {
+                    actionError: configsError,
+                },
+            })
+        );
     }
 }

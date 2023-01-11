@@ -36,43 +36,7 @@ class ReferralProgramClass extends React.Component<Props> {
 
         const referralLink = `${window.document.location.origin}/signup?refid=${user.uid}`;
         const referralCode = user.uid;
-        const dataTable = [
-            {
-                time: '20-01-2022',
-                email: 'test@email.com',
-                username: 'myusername',
-                step: 'document verification',
-                status: <span className="green-text">active</span>,
-            },
-            {
-                time: '20-01-2022',
-                email: 'test@email.com',
-                username: 'myusername',
-                step: 'document verification',
-                status: <span className="green-text">active</span>,
-            },
-            {
-                time: '20-01-2022',
-                email: 'test@email.com',
-                username: 'myusername',
-                step: 'document verification',
-                status: <span className="green-text">active</span>,
-            },
-            {
-                time: '20-01-2022',
-                email: 'test@email.com',
-                username: 'myusername',
-                step: 'document verification',
-                status: <span className="green-text">active</span>,
-            },
-            {
-                time: '20-01-2022',
-                email: 'test@email.com',
-                username: 'myusername',
-                step: 'document verification',
-                status: <span className="green-text">active</span>,
-            },
-        ];
+        const dataTable = [];
         return (
             <div className="referral-program content-wrapper dark-bg-accent">
                 <div className="header dark-bg-main py-4 px-24 pt-4 pb-4 mb-24">
@@ -80,7 +44,7 @@ class ReferralProgramClass extends React.Component<Props> {
                 </div>
                 <div className="px-24">
                     <div className="d-flex mt-3 mb-48">
-                        <img src="img/referral.png" className="referral-image" alt="referral-image" />
+                        <img src="/img/referral.png" className="referral-image" alt="referral-image" />
                         <div className="ml-4">
                             <h6 className="text-sm white-text font-bold">Your total rewards</h6>
                             <h2 className="gradient-text text-xl font-bold">00 USDT</h2>

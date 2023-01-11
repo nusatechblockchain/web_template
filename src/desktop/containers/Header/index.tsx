@@ -450,7 +450,7 @@ class Head extends React.Component<Props, HeaderState> {
                                 </React.Fragment>
                             )}
 
-                            <span
+                            {/* <span
                                 className="cursor-pointer"
                                 onClick={(e) =>
                                     this.handleChangeCurrentStyleMode(
@@ -458,7 +458,7 @@ class Head extends React.Component<Props, HeaderState> {
                                     )
                                 }>
                                 {this.props.colorTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
-                            </span>
+                            </span> */}
                         </ul>
 
                         {this.state.showHeader && !isLoggedIn && (
