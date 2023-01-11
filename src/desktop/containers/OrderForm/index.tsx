@@ -11,11 +11,13 @@ import {
     selectOrderExecuteLoading,
     selectDepthAsks,
     selectDepthBids,
+    selectOrderError,
+    selectConfigUpdateData,
 } from '../../../modules';
 import { OrderSide } from 'src/modules/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { getTotalPrice } from '../../../helpers';
+import { getTotalPrice, numberFormat, getAmount } from '../../../helpers';
 
 export const OrderForm = () => {
     const dispatch = useDispatch();
@@ -26,6 +28,7 @@ export const OrderForm = () => {
     const orderLoading = useSelector(selectOrderExecuteLoading);
     const bids = useSelector(selectDepthBids);
     const asks = useSelector(selectDepthAsks);
+    const error = useSelector(selectOrderError);
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const tickerItem: Ticker = tickers[currency];
@@ -55,27 +58,82 @@ export const OrderForm = () => {
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
 
-    React.useEffect(() => {
-        let temp = Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision);
-        setAmountSell(temp);
-    }, [orderPercentageSell]);
+    const totalPrice = getTotalPrice(
+        side === 'buy' ? amountBuy : amountSell,
+        +tickerItem?.last,
+        side === 'buy' ? bids : asks
+    );
+
+    const totalAmount = getAmount(
+        side === 'buy' ? +usdt : +balance,
+        side === 'buy' ? bids : asks,
+        side === 'buy' ? orderPercentageBuy : orderPercentageSell
+    );
 
     React.useEffect(() => {
-        let limit = Decimal.format(+priceSell * +amountSell, currentMarket?.price_precision);
-        let market = Decimal.format(+tickerItem?.last * +amountSell, currentMarket?.price_precision);
+        const safePrice = +totalPrice / +totalAmount || priceSell;
+
+        const market =
+            orderPercentageSell !== 0
+                ? Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision)
+                : Decimal.format(amountSell, currentMarket?.amount_precision);
+
+        const limit =
+            orderPercentageSell !== 0
+                ? Decimal.format(+totalSell / +priceSell, currentMarket?.amount_precision)
+                : Decimal.format(amountSell, currentMarket?.amount_precision);
+
+        setAmountSell(orderType === 'market' ? market : limit);
+    }, [orderPercentageSell, totalSell, priceSell]);
+
+    React.useEffect(() => {
+        const safePrice = totalPrice / +amountSell || priceSell;
+        // const market =
+        //     orderPercentageSell !== 0
+        //         ? Decimal.format((+balance * +orderPercentageSell) / 100, currentMarket?.price_precision)
+        //         : Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
+
+        const market = Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
+
+        const limit =
+            orderPercentageSell !== 0
+                ? Decimal.format((+balance * +orderPercentageSell) / 100, currentMarket?.price_precision)
+                : Decimal.format(+priceSell * +amountSell, currentMarket?.price_precision);
+
         setTotalSell(orderType === 'market' ? market : limit);
-    }, [priceSell, amountSell]);
+    }, [priceSell, amountSell, orderPercentageSell]);
 
     React.useEffect(() => {
-        let limit = Decimal.format(+priceBuy * +amountBuy, currentMarket?.price_precision);
-        let market = Decimal.format(+tickerItem?.last * +amountBuy, currentMarket?.price_precision);
+        // const safePrice = +totalPrice / +totalAmount || priceBuy;
+        const market =
+            orderPercentageBuy !== 0
+                ? Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.amount_precision)
+                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+
+        const limit =
+            orderPercentageBuy !== 0
+                ? Decimal.format(+totalBuy / +priceBuy, currentMarket?.amount_precision)
+                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+
+        setAmountBuy(orderType === 'market' ? market : limit);
+    }, [orderPercentageBuy, totalBuy, priceBuy]);
+
+    React.useEffect(() => {
+        const safePrice = totalPrice / +amountBuy || priceBuy;
+        // const market =
+        //     orderPercentageBuy !== 0
+        //         ? Decimal.format((+usdt * +orderPercentageBuy) / 100, currentMarket?.price_precision)
+        //         : Decimal.format(+amountBuy * +safePrice, currentMarket?.price_precision);
+
+        const market = Decimal.format(+amountBuy * +safePrice, currentMarket?.price_precision);
+
+        const limit =
+            orderPercentageBuy !== 0
+                ? Decimal.format((+usdt * +orderPercentageBuy) / 100, currentMarket?.price_precision)
+                : Decimal.format(+priceBuy * +amountBuy, currentMarket?.price_precision);
+
         setTotalBuy(orderType === 'market' ? market : limit);
-    }, [priceBuy, amountBuy]);
-
-    React.useEffect(() => {
-        let temp = Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.amount_precision);
-        setAmountBuy(temp);
-    }, [priceBuy, orderPercentageBuy]);
+    }, [priceBuy, amountBuy, orderPercentageBuy]);
 
     const resetForm = () => {
         setShowModalSell(false);
@@ -128,11 +186,13 @@ export const OrderForm = () => {
     const handleChangeAmountBuy = (e: string) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmountBuy(value);
+        setOrderPercentageBuy(0);
     };
 
     const handleChangeAmounSell = (e: string) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmountSell(value);
+        setOrderPercentageSell(0);
     };
 
     const renderModalContentSell = () => (
@@ -244,7 +304,7 @@ export const OrderForm = () => {
                                 handleChangeAmount={handleChangeAmountBuy}
                                 total={totalBuy}
                                 price={priceBuy}
-                                totalPrice={getTotalPrice(amountBuy, +tickerItem?.last, side === 'buy' ? bids : asks)}
+                                totalPrice={getTotalPrice(amountBuy, +tickerItem?.last, bids)}
                                 handleChangePrice={handleChangePriceBuy}
                                 handleSubmit={() => setShowModalBuy(true)}
                             />
@@ -269,7 +329,7 @@ export const OrderForm = () => {
                                 handleChangeAmount={handleChangeAmounSell}
                                 total={totalSell}
                                 price={priceSell}
-                                totalPrice={getTotalPrice(amountSell, +tickerItem?.last, side === 'buy' ? bids : asks)}
+                                totalPrice={getTotalPrice(amountSell, +tickerItem?.last, asks)}
                                 handleChangePrice={handleChangePriceSell}
                                 handleSubmit={() => setShowModalSell(true)}
                             />

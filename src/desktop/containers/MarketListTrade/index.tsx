@@ -4,7 +4,14 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Decimal } from '../../../components';
 import { FilterInput, NoData } from '../../../desktop/components';
 import { useMarketsFetch, useMarketsTickersFetch } from '../../../hooks';
-import { selectCurrencies, selectMarketTickers, selectMarkets, setCurrentMarket, Market } from '../../../modules';
+import {
+    selectCurrencies,
+    selectMarketTickers,
+    selectMarkets,
+    setCurrentMarket,
+    Market,
+    selectCurrentMarket,
+} from '../../../modules';
 import { numberFormat } from '../../../helpers';
 
 const defaultTicker = {
@@ -28,6 +35,7 @@ const MarketListTradeComponent = (props) => {
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
     const currencies = useSelector(selectCurrencies);
+    const currentMarket = useSelector(selectCurrentMarket);
 
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredMarket, setFilteredMarket] = React.useState([]);
@@ -122,9 +130,7 @@ const MarketListTradeComponent = (props) => {
                                                         />
                                                     </span>
                                                     <div className="name ml-1">
-                                                        <p className="text-sm text-white font-bold mb-0">
-                                                            {item.currency && item.currency.id.toUpperCase()}
-                                                        </p>
+                                                        <p className="text-sm text-white font-bold mb-0">{item.name}</p>
                                                         <span className="text-xs grey-text-accent">
                                                             {item.currency && item.currency.name.toUpperCase()}
                                                         </span>
@@ -138,7 +144,7 @@ const MarketListTradeComponent = (props) => {
                                                     className={`text-xs my-auto  mb-0 text-right ${
                                                         item.last < item.open ? 'danger-text' : 'green-text'
                                                     }`}>
-                                                    {numberFormat(item.last, 'USA').toString()}
+                                                    {Decimal.format(item.last, currentMarket?.price_precision)}
                                                 </p>
                                             </div>
                                         </td>

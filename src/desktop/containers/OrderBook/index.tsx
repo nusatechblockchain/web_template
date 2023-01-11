@@ -106,23 +106,20 @@ const OrderBookComponent = (props) => {
                                         <tr key={i} className="m-0 p-0">
                                             <td>
                                                 <p className="text-sm danger-text font-bold m-0 p-0 text-left">
-                                                    {
-                                                        numberFormat(+item[0], 'USA')
-                                                            .toString()
-                                                            .split('.')[0]
-                                                    }
+                                                    {Decimal.format(+item[0], currentMarket?.price_precision)}
                                                 </p>
                                             </td>
                                             <td>
                                                 <p className="text-sm grey-text-accent font-bold m-0 p-0 text-right">
-                                                    <Decimal fixed={currentMarket.amount_precision} thousSep=",">
-                                                        {item[1]}
-                                                    </Decimal>
+                                                    {Decimal.format(+item[1], currentMarket?.amount_precision)}
                                                 </p>
                                             </td>
                                             <td>
                                                 <p className="text-sm m-0 p-0 grey-text-accent font-bold text-right">
-                                                    {numberFormat(+item[0] * +item[1], 'USA').toString()}
+                                                    {Decimal.format(
+                                                        +item[0] * +item[1],
+                                                        currentMarket?.price_precision
+                                                    )}
                                                 </p>
                                             </td>
                                         </tr>
@@ -136,7 +133,7 @@ const OrderBookComponent = (props) => {
                         className={`text-md font-bold m-0 p-0 ${
                             lastTrade && +lastTrade.price_change > 0 ? 'green-text' : 'danger-text'
                         }`}>
-                        {numberFormat(lastTrade && +lastTrade.price, 'USA').toString()}
+                        {Decimal.format(lastTrade && +lastTrade.price, currentMarket?.price_precision)}
                         {lastTrade && +lastTrade.price_change > 0 ? <TradeUp /> : <TradeDown />}
                     </h3>
                     <p
@@ -166,23 +163,17 @@ const OrderBookComponent = (props) => {
                                     <tr key={i} className="m-0 p-0">
                                         <td>
                                             <p className="text-sm green-text font-bold m-0 p-0 text-left">
-                                                {
-                                                    numberFormat(+item[0], 'USA')
-                                                        .toString()
-                                                        .split('.')[0]
-                                                }
+                                                {Decimal.format(+item[0], currentMarket?.price_precision)}
                                             </p>
                                         </td>
                                         <td>
                                             <p className="text-sm grey-text-accent font-bold m-0 p-0 text-right">
-                                                <Decimal fixed={currentMarket.amount_precision} thousSep=",">
-                                                    {item[1]}
-                                                </Decimal>
+                                                {Decimal.format(+item[1], currentMarket?.amount_precision)}
                                             </p>
                                         </td>
                                         <td>
                                             <p className="text-sm m-0 p-0 grey-text-accent font-bold text-right">
-                                                {numberFormat(+item[0] * +item[1], 'USA')}
+                                                {Decimal.format(+item[0] * +item[1], currentMarket?.price_precision)}
                                             </p>
                                         </td>
                                     </tr>
