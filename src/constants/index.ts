@@ -1,5 +1,6 @@
 import { AbilitiesInterface, Wallet } from 'src/modules';
 import { API_URL } from '../config';
+import { primaryCurrency } from '../api';
 
 export const PG_TITLE_PREFIX = 'Heaven Exchange';
 
@@ -38,7 +39,7 @@ export const GLOBAL_PLATFORM_CURRENCY = 'USDT';
 export const DEFAULT_CCY_PRECISION = 4;
 export const DEFAULT_FIAT_PRECISION = 2;
 export const DEFAULT_TRADING_VIEW_INTERVAL = '15';
-export const VALUATION_PRIMARY_CURRENCY = 'USD';
+export const VALUATION_PRIMARY_CURRENCY = primaryCurrency().toUpperCase();
 export const VALUATION_SECONDARY_CURRENCY = 'ETH';
 
 export const PASSWORD_ENTROPY_STEP = 6;
