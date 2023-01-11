@@ -228,7 +228,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                                           id: 'page.mobile.withdraw.addressPlaceholder',
                                                       })}`
                                             }
-                                            defaultLabel=""
+                                            defaultLabel="Select Address"
                                             inputValue={''}
                                             classNameLabel="d-none"
                                             classNameInput={`cursor-pointer dark-bg-accent`}
@@ -340,11 +340,13 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
 
             {showModalAddBeneficiary && (
                 <ModalAddBeneficiaryMobile
-                    onCloseList={() => ''}
+                    onCloseList={() => setShowModalBeneficiaryList(false)}
                     onCloseAdd={() => setShowModalModalAddBeneficiary(false)}
                     handleAddAddress={() => {
                         setShowModalModalAddBeneficiary(false);
                         setShowModalConfirmationBeneficiary(true);
+                        setBeneficiaryCode('');
+                        setTimerActive(true);
                     }}
                     showModalAddBeneficiary={showModalAddBeneficiary}
                 />
@@ -365,6 +367,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                     }}
                     handlePendingStatus={(id) => handlePendingStatus(id)}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}
+                    handleDelete={() => setAddress('')}
                 />
             )}
 

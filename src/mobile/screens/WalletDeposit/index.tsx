@@ -10,6 +10,9 @@ import { DEFAULT_WALLET } from '../../../constants';
 import { ArrowLeft, ArrowRight } from 'src/mobile/assets/Arrow';
 import { InfoWarningIcon } from '../../../assets/images/InfoIcon';
 import { CopyButton } from '../../../assets/images/CopyButton';
+import { HelpIcon } from 'src/mobile/assets/Help';
+
+import { ModalMobile } from 'src/mobile/components';
 
 type LocationProps = {
     state: {
@@ -31,6 +34,7 @@ const WalletDepositMobileScreen: React.FC = () => {
     const blockchain_key = location.state?.blockchain_key;
     const protocol = location.state?.protocol;
     const [address, setAddress] = React.useState('');
+    const [showFAQ, setShowFAQ] = React.useState(false);
 
     const wallet: Wallet = wallets.find((item) => item.currency === currency) || DEFAULT_WALLET;
     const currencies: Currency[] = useSelector(selectCurrencies);
@@ -79,6 +83,74 @@ const WalletDepositMobileScreen: React.FC = () => {
         }
     }, [depositAddress]);
 
+    const renderHeaderFAQMobile = () => {
+        return (
+            <React.Fragment>
+                <div>
+                    <div className="mt-3">
+                        <span onClick={() => setShowFAQ(!showFAQ)} className="cursor-pointer text-secondary">
+                            <ArrowLeft className={''} />
+                        </span>
+                    </div>
+                    <h5 className="font-semibold grey-text-accent mt-3">FAQ</h5>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const renderContentFAQMobile = () => {
+        return (
+            <>
+                <div className="list-faq grey-text-accent">
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>How To Deposit</span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>How do i deposit crypto into Heaven Exchange account</span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>
+                            What should i do if i didn't receive my deposits or i deposit to an incorrect address
+                        </span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>What should i do if i deposit the wrong crypto?</span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>See intructions</span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>What are the common deposit networks?</span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                    <div className="d-flex justify-content-between cursor-pointer mb-3 align-items-start pb-1 text-sm">
+                        <span>What should i do if i forgot to specify the Memo, Tag, or Message for my deposit</span>
+                        <span>
+                            <ArrowRight className={''} />
+                        </span>
+                    </div>
+                </div>
+            </>
+        );
+    };
+
     return (
         <React.Fragment>
             <section className="wallet-deposit-mobile-screen pb-5 dark-bg-main">
@@ -92,6 +164,9 @@ const WalletDepositMobileScreen: React.FC = () => {
                         <h1 className="navbar-brand p-0 m-0 grey-text-accent">
                             Deposit {currencyItem && currencyItem.name}
                         </h1>
+                        <div onClick={() => setShowFAQ(!showFAQ)} className="cursor-pointer">
+                            <HelpIcon className={''} />
+                        </div>
                     </div>
 
                     {/* ========= Render if address has been generated =========== */}
@@ -244,6 +319,12 @@ const WalletDepositMobileScreen: React.FC = () => {
                     )}
                 </div>
             </section>
+
+            {showFAQ && (
+                <div className="modal-benericary-list-mobile">
+                    <ModalMobile show={showFAQ} header={renderHeaderFAQMobile()} content={renderContentFAQMobile()} />
+                </div>
+            )}
         </React.Fragment>
     );
 };
