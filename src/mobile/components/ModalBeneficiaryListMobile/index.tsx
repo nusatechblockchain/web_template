@@ -61,20 +61,7 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
                         <span className="white-text text-center">No Address yet</span>
                     ) : (
                         beneficiariesList.map((item, i) => (
-                            <div
-                                onClick={() => {
-                                    if (item.state === 'pending') {
-                                        props.handlePendingStatus(item.id);
-                                    } else {
-                                        props.handleChangeBeneficiaryId(
-                                            item.id,
-                                            item.data.address,
-                                            item.blockchain_key
-                                        );
-                                    }
-                                }}
-                                className="my-2 content-list-mobile pb-2 cursor-pointer"
-                                key={i}>
+                            <div className="my-2 content-list-mobile pb-2 cursor-pointer" key={i}>
                                 <div className="d-flex align-items-center mb-1 justify-content-between">
                                     <h6 className="text-secondary mb-0">{item && item.name}</h6>
                                     <div
@@ -97,7 +84,19 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="d-flex ml-2">
+                                <div
+                                    onClick={() => {
+                                        if (item.state === 'pending') {
+                                            props.handlePendingStatus(item.id);
+                                        } else {
+                                            props.handleChangeBeneficiaryId(
+                                                item.id,
+                                                item.data.address,
+                                                item.blockchain_key
+                                            );
+                                        }
+                                    }}
+                                    className="d-flex ml-2">
                                     <span className="text-secondary text-sm font-light">
                                         Address<span className="ml-2">:</span>
                                     </span>
