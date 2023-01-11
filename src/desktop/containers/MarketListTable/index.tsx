@@ -56,9 +56,9 @@ export const MarketListTable: FC = (): ReactElement => {
                         </Tab>
                     )}
 
-                    <Tab eventKey="new-listing" title="New Listing">
+                    {/* <Tab eventKey="new-listing" title="New Listing">
                         <MarketNewListingTabs />
-                    </Tab>
+                    </Tab> */}
                 </Tabs>
             </div>
         </React.Fragment>
