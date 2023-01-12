@@ -41,6 +41,7 @@ const ProfileMobileScreen: React.FC = () => {
     const [resendCodeActive, setResendCodeActive] = React.useState(false);
     const [verificationCode, setVerificationCode] = React.useState('');
     const [showModalLocked, setShowModalLocked] = React.useState(false);
+    const [hideWarning, setHideWarning] = React.useState(false);
     const [seconds, setSeconds] = React.useState(TIME_RESEND);
     const [timerActive, setTimerActive] = React.useState(false);
 
@@ -271,17 +272,20 @@ const ProfileMobileScreen: React.FC = () => {
                         <h3 className="grey-text-accent font-bold text-sm">36.80.199.122</h3>
                     </div>
                 </div>
-
+                {!hideWarning && user.level < 3 &&
                 <div className="alert-mobile-warning px-2 py-3 alert d-flex align-items-center justify-content-between show text-xs warning-text font-normal position-relative mb-24">
                     <WarningIcon className="mr-2" />
                     <span className="text-xxs warning-text font-normal">
                         Complete your identity verify to start trading with heaven exchange
                     </span>
-                    <div className="close-icon">
+                    {
+                        user.level >= 3 &&
+                    <div onClick={()=> setHideWarning(true)} className="close-icon cursor-pointer">
                         <CloseIcon fill="#FF9533" className="ml-2" />
                     </div>
+                    }
                 </div>
-
+                }
                 <div>
                     <div
                         className=" d-flex align-items-center mb-24 cursor-pointer"
@@ -305,7 +309,7 @@ const ProfileMobileScreen: React.FC = () => {
                         <div className="d-flex justify-content-between align-items-center w-100">
                             <div>
                                 <h4 className="mb-0 text-sm font-bold grey-text-accent">KYC Verification</h4>
-                                <p className="mb-0 text-xs green-text">KYC Level {user.level}</p>
+                                <p className="mb-0 text-xs green-text">KYC Level 1</p>
                             </div>
 
                             <CheckIcon className="check-icon" />
