@@ -628,6 +628,10 @@ button[disabled] {
 ::-webkit-scrollbar {
     width: 0px !important;
 }
+
+.letter-sm {
+    letter-spacing: 8px;
+}
 /* another css variable */
 
 /* MOBILE VARIABLE */
@@ -705,7 +709,7 @@ button[disabled] {
     position: relative;
     &:before {
         position: absolute;
-        content: "PLEASE LOGIN ";
+        content: "";
         top: 0;
         left: 0;
         right: 0;
@@ -715,10 +719,23 @@ button[disabled] {
         justify-content: center;
         align-items: center;
         z-index: 10;
+    }
+
+    .blur-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 11;
         color: var(--text-primary-color);
         font-size: 18px;
-        letter-spacing: 8px;
+        /* letter-spacing: 8px; */
     }
+
     &.blur-mobile {
         &:before {
             position: absolute;
