@@ -1,6 +1,8 @@
-import React, { FC, ReactElement, useCallback, useEffect } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { useHistory, Link } from 'react-router-dom';
+
 import { Decimal, formatWithSeparators, Table } from 'src/components';
 import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch } from 'src/hooks';
 import {
@@ -16,10 +18,8 @@ import {
 } from 'src/modules';
 import { estimateUnitValue } from 'src/helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY } from 'src/constants';
-import { WalletsHeader, Modal } from '../../components';
-import { useHistory, Link } from 'react-router-dom';
+import { WalletsHeader, Modal, NoData } from '../../components';
 import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIcon';
-import { NoData } from '../../components';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -35,10 +35,10 @@ interface ExtendedWallet extends Wallet {
 }
 
 const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
-    const [filterValue, setFilterValue] = React.useState<string>('');
-    const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
-    const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
-    const [showModalLocked, setShowModalLocked] = React.useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState<string>('');
+    const [filteredWallets, setFilteredWallets] = useState<ExtendedWallet[]>([]);
+    const [nonZeroSelected, setNonZeroSelected] = useState<boolean>(false);
+    const [showModalLocked, setShowModalLocked] = useState<boolean>(false);
 
     const { formatMessage } = useIntl();
     const { isP2PEnabled } = props;
@@ -106,7 +106,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         [history]
     );
 
-    const retrieveData = React.useCallback(() => {
+    const retrieveData = useCallback(() => {
         const list = nonZeroSelected
             ? filteredWallets.filter((i) => i.balance && Number(i.balance) > 0)
             : filteredWallets;

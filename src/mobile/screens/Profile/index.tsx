@@ -105,6 +105,8 @@ const ProfileMobileScreen: React.FC = () => {
         history.push('/change-email');
     };
 
+    console.log('user', user);
+
     const renderModal = () => (
         <React.Fragment>
             <div className="d-flex justify-content-center">
@@ -303,7 +305,7 @@ const ProfileMobileScreen: React.FC = () => {
                         <div className="d-flex justify-content-between align-items-center w-100">
                             <div>
                                 <h4 className="mb-0 text-sm font-bold grey-text-accent">KYC Verification</h4>
-                                <p className="mb-0 text-xs green-text">KYC Level 1</p>
+                                <p className="mb-0 text-xs green-text">KYC Level {user.level}</p>
                             </div>
 
                             <CheckIcon className="check-icon" />
