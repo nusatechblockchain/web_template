@@ -11,8 +11,8 @@ import {
     setCurrentMarket,
     Market,
     selectCurrentMarket,
+    depthFetch,
 } from '../../../modules';
-import { numberFormat } from '../../../helpers';
 
 const defaultTicker = {
     amount: '0.0',
@@ -24,7 +24,7 @@ const defaultTicker = {
     volume: '0.0',
 };
 
-const MarketListTradeComponent = (props) => {
+const MarketListTradeComponent = ({ handleRedirectToTrading }) => {
     useMarketsFetch();
     useMarketsTickersFetch();
 
@@ -39,17 +39,6 @@ const MarketListTradeComponent = (props) => {
 
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredMarket, setFilteredMarket] = React.useState([]);
-
-    const handleRedirectToTrading = (id: string) => {
-        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
-
-        if (currentMarket) {
-            dispatch(setCurrentMarket(currentMarket));
-            history.push(
-                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
-            );
-        }
-    };
 
     const marketList = markets
         .map((market) => ({
@@ -116,7 +105,9 @@ const MarketListTradeComponent = (props) => {
                             <tbody>
                                 {filteredList.map((item) => (
                                     <tr
-                                        onClick={() => handleRedirectToTrading(item.id)}
+                                        onClick={() => {
+                                            handleRedirectToTrading(item.id);
+                                        }}
                                         key={item.id}
                                         className={`cursor-pointer ${item.id === currency && 'active'}`}>
                                         <td>
