@@ -1,337 +1,120 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
-import { useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { passwordMinEntropy } from '../../../api/config';
-import { ArrowLeft } from '../../assets/Arrow';
+import { injectIntl } from 'react-intl';
+import { connect, MapDispatchToPropsFunction, MapStateToProps } from 'react-redux';
+import { RouterProps, withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { IntlProps } from '../../../';
+import { ChangePasswordMobile } from 'src/mobile/components/ResetPasswordMobile';
+import { setDocumentTitle } from '../../../helpers';
 import {
-    PASSWORD_REGEX,
-    passwordErrorFirstSolution,
-    passwordErrorSecondSolution,
-    passwordErrorThirdSolution,
-} from '../../../helpers';
-import { forgotPassword, resetCaptchaState, selectCaptchaResponse } from '../../../modules';
-import { captchaType } from '../../../api/config';
-import { Modal } from 'src/desktop/components';
-import { CustomInput } from 'src/desktop/components';
-import { PasswordStrengthMeter } from 'src/desktop/components';
-import PinInput from 'react-pin-input';
-import { useLocation } from 'react-router-dom';
-import { Captcha } from 'src/components';
+    changeForgotPasswordFetch,
+    changeLanguage,
+    entropyPasswordFetch,
+    RootState,
+    selectChangeForgotPasswordSuccess,
+    selectCurrentPasswordEntropy,
+    selectMobileDeviceState,
+} from '../../../modules';
 
-export const ResetPasswordMobileScreen = (props) => {
-    const [oldPassword, setOldPassword] = React.useState('');
-    const [newPassword, setNewPassword] = React.useState('');
-    const [newPasswordFocus, setNewPasswordFocus] = React.useState(false);
-    const [confirmationPassword, setConfirmationPassword] = React.useState('');
-    const [confirmPasswordFocus, setConfirmPasswordFocus] = React.useState(false);
-    const [passwordErrorFirstSolved, setPasswordErrorFirstSolved] = React.useState(false);
-    const [passwordErrorSecondSolved, setPasswordErrorSecondSolved] = React.useState(false);
-    const [passwordErrorThirdSolved, setPasswordErrorThirdSolved] = React.useState(false);
-    const [passwordPopUp, setPasswordPopUp] = React.useState(false);
-    const [code, setCode] = React.useState('');
-    const [showModalConfirmation, setShowModalConfirmation] = React.useState(false);
-    const [showModalResendCode, setShowModalResendCode] = React.useState(false);
-    const location: { state: { email: string } } = useLocation();
-    const dispatch = useDispatch();
-    const intl = useIntl();
-    const history = useHistory();
+interface ChangeForgottenPasswordState {
+    confirmToken: string;
+    seconds: number;
+    timerActive: boolean;
+}
 
-    const captcha_response = useSelector(selectCaptchaResponse);
+interface ReduxProps {
+    changeForgotPassword?: boolean;
+    isMobileDevice: boolean;
+    currentPasswordEntropy: number;
+}
 
-    const handleChangePassword = () => {
-        const payload = props.hideOldPassword
-            ? {
-                  password: newPassword,
-                  confirm_password: confirmationPassword,
-              }
-            : {
-                  old_password: oldPassword,
-                  new_password: newPassword,
-                  confirm_password: confirmationPassword,
-              };
+interface DispatchProps {
+    changeForgotPasswordFetch: typeof changeForgotPasswordFetch;
+    changeLanguage: typeof changeLanguage;
+    fetchCurrentPasswordEntropy: typeof entropyPasswordFetch;
+}
 
-        props.handleChangePassword(payload);
-
-        setCode('');
-        setOldPassword('');
-        setNewPassword('');
-        setConfirmationPassword('');
-        setConfirmPasswordFocus(false);
-        setShowModalConfirmation(false);
+interface HistoryProps {
+    history: {
+        location: {
+            search: string;
+            state: {
+                email: string;
+            };
+        };
     };
+}
 
-    const handleChangeOTP = (e) => {
-        setCode(e);
-        props.handleChangePin(e);
-    };
+type Props = RouterProps & DispatchProps & HistoryProps & ReduxProps & IntlProps;
 
-    const handleChangeNewPassword = (value: string) => {
-        if (passwordErrorFirstSolution(value) && !passwordErrorFirstSolved) {
-            setPasswordErrorFirstSolved(true);
-        } else if (!passwordErrorFirstSolution(value) && passwordErrorFirstSolved) {
-            setPasswordErrorFirstSolved(false);
+class PasswordResetMobile extends React.Component<Props, ChangeForgottenPasswordState> {
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            confirmToken: '',
+            seconds: 30000,
+            timerActive: false,
+        };
+    }
+
+    public componentWillReceiveProps(next: Props) {
+        if (next.changeForgotPassword && !this.props.changeForgotPassword) {
+            this.props.history.push('/signin');
         }
+    }
 
-        if (passwordErrorSecondSolution(value) && !passwordErrorSecondSolved) {
-            setPasswordErrorSecondSolved(true);
-        } else if (!passwordErrorSecondSolution(value) && passwordErrorSecondSolved) {
-            setPasswordErrorSecondSolved(false);
-        }
-
-        if (passwordErrorThirdSolution(value) && !passwordErrorThirdSolved) {
-            setPasswordErrorThirdSolved(true);
-        } else if (!passwordErrorThirdSolution(value) && passwordErrorThirdSolved) {
-            setPasswordErrorThirdSolved(false);
-        }
-
-        setNewPassword(value);
-        setTimeout(() => {
-            props.fetchCurrentPasswordEntropy({ password: value });
-        }, 500);
-    };
-
-    const handleFocusNewPassword = () => {
-        setPasswordPopUp(!passwordPopUp);
-        setNewPasswordFocus(!newPasswordFocus);
-    };
-
-    const translate = (key: string) => intl.formatMessage({ id: key });
-
-    const isValidForm = () => {
-        const isNewPasswordValid =
-            newPassword.match(PASSWORD_REGEX) &&
-            passwordErrorFirstSolved &&
-            passwordErrorSecondSolved &&
-            passwordErrorThirdSolved;
-        const isConfirmPasswordValid = newPassword === confirmationPassword;
-        const isOldPasswordValid = (!props.hideOldPassword && oldPassword) || true;
-
-        return isOldPasswordValid && isNewPasswordValid && isConfirmPasswordValid;
-    };
-
-    const handleResendCode = () => {
-        const email = location.state.email;
-
-        switch (captchaType()) {
-            case 'recaptcha':
-            case 'geetest':
-                dispatch(forgotPassword({ email, captcha_response }));
-                break;
-            default:
-                dispatch(forgotPassword({ email }));
-                break;
-        }
-
-        setShowModalResendCode(!showModalResendCode);
-        dispatch(resetCaptchaState());
-    };
-
-    const renderHeaderModalConfirmation = () => {
-        return (
-            <div className="text-center w-100">
-                <h6 className="text-md white-text m-0">Reset Password</h6>
-            </div>
-        );
-    };
-
-    const renderContentModalConfirmation = () => {
+    public render() {
+        const { isMobileDevice, currentPasswordEntropy } = this.props;
         return (
             <React.Fragment>
-                <p className="grey-text-accent text-center m-0 mb-24">
-                    Are you sure you want to change your password? ,make sure you remember your new password
-                </p>
-
-                <div className="d-flex justify-content-center p-0 border-none rounded-bottom-10">
-                    <Button type="button" className="btn-danger mr-24" onClick={() => setShowModalConfirmation(false)}>
-                        Close
-                    </Button>
-                    <Button className="btn-primary" onClick={handleChangePassword}>
-                        Continue
-                    </Button>
-                </div>
+                <ChangePasswordMobile
+                    handleChangePassword={this.handleSendNewPassword}
+                    handleChangePin={this.handleChangePin}
+                    title={
+                        !isMobileDevice &&
+                        this.props.intl.formatMessage({ id: 'page.header.signIn.resetPassword.title' })
+                    }
+                    currentPasswordEntropy={currentPasswordEntropy}
+                    fetchCurrentPasswordEntropy={this.props.fetchCurrentPasswordEntropy}
+                    hideOldPassword={true}
+                />
             </React.Fragment>
         );
+    }
+
+    private handleChangePin = (e) => {
+        this.setState({
+            confirmToken: e,
+        });
     };
 
-    const renderHeaderModalResendCode = () => {
-        return (
-            <div className="text-center w-100">
-                <h6 className="text-md white-text m-0">Resend Code</h6>
-            </div>
-        );
+    private handleSendNewPassword = (payload) => {
+        const { confirmToken } = this.state;
+        const { history } = this.props;
+        this.props.changeForgotPasswordFetch({
+            ...payload,
+            reset_password_token: confirmToken,
+            email: history.location.state.email || '',
+        });
     };
+}
 
-    const renderContentModalResendCode = () => {
-        const { error, success } = props;
+const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => ({
+    changeForgotPassword: selectChangeForgotPasswordSuccess(state),
+    isMobileDevice: selectMobileDeviceState(state),
+    currentPasswordEntropy: selectCurrentPasswordEntropy(state),
+});
 
-        return (
-            <React.Fragment>
-                <div className="mb-24">
-                    <Captcha error={error} success={success} />
-                </div>
-                <div className="d-flex justify-content-center p-0 border-none rounded-bottom-10">
-                    <Button
-                        type="button"
-                        className="btn-danger mr-24"
-                        onClick={() => setShowModalResendCode(!showModalResendCode)}>
-                        Close
-                    </Button>
-                    <Button
-                        className="btn-primary"
-                        disabled={!captcha_response ? true : false}
-                        onClick={handleResendCode}>
-                        Resend
-                    </Button>
-                </div>
-            </React.Fragment>
-        );
-    };
+const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
+    changeForgotPasswordFetch: (credentials) => dispatch(changeForgotPasswordFetch(credentials)),
+    changeLanguage: (lang) => dispatch(changeLanguage(lang)),
+    fetchCurrentPasswordEntropy: (payload) => dispatch(entropyPasswordFetch(payload)),
+});
 
-    const renderForm = () => {
-        return (
-            <React.Fragment>
-                <div className="mobile-container no-header dark-bg-main">
-                    <div onClick={() => history.push('/signin')}>
-                        <ArrowLeft className={'back'} />
-                    </div>
-                    <h1 className="mt-4 font-extrabold text-md grey-text-accent mb-3">Change Password</h1>
-                    <p className="text-sm grey-text">
-                        Change your password and by entering the code that has been sent previously
-                    </p>
-
-                    <p className="white-text text-sm mb-8">Pin Code</p>
-                    <PinInput
-                        length={6}
-                        onChange={(e) => handleChangeOTP(e)}
-                        onComplete={(e) => handleChangeOTP(e)}
-                        type="numeric"
-                        inputMode="number"
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            marginBottom: '8px',
-                        }}
-                        inputStyle={{
-                            background: 'transparent',
-                            borderRadius: '4px',
-                            borderColor: '#23262F',
-                            fontSize: '20px',
-                            color: '#F2F0FF',
-                        }}
-                        inputFocusStyle={{ fontSize: '20px', color: '#F2F0FF' }}
-                        autoSelect={true}
-                        regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
-                    />
-                    <p
-                        onClick={() => setShowModalResendCode(!showModalResendCode)}
-                        className="text-right text-sm grey-text cursor-pointer">
-                        Resend Code
-                    </p>
-                    <div>
-                        <CustomInput
-                            type="password"
-                            label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.new' })}
-                            placeholder={intl.formatMessage({
-                                id: 'page.body.profile.header.account.content.password.new',
-                            })}
-                            defaultLabel="New password"
-                            handleChangeInput={handleChangeNewPassword}
-                            inputValue={newPassword}
-                            handleFocusInput={handleFocusNewPassword}
-                            classNameLabel="white-text text-sm mb-8"
-                            classNameInput={`${
-                                newPasswordFocus &&
-                                (!passwordErrorFirstSolved ||
-                                    !passwordErrorSecondSolved ||
-                                    !passwordErrorThirdSolved) &&
-                                'error'
-                            }`}
-                            autoFocus={false}
-                            labelVisible
-                        />
-                        {newPasswordFocus &&
-                            (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) && (
-                                <p className="danger-text m-0 mb-24 text-xs">Password Strength must be GOOD</p>
-                            )}
-                    </div>
-                    <div>
-                        <PasswordStrengthMeter
-                            minPasswordEntropy={passwordMinEntropy()}
-                            currentPasswordEntropy={props.currentPasswordEntropy}
-                            passwordExist={newPassword !== ''}
-                            passwordErrorFirstSolved={passwordErrorFirstSolved}
-                            passwordErrorSecondSolved={passwordErrorSecondSolved}
-                            passwordErrorThirdSolved={passwordErrorThirdSolved}
-                            passwordPopUp={passwordPopUp}
-                            translate={translate}
-                        />
-                    </div>
-                    <div className="mt-3">
-                        <CustomInput
-                            type="password"
-                            label={intl.formatMessage({ id: 'page.body.profile.header.account.content.password.conf' })}
-                            placeholder={intl.formatMessage({
-                                id: 'page.body.profile.header.account.content.password.conf',
-                            })}
-                            defaultLabel="Password confirmation"
-                            handleChangeInput={setConfirmationPassword}
-                            inputValue={confirmationPassword}
-                            handleFocusInput={() => setConfirmPasswordFocus(!confirmPasswordFocus)}
-                            classNameLabel="white-text text-sm mb-8"
-                            classNameInput={`${
-                                confirmPasswordFocus &&
-                                (!passwordErrorFirstSolved ||
-                                    !passwordErrorSecondSolved ||
-                                    !passwordErrorThirdSolved) &&
-                                'error'
-                            }`}
-                            autoFocus={false}
-                            labelVisible
-                        />
-
-                        {confirmPasswordFocus && confirmationPassword !== newPassword && (
-                            <p className="text-xs danger-text m-0 mb-24">Password Confirmation doesn't match</p>
-                        )}
-                    </div>
-
-                    <div className="form-button-group mt-4">
-                        <div className="footer-section">
-                            <Button
-                                block={true}
-                                disabled={!isValidForm()}
-                                onClick={() => setShowModalConfirmation(true)}
-                                size="lg"
-                                variant="primary">
-                                {intl.formatMessage({
-                                    id: 'page.body.profile.header.account.content.password.button.change',
-                                })}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-
-                {showModalConfirmation && (
-                    <Modal
-                        show={showModalConfirmation}
-                        header={renderHeaderModalConfirmation()}
-                        content={renderContentModalConfirmation()}
-                    />
-                )}
-
-                {showModalResendCode && (
-                    <Modal
-                        show={showModalResendCode}
-                        header={renderHeaderModalResendCode()}
-                        content={renderContentModalResendCode()}
-                    />
-                )}
-            </React.Fragment>
-        );
-    };
-
-    return <React.Fragment>{renderForm()}</React.Fragment>;
-};
-
-export const ChangePassword = React.memo(ResetPasswordMobileScreen);
+export const ResetPasswordMobileScreen = compose(
+    injectIntl,
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(PasswordResetMobile) as React.ComponentClass;
