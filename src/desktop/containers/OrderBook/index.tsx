@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Spinner } from 'react-bootstrap';
 import {
     selectCurrentMarket,
     selectDepthBids,
     selectDepthAsks,
+    selectDepthLoading,
     selectLastRecentTrade,
     setCurrentMarket,
     Market,
     selectMarkets,
     depthFetch,
-    depthDataIncrement,
+    selectOrderBookId,
 } from '../../../modules';
-import { selectRanger } from 'src/modules/public/ranger/selectors';
 import { useParams } from 'react-router-dom';
-import { useOpenOrdersFetch, useDepthFetch } from '../../../hooks';
+import { useOpenOrdersFetch, useDepthFetch, usePrevious } from '../../../hooks';
 import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
 import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers';
 import { Decimal } from '../../../components';
@@ -33,25 +34,15 @@ const OrderBookComponent = (props) => {
     const lastTrade = useSelector(selectLastRecentTrade);
     const ask = useSelector(selectDepthAsks);
     const bid = useSelector(selectDepthBids);
-    const rangerConnect = useSelector(selectRanger);
+    const loading = useSelector(selectDepthLoading);
+    const marketId = useSelector(selectOrderBookId);
 
     const current = markets.find((item) => item.id === currency);
     React.useEffect(() => {
-        if (current) {
-            dispatch(setCurrentMarket(current));
-            // dispatch(depthDataIncrement());
-        }
-    }, [current]);
-
-    React.useEffect(() => {
-        if (ask.length || ask !== undefined) {
-            setAsks([...ask].sort((a, b) => Number(b[0]) - Number(a[0])));
-        }
-
-        if (bid.length || bid !== undefined) {
-            setBids([...bid].sort((a, b) => Number(b[0]) - Number(a[0])));
-        }
-    }, [bid, ask]);
+        dispatch(depthFetch(currentMarket));
+        setAsks([...ask].sort((a, b) => Number(b[0]) - Number(a[0])));
+        setBids([...bid].sort((a, b) => Number(b[0]) - Number(a[0])));
+    }, [dispatch, currentMarket]);
 
     const mapValues = (maxVolume?: number, data?: number[]) => {
         const resultData =
@@ -140,7 +131,7 @@ const OrderBookComponent = (props) => {
                         className={`p-0 m-0 text-sm font-normal ${
                             lastTrade && +lastTrade.price_change > 0 ? 'green-text' : 'danger-text'
                         }`}>
-                        {lastTrade && lastTrade.price_change}
+                        {Decimal.format(lastTrade && +lastTrade.price_change, currentMarket?.price_precision)}
                     </p>
                 </div>
                 <div className="max-400 position-relative">

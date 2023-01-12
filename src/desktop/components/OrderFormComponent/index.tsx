@@ -125,8 +125,10 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={amount}
-                        value={amount}
+                        defaultValue={
+                            amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount
+                        }
+                        value={amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount}
                         onChange={(e) => {
                             handleChangeAmount(e.target.value);
                             handleSide(side === 'Sell' ? 'sell' : 'buy');
@@ -159,7 +161,9 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={total}
+                        defaultValue={
+                            amount.includes('NaN') ? Decimal.format('0', currentMarket?.price_precision) : total
+                        }
                         readOnly
                         className="form-control input-order-form"
                         id={labelTotal}
