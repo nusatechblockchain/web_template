@@ -30,6 +30,7 @@ const HeaderComponent: React.FC = () => {
     const handleLogout = async () => {
         await dispatch(logoutFetch());
         history.push('/trading');
+        setShowSidebar(false);
     };
 
     const sidebarMenu = [
@@ -159,7 +160,7 @@ const HeaderComponent: React.FC = () => {
                                 ))}
 
                             {userLoggedIn && (
-                                <div className="px-24 mt-5">
+                                <div className="px-24 mt-5 pb-3">
                                     <button
                                         onClick={handleLogout}
                                         type="button"
