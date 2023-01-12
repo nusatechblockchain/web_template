@@ -33,7 +33,7 @@ const FAQMobileScreen: React.FC = () => {
     };
 
     const sidebarMenu = [
-        { icon: <Dashboard />, name: 'Dashborad', path: '/profile', showNotLoggedin: false },
+        { icon: <Dashboard />, name: 'Dashboard', path: '/profile', showNotLoggedin: false },
         { icon: <Wallet />, name: 'Wallet', path: '/wallets', showNotLoggedin: false },
         { icon: <MarketOrder />, name: 'MarketOrder', path: '/market-order', showNotLoggedin: false },
         { icon: <TradeHistory />, name: 'Trade History', path: '/history-trade', showNotLoggedin: false },

@@ -34,7 +34,7 @@ const HeaderComponent: React.FC = () => {
     };
 
     const sidebarMenu = [
-        { icon: <Dashboard />, name: 'Dashborad', path: '/profile', showNotLoggedin: false },
+        { icon: <Dashboard />, name: 'Dashboard', path: '/profile', showNotLoggedin: false },
         { icon: <Wallet />, name: 'Wallet', path: '/wallets', showNotLoggedin: false },
         { icon: <MarketOrder />, name: 'MarketOrder', path: '/market-order', showNotLoggedin: false },
         { icon: <TradeHistory />, name: 'Trade History', path: '/history-trade', showNotLoggedin: false },
@@ -74,7 +74,7 @@ const HeaderComponent: React.FC = () => {
                             {userLoggedIn ? (
                                 <Link to={'/profile'} onClick={() => setShowSidebar(false)}>
                                     <div className="card-user-info d-flex align-items-center px-24 mb-24">
-                                        <img src="img-mobile/avatar.png" className="avatar-image" alt="ava" />
+                                        <img src="/img-mobile/avatar.png" className="avatar-image" alt="ava" />
                                         <div className="user-info d-flex justify-content-between align-items-center ml-2 w-100">
                                             <div>
                                                 <div className="user-name d-flex align-items-center">
