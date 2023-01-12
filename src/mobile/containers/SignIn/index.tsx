@@ -174,7 +174,7 @@ const SignInMobile: React.FC<SignInProps> = ({
             </div>
             <h5 className="text-md font-extrabold contrast-text text-center mb-3">Forgot Password?</h5>
             <p className="text-center text-sm grey-text">
-                Please reset the password by entering the username that has been given
+                Don’t worry it happens, Please click continue to associated with your account
             </p>
             <Link to={'/forgot-password'} className="btn btn-primary btn-mobile btn-block mb-3">
                 Continue
