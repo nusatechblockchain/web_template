@@ -22,6 +22,7 @@ import {
     selectDepthBids,
     depthFetch,
     depthIncrementSubscribeResetLoading,
+    selectDepthLoading,
 } from 'src/modules';
 import { incrementalOrderBook } from 'src/api';
 import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
@@ -43,6 +44,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const marketTickers = useSelector(selectMarketTickers);
     const currencies = useSelector(selectCurrencies);
     const currentMarket = useSelector(selectCurrentMarket);
+    const loading = useSelector(selectDepthLoading);
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
     useDepthFetch();
@@ -60,6 +62,14 @@ export const TradingScreen: FC = (): ReactElement => {
             dispatch(setCurrentMarket(current));
         }
     }, [current]);
+
+    React.useEffect(() => {
+        if (loading) {
+            setTimeout(() => {
+                dispatch(depthIncrementSubscribeResetLoading);
+            }, 5000);
+        }
+    }, [currentMarket, loading]);
 
     React.useEffect(() => {
         if (listOrder) {
@@ -270,7 +280,7 @@ export const TradingScreen: FC = (): ReactElement => {
                     <div className="px-24 pt-1">
                         <div className="grid-wrapper">
                             <div className="grid-item order-book">
-                                <OrderBook asks={asks} bids={bids} />
+                                <OrderBook asks={asks} bids={bids} loading={loading} />
                             </div>
                             <div className="grid-item chart">
                                 <TradingChart />

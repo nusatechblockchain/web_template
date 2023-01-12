@@ -21,7 +21,7 @@ import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers'
 import { Decimal } from '../../../components';
 import { NoData } from '../../../desktop/components';
 
-const OrderBookComponent = ({ asks, bids }) => {
+const OrderBookComponent = ({ asks, bids, loading }) => {
     useOpenOrdersFetch();
     useDepthFetch();
 
@@ -32,7 +32,6 @@ const OrderBookComponent = ({ asks, bids }) => {
 
     const currentMarket = useSelector(selectCurrentMarket);
     const lastTrade = useSelector(selectLastRecentTrade);
-    const loading = useSelector(selectDepthLoading);
 
     React.useEffect(() => {
         if (!asks[0]) {
@@ -53,11 +52,10 @@ const OrderBookComponent = ({ asks, bids }) => {
         };
     }, [asks, bids, currentMarket]);
 
-    React.useEffect(() => {
-        if (loading) {
-            dispatch(depthIncrementSubscribeResetLoading());
-        }
-    }, [loading]);
+    // React.useEffect(() => {
+    //     setTimeout(() => {})
+    //     dispatch(depthIncrementSubscribeResetLoading());
+    // }, [loading]);
 
     const mapValues = (maxVolume?: number, data?: number[]) => {
         const resultData =
