@@ -18,8 +18,9 @@ import { OrderSide } from 'src/modules/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { getTotalPrice, numberFormat, getAmount } from '../../../helpers';
+import { Link } from 'react-router-dom';
 
-export const OrderForm = () => {
+export const OrderForm: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const isLoggedin = useSelector(selectUserLoggedIn);
     const tickers = useSelector(selectMarketTickers);
@@ -47,11 +48,11 @@ export const OrderForm = () => {
 
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
-    const [priceBuy, setPriceBuy] = React.useState('');
+    const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
     const [amountBuy, setAmountBuy] = React.useState('');
     const [totalBuy, setTotalBuy] = React.useState('');
 
-    const [priceSell, setPriceSell] = React.useState('');
+    const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
     const [amountSell, setAmountSell] = React.useState('');
     const [totalSell, setTotalSell] = React.useState('');
 
@@ -140,8 +141,8 @@ export const OrderForm = () => {
         setShowModalBuy(false);
         setAmountBuy('');
         setAmountSell('');
-        setPriceBuy('');
-        setPriceSell('');
+        setPriceBuy(Decimal.format('0', currentMarket?.price_precision));
+        setPriceSell(Decimal.format('0', currentMarket?.price_precision));
         setTotalBuy('');
         setTotalSell('');
         setOrderPercentageSell(0);
@@ -244,7 +245,17 @@ export const OrderForm = () => {
             <div className="p-3">
                 <p className="white-text font-bold text-sm mb-3">Order Form</p>
 
-                <div className={isLoggedin ? ' ' : ' blur-effect'}>
+                <div className={isLoggedin ? ' ' : 'blur-effect'}>
+                    {isLoggedin ? (
+                        ''
+                    ) : (
+                        <div className="blur-content letter-sm">
+                            PLEASE{'   '}
+                            <Link to={'/signin'} className="blue-text font-bold">
+                                LOGIN
+                            </Link>
+                        </div>
+                    )}
                     <div className="d-flex mb-1 order-tab">
                         <input
                             type="radio"

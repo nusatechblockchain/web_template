@@ -104,15 +104,15 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         defaultValue={
                             orderType === 'market'
                                 ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
-                                : +price
+                                : price
                         }
                         value={
                             orderType === 'market'
                                 ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
-                                : +price
+                                : price
                         }
                         onChange={(e) => handleChangePrice(e.target.value)}
-                        className="form-control input-order-form"
+                        className={`form-control input-order-form ${orderType === 'market' && 'text-sm grey-text'}`}
                         id={labelPrice}
                     />
                     <label htmlFor={labelPrice} className="input-order-label-left">
@@ -122,9 +122,10 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         {currentMarket?.quote_unit?.toUpperCase()}
                     </label>
                 </div>
-                <div className="form-group mb-3 position-relative  w-100">
+                <div className="form-group mb-3 position-relative w-100">
                     <input
                         type="text"
+                        // placeholder={Decimal.format('0', currentMarket?.amount_precision)}
                         defaultValue={
                             amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount
                         }
@@ -161,8 +162,10 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <div className="form-group mb-3 position-relative  w-100">
                     <input
                         type="text"
-                        defaultValue={
-                            amount.includes('NaN') ? Decimal.format('0', currentMarket?.price_precision) : total
+                        placeholder={
+                            total.includes('NaN')
+                                ? Decimal.format('0', currentMarket?.price_precision)
+                                : Decimal.format(+total, currentMarket?.price_precision)
                         }
                         readOnly
                         className="form-control input-order-form"
