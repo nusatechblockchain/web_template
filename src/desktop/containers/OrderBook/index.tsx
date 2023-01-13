@@ -34,28 +34,10 @@ const OrderBookComponent = ({ asks, bids, loading }) => {
     const lastTrade = useSelector(selectLastRecentTrade);
 
     React.useEffect(() => {
-        if (!asks[0]) {
-            setAsk([]);
-        } else {
-            setAsk([...asks].sort((a, b) => Number(b[0]) - Number(a[0])));
-        }
-
-        if (!bids[0]) {
-            setBid([]);
-        } else {
-            setBid([...bids].sort((a, b) => Number(b[0]) - Number(a[0])));
-        }
-
-        return () => {
-            setAsk([]);
-            setBid([]);
-        };
+        setAsk([...asks].sort((a, b) => Number(b[0]) - Number(a[0])));
+        setBid([...bids].sort((a, b) => Number(b[0]) - Number(a[0])));
+        // }
     }, [asks, bids, currentMarket]);
-
-    // React.useEffect(() => {
-    //     setTimeout(() => {})
-    //     dispatch(depthIncrementSubscribeResetLoading());
-    // }, [loading]);
 
     const mapValues = (maxVolume?: number, data?: number[]) => {
         const resultData =
