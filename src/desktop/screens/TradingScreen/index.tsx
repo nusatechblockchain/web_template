@@ -29,12 +29,14 @@ import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
 import { OrderCommon } from '../../../modules/types';
 import { getTriggerSign } from './helpers';
+import { CloseIconTrade } from 'src/assets/images/CloseIcon';
 
 export const TradingScreen: FC = (): ReactElement => {
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
     const [list, setList] = useState([]);
     const [filterSell, setFilterSell] = useState(false);
     const [filterBuy, setFilterBuy] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const asks = useSelector(selectDepthAsks);
     const bids = useSelector(selectDepthBids);
@@ -44,7 +46,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const marketTickers = useSelector(selectMarketTickers);
     const currencies = useSelector(selectCurrencies);
     const currentMarket = useSelector(selectCurrentMarket);
-    const loading = useSelector(selectDepthLoading);
+    const orderBookLoading = useSelector(selectDepthLoading);
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
     useDepthFetch();
@@ -64,12 +66,14 @@ export const TradingScreen: FC = (): ReactElement => {
     }, [current]);
 
     React.useEffect(() => {
-        if (loading) {
+        if (orderBookLoading) {
+            setLoading(true);
             setTimeout(() => {
-                dispatch(depthIncrementSubscribeResetLoading);
-            }, 5000);
+                dispatch(depthIncrementSubscribeResetLoading());
+                setLoading(false);
+            }, 2000);
         }
-    }, [currentMarket, loading]);
+    }, [currentMarket, orderBookLoading]);
 
     React.useEffect(() => {
         if (listOrder) {
@@ -97,10 +101,6 @@ export const TradingScreen: FC = (): ReactElement => {
 
         if (currentMarket) {
             dispatch(setCurrentMarket(currentMarket));
-            console.log(currentMarket);
-
-            dispatch(depthIncrementSubscribeResetLoading());
-
             if (!incrementalOrderBook()) {
                 dispatch(depthFetch(currentMarket));
             }
@@ -144,7 +144,10 @@ export const TradingScreen: FC = (): ReactElement => {
             'Filled',
             'Side',
             <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
-                Cancel All
+                Cancel All{' '}
+                <span className="ml-2">
+                    <CloseIconTrade />
+                </span>
             </p>,
         ],
         []
@@ -162,7 +165,10 @@ export const TradingScreen: FC = (): ReactElement => {
             'Filled',
             'Side',
             <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
-                Cancel All
+                Cancel All{' '}
+                <span className="ml-2">
+                    <CloseIconTrade />
+                </span>
             </p>,
         ],
         []

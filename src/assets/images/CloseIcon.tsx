@@ -19,6 +19,17 @@ export const CloseIcon: React.FC<CloseIconProps> = (props: CloseIconProps) => {
     );
 };
 
+export const CloseIconTrade: React.FC = () => {
+    return (
+        <svg width={11} height={12} viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M5.84537 5.9595L9.98167 1.8232L9.21103 1.05257L5.07473 5.18886L0.770636 0.884766L0 1.6554L4.3041 5.9595L0.1678 10.0958L0.938436 10.8664L5.07473 6.73014L9.45962 11.115L10.2303 10.3444L5.84537 5.9595Z"
+                fill="#B5B3BC"
+            />
+        </svg>
+    );
+};
+
 export const HugeCloseIcon: React.FC<CloseIconProps> = (props: CloseIconProps) => {
     return (
         <svg
