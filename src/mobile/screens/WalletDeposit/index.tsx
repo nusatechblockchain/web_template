@@ -154,7 +154,7 @@ const WalletDepositMobileScreen: React.FC = () => {
 
     const renderFAQDetailHeader = () => {
         return (
-            <div className="mt-3 p-10">
+            <div className="mt-3 px-12">
                 <div onClick={() => setShowFAQDetail(!showFAQDetail)} className="cursor-pointer">
                     <ArrowLeft className={''} />
                 </div>
