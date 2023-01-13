@@ -1,13 +1,8 @@
-import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-<<<<<<< HEAD
 import { useHistory, Link } from 'react-router-dom';
-
-import { Decimal, formatWithSeparators, Table } from 'src/components';
-=======
 import { Decimal, formatWithSeparators, Loading, Table } from 'src/components';
->>>>>>> 42c1a6b476a43d9244f80a6b8f126ada691b152f
 import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch } from 'src/hooks';
 import {
     selectAbilities,
@@ -40,18 +35,11 @@ interface ExtendedWallet extends Wallet {
 }
 
 const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
-<<<<<<< HEAD
-    const [filterValue, setFilterValue] = useState<string>('');
-    const [filteredWallets, setFilteredWallets] = useState<ExtendedWallet[]>([]);
-    const [nonZeroSelected, setNonZeroSelected] = useState<boolean>(false);
-    const [showModalLocked, setShowModalLocked] = useState<boolean>(false);
-=======
     const [filterValue, setFilterValue] = React.useState<string>('');
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
     const [showModalLocked, setShowModalLocked] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
->>>>>>> 42c1a6b476a43d9244f80a6b8f126ada691b152f
 
     const { formatMessage } = useIntl();
     const { isP2PEnabled } = props;
