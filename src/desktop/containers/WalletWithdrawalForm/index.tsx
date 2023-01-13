@@ -22,8 +22,8 @@ import {
 import { GLOBAL_PLATFORM_CURRENCY, DEFAULT_FIAT_PRECISION } from '../../../constants';
 import { Decimal, Tooltip } from '../../../components';
 import { CirclePlusIcon } from '../../../assets/images/CirclePlusIcon';
-import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector } from '../../../hooks';
-import { walletsWithdrawCcyFetch, selectWithdrawSuccess } from '../../../modules';
+import { useBeneficiariesFetch, useWithdrawLimits, useReduxSelector, useWalletsFetch } from '../../../hooks';
+import { walletsWithdrawCcyFetch, selectWithdrawSuccess, selectWallets } from '../../../modules';
 import PinInput from 'react-pin-input';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import moment from 'moment';
@@ -32,6 +32,7 @@ import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIc
 export const WalletWithdrawalForm: React.FC = () => {
     useBeneficiariesFetch();
     useWithdrawLimits();
+    useWalletsFetch();
     const intl = useIntl();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -61,10 +62,13 @@ export const WalletWithdrawalForm: React.FC = () => {
     const beneficiariesActivateError = useSelector(selectBeneficiariesActivateError);
     const beneficiaryPermited = useSelector(selectBeneficiariesFetchError);
     const withdrawPermited = useSelector(selectWithdrawLimitError);
-    const user = useSelector(selectUserInfo);
-    const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencies: Currency[] = useSelector(selectCurrencies);
+    const wallets = useSelector(selectWallets);
+    const user = useSelector(selectUserInfo);
+
+    const beneficiariesList = beneficiaries.filter((item) => item.currency === currency);
     const currencyItem: Currency = currencies.find((item) => item.id === currency);
+    const wallet = wallets.find((item) => item.currency === currency);
 
     const [seconds, setSeconds] = React.useState(30000);
     const [timerActive, setTimerActive] = React.useState(false);
@@ -444,12 +448,18 @@ export const WalletWithdrawalForm: React.FC = () => {
                     Amount available for withdrawal ≤ Account available assets - Unconfirmed digital assets.
                 </p>
                 <div className="d-flex justify-content-between mb-12">
-                    <p className="mb-0 text-ms grey-text-accent">Fee</p>
-                    <p className="mb-0 text-ms grey-text-accent font-bold">${fee !== undefined ? fee : '0'}</p>
+                    <p className="mb-0 text-ms grey-text-accent">Your Balance</p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">
+                        {wallet?.balance} {currency.toUpperCase()}
+                    </p>
                 </div>
                 <div className="d-flex justify-content-between mb-12">
                     <p className="mb-0 text-ms grey-text-accent">Min Withdraw </p>
-                    <p className="mb-0 text-ms grey-text-accent font-bold">${minWithdraw ? minWithdraw : '0'}</p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">$ {minWithdraw ? minWithdraw : '0'}</p>
+                </div>
+                <div className="d-flex justify-content-between mb-12">
+                    <p className="mb-0 text-ms grey-text-accent">Fee</p>
+                    <p className="mb-0 text-ms grey-text-accent font-bold">$ {fee !== undefined ? fee : '0'}</p>
                 </div>
                 <div className="d-flex justify-content-between mb-24">
                     <p className="mb-0 text-ms grey-text-accent">You will Recive </p>

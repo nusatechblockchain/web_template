@@ -264,7 +264,7 @@ export const MarketOpen: FC = (): ReactElement => {
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="position-relative">
                         {renderFilter()}
-                        {tab === 'open' && (
+                        {tab === 'open' && data.length && (
                             <div className="ml-3 cancel-all-order">
                                 <button type="button" onClick={handleCancelAllOrders} className="btn btn-secondary">
                                     Cancel All Orders <ModalCloseIcon className="small-icon" />
