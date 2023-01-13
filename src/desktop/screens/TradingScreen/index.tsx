@@ -1,9 +1,9 @@
 import classnames from 'classnames';
 import React, { FC, ReactElement, useMemo, useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useOpenOrdersFetch } from 'src/hooks';
+import { useDepthFetch, useOpenOrdersFetch } from 'src/hooks';
 import { Decimal } from '../../../components';
 import { localeDate, setTradeColor } from '../../../helpers';
 import {
@@ -13,30 +13,49 @@ import {
     selectMarkets,
     selectOpenOrdersFetching,
     selectOpenOrdersList,
+    selectMarketTickers,
+    selectCurrencies,
     userOpenOrdersFetch,
     setCurrentMarket,
     Market,
+    selectDepthAsks,
+    selectDepthBids,
+    depthFetch,
+    depthIncrementSubscribeResetLoading,
+    selectDepthLoading,
 } from 'src/modules';
+import { incrementalOrderBook } from 'src/api';
+import { useMarketsFetch, useMarketsTickersFetch } from 'src/hooks';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
 import { OrderCommon } from '../../../modules/types';
 import { getTriggerSign } from './helpers';
+import { CloseIconTrade } from 'src/assets/images/CloseIcon';
 
 export const TradingScreen: FC = (): ReactElement => {
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
     const [list, setList] = useState([]);
     const [filterSell, setFilterSell] = useState(false);
     const [filterBuy, setFilterBuy] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const asks = useSelector(selectDepthAsks);
+    const bids = useSelector(selectDepthBids);
+    const listOrder = useSelector(selectOpenOrdersList);
+    const fetching = useSelector(selectOpenOrdersFetching);
+    const markets = useSelector(selectMarkets);
+    const marketTickers = useSelector(selectMarketTickers);
+    const currencies = useSelector(selectCurrencies);
     const currentMarket = useSelector(selectCurrentMarket);
+    const orderBookLoading = useSelector(selectDepthLoading);
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
+    useDepthFetch();
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const { formatMessage } = useIntl();
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    const listOrder = useSelector(selectOpenOrdersList);
-    const fetching = useSelector(selectOpenOrdersFetching);
-    const markets = useSelector(selectMarkets);
     const translate = React.useCallback((id: string) => formatMessage({ id: id }), [formatMessage]);
 
     const current: Market | undefined = markets.find((item) => item.id === currency);
@@ -45,6 +64,16 @@ export const TradingScreen: FC = (): ReactElement => {
             dispatch(setCurrentMarket(current));
         }
     }, [current]);
+
+    React.useEffect(() => {
+        if (orderBookLoading) {
+            setLoading(true);
+            setTimeout(() => {
+                dispatch(depthIncrementSubscribeResetLoading());
+                setLoading(false);
+            }, 2000);
+        }
+    }, [currentMarket, orderBookLoading]);
 
     React.useEffect(() => {
         if (listOrder) {
@@ -66,6 +95,21 @@ export const TradingScreen: FC = (): ReactElement => {
             setList([]);
         }
     }, [listOrder, filterBuy, filterSell, hideOtherPairs]);
+
+    const handleRedirectToTrading = (id: string) => {
+        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
+
+        if (currentMarket) {
+            dispatch(setCurrentMarket(currentMarket));
+            if (!incrementalOrderBook()) {
+                dispatch(depthFetch(currentMarket));
+            }
+
+            history.push(
+                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
+            );
+        }
+    };
 
     const handleCancel = (order: OrderCommon) => {
         dispatch(openOrdersCancelFetch({ order, list }));
@@ -100,7 +144,10 @@ export const TradingScreen: FC = (): ReactElement => {
             'Filled',
             'Side',
             <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
-                Cancel All
+                Cancel All{' '}
+                <span className="ml-2">
+                    <CloseIconTrade />
+                </span>
             </p>,
         ],
         []
@@ -118,7 +165,10 @@ export const TradingScreen: FC = (): ReactElement => {
             'Filled',
             'Side',
             <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
-                Cancel All
+                Cancel All{' '}
+                <span className="ml-2">
+                    <CloseIconTrade />
+                </span>
             </p>,
         ],
         []
@@ -236,13 +286,13 @@ export const TradingScreen: FC = (): ReactElement => {
                     <div className="px-24 pt-1">
                         <div className="grid-wrapper">
                             <div className="grid-item order-book">
-                                <OrderBook />
+                                <OrderBook asks={asks} bids={bids} loading={loading} />
                             </div>
                             <div className="grid-item chart">
                                 <TradingChart />
                             </div>
                             <div className="grid-item market-list">
-                                <MarketListTrade />
+                                <MarketListTrade handleRedirectToTrading={handleRedirectToTrading} />
                             </div>
                             <div className="grid-item order-form">
                                 <OrderForm />

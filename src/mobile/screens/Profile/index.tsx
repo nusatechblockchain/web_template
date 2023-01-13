@@ -44,6 +44,8 @@ const ProfileMobileScreen: React.FC = () => {
     const [hideWarning, setHideWarning] = React.useState(false);
     const [seconds, setSeconds] = React.useState(TIME_RESEND);
     const [timerActive, setTimerActive] = React.useState(false);
+    const [kycStatus, setKycStatus] = React.useState('');
+    const [profilekycStatus, setProfileKycStatus] = React.useState('');
 
     React.useEffect(() => {
         let timer = null;
@@ -61,6 +63,18 @@ const ProfileMobileScreen: React.FC = () => {
             clearInterval(timer);
         };
     });
+
+    React.useEffect(() => {
+        const kycData = user?.labels[0];
+        if (kycData.key == 'document') {
+            const kycStatus = kycData.value;
+            setKycStatus(kycStatus);
+        } else {
+            setKycStatus('');
+        }
+
+        setProfileKycStatus(user.profiles[0]?.state);
+    }, []);
 
     const phone = user.phones.slice(-1);
 
@@ -231,6 +245,18 @@ const ProfileMobileScreen: React.FC = () => {
         </>
     );
 
+    const renderKycStatus = () => {
+        if (kycStatus == '') {
+            return <span className="d-block p-1 danger-text text-xs font-normal "> Unverified</span>;
+        } else if (kycStatus == 'rejected') {
+            return <span className="d-block p-1 danger-text text-xs font-normal "> Rejected</span>;
+        } else if (kycStatus == 'verified') {
+            return <span className="d-block p-1 contrast-text text-xs font-normal "> Verified</span>;
+        } else if (kycStatus == 'pending') {
+            return <span className="d-block p-1 grey-text text-xs font-normal ">Waiting Confirmation</span>;
+        }
+    };
+
     return (
         <React.Fragment>
             <div className="mobile-container profile-screen no-header dark-bg-main">
@@ -302,19 +328,21 @@ const ProfileMobileScreen: React.FC = () => {
                             {user && user.email && <CheckIcon className="check-icon" />}
                         </div>
                     </div>
-                    <div className=" d-flex align-items-center mb-24 cursor-pointer">
-                        <div className="mr-3">
-                            <KycProfileIcon className="profile-icon" />
-                        </div>
-                        <div className="d-flex justify-content-between align-items-center w-100">
-                            <div>
-                                <h4 className="mb-0 text-sm font-bold grey-text-accent">KYC Verification</h4>
-                                <p className="mb-0 text-xs green-text">KYC Level 1</p>
+                    <Link to={kycStatus == 'verified' ? '/profile' : '/profile/kyc'}>
+                        <div className=" d-flex align-items-center mb-24 cursor-pointer">
+                            <div className="mr-3">
+                                <KycProfileIcon className="profile-icon" />
                             </div>
+                            <div className="d-flex justify-content-between align-items-center w-100">
+                                <div>
+                                    <h4 className="mb-0 text-sm font-bold grey-text-accent">KYC Verification</h4>
+                                    <p className="mb-0 text-xs green-text">{renderKycStatus()}</p>
+                                </div>
 
-                            <CheckIcon className="check-icon" />
+                                {kycStatus === 'verified' && <CheckIcon className="check-icon" />}
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                     <div onClick={() => handleModalChangePhone()}>
                         <div className=" d-flex align-items-center mb-24 cursor-pointer">
                             <div className="mr-3">

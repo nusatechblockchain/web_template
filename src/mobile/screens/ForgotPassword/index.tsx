@@ -113,7 +113,9 @@ const ForgotPasswordMobileScreen: React.FC<CaptchaProps> = (props) => {
     return (
         <React.Fragment>
             <div className="mobile-container  no-header dark-bg-main">
-                <ArrowLeft className={'back'} />
+                <div onClick={() => history.push('/signin')}>
+                    <ArrowLeft className={'back'} />
+                </div>
                 <h1 className="mt-4 font-extrabold text-md grey-text-accent mb-3">Forgot Password</h1>
                 <p className="text-sm grey-text">
                     Please enter your email address or phone. You will receive a code to create a new password{' '}
