@@ -91,6 +91,8 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         });
     }, [coinBlockchainName]);
 
+    console.log(coinBlockchainName, 'coinBlockchainName')
+    
     const validateCoinAddressFormat = React.useCallback(
         (value: string) => {
             const valid = WAValidator.validate(value, currencyID);
