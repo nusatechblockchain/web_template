@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
+
 import './ModalAddBeneficiary.pcss';
 import { CircleCloseIcon } from 'src/assets/images/CircleCloseIcon';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
@@ -92,7 +93,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
 
     const validateCoinAddressFormat = React.useCallback(
         (value: string) => {
-            var valid = WAValidator.validate(value, currencyID);
+            const valid = WAValidator.validate(value, currencyID);
             setCoinAddressValid(valid);
         },
         [currencyID]
@@ -139,6 +140,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         }
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName, errorCreate, createLoading]);
 
+    console.log('coinAddress', coinAddress);
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
 
     const optionNetworks =
@@ -170,7 +172,7 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
             </React.Fragment>
         );
     };
-
+    // ketika gagal add hanya tampilkan error saja, modal tidak tampil
     const renderContentModalAddBeneficiary = () => {
         return (
             <React.Fragment>

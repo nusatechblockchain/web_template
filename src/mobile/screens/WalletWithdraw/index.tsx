@@ -61,7 +61,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
     const blockchainKeyValue =
         currencyItem && currencyItem.networks.find((item) => item.blockchain_key === blockchainKey);
     const fee = blockchainKeyValue && blockchainKeyValue.withdraw_fee;
-
+    console.log(beneficiariesError, '1')
     React.useEffect(() => {
         let timer = null;
         if (timerActive) {
@@ -364,6 +364,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                     handleAddAddress={() => {
                         setShowModalModalAddBeneficiary(true);
                         setShowModalBeneficiaryList(false);
+                        console.log(beneficiariesError, '2')
                     }}
                     handlePendingStatus={(id) => handlePendingStatus(id)}
                     handleChangeBeneficiaryId={handleChangeBeneficiaryId}

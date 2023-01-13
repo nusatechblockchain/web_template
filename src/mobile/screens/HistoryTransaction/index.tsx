@@ -19,12 +19,13 @@ import {
 import { FilterIcon } from 'src/mobile/assets/Wallet';
 import Tabs from 'react-bootstrap/Tabs';
 import { useDocumentTitle } from 'src/hooks';
-import { Table } from '../../../components';
+import { CopyableTextField, Table } from '../../../components';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
 import { BtcIcon } from '../../../assets/images/CoinIcon';
 import { NoData } from 'src/desktop/components';
 import { PaginationMobile } from 'src/mobile/components';
 import { Link } from 'react-router-dom';
+import { CopyButton } from 'src/assets/images/CopyButton';
 
 const HistoryTransactionMobileScreen: React.FC = () => {
     const intl = useIntl();
@@ -82,6 +83,8 @@ const HistoryTransactionMobileScreen: React.FC = () => {
         }
     };
 
+    console.log('historys', list);
+
     // Handle className for type History Transaction
     const getTypeClassnameHistoryTransaction = (typeClassTransaction: string) => {
         switch (typeClassTransaction) {
@@ -115,6 +118,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                 return 'warning-text';
             case 'Canceled':
                 return 'danger-text';
+            case 'completed':
+                return 'success-text';
+            case 'errored':
+                return 'danger-text';
+
             default:
                 return 'green-text';
         }
@@ -164,11 +172,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
             {formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.header.status' })}
         </p>,
     ];
-
+    
     // Render data table for internal transaction history
     const getTableDataInternalTransaction = (data) => {
         return data.map((item) => [
-            <div className="d-flex justify-content-center align-items-stretch">
+        <div className="d-flex justify-content-center align-items-stretch">
                 <img
                     className="icon-history mr-3 rounded-full"
                     src={item.dataCurrency && item.dataCurrency.icon_url}
@@ -198,83 +206,88 @@ const HistoryTransactionMobileScreen: React.FC = () => {
 
     // ======= End Internal history transaction ============
 
-    const dataAll = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Pending',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Withdrawal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Tf Internal',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Canceled',
-        },
-    ];
 
-    const dataDeposit = [
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Pending',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Done',
-        },
-        {
-            date: '24-10-2022 - 13:22:03',
-            type: 'Deposit',
-            assets: 'BTC',
-            icon: <BtcIcon />,
-            ammount: '0.02 BTC',
-            price: '323,669,061',
-            status: 'Canceled',
-        },
+    const getTableHeadersDeposit = () => [
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.deposit.header.asset' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.deposit.header.amount' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.deposit.header.type' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.deposit.header.txid' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.deposit.header.tid' })}
+        </p>,
+        <p className="mb-0 text-sm grey-text">
+            {formatMessage({ id: 'page.mobile.historyTransaction.deposit.header.status' })}
+        </p>,
     ];
+        // Render data table for DEPOSIT history
+        const getTableDataDeposit = (data) => {
+            return data.map((item) => [
+                <div className="d-flex justify-content-center align-items-stretch">
+                        <img
+                            className="icon-history mr-3 rounded-full"
+                            src={item.dataCurrency && item.dataCurrency.icon_url}
+                            alt="icon"
+                        />
+                    </div>,
+                    <div className="text-nowrap">
+                        <p className="mb-1 font-weight-bold">
+                            {item.amount} {getAmmountCode(item.currency)}
+                        </p>
+                        <p className="text-secondary text-sm">
+                            <small>{moment(item.created_at).format('D MMM YYYY - HH:mm')}</small>
+                        </p>
+                    </div>,
+                    <div>
+                        <p className={`m-0 text-xs font-bold text-nowrap ${getTypeClassnameHistoryTransaction(type)}`}>
+                            {getTypeHistoryTransaction(type)}
+                        </p>
+                    </div>,
+                    <div className='d-flex flex-row w-1/2'>
+                        <fieldset className={`m-0 text-xs font-bold text-nowrap text-truncate ${getTypeClassnameHistoryTransaction(type)}`}>
+                           {item.txid} 
+                        </fieldset>
+                        <div className='cursor-pointer' onClick={()=> navigator.clipboard.writeText(item.txid)}>
+                            <CopyButton className="copy-icon" />
+                        </div>
+                    </div>,
+                    <div>
+                        <p className={`m-0 text-xs font-bold text-nowrap`}>
+                        {item.tid}
+                        </p>
+                </div>,
+                    <p className={`m-0 text-sm ${getStatusClassTransaction(item.state)}`}>
+                        {item.status === 'pending'
+                    ? 'Pending'
+                    : item.status === 'canceled'
+                    ? 'Canceled'
+                    : item.status === 'completed'
+                    ? 'Completed'
+                    : item.state === 'collected'
+                    ? 'Collected'
+                    : item.state === 'processing'
+                    ? 'Processing'
+                    : item.state === 'confirming'
+                    ? 'Success'
+                    : item.state === 'errored'
+                    ? 'Error'
+                    : item.state == 'succeed'
+                    ? 'Success'
+                    : item.state == 'failed'
+                    ? 'Failed'
+                    : ''}
+                    </p>,
+                ]);
+        };
+    
+        // ======= End DEPOSIT history transaction ============
 
     const dataWithdrawal = [
         {
@@ -316,11 +329,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     ];
 
     const renderTableHeader = [
-        <p className="mb-0 text-sm grey-text">Coins</p>,
-        <p className="mb-0 text-sm grey-text">Amount</p>,
-        <p className="mb-0 text-sm grey-text">Price</p>,
-        <p className="mb-0 text-sm grey-text">Type</p>,
-        <p className="mb-0 text-sm grey-text">Status</p>,
+        <p className="mb-0 text-sm grey-text text-center">Coins</p>,
+        <p className="mb-0 text-sm grey-text text-center">Amount</p>,
+        <p className="mb-0 text-sm grey-text text-center">Price</p>,
+        <p className="mb-0 text-sm grey-text text-center">Type</p>,
+        <p className="mb-0 text-sm grey-text text-center">Status</p>,
     ];
 
     const renderDataTable = (data) => {
@@ -413,13 +426,18 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                 defaultActiveKey="deposits"
                 onSelect={(e) => handleChangeType(e)}
                 className="justify-content-between">
+            {/* =================== Tab navigation history transaction DEPOSIT =========== */}
                 <Tab
                     eventKey="deposits"
                     title={`${formatMessage({ id: 'page.mobile.historyTransaction.internalTransfer.type.deposits' })}`}>
                     <div className="table-mobile-wrapper">
-                        <Table data={renderDataTable(dataDeposit)} header={renderTableHeader} />
+                        <Table 
+                        data={getTableDataDeposit(transFerlistDataHistory)} 
+                        header={getTableHeadersDeposit()} 
+                        />
                     </div>
                 </Tab>
+                {/* =================== Tab navigation history transaction WITHDRAWAL =========== */}
                 <Tab
                     eventKey="withdraws"
                     title={`${formatMessage({
@@ -429,6 +447,7 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                         <Table data={renderDataTable(dataWithdrawal)} header={renderTableHeader} />
                     </div>
                 </Tab>
+                {/* =================== Tab navigation history transaction TRANSFERS =========== */}
                 <Tab
                     eventKey="transfers"
                     title={`${formatMessage({

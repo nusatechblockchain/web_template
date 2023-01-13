@@ -22,10 +22,10 @@ const TwoFaActivationMobileScreen: React.FC = () => {
     return (
         <React.Fragment>
             <div className="mobile-container two-fa-mobile no-header pt-5 home-screen dark-bg-main">
-                <div className="head-container position-relative mb-36">
-                    <Link to={''} className="cursor-pointer position-absolute">
+                <div className="head-container mb-36 mt-50 d-flex flex-row gap-10 justifycontent-around">
+                    <div onClick={()=>history.goBack()} className="cursor-pointer">
                         <ArrowLeft className={'back'} />
-                    </Link>
+                    </div>
                     <h1 className="text-center text-md grey-text-accent font-bold">Two-factor Authentication</h1>
                 </div>
                 <div className="two-container">
