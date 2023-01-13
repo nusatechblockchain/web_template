@@ -15,7 +15,6 @@ import {
     selectUserInfo,
     selectCurrencies,
 } from '../../../modules';
-import { numberFormat } from '../../../helpers';
 
 const defaultTicker = {
     amount: '0.0',
@@ -96,24 +95,12 @@ const MarketsTableComponent = (props) => {
         ? currentBidUnitMarkets
               .map((market) => ({
                   ...market,
-                  last: Decimal.format(
-                      Number((marketTickers[market.id] || defaultTicker).last),
-                      market.amount_precision
-                  ),
-                  open: Decimal.format(
-                      Number((marketTickers[market.id] || defaultTicker).open),
-                      market.price_precision
-                  ),
-                  price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
-                  high: Decimal.format(
-                      Number((marketTickers[market.id] || defaultTicker).high),
-                      market.amount_precision
-                  ),
-                  low: Decimal.format(Number((marketTickers[market.id] || defaultTicker).low), market.amount_precision),
-                  volume: Decimal.format(
-                      Number((marketTickers[market.id] || defaultTicker).volume),
-                      market.amount_precision
-                  ),
+                  last: Decimal.format(+(marketTickers[market.id] || defaultTicker).last, market.price_precision),
+                  open: Decimal.format(+(marketTickers[market.id] || defaultTicker).open, market.price_precision),
+                  price_change_percent: marketTickers[market.id].price_change_percent,
+                  high: Decimal.format(+(marketTickers[market.id] || defaultTicker).high, market.price_precision),
+                  low: Decimal.format(+(marketTickers[market.id] || defaultTicker).low, market.price_precision),
+                  volume: Decimal.format(+(marketTickers[market.id] || defaultTicker).volume, market.amount_precision),
                   currency: currencies.find((cur) => cur.id == market.base_unit),
               }))
               .map((market) => ({
@@ -167,12 +154,10 @@ const MarketsTableComponent = (props) => {
                                                 {item.price_change_percent}
                                             </span>
                                         </p>
-                                        <p className="mb-0 text-lg white-text font-bold">
-                                            ${numberFormat(item.last, 'USD').toString()}
-                                        </p>
+                                        <p className="mb-0 text-lg white-text font-bold">$ {item.last}</p>
                                         <p className="mb-0 text-xs grey-text-accent">
                                             <span>Volume: </span>
-                                            {numberFormat(item.volume, 'USD').toString().split('.')[0]}
+                                            {item.volume}
                                         </p>
                                     </div>
                                 ))}

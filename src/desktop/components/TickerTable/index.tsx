@@ -58,16 +58,16 @@ export const TickerTable: React.FC<Props> = ({
                         </div>
                     </td>
                     <td>
-                        <span>${numberFormat(market.last, 'USD').toString().split('.')[0]}</span>
+                        <span>$ {market.last}</span>
                     </td>
                     <td>
                         <span className={marketChangeColor}>{market.price_change_percent}</span>
                     </td>
                     <td>
-                        <span>${numberFormat(market.high, 'USD').toString().split('.')[0]}</span>
+                        <span>$ {market.high}</span>
                     </td>
                     <td>
-                        <span>${numberFormat(market.low, 'USD').toString().split('.')[0]}</span>
+                        <span>$ {market.low}</span>
                     </td>
                     <td>
                         <div className="d-flex">
