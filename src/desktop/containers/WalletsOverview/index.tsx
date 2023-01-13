@@ -1,7 +1,8 @@
 import React, { FC, ReactElement, useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { Decimal, formatWithSeparators, Table } from 'src/components';
+import { useHistory, Link } from 'react-router-dom';
+import { Decimal, formatWithSeparators, Loading, Table } from 'src/components';
 import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch } from 'src/hooks';
 import {
     selectAbilities,
@@ -13,13 +14,12 @@ import {
     User,
     selectUserInfo,
     Currency,
+    selectWalletsLoading,
 } from 'src/modules';
 import { estimateUnitValue } from 'src/helpers/estimateValue';
 import { VALUATION_PRIMARY_CURRENCY } from 'src/constants';
-import { WalletsHeader, Modal } from '../../components';
-import { useHistory, Link } from 'react-router-dom';
+import { WalletsHeader, Modal, NoData } from '../../components';
 import { CircleCloseDangerLargeIcon } from '../../../assets/images/CircleCloseIcon';
-import { NoData } from '../../components';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -39,6 +39,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
     const [filteredWallets, setFilteredWallets] = React.useState<ExtendedWallet[]>([]);
     const [nonZeroSelected, setNonZeroSelected] = React.useState<boolean>(false);
     const [showModalLocked, setShowModalLocked] = React.useState<boolean>(false);
+    const [loading, setLoading] = React.useState<boolean>(false);
 
     const { formatMessage } = useIntl();
     const { isP2PEnabled } = props;
@@ -47,6 +48,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         formatMessage,
     ]);
     const wallets = useSelector(selectWallets);
+    const walletsLoading = useSelector(selectWalletsLoading);
     const abilities = useSelector(selectAbilities);
     const currencies: Currency[] = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
@@ -80,6 +82,13 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         }
     }, [wallets, currencies, isP2PEnabled]);
 
+    React.useEffect(() => {
+        setLoading(true);
+        if (walletsLoading) {
+            setLoading(false);
+        }
+    }, [wallets]);
+
     const headerTitles = useCallback(
         () => [
             'Assets',
@@ -106,7 +115,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         [history]
     );
 
-    const retrieveData = React.useCallback(() => {
+    const retrieveData = useCallback(() => {
         const list = nonZeroSelected
             ? filteredWallets.filter((i) => i.balance && Number(i.balance) > 0)
             : filteredWallets;
@@ -118,6 +127,8 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
         );
 
         return !filteredList.length
+            ? [[[''], [''], <Loading />, [''], [''], ['']]]
+            : !filteredList.length && !loading
             ? [[]]
             : filteredList.map((item, index) => {
                   const { currency, iconUrl, name, fixed, spotBalance, spotLocked } = item;

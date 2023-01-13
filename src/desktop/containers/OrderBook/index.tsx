@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Spinner } from 'react-bootstrap';
 import {
     selectCurrentMarket,
     selectDepthBids,
@@ -18,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import { useOpenOrdersFetch, useDepthFetch, usePrevious } from '../../../hooks';
 import { TradeDown, TradeUp } from '../../../assets/images/TradeIcon';
 import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers';
-import { Decimal } from '../../../components';
+import { Decimal, Loading } from '../../../components';
 import { NoData } from '../../../desktop/components';
 
 const OrderBookComponent = ({ asks, bids, loading }) => {
@@ -34,34 +33,15 @@ const OrderBookComponent = ({ asks, bids, loading }) => {
     const lastTrade = useSelector(selectLastRecentTrade);
 
     React.useEffect(() => {
-        if (!asks[0]) {
-            setAsk([]);
-        } else {
-            setAsk([...asks].sort((a, b) => Number(b[0]) - Number(a[0])));
-        }
-
-        if (!bids[0]) {
-            setBid([]);
-        } else {
-            setBid([...bids].sort((a, b) => Number(b[0]) - Number(a[0])));
-        }
-
-        return () => {
-            setAsk([]);
-            setBid([]);
-        };
+        setAsk([...asks].sort((a, b) => Number(b[0]) - Number(a[0])));
+        setBid([...bids].sort((a, b) => Number(b[0]) - Number(a[0])));
+        // }
     }, [asks, bids, currentMarket]);
-
-    // React.useEffect(() => {
-    //     setTimeout(() => {})
-    //     dispatch(depthIncrementSubscribeResetLoading());
-    // }, [loading]);
 
     const mapValues = (maxVolume?: number, data?: number[]) => {
         const resultData =
             data && maxVolume && data.length
                 ? data.map((currentVolume) => {
-                      // tslint:disable-next-line:no-magic-numbers
                       return { value: (currentVolume / maxVolume) * 100 };
                   })
                 : [];
@@ -78,7 +58,7 @@ const OrderBookComponent = ({ asks, bids, loading }) => {
                 <p className="white-text font-bold text-sm">Order Book</p>
                 {loading ? (
                     <div className="d-flex justify-content-center align-items-center">
-                        <Spinner animation="grow" variant="primary" />
+                        <Loading />
                     </div>
                 ) : (
                     <React.Fragment>

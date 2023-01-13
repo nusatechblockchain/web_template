@@ -63,7 +63,7 @@ export const ModalBeneficiaryListMobile: React.FC<ModalBeneficiaryListMobileProp
                         beneficiariesList.map((item, i) => (
                             <div className="my-2 content-list-mobile pb-2 cursor-pointer" key={i}>
                                 <div className="d-flex align-items-center mb-1 justify-content-between">
-                                    <h6 className="text-secondary mb-0">{item && item.name}</h6>
+                                    <h6 className="text-secondary mb-0 text-truncate">{item && item.name}</h6>
                                     <div
                                         onClick={handleDeleteAddress(item)}
                                         className="delete-button-address cursor-pointer">

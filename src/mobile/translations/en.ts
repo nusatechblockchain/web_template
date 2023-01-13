@@ -208,5 +208,12 @@ export const en = {
     'page.mobile.historyTransaction.internalTransfer.status.canceled' : 'Canceled',
     'page.mobile.historyTransaction.internalTransfer.status.pending' : 'Pending',
 
-    
+    // History trasaction Deposit
+    'page.mobile.historyTransaction.deposit.header.date' : 'Date',
+    'page.mobile.historyTransaction.deposit.header.type' : 'Type',
+    'page.mobile.historyTransaction.deposit.header.asset' : 'Asset',
+    'page.mobile.historyTransaction.deposit.header.amount' : 'Amount',
+    'page.mobile.historyTransaction.deposit.header.txid' : 'TXID',
+    'page.mobile.historyTransaction.deposit.header.tid' : 'TID',
+    'page.mobile.historyTransaction.deposit.header.status' : 'Status',
 };

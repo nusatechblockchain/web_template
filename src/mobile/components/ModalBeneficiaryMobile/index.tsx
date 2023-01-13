@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { CustomInput } from 'src/desktop/components';
 import { ModalFullScreenMobile } from '../../components';
-import { selectCurrencies, beneficiariesCreate, selectWallets, alertPush } from '../../../modules';
+import { selectCurrencies, beneficiariesCreate, selectWallets, alertPush, beneficiariesError } from '../../../modules';
 import Select from 'react-select';
 import { CustomStylesSelect } from '../../components';
 import { validateBeneficiaryAddress } from '../../../helpers/validateBeneficiaryAddress';
@@ -75,6 +75,7 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
     };
 
     const handleSubmitAddAddressCoinModal = React.useCallback(async () => {
+        console.log(beneficiariesError);
         const filterCurrency = wallets.find((curr) => curr.currency == currency);
         const addressExist =
             filterCurrency && filterCurrency.deposit_addresses.find((item) => item.address == coinAddress);

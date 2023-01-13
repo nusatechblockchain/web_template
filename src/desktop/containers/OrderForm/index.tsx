@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { getTotalPrice, numberFormat, getAmount } from '../../../helpers';
 import { Link } from 'react-router-dom';
+import { LockIcon } from 'src/assets/images/LockIcon';
 
 export const OrderForm: React.FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -249,11 +250,17 @@ export const OrderForm: React.FunctionComponent = () => {
                     {isLoggedin ? (
                         ''
                     ) : (
-                        <div className="blur-content letter-sm">
-                            PLEASE{'   '}
-                            <Link to={'/signin'} className="blue-text font-bold">
-                                LOGIN
-                            </Link>
+                        <div className="blur-content">
+                            <div className="d-flex flex-column justify-content-between align-items-center">
+                                <img src={'/img/lock.png'} alt="lock" width={64} height={64} className="mb-24" />
+                                <span>
+                                    Please{' '}
+                                    <Link to={'/signin'} className="blue-text font-bold">
+                                        login
+                                    </Link>{' '}
+                                    for accessing trade
+                                </span>
+                            </div>
                         </div>
                     )}
                     <div className="d-flex mb-1 order-tab">
