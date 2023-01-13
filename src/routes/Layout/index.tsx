@@ -90,6 +90,10 @@ import {
     FAQScreen,
     ChangeEmail,
     ProfileSetting,
+    P2PScreen,
+    P2PProfileScreen,
+    P2POrderScreen,
+    P2PWalletScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -489,102 +493,112 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                 <Switch>
                     <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signin" component={SignInScreen} />
                     <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signup" component={SignUpScreen} />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/wallets/:currency/deposit"
                         component={WalletDeposit}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/wallets/:currency/withdraw"
                         component={WalletWitdrawal}
                     />
-                    {/* <PrivateRoute
+
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/wallets"
                         component={WalletsScreen}
-                    /> */}
-                    <PublicRoute
-                        loading={userLoading}
-                        // isLogged={isLoggedIn}
-                        path="/wallets"
-                        component={WalletsScreen}
                     />
+
                     <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/email-verification"
                         component={EmailVerificationScreen}
                     />
+
                     <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/forgot_password"
                         component={ForgotPasswordScreen}
                     />
-                    <PublicRoute
+
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/accounts/password_reset"
                         component={PasswordResetScreen}
                     />
+
                     <PublicRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/lost-two-fa"
                         component={Lost2FAScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/referral"
                         component={ReferralScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/api-key"
                         component={ApiKeyScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/two-fa-activation"
                         component={TwoFaActivationScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/kyc"
                         component={KycScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/security"
                         component={Security}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile/setting"
                         component={ProfileSetting}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/profile"
                         component={ProfileScreen}
                     />
+
                     <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/security/2fa"
                         component={ProfileTwoFactorAuthScreen}
                     />
+
                     <PublicRoute
                         loading={userLoading}
                         path="/markets/detail/:currency"
@@ -623,12 +637,18 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
                     <PublicRoute loading={userLoading} path="/announcement" component={AnnouncementScreen} />
                     <PublicRoute loading={userLoading} path="/faq" component={FAQScreen} />
-                    <PublicRoute
+
+                    <PrivateRoute
                         loading={userLoading}
                         isLogged={isLoggedIn}
                         path="/change-email"
                         component={ChangeEmail}
                     />
+
+                    <PublicRoute loading={userLoading} path="/p2p/order" component={P2POrderScreen} />
+                    <PublicRoute loading={userLoading} path="/p2p/wallets" component={P2PWalletScreen} />
+                    <PublicRoute loading={userLoading} path="/p2p/profile" component={P2PProfileScreen} />
+                    <PublicRoute loading={userLoading} path="/p2p" component={P2PScreen} />
                     <Route exact={true} path="/" component={LandingScreen} />
                     <Route path="**">
                         <Redirect to="/markets/" />

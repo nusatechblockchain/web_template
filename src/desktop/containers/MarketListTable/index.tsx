@@ -2,15 +2,9 @@ import React, { FC, ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 import { StarIconFill } from 'src/assets/images/StarIcon';
-import {
-    MarketAllCryptoTabs,
-    MarketFavoriteTabs,
-    MarketFuturesTabs,
-    MarketNewListingTabs,
-    MarketSpotTabs,
-} from '../../components';
+import { MarketAllCryptoTabs, MarketFavoriteTabs, MarketFuturesTabs, MarketSpotTabs } from '../../components';
 import './MarketListTable.pcss';
-import { selectCurrencies, selectMarkets, selectMarketTickers, selectUserLoggedIn } from 'src/modules';
+import { selectMarkets } from 'src/modules';
 
 export const MarketListTable: FC = (): ReactElement => {
     const markets = useSelector(selectMarkets);
@@ -55,10 +49,6 @@ export const MarketListTable: FC = (): ReactElement => {
                             <MarketFuturesTabs />
                         </Tab>
                     )}
-
-                    {/* <Tab eventKey="new-listing" title="New Listing">
-                        <MarketNewListingTabs />
-                    </Tab> */}
                 </Tabs>
             </div>
         </React.Fragment>

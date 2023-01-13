@@ -28,9 +28,7 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                                 </div>
                                 <p className="white-text m-0">{el && el.currency && el.currency.id.toUpperCase()}</p>
                             </td>
-                            <td className="white-text pr-8">
-                                ${numberFormat(el.last, 'USD').toString().split('.')[0]}
-                            </td>
+                            <td className="white-text pr-8">$ {el.last}</td>
                             <td className={el && el.price_change_percent?.includes('-') ? 'danger' : 'primary'}>
                                 {el && el.price_change_percent}
                             </td>

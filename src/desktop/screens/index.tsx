@@ -26,3 +26,7 @@ export * from './AnnouncementScreen';
 export * from './FAQScreen';
 export * from './ChangeEmail';
 export * from './ProfileSettingScreen';
+export * from './P2PScreen';
+export * from './P2PProfileScreen';
+export * from './P2POrderScreen';
+export * from './P2PWalletScreen';
