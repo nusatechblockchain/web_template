@@ -252,7 +252,7 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                     </div>,
                     <div className='d-flex flex-row w-1/2'>
                         <fieldset className={`m-0 text-xs font-bold text-nowrap text-truncate ${getTypeClassnameHistoryTransaction(type)}`}>
-                           {item.txid} 
+                           {item.txid.length > 10 ? item.txid.slice(0, 10) + '...' : item.txid} 
                         </fieldset>
                         <div className='cursor-pointer' onClick={()=> navigator.clipboard.writeText(item.txid)}>
                             <CopyButton className="copy-icon" />

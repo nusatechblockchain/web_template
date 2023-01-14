@@ -24,6 +24,7 @@ import { Modal } from 'react-bootstrap';
 import PinInput from 'react-pin-input';
 import { KeyConfirmation } from 'src/mobile/assets/KeyConfirmation';
 import { selectWallets } from '../../../modules';
+import { useHistory } from 'react-router-dom';
 
 export const WalletWithdrawMobileScreen: React.FC = () => {
     useBeneficiariesFetch();
@@ -31,7 +32,7 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
     const intl = useIntl();
     const { formatMessage } = useIntl();
     const dispatch = useDispatch();
-
+    const history = useHistory();
     const TIME_RESEND = 30000;
 
     const [amount, setAmount] = React.useState('');
@@ -127,9 +128,10 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
         setBeneficiaryCode(value);
     };
 
-    const handleSubmitWithdraw = () => {
+    const handleSubmitWithdraw = async () => {
         dispatch(walletsWithdrawCcyFetch({ amount, beneficiary_id: beneficiaryId.toString(), currency, otp }));
         setShowModalConfirmation(false);
+        history.push('/history-transaction');
     };
 
     const isValidForm = () => {
@@ -317,12 +319,15 @@ export const WalletWithdrawMobileScreen: React.FC = () => {
                                     $ {fee !== undefined ? fee : '0'}
                                 </p>
                             </div>
-{/* { wallet.balance !== null &&                            
-                <div className="my-3">
-                                <p>
-                                    balance {wallet.balance}
+                            { wallet !== undefined &&                            
+                            <div className="my-3">
+                                <p className='mb-0 text-sm grey-text-accent'>
+                                Balance
                                 </p>
-                            </div>} */}
+                                <p className='mb-0 text-base grey-text-accent font-bold'>
+                                    {wallet.balance} {currency.toUpperCase()}
+                                </p>
+                            </div>}
                             <div className="">
                                 <p className="mb-0 text-sm grey-text-accent">
                                     {formatMessage({
