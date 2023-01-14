@@ -72,7 +72,7 @@ const ChartLandingMobile = ({ data, label, width, height }) => {
             },
             options: {
                 chartArea: {
-                    backgroundColor: 'transparent',
+                    backgroundColor: '',
                 },
                 layout: {
                     padding: 1,
