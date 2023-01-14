@@ -106,8 +106,6 @@ const ProfileMobileScreen: React.FC = () => {
         history.push('/change-email');
     };
 
-    console.log('user', user);
-
     const renderModal = () => (
         <React.Fragment>
             <div className="d-flex justify-content-center">

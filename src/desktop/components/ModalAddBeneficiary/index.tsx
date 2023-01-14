@@ -90,8 +90,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
             }
         });
     }, [coinBlockchainName]);
-
-    console.log(coinBlockchainName, 'coinBlockchainName')
     
     const validateCoinAddressFormat = React.useCallback(
         (value: string) => {
@@ -142,7 +140,6 @@ export const ModalAddBeneficiary: React.FunctionComponent<ModalAddBeneficiaryPro
         }
     }, [coinAddress, coinBeneficiaryName, coinDescription, currency, coinBlockchainName, errorCreate, createLoading]);
 
-    console.log('coinAddress', coinAddress);
     const isDisabled = !coinAddress || !coinBeneficiaryName || !coinAddressValid || !coinBlockchainName.blockchainKey;
 
     const optionNetworks =

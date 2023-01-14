@@ -87,10 +87,6 @@ export const ModalAddBeneficiaryMobile: React.FC<ModalBeneficiaryMobileProps> = 
         });
     }, [coinBlockchainName]);
 
-    console.log(currencyItem.networks, 'currencyItem.networks')
-    console.log(coinBlockchainName, 'coinBlockchainName')
-    console.log(currencyID, 'currencyID')
-
     const validateCoinAddressFormat = React.useCallback(
         (value: string) => {
             const valid = WAValidator.validate(value, currencyID);
