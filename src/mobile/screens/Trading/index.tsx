@@ -10,10 +10,15 @@ import {
     MarketsTickersData,
     setCurrentMarket,
     selectCurrentMarket,
+    depthIncrementSubscribeResetLoading,
     Currency,
     selectMarkets,
     Market,
+    selectDepthLoading,
     selectUserLoggedIn,
+    selectDepthAsks,
+    selectDepthBids,
+    selectMobileDeviceState,
 } from '../../../modules';
 import { Decimal } from '../../../components';
 import { ModalFullScreenMobile } from 'src/mobile/components';
@@ -35,6 +40,7 @@ import Select from 'react-select';
 import { CustomStylesSelect } from 'src/desktop/components';
 import { Table } from '../../../components';
 import { TradingChart } from '../../containers';
+import { OrderBook } from '../../../desktop/containers';
 
 export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const { currency } = useParams<{ currency?: string }>();
@@ -43,9 +49,16 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const markets = useSelector(selectMarkets);
     const currentMarket = useSelector(selectCurrentMarket);
     const marketTickers = useSelector(selectMarketTickers);
+    const orderBookLoading = useSelector(selectDepthLoading);
+    const asks = useSelector(selectDepthAsks);
+    const bids = useSelector(selectDepthBids);
+    const isMobileDevice = useSelector(selectMobileDeviceState);
+    const [loading, setLoading] = React.useState(false);
     const [marketType, setMerketType] = React.useState('buy');
     const [showTrading, setShowTrading] = React.useState(false);
     const [showSidebar, setShowSidebar] = React.useState(false);
+    const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
+    const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
     const [key, setKey] = React.useState('USDT');
     const isLoggedin = useSelector(selectUserLoggedIn);
     useDocumentTitle('Trading');
@@ -59,6 +72,27 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
         low: '0.0',
         price_change_percent: '+0.00%',
         volume: '0.0',
+    };
+
+    React.useEffect(() => {
+        if (orderBookLoading) {
+            setLoading(true);
+            setTimeout(() => {
+                dispatch(depthIncrementSubscribeResetLoading());
+                setLoading(false);
+            }, 2000);
+        }
+    }, [currentMarket, orderBookLoading]);
+
+    // Function Order Book
+    const handleSelectPriceAsks = (e: string) => {
+        setPriceSell(e);
+        setPriceBuy(e);
+    };
+
+    const handleSelectPriceBids = (e: string) => {
+        setPriceBuy(e);
+        setPriceSell(e);
     };
 
     const current = markets.find((item) => item.id === currency);
@@ -90,8 +124,6 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     ];
 
     const renderSidebarData = (data) => {
-        console.log(data);
-
         return data.map((item) => [
             <div
                 className="d-flex justify-content-between"
@@ -107,7 +139,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     <h4 className="primary-text">
                         {item.last} {item.quote_unit.toUpperCase()}
                     </h4>
-                    <h5 className={`${item.price_change_percent.includes('+') ? 'green-text' : 'danger-text'}`}>
+                    <h5 className={`mb-0 ${item.price_change_percent.includes('+') ? 'green-text' : 'danger-text'}`}>
                         {item.price_change_percent}
                     </h5>
                 </div>
@@ -118,12 +150,13 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     return (
         <React.Fragment>
             <div className="mobile-container trading-screen no-header position-relative dark-bg-main">
+                {/* TOP TRADING SCREEN */}
                 <div className="d-flex justify-content-between align-items-center mb-3 ">
                     <div className="d-flex align-items-center menu-title">
-                        <div className="cursor-pointer" onClick={() => setShowSidebar(true)}>
+                        <div className="cursor-pointer d-flex align-items-center" onClick={() => setShowSidebar(true)}>
                             <SidebarMenuIcon />
+                            <h1 className="mb-0">{currentMarket && currentMarket.name}</h1>
                         </div>
-                        <h1 className="mb-0">{currentMarket && currentMarket.name}</h1>
                         <div
                             className={`${
                                 priceChange && priceChange.price_change_percent.includes('+')
@@ -147,13 +180,16 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     </div>
                 </div>
 
+                {/* TRADING */}
                 {showTrading && (
                     <div className="mb-3" style={{ height: 400 }}>
                         {<TradingChart />}
                     </div>
                 )}
+
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
-                    <div className={`buy-sell-container  ${isLoggedin ? '' : 'blur-effect blur-mobile'}`}>
+                    {/* ORDER FORM */}
+                    <div className={`buy-sell-container  w-60 ${isLoggedin ? '' : 'blur-effect blur-mobile'}`}>
                         <ul className="nav nav-pills w-100" id="pills-tab" role="tablist">
                             <li
                                 className={`nav-item buy ${marketType == 'buy' && 'active'}`}
@@ -251,103 +287,173 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                             </form>
                         </div>
                     </div>
-                    <div className=" trading-view-container position-relative">
-                        <div className="table-background position-absolute w-100">
-                            <div className="table-background-row row-danger" style={{ width: '70%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '30%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '50%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '40%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '80%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '40%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '100%' }} />
-                            <div className="table-background-row row-danger" style={{ width: '30%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '90%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '50%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '60%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '30%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '80%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '100%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '30%' }} />
-                            <div className="table-background-row row-primary" style={{ width: '60%' }} />
+
+                    {/* ORDER BOOK */}
+                    <div className="w-40">
+                        <OrderBook
+                            asks={asks}
+                            bids={bids}
+                            loading={loading}
+                            handleSelectPriceAsks={handleSelectPriceAsks}
+                            handleSelectPriceBids={handleSelectPriceBids}
+                        />
+                        {/* <div className=" trading-view-container position-relative max-h-160">
+                            <div className="table-background position-absolute w-100">
+                                <div className="table-background-row row-danger" style={{ width: '70%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '30%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '50%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '40%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '80%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '40%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '100%' }} />
+                                <div className="table-background-row row-danger" style={{ width: '30%' }} />
+                            </div>
+                            <table className="table table-borderless w-100">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Price</th>
+                                        <th scope="col" className="text-right">
+                                            Quantity
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price danger">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table className="table table-borderless w-100">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Price (BIDR)</th>
-                                    <th scope="col" className="text-right">
-                                        Quantity(BTC)
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price danger">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                                <tr>
-                                    <td className="td-price primary">323,451,889</td>
-                                    <td className="td-qty">0.092390</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div className="price-deal">
+                            <p className="mb-0 text-xxs font-bold danger-text pt-2 pb-1 text-center">0.0123 USDT</p>
+                        </div>
+                        <div className=" trading-view-container position-relative max-h-160">
+                            <div className="table-background position-absolute w-100 no-top">
+                                <div className="table-background-row row-primary" style={{ width: '90%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '50%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '80%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '100%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '90%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '50%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '80%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '100%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
+                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
+                            </div>
+                            <table className="table table-borderless w-100">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" className="d-none"></th>
+                                        <th scope="col" className="d-none"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="td-price primary">323,451,889</td>
+                                        <td className="td-qty">0.092390</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> */}
                     </div>
                 </div>
+
+                {/* OPEN ORDER */}
                 <div className="d-flex justify-content-between align-items-center sorting-container w-100 mb-16">
                     <div className="d-flex justify-content-between align-items-center sorting-left-container">
                         <p className="sorting-by m-0">Sorting by:</p>
@@ -367,6 +473,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                         </div>
                     </div>
                 </div>
+                {/* OPEN ORDER */}
                 <div className="d-flex justify-content-between align-items-center table-container w-100 mb-16">
                     <div className="d-flex align-items-center table-head-container">
                         <p>Date</p>

@@ -93,7 +93,7 @@
     }
 
     .trading-view-container {
-        width: 40%;
+        width: 100%;
     }
 
     .row-container {
@@ -324,7 +324,10 @@
     }
 
     .table-background {
-        top: 32px;
+        top: 32px !important;
+        &.no-top {
+            top: 0 !important;
+        }
     }
 
     .table-background-row {
@@ -821,5 +824,11 @@
         &.active {
             transform: translateX(0);
         }
+    }
+
+    .max-h-160 {
+        max-height: 180px;
+        height: 180px;
+        overflow-y: auto;
     }
 }

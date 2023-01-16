@@ -37,7 +37,6 @@ const HomeMobileScreen: React.FC = () => {
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    //console.log(markets);
 
     const [key, setKey] = React.useState('tranding');
 
@@ -68,8 +67,6 @@ const HomeMobileScreen: React.FC = () => {
                 market.price_precision
             ),
         }));
-
-    // console.log(marketList);
 
     const dataTranding = marketList && marketList.sort((a, b) => +b.last - +a.last);
     const dataGainers = marketList && marketList.sort((a, b) => +b.price_change_percent - +a.price_change_percent);

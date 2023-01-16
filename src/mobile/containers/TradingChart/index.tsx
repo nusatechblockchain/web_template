@@ -108,8 +108,6 @@ export class TradingChartComponent extends React.PureComponent<Props> {
             widgetParams.interval = String(periodStringToMinutes(this.props.kline.period));
         }
 
-        console.log(this.props.currentMarket);
-
         const disabledFeatures = {
             disabled_features: isMobileDevice
                 ? [
