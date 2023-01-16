@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { CustomInput } from 'src/desktop/components';
 import { ModalFullScreenMobile } from '../../components';
-import { selectCurrencies, beneficiariesCreate, selectWallets, alertPush, beneficiariesError } from '../../../modules';
 import Select from 'react-select';
 
 import { DEFAULT_WALLET } from '../../../constants';
