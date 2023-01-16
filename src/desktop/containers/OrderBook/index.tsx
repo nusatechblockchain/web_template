@@ -22,7 +22,7 @@ const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handle
     const isLoggedIn = useSelector(selectUserLoggedIn);
 
     React.useEffect(() => {
-        setAsk([...asks].sort((a, b) => Number(b[0]) - Number(a[0])));
+        setAsk([...asks].sort((a, b) => Number(a[0]) - Number(b[0])));
         setBid([...bids].sort((a, b) => Number(b[0]) - Number(a[0])));
         // }
     }, [asks, bids, currentMarket]);
