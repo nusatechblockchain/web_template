@@ -122,7 +122,7 @@ const HomeMobileScreen: React.FC = () => {
                 </p>
             </div>,
             <div className="">
-                <ChartLandingMobile label={item.kline[0]} data={item.kline[2]} width={80} height={20} />
+                {/* <ChartLandingMobile label={item.kline[0]} data={item.kline[2]} width={80} height={20} /> */}
             </div>,
             <p className={`badge white-text font-bold ${item.change.includes('-') ? 'badge-danger' : 'badge-success'}`}>
                 {item && item.price_change_percent}

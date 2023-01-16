@@ -8,6 +8,8 @@ import {
     selectCurrencies,
     selectMarketTickers,
     MarketsTickersData,
+    setCurrentMarket,
+    selectCurrentMarket,
     Currency,
     selectMarkets,
     Market,
@@ -32,121 +34,83 @@ import { FilterInput } from 'src/desktop/components';
 import Select from 'react-select';
 import { CustomStylesSelect } from 'src/desktop/components';
 import { Table } from '../../../components';
+import { TradingChart } from '../../containers';
 
 export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const { currency } = useParams<{ currency?: string }>();
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const markets = useSelector(selectMarkets);
+    const currentMarket = useSelector(selectCurrentMarket);
+    const marketTickers = useSelector(selectMarketTickers);
     const [marketType, setMerketType] = React.useState('buy');
     const [showTrading, setShowTrading] = React.useState(false);
     const [showSidebar, setShowSidebar] = React.useState(false);
     const [key, setKey] = React.useState('USDT');
     const isLoggedin = useSelector(selectUserLoggedIn);
     useDocumentTitle('Trading');
+    useMarketsFetch();
+
+    const defaultTicker = {
+        amount: '0.0',
+        last: '0.0',
+        high: '0.0',
+        open: '0.0',
+        low: '0.0',
+        price_change_percent: '+0.00%',
+        volume: '0.0',
+    };
+
+    const current = markets.find((item) => item.id === currency);
+    React.useEffect(() => {
+        dispatch(setCurrentMarket(current));
+    }, [current]);
 
     const optionStatus = [
         { label: <p className="m-0 text-sm grey-text-accent">Limit Order</p>, value: 'limit-order' },
         { label: <p className="m-0 text-sm grey-text-accent">Market</p>, value: 'market' },
     ];
 
-    const SidebarData = [
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
-        {
-            currency: 'BTC',
-            pair: 'USDT',
-            x: '5X',
-            price: '1505.79',
-            change: '-2.99%',
-        },
+    const marketList = markets.map((market) => ({
+        ...market,
+        last: Decimal.format(Number((marketTickers[market.id] || defaultTicker).last), market.amount_precision),
+        open: Decimal.format(Number((marketTickers[market.id] || defaultTicker).open), market.price_precision),
+        price_change_percent: String((marketTickers[market.id] || defaultTicker).price_change_percent),
+        high: Decimal.format(Number((marketTickers[market.id] || defaultTicker).high), market.amount_precision),
+        volume: Decimal.format(Number((marketTickers[market.id] || defaultTicker).volume), market.price_precision),
+    }));
+
+    const priceChange = marketList.find((item) => item.id == currency);
+
+    const renderHeaderData = [
+        <div className="d-flex w-100 justify-content-between">
+            <p>Pair</p>
+            <p className="text-right">Price 24h Change</p>
+        </div>,
     ];
 
-    const renderHeaderData = [<p>Pair</p>, <p className="text-right">Price 24h Change</p>];
-
     const renderSidebarData = (data) => {
+        console.log(data);
+
         return data.map((item) => [
-            <div className="td-pair d-flex align-items-center">
-                <p className="mb-0">
-                    {item.currency} <span>/USDT</span>
-                </p>
-                <div className="tag-pair">5X</div>
-            </div>,
-            <div className="td-price d-flex flex-column justify-content-end align-items-end w-full">
-                <h4>1505.79</h4>
-                <h5>-2.99%</h5>
+            <div
+                className="d-flex justify-content-between"
+                onClick={() => {
+                    history.push(`/trading/${item.id}`);
+                    setShowSidebar(false);
+                }}>
+                <div className="td-pair d-flex align-items-center">
+                    <p className="mb-0">{item.name}</p>
+                    {/* <div className="tag-pair">5X</div> */}
+                </div>
+                <div className="td-price d-flex flex-column justify-content-end align-items-end w-full">
+                    <h4 className="primary-text">
+                        {item.last} {item.quote_unit.toUpperCase()}
+                    </h4>
+                    <h5 className={`${item.price_change_percent.includes('+') ? 'green-text' : 'danger-text'}`}>
+                        {item.price_change_percent}
+                    </h5>
+                </div>
             </div>,
         ]);
     };
@@ -159,32 +123,34 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                         <div className="cursor-pointer" onClick={() => setShowSidebar(true)}>
                             <SidebarMenuIcon />
                         </div>
-                        <h1 className="mb-0">BTC/BIDR</h1>
-                        <div className="badge-primary">+2.00%</div>
+                        <h1 className="mb-0">{currentMarket && currentMarket.name}</h1>
+                        <div
+                            className={`${
+                                priceChange && priceChange.price_change_percent.includes('+')
+                                    ? 'badge-success'
+                                    : 'badge-danger'
+                            }`}>
+                            {priceChange && priceChange.price_change_percent}
+                        </div>
                     </div>
                     <div className="d-flex align-items-center menu-expand">
-                        <div className="cursor-pointer more">
+                        {/* <div className="cursor-pointer more">
                             <DotsIcon />
-                        </div>
+                        </div> */}
                         <div
                             id="expand-trade-view"
-                            className="d-flex expand-container cursor-pointer"
+                            className="d-flex expand-container align-items-center cursor-pointer"
                             onClick={() => setShowTrading(!showTrading)}>
-                            <p className="m-0">Expand</p>
+                            <p className="m-0 text-sm mr-1">Expand</p>
                             <ArrowDownIcon />
                         </div>
                     </div>
                 </div>
+
                 {showTrading && (
-                    <TradingViewEmbed
-                        widgetType={widgetType.ADVANCED_CHART}
-                        widgetConfig={{
-                            colorTheme: 'dark',
-                            symbol: currency,
-                            width: '100%',
-                            height: '400',
-                        }}
-                    />
+                    <div className="mb-3" style={{ height: 400 }}>
+                        {<TradingChart />}
+                    </div>
                 )}
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
                     <div className={`buy-sell-container  ${isLoggedin ? '' : 'blur-effect blur-mobile'}`}>
@@ -448,7 +414,8 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                                     </div>
                                 </div>
                             </div>
-                            <Tabs
+                            <Table data={renderSidebarData(marketList)} header={renderHeaderData} />
+                            {/* <Tabs
                                 id="controlled-tab-example"
                                 defaultActiveKey="all-crypto"
                                 activeKey={key}
@@ -479,7 +446,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                                         <Table data={renderSidebarData(SidebarData)} header={renderHeaderData} />
                                     </div>
                                 </Tab>
-                            </Tabs>
+                            </Tabs> */}
                         </div>
                         <div
                             id="close-sidebar"
