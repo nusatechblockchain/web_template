@@ -11,6 +11,7 @@ import { ArrowLeft, ArrowRight } from 'src/mobile/assets/Arrow';
 import { InfoWarningIcon } from '../../../assets/images/InfoIcon';
 import { CopyButton } from '../../../assets/images/CopyButton';
 import { HelpIcon } from 'src/mobile/assets/Help';
+import { ModalMobile } from 'src/mobile/components';
 
 import { ModalFullScreenMobile } from 'src/mobile/components';
 
