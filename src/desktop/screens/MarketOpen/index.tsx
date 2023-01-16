@@ -274,7 +274,7 @@ export const MarketOpen: FC = (): ReactElement => {
                 <div className="pg-history-transaction-screen__content-wrapper dark-bg-accent">
                     <div className="position-relative">
                         {renderFilter()}
-                        {tab === 'open' && data.length && (
+                        {tab === 'open' && data && data[0] && (
                             <div className="ml-3 cancel-all-order">
                                 <button type="button" onClick={handleCancelAllOrders} className="btn btn-secondary">
                                     Cancel All Orders <ModalCloseIcon className="small-icon" />
@@ -299,7 +299,7 @@ export const MarketOpen: FC = (): ReactElement => {
                                 {loading && <Loading />}
                             </div>
 
-                            {data.length && (
+                            {data && data[0] && (
                                 <Pagination
                                     firstElemIndex={firstElemIndex}
                                     lastElemIndex={lastElemIndex}
@@ -317,7 +317,7 @@ export const MarketOpen: FC = (): ReactElement => {
                                 {loading && <Loading />}
                             </div>
 
-                            {data.length && (
+                            {data && data[0] && (
                                 <Pagination
                                     firstElemIndex={firstElemIndex}
                                     lastElemIndex={lastElemIndex}
