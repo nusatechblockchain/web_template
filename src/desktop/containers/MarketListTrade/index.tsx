@@ -75,6 +75,8 @@ const MarketListTradeComponent = ({ handleRedirectToTrading }) => {
             i.id?.toLocaleLowerCase().includes(filterValue.toLowerCase())
     );
 
+    console.log(filteredList);
+
     return (
         <React.Fragment>
             <div className="p-3">
@@ -135,7 +137,7 @@ const MarketListTradeComponent = ({ handleRedirectToTrading }) => {
                                                     className={`text-xs my-auto  mb-0 text-right ${
                                                         item.last < item.open ? 'danger-text' : 'green-text'
                                                     }`}>
-                                                    {Decimal.format(item.last, currentMarket?.price_precision)}
+                                                    {Decimal.format(item.last, item.price_precision)}
                                                 </p>
                                             </div>
                                         </td>
