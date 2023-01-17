@@ -61,9 +61,6 @@ const MarketDetailMobileScreen: React.FC = () => {
     });
 
     const current = markets.find((item) => item.base_unit === currency);
-    console.log(markets);
-
-    console.log(currency);
 
     React.useEffect(() => {
         dispatch(setCurrentMarket(current));
