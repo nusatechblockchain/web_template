@@ -22,6 +22,7 @@ import {
 } from '../../../modules';
 import { Decimal } from '../../../components';
 import { ModalFullScreenMobile } from 'src/mobile/components';
+import { RecentTrades } from '../../../desktop/containers';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import {
@@ -179,14 +180,12 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                         </div>
                     </div>
                 </div>
-
                 {/* TRADING */}
                 {showTrading && (
                     <div className="mb-3" style={{ height: 400 }}>
                         {<TradingChart />}
                     </div>
                 )}
-
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
                     {/* ORDER FORM */}
                     <div className={`buy-sell-container  w-60 ${isLoggedin ? '' : 'blur-effect blur-mobile'}`}>
@@ -297,200 +296,56 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                             handleSelectPriceAsks={handleSelectPriceAsks}
                             handleSelectPriceBids={handleSelectPriceBids}
                         />
-                        {/* <div className=" trading-view-container position-relative max-h-160">
-                            <div className="table-background position-absolute w-100">
-                                <div className="table-background-row row-danger" style={{ width: '70%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '30%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '50%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '40%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '80%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '40%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '100%' }} />
-                                <div className="table-background-row row-danger" style={{ width: '30%' }} />
-                            </div>
-                            <table className="table table-borderless w-100">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Price</th>
-                                        <th scope="col" className="text-right">
-                                            Quantity
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price danger">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="price-deal">
-                            <p className="mb-0 text-xxs font-bold danger-text pt-2 pb-1 text-center">0.0123 USDT</p>
-                        </div>
-                        <div className=" trading-view-container position-relative max-h-160">
-                            <div className="table-background position-absolute w-100 no-top">
-                                <div className="table-background-row row-primary" style={{ width: '90%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '50%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '80%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '100%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '90%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '50%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '80%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '100%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '30%' }} />
-                                <div className="table-background-row row-primary" style={{ width: '60%' }} />
-                            </div>
-                            <table className="table table-borderless w-100">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" className="d-none"></th>
-                                        <th scope="col" className="d-none"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-price primary">323,451,889</td>
-                                        <td className="td-qty">0.092390</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> */}
-                    </div>
-                </div>
-
-                {/* OPEN ORDER */}
-                <div className="d-flex justify-content-between align-items-center sorting-container w-100 mb-16">
-                    <div className="d-flex justify-content-between align-items-center sorting-left-container">
-                        <p className="sorting-by m-0">Sorting by:</p>
-                        <div className="d-flex align-items-center sort-buy">
-                            <p className="m-0">Buy</p>
-                            <BuyIcon />
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center sorting-right-container">
-                        <div className="d-flex align-items-center sort-sell">
-                            <p className="m-0">Sell</p>
-                            <SellIcon />
-                        </div>
-                        <div className="d-flex align-items-center hide-pairs">
-                            <img src="../../assets/icons/checkbox.svg" alt="pairs" width={10} height={10} />
-                            <p className="mb-0">Hide all pairs</p>
-                        </div>
                     </div>
                 </div>
                 {/* OPEN ORDER */}
-                <div className="d-flex justify-content-between align-items-center table-container w-100 mb-16">
-                    <div className="d-flex align-items-center table-head-container">
-                        <p>Date</p>
-                        <p>Pair</p>
-                        <p>Type</p>
-                        <p>Price</p>
-                        <p>Filled</p>
-                        <p>Total</p>
-                    </div>
-                    <Link to="/history-transaction">
-                        <div className="d-flex align-items-center all-order">
-                            <p className="mb-0">All Order</p>
-                            <HistoryIcon />
-                        </div>
-                    </Link>
+                <div className="trading-tabs mt-2">
+                    <Tabs defaultActiveKey="open-order" id="justify-tab-example" className="" justify>
+                        <Tab eventKey="open-order" title="Open Order">
+                            <div className="d-flex justify-content-between align-items-center sorting-container w-100 py-1">
+                                <div className="d-flex justify-content-between align-items-center sorting-left-container">
+                                    <p className="sorting-by m-0">Sorting by:</p>
+                                    <div className="d-flex align-items-center sort-buy">
+                                        <p className="m-0">Buy</p>
+                                        <BuyIcon />
+                                    </div>
+                                </div>
+                                <div className="d-flex justify-content-between align-items-center sorting-right-container">
+                                    <div className="d-flex align-items-center sort-sell">
+                                        <p className="m-0">Sell</p>
+                                        <SellIcon />
+                                    </div>
+                                    <div className="d-flex align-items-center hide-pairs">
+                                        <img src="../../assets/icons/checkbox.svg" alt="pairs" width={10} height={10} />
+                                        <p className="mb-0">Hide all pairs</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="d-flex justify-content-between align-items-center table-container w-100 mb-16">
+                                <div className="d-flex align-items-center table-head-container">
+                                    <p>Date</p>
+                                    <p>Pair</p>
+                                    <p>Type</p>
+                                    <p>Price</p>
+                                    <p>Filled</p>
+                                    <p>Total</p>
+                                </div>
+                                <Link to="/history-transaction">
+                                    <div className="d-flex align-items-center all-order">
+                                        <p className="mb-0">All Order</p>
+                                        <HistoryIcon />
+                                    </div>
+                                </Link>
+                            </div>
+                            <div className="no-order text-center"> You have no order</div>
+                        </Tab>
+                        <Tab eventKey="recent-trade" title="Recent Trade">
+                            <div className="mobile-trades">
+                                <RecentTrades />
+                            </div>
+                        </Tab>
+                    </Tabs>
                 </div>
-                <div className="no-order text-center"> You have no order</div>
 
                 {/* OFF CANVAS SIDEBAR */}
                 <div
