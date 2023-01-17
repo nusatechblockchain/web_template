@@ -289,7 +289,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     </div>
 
                     {/* ORDER BOOK */}
-                    <div className="w-40">
+                    <div className={`w-40 ${isMobileDevice && 'mobile-device'}`}>
                         <OrderBook
                             asks={asks}
                             bids={bids}
