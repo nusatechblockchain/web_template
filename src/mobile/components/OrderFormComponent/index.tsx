@@ -132,10 +132,41 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     </div>
                 </div>
                 <div className="badge-container d-flex justify-content-between align-items-center flex-wrap mb-8">
-                    <div className="badge">25%</div>
-                    <div className="badge">50%</div>
-                    <div className="badge">75%</div>
-                    <div className="badge">100%</div>
+                    <div
+                        className={`badge cursor-pointer ${
+                            orderPercentage >= 0 && orderPercentage <= 100 && 'bg-contrast white-text'
+                        }`}
+                        onClick={() => handleSelectPercentage(0)}>
+                        0%
+                    </div>
+                    <div
+                        className={`badge cursor-pointer ${
+                            orderPercentage > 0 && orderPercentage <= 100 && 'bg-contrast white-text'
+                        }`}
+                        onClick={() => handleSelectPercentage(25)}>
+                        25%
+                    </div>
+                    <div
+                        className={`badge cursor-pointer ${
+                            orderPercentage > 25 && orderPercentage <= 100 && 'bg-contrast white-text'
+                        }`}
+                        onClick={() => handleSelectPercentage(50)}>
+                        50%
+                    </div>
+                    <div
+                        className={`badge cursor-pointer ${
+                            orderPercentage > 50 && orderPercentage <= 100 && 'bg-contrast white-text'
+                        }`}
+                        onClick={() => handleSelectPercentage(75)}>
+                        75%
+                    </div>
+                    <div
+                        className={`badge cursor-pointer ${
+                            orderPercentage > 75 && orderPercentage <= 100 && 'bg-contrast white-text'
+                        }`}
+                        onClick={() => handleSelectPercentage(100)}>
+                        100%
+                    </div>
                 </div>
                 <div className="input-group mb-8">
                     <div className="input-group-prepend">
