@@ -61,11 +61,11 @@ export const TradingScreen: FC = (): ReactElement => {
     const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
-    const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
-    const [amountBuy, setAmountBuy] = React.useState('');
+    const [priceBuy, setPriceBuy] = React.useState('0');
+    const [amountBuy, setAmountBuy] = React.useState('0');
     const [totalBuy, setTotalBuy] = React.useState('');
-    const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
-    const [amountSell, setAmountSell] = React.useState('');
+    const [priceSell, setPriceSell] = React.useState('0');
+    const [amountSell, setAmountSell] = React.useState('0');
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
@@ -161,17 +161,11 @@ export const TradingScreen: FC = (): ReactElement => {
     React.useEffect(() => {
         const safePrice = +totalPrice / +totalAmount || priceSell;
 
-        const market =
-            orderPercentageSell !== 0
-                ? Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision)
-                : Decimal.format(amountSell, currentMarket?.amount_precision);
+        const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
 
-        const limit =
-            orderPercentageSell !== 0
-                ? Decimal.format(+totalSell / +priceSell, currentMarket?.amount_precision)
-                : Decimal.format(amountSell, currentMarket?.amount_precision);
+        const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
 
-        setAmountSell(orderType === 'market' ? market : limit);
+        setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
 
     React.useEffect(() => {
@@ -193,17 +187,11 @@ export const TradingScreen: FC = (): ReactElement => {
 
     React.useEffect(() => {
         // const safePrice = +totalPrice / +totalAmount || priceBuy;
-        const market =
-            orderPercentageBuy !== 0
-                ? Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.amount_precision)
-                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+        const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
 
-        const limit =
-            orderPercentageBuy !== 0
-                ? Decimal.format(+totalBuy / +priceBuy, currentMarket?.amount_precision)
-                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+        const limit = orderPercentageBuy !== 0 ? +totalBuy / +priceBuy : amountBuy;
 
-        setAmountBuy(orderType === 'market' ? market : limit);
+        setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
 
     React.useEffect(() => {
@@ -226,10 +214,10 @@ export const TradingScreen: FC = (): ReactElement => {
     const resetForm = () => {
         setShowModalSell(false);
         setShowModalBuy(false);
-        setAmountBuy('');
-        setAmountSell('');
-        setPriceBuy(Decimal.format('0', currentMarket?.price_precision));
-        setPriceSell(Decimal.format('0', currentMarket?.price_precision));
+        setAmountBuy('0');
+        setAmountSell('0');
+        setPriceBuy('0');
+        setPriceSell('0');
         setTotalBuy('');
         setTotalSell('');
         setOrderPercentageSell(0);
