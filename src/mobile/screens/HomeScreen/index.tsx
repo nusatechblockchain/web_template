@@ -23,6 +23,7 @@ import { ArrowRight } from '../../assets/Arrow';
 import { ChartLandingMobile } from 'src/mobile/components';
 import { DocIcon } from 'src/mobile/assets/Wallet';
 import moment from 'moment';
+ 
 
 const noHeaderRoutes = ['/'];
 
