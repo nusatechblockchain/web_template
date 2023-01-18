@@ -9,7 +9,6 @@ import {
     selectMarketTickers,
     setCurrentMarket,
 } from 'src/modules';
-import { TradingViewEmbed, widgetType } from 'react-tradingview-embed';
 import { WarningIcon } from '../../assets/Warning';
 import { Decimal } from 'src/components';
 import { ArrowLeft } from 'src/mobile/assets/Arrow';
@@ -66,7 +65,6 @@ const MarketDetailMobileScreen: React.FC = () => {
         dispatch(setCurrentMarket(current));
     }, [current]);
 
-    const optionStatus = [{ label: <p className="m-0 text-sm grey-text-accent">USDT</p>, value: 'usdt' }];
     return (
         <React.Fragment>
             <div className="mobile-container no-header market-detail dark-bg-main">
@@ -174,8 +172,8 @@ const MarketDetailMobileScreen: React.FC = () => {
                             <Link
                                 to={
                                     detail && detail.type == 'spot'
-                                        ? `/trading/${detail && detail.base_unit}`
-                                        : `/trading-future/${detail && detail.base_unit}`
+                                        ? `/trading/${detail && detail.id}`
+                                        : `/trading-future/${detail && detail.id}`
                                 }
                                 className="btn btn-primary btn-mobile btn-block">
                                 Trade Now

@@ -75,8 +75,6 @@ const MarketListTradeComponent = ({ handleRedirectToTrading }) => {
             i.id?.toLocaleLowerCase().includes(filterValue.toLowerCase())
     );
 
-    console.log(filteredList);
-
     return (
         <React.Fragment>
             <div className="p-3">
