@@ -39,7 +39,6 @@ interface PaginationProps {
     totalText?: string;
 }
 
-
 interface PreviousIconProps {
     /**
      * Value for defining if previous page disabled
@@ -91,13 +90,7 @@ const NextPageIcon: React.FunctionComponent<NextPageIconProps> = ({ disabled }) 
  */
 class Pagination extends React.Component<PaginationProps> {
     public renderInfoElement = () => {
-        const {
-            firstElemIndex,
-            lastElemIndex,
-            separator,
-            total,
-            totalText,
-        } = this.props;
+        const { firstElemIndex, lastElemIndex, separator, total, totalText } = this.props;
 
         if (total) {
             return (
@@ -113,34 +106,26 @@ class Pagination extends React.Component<PaginationProps> {
 
         return (
             <p>
-                <span>{firstElemIndex}</span>
+                {/* <span>{firstElemIndex}</span>
                 <span>{separator || ' - '}</span>
-                <span>{lastElemIndex}</span>
+                <span>{lastElemIndex}</span> */}
             </p>
         );
     };
 
     public render() {
-        const {page, nextPageExists } = this.props;
+        const { page, nextPageExists } = this.props;
         const prevDisabled = page === 0;
         const nextDisabled = !nextPageExists;
 
         return (
-            <div>
+            <div className="pagination-component">
                 {this.renderInfoElement()}
-                <button
-                    className=""
-                    onClick={this.onClickPrevPage}
-                    disabled={prevDisabled}
-                >
-                    <PreviousIcon disabled={prevDisabled}/>
+                <button className="" onClick={this.onClickPrevPage} disabled={prevDisabled}>
+                    <PreviousIcon disabled={prevDisabled} />
                 </button>
-                <button
-                    className=""
-                    onClick={this.onClickNextPage}
-                    disabled={nextDisabled}
-                >
-                    <NextPageIcon disabled={nextDisabled}/>
+                <button className="" onClick={this.onClickNextPage} disabled={nextDisabled}>
+                    <NextPageIcon disabled={nextDisabled} />
                 </button>
             </div>
         );
@@ -161,6 +146,4 @@ class Pagination extends React.Component<PaginationProps> {
     };
 }
 
-export {
-    Pagination,
-};
+export { Pagination };

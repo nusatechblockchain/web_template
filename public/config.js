@@ -1,7 +1,8 @@
 function fetchConfigs() {
     const fetchConfig = new XMLHttpRequest();
-    const hostUrl = 'https://dev.koinku.co';
-    
+    const hostUrl = 'https://www.heavenexchange.io';
+    // const hostUrl = 'https://app.nagaexchange.co.id';
+
     fetchConfig.open('GET', `${hostUrl}/api/v2/sonic/public/config`, false);
     fetchConfig.send(null);
 
@@ -13,8 +14,8 @@ function fetchConfigs() {
     if (window.location.pathname === '/magic-link') {
         if (token) {
             const sendAccessToken = new XMLHttpRequest();
-            sendAccessToken.open('POST', `${hostUrl}/api/v2/account/identity/users/access`, false)
-            sendAccessToken.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            sendAccessToken.open('POST', `${hostUrl}/api/v2/account/identity/users/access`, false);
+            sendAccessToken.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             sendAccessToken.send(JSON.stringify({ whitelink_token: token }));
         } else {
             window.location.replace(window.location.origin);
@@ -33,5 +34,5 @@ function fetchConfigs() {
         }
     }
 }
-  
+
 fetchConfigs();

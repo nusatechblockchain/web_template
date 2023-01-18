@@ -1,0 +1,175 @@
+/* table */
+.table.table-small thead {
+    position: sticky;
+    top: 0;
+    border: none;
+    background: var(--dark-600);
+}
+
+.table-open-order thead {
+    position: sticky;
+    top: 44px !important;
+    background: var(--dark-600);
+}
+
+.table.table-small thead tr {
+    border: none;
+}
+
+.table.table-small thead th {
+    padding: 6px 4px;
+    font-weight: 600;
+}
+
+.table.table-small tbody td {
+    padding: 6px 3px;
+    border: 0;
+}
+
+.max-140 {
+    max-height: 170px;
+    overflow: auto;
+}
+
+.max-120 {
+    max-height: 120px;
+    overflow: auto;
+}
+
+.max-250 {
+    max-height: 250px;
+    overflow: auto;
+}
+
+.max-300 {
+    max-height: 340px;
+    overflow: auto;
+}
+
+.max-400 {
+    max-height: 380px;
+    overflow: auto;
+}
+
+.table-background {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.table-background.top-30 {
+    top: 0;
+}
+
+.table-background-row.danger {
+    height: 28px;
+    margin: 1px 0;
+    background: var(--red);
+    opacity: 0.2;
+}
+.table-background-row.good {
+    height: 28px;
+    margin: 1px 0;
+    background: var(--green);
+    opacity: 0.2;
+}
+/* end table */
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    cursor: pointer;
+}
+
+.form-control.input-search {
+    padding-left: 40px;
+}
+
+.order-form label {
+    color: var(--grey-200);
+}
+
+.order-tab input[type="radio"]:checked + label {
+    color: var(--green);
+}
+
+.order-form .input-order-form {
+    padding-left: 56px;
+    padding-right: 56px;
+    color: var(--white);
+}
+
+.order-form .input-order-label-left {
+    position: absolute;
+    top: 16px;
+    left: 10px;
+    font-size: 12px;
+}
+
+.order-form .input-order-label-right {
+    position: absolute;
+    top: 16px;
+    right: 10px;
+    font-size: 12px;
+}
+
+.order-form .line-wrap {
+    height: 2px;
+    background: var(--grey-200);
+    width: 100%;
+}
+
+.input-timeline {
+    height: 20px;
+}
+
+.order-form .line-wrap .line {
+    height: 2px;
+    background: var(--green);
+    width: 100%;
+}
+
+.order-form .main-input {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+}
+
+.order-form .main-input .input-item {
+    width: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+    margin-top: -2px;
+}
+
+.order-form .main-input .input-item img {
+    display: none;
+}
+
+.order-form .main-input .input-item .show {
+    display: block;
+}
+
+.order-form .main-input .input-item.start {
+    align-items: start;
+}
+
+.order-form .main-input .input-item.end {
+    align-items: end;
+}
+
+#tp-sl-form {
+    display: none;
+}
+
+#tp-sl-form.show {
+    display: block;
+}

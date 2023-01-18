@@ -1,6 +1,5 @@
-import cr from 'classnames';
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { CustomInput, PasswordStrengthMeter } from '../';
 import { isUsernameEnabled } from '../../../api';
@@ -14,10 +13,15 @@ import {
 } from '../../../helpers';
 import { GeetestCaptchaResponse } from '../../../modules';
 import { selectMobileDeviceState } from '../../../modules/public/globalSettings';
+import { ArrowDownIcon } from 'src/assets/images/ArrowDownIcon';
+import { ArrowUpIcon } from 'src/assets/images/ArrowUpIcon';
+import './SignUp.pcss';
+import 'react-phone-input-2/lib/style.css';
 
 export interface SignUpFormProps {
     isLoading?: boolean;
     title?: string;
+    type?: string;
     onSignUp: () => void;
     onSignIn?: () => void;
     className?: string;
@@ -73,6 +77,7 @@ export interface SignUpFormProps {
 const SignUpFormComponent: React.FC<SignUpFormProps> = ({
     username,
     email,
+    type,
     confirmPassword,
     refId,
     onSignIn,
@@ -119,12 +124,29 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
     renderCaptcha,
 }) => {
     const isMobileDevice = useSelector(selectMobileDeviceState);
+    const [expand, setExpand] = React.useState(false);
+    const [show, setShow] = React.useState(false);
+    const [showError, setShowError] = React.useState(false);
+    const [showModalAddBeneficiary, setShowModalModalAddBeneficiary] = React.useState(false);
+    const [showModalBeneficiaryList, setShowModalBeneficiaryList] = React.useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     const disableButton = React.useMemo((): boolean => {
         const captchaTypeValue = captchaType();
 
-        if (!hasConfirmed || isLoading || !email.match(EMAIL_REGEX) || !password || !confirmPassword ||
-            (isUsernameEnabled() && !username.match(USERNAME_REGEX))) {
-
+        if (
+            // !hasConfirmed ||
+            !passwordErrorFirstSolved ||
+            !passwordErrorSecondSolved ||
+            !passwordErrorThirdSolved ||
+            isLoading ||
+            !email.match(EMAIL_REGEX) ||
+            confirmPassword !== password ||
+            !password ||
+            !confirmPassword ||
+            (isUsernameEnabled() && !username.match(USERNAME_REGEX))
+        ) {
             return true;
         }
 
@@ -160,10 +182,19 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangePassword}
                     inputValue={password}
                     handleFocusInput={handleFocusPassword}
-                    classNameLabel=""
-                    classNameInput=""
+                    classNameLabel="white-text text-sm"
+                    classNameInput={`${
+                        passwordFocused &&
+                        (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) &&
+                        'error'
+                    }`}
                     autoFocus={false}
+                    labelVisible
                 />
+                {passwordFocused &&
+                    (!passwordErrorFirstSolved || !passwordErrorSecondSolved || !passwordErrorThirdSolved) && (
+                        <p className="danger-text m-0 mb-24 text-xs">Password Strength must be GOOD</p>
+                    )}
                 {password ? (
                     <PasswordStrengthMeter
                         minPasswordEntropy={passwordMinEntropy()}
@@ -219,6 +250,19 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
         [handleSubmitForm, isValidForm, validateForm]
     );
 
+    const handleCheck = () => {
+        if (hasConfirmed === false) {
+            hasConfirmed = true;
+        }
+        hasConfirmed = false;
+    };
+
+    const handleSubmit = async (e) => {
+        await handleClick(e as any);
+        await handleCheck();
+        await clickCheckBox(e);
+        handleClose();
+    };
 
     const renderUsernameError = (nick: string) => {
         return nick.length < 4 ? translate(ERROR_SHORT_USERNAME) : translate(ERROR_LONG_USERNAME);
@@ -226,7 +270,6 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
 
     return (
         <React.Fragment>
-            <h3>Register</h3>
             <div className="field">
                 <CustomInput
                     type="text"
@@ -236,15 +279,16 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangeUsername}
                     inputValue={username}
                     handleFocusInput={handleFocusUsername}
-                    classNameLabel=""
-                    classNameInput=""
+                    classNameLabel="white-text text-sm"
+                    classNameInput={`${usernameFocused && !username.match(USERNAME_REGEX) && 'error'}`}
                     autoFocus={!isMobileDevice}
+                    labelVisible
                 />
-                {!username.match(USERNAME_REGEX) && !usernameFocused && username.length ? (
-                    <div className="invalid-feedback">
-                        {renderUsernameError(username)}
-                    </div>
-                ) : null}        
+                {usernameFocused && !username.match(USERNAME_REGEX) && (
+                    <p className="text-xs danger-text m-0 mb-24">
+                        Username must be at least 4 characters long and maximum 12 characters
+                    </p>
+                )}
             </div>
 
             <div className="field">
@@ -256,14 +300,17 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangeEmail}
                     inputValue={email}
                     handleFocusInput={handleFocusEmail}
-                    classNameLabel=""
-                    classNameInput=""
+                    classNameLabel="white-text text-sm"
+                    classNameInput={`${emailFocused && !email.match(EMAIL_REGEX) && 'error'}`}
                     autoFocus={!isUsernameEnabled() && !isMobileDevice}
+                    labelVisible
                 />
-                {emailError && <div className="invalid-feedback">{emailError}</div>}      
+                {emailFocused && !email.match(EMAIL_REGEX) && (
+                    <p className="text-xs danger-text m-0 mb-24">Enter a valid email address</p>
+                )}
             </div>
 
-            {renderPasswordInput()} 
+            {renderPasswordInput()}
 
             <div className="field">
                 <CustomInput
@@ -274,57 +321,106 @@ const SignUpFormComponent: React.FC<SignUpFormProps> = ({
                     handleChangeInput={handleChangeConfirmPassword}
                     inputValue={confirmPassword}
                     handleFocusInput={handleFocusConfirmPassword}
-                    classNameLabel=""
-                    classNameInput=""
+                    classNameLabel="white-text text-sm"
+                    classNameInput={`rounded-sm m-0 ${
+                        confirmPasswordFocused && confirmPassword !== password && 'error'
+                    }`}
                     autoFocus={false}
+                    labelVisible
                 />
-            </div> 
-
-            <CustomInput
-                type="text"
-                label={referalCodeLabel || 'Referral code'}
-                placeholder={referalCodeLabel || 'Referral code'}
-                defaultLabel="Referral code"
-                handleChangeInput={handleChangeRefId}
-                inputValue={refId}
-                handleFocusInput={handleFocusRefId}
-                classNameLabel=""
-                classNameInput=""
-                autoFocus={false}
-            />   
-
-            <div className='mt-4 mb-4'>
-                {renderCaptcha}
+                {confirmPasswordFocused && confirmPassword !== password && (
+                    <p className="text-xs danger-text m-0 mb-24">Password Confirmation doesn't match</p>
+                )}
             </div>
 
+            <div
+                onClick={() => setExpand(!expand)}
+                className={`label-referral cursor-pointer text-sm mb-8 ${expand ? 'white-text' : 'grey-text'}`}>
+                Referral ID (Optional){' '}
+                {expand ? (
+                    <ArrowUpIcon fillColor={'#F2F0FF'} />
+                ) : (
+                    <ArrowDownIcon className={''} strokeColor={'#6f6f6f'} />
+                )}
+            </div>
 
-            <label className="checkbox" onClick={clickCheckBox}>
-                <input className="checkbox__input" type="checkbox" id="agreeWithTerms" checked={hasConfirmed} onChange={clickCheckBox}/>
-                <span className="checkbox__inner">
-                <span className="checkbox__tick" />
-                <span className="checkbox__text">
-                    By signing up I agree that I’m 18 years of age or older, to the{" "}
-                    <a className="checkbox__link" href="#">
-                        User Agreements 
-                    </a> , <a className="checkbox__link" href="#">
-                        Privacy Policy
-                    </a> , <a className="checkbox__link" href="#">
-                        Cookie Policy
-                    </a>
-                </span>
-                </span>
-            </label>
+            {expand && (
+                <CustomInput
+                    type="text"
+                    label={''}
+                    labelVisible={false}
+                    placeholder={referalCodeLabel || 'Referral code'}
+                    defaultLabel=""
+                    handleChangeInput={handleChangeRefId}
+                    inputValue={refId}
+                    handleFocusInput={handleFocusRefId}
+                    classNameLabel="d-none"
+                    classNameInput="m-0"
+                    autoFocus={false}
+                />
+            )}
+
+            <div className="mt-4 mb-24">{renderCaptcha}</div>
 
             <Button
                 block={true}
                 type="button"
                 disabled={disableButton}
-                onClick={(e) => handleClick(e as any)}
+                onClick={handleShow}
                 size="lg"
-                className='button registration__button'
+                className="button registration__button"
                 variant="primary">
                 {isLoading ? 'Loading...' : labelSignUp ? labelSignUp : 'Sign up'}
             </Button>
+
+            <Modal show={show} onHide={handleClose} className="w-100">
+                <Modal.Header className="rounded-top-10 border-none">
+                    <h6 className="text-lg grey-text-accent font-normal mb-24">Term of service</h6>
+                </Modal.Header>
+                <Modal.Body className="tos-content">
+                    <p className="grey-text-accent">SYARAT – SYARAT DAN KETENTUAN UMUM</p>
+                    <p className="grey-text-accent">
+                        Syarat – Syarat dan Ketentuan Umum (selanjutnya disebut sebagai “SKU”) HEAVEN EXCHANGE adalah
+                        ketentuan yang berisikan syarat dan ketentuan mengenai penggunaan produk, jasa, teknologi, fitur
+                        layanan yang diberikan oleh HEAVEN EXCHANGE termasuk, namun tidak terbatas pada penggunaan
+                        Website, Dompet Bitcoin Indonesia dan HEAVEN EXCHANGE Trading Platform (Trading App) (untuk
+                        selanjutnya disebut sebagai “Platform HEAVEN EXCHANGE”) sepanjang tidak diatur secara khusus
+                        sebagaimana tercantum pada bagian registrasi Akun HEAVEN EXCHANGE yang dibuat pada hari dan
+                        tanggal yang tercantum dalam bagian registrasi Akun https://HEAVEN EXCHANGE.com, merupakan satu
+                        kesatuan tidak terpisahkan dan persetujuan atas SKU ini. Dengan mendaftar menjadi
+                        Member/Verified Member, Anda menyatakan telah MEMBACA, MEMAHAMI, MENYETUJUI dan MEMATUHI
+                        Persyaratan dan Ketentuan di bawah. Anda disarankan membaca semua persyaratan dan ketentuan
+                        secara seksama sebelum menggunakan layanan platform HEAVEN EXCHANGE atau segala layanan yang
+                        diberikan, dan bersama dengan ini Anda setuju dan mengikatkan diri terhadap seluruh kegiatan
+                        dalam SKU ini dengan persyaratan dan ketentuan sebagai berikut : DEFINISI sepanjang konteks
+                        kalimatnya tidak menentukan lain, istilah atau definisi dalam SKU memiliki arti sebagai berikut
+                        :
+                    </p>
+                    <p className="grey-text-accent">
+                        Website mengacu pada situs online dengan alamat https://HEAVEN EXCHANGE.com. Website ini
+                        dikelola oleh HEAVEN EXCHANGE, dengan tidak terbatas pada para pemilik, investor, karyawan dan
+                        pihak-pihak yang terkait dengan HEAVEN EXCHANGE. Tergantung pada konteks, “Website” dapat juga
+                        mengacu pada jasa, produk, situs, konten atau layanan lain yang disediakan oleh HEAVEN EXCHANGE.
+                        Aset Kripto adalah komoditas digital yang menggunakan prinsip teknologi desentralisasi
+                        berbasiskan jaringan peer-to-peer (antar muka)atau disebut dengan Jaringan Blockchain yang
+                        diperdagangkan di dalam platform Blockchain adalah sebuah buku besar terdistribusi (distributed
+                        ledger) terbuka yang dapat mencatat transaksi antara dua pihak secara efisien dan dengan cara
+                        yang dapat diverifikasi secara permanen. Registrasi adalah proses pendaftaran menjadi Member
+                        dalam platform HEAVEN EXCHANGE yang merupakan proses verifikasi awal untuk memperoleh
+                        keterangan, pernyataan dalam penggunaan layanan platform Member adalah orang (perseorangan),
+                        badan usaha, maupun badan hukum yang telah melakukan registrasi pada platform HEAVEN EXCHANGE,
+                        sehingga memperoleh otorisasi dari platform HEAVEN EXCHANGE untuk melakukan{' '}
+                    </p>
+                </Modal.Body>
+                <Modal.Footer className="d-flex justify-content-between border-none rounded-bottom-10">
+                    <Button type="button" className="btn-danger" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button className="btn-success" onClick={(e) => handleSubmit(e)}>
+                        {isLoading ? 'Loading...' : 'Accept'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </React.Fragment>
     );
 };

@@ -1,0 +1,58 @@
+.group-wWM3zP_M- {
+    background-color: var(--text-contrast-color) !important;
+}
+
+.pg-trading-chart {
+    /* background: transparent !important; */
+    height: 100%;
+    left: 0;
+    position: relative !important;
+    top: 0;
+    width: 100%;
+
+    #tv_chart_container {
+        background: transparent !important;
+    }
+
+    #cryptobase_chart {
+        background: transparent !important;
+        height: calc(100% - 39px);
+    }
+
+    .cr-title-component {
+        padding: calc(var(--gap) * 2);
+    }
+
+    &__widget {
+        height: 100%;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 2 !important;
+    }
+
+    &__bg {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+}
+
+.pg-trading-chart--error {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid white;
+    color: var(--text-danger-color);
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+    .pg-trading-chart {
+        width: 100%;
+    }
+}

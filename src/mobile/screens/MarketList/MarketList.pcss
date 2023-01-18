@@ -1,0 +1,665 @@
+.market-list {
+    nav,
+    .container-fluid {
+        background: var(--main-background-color);
+        max-width: 768px;
+        margin: 0 auto;
+    }
+
+    .container-fluid {
+        padding-top: 24px !important;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 23px;
+        color: var(--text-secondary-color);
+    }
+
+    .show {
+        display: block !important;
+    }
+
+    .form-wrapper {
+        gap: 6px;
+    }
+
+    .form-control,
+    .input-group-text {
+        background: var(--body-background-color);
+        border: none;
+        border-radius: 2px;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-primary-color);
+        padding: 4px 8px !important;
+    }
+
+    .form-input {
+        border-radius: 8px;
+    }
+
+    .cancel-icon {
+        left: auto;
+        right: 10px;
+        display: none;
+    }
+
+    .form-control:focus {
+        background: var(--body-background-color);
+        color: var(--text-primary-color);
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .form-control::placeholder {
+        color: var(--text-grey-color);
+    }
+
+    .btn-cancel {
+        border: none;
+        background: none;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .btn-cancel:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .menu-snackbar.active {
+        color: var(--text-secondary-color);
+    }
+
+    .menu-snackbar {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+        gap: 8px;
+    }
+
+    a.nav-link,
+    .nav-tabs {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-secondary-color);
+        background: transparent;
+        border: 0;
+        padding: 8px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-tabs .nav-link:hover {
+        border-color: transparent;
+    }
+
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        background: var(--text-gradient-color) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        padding: 8px 0;
+        border: none;
+        /* border-bottom: 1px solid var(--text-contrast-color); */
+    }
+
+    .tab-content {
+        width: 100%;
+    }
+
+    .nav-market {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 10px;
+    }
+
+    .nav-all-crypto {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 10px;
+    }
+
+    .crypto-nav-link {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--primary-text-color);
+        padding: 10px;
+        border-radius: 2px;
+        background: none;
+        border: none;
+        height: 34px;
+        min-width: 68px;
+    }
+
+    .crypto-nav-link.crypto-active {
+        background: var(--text-gradient-color);
+    }
+
+    .table-all-crypto-container {
+        padding: 0 12px;
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .table-all-crypto-container table {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .table-all-crypto-container thead {
+        background: transparent !important;
+    }
+
+    .table-all-crypto-container th,
+    .table-all-crypto-container td {
+        padding: 12px 0;
+    }
+
+    .table-all-crypto-container thead th:nth-child(1),
+    .table-all-crypto-container tbody td:nth-child(1) {
+        width: 50%;
+    }
+
+    .table-all-crypto-container thead th:nth-child(2),
+    .table-all-crypto-container thead th:nth-child(3),
+    .table-all-crypto-container tbody td:nth-child(2),
+    .table-all-crypto-container tbody td:nth-child(3) {
+        width: 25%;
+    }
+
+    .name-vol-container {
+        gap: 8px;
+    }
+
+    .name-col {
+        gap: 4px;
+    }
+
+    .name-col p {
+        margin: 0;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-coin {
+        gap: 8px;
+    }
+
+    .card-coin h3 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-secondary-color);
+    }
+
+    .card-coin span {
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-coin .divide {
+        font-size: 14px;
+    }
+
+    .card-coin p {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-price {
+        gap: 8px;
+    }
+
+    .card-price h3 {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .card-price .primary {
+        color: var(--text-contrast-color);
+    }
+
+    .card-price .danger {
+        color: var(--text-danger-color);
+    }
+
+    .card-price h4 {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    /* Favorite */
+    .nav-favorite {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 10px;
+    }
+
+    .nav-favorite .nav-link {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--primary-text-color);
+        padding: 10px;
+        border-radius: 2px;
+        background: none;
+        border: none;
+        height: 34px;
+        min-width: 68px;
+    }
+
+    .nav-favorite .nav-link.active {
+        background: var(--text-gradient-color);
+        color: var(--primary-text-color);
+        border: none;
+    }
+
+    .table-favorite-container {
+        padding: 0 12px;
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .table-favorite-container table {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .table-favorite-container thead {
+        background: transparent !important;
+    }
+
+    .table-favorite-container th,
+    .table-favorite-container td {
+        padding: 12px 0;
+    }
+
+    .table-favorite-container thead th,
+    .table-favorite-container tbody td {
+        width: 25%;
+    }
+
+    .name-vol-container {
+        gap: 8px;
+    }
+
+    .name-col {
+        gap: 4px;
+    }
+
+    .name-col p {
+        margin: 0;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-favorite-name {
+        gap: 4px;
+    }
+
+    .card-favorite-name h3 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--primary-text-color);
+    }
+
+    .card-favorite-price {
+        gap: 4px;
+    }
+
+    .card-favorite-price h4 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .text-24change {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-contrast-color);
+    }
+
+    .card-favorite-price .primary {
+        color: var(--text-contrast-color);
+    }
+
+    .card-favorite-price .danger {
+        color: var(--text-danger-color);
+    }
+
+    .text-24volume {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: right;
+        color: var(--text-grey-color);
+    }
+
+    /* Spot */
+    .nav-spot {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 10px;
+    }
+
+    .spot-nav-link {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--primary-text-color);
+        padding: 10px;
+        border-radius: 2px;
+        background: none;
+        border: none;
+        height: 34px;
+        min-width: 68px;
+    }
+
+    .spot-nav-link.spot-active {
+        background: var(--text-ggradient-color);
+    }
+
+    .table-spot-container {
+        padding: 0 12px;
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .table-spot-container table {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .table-spot-container thead {
+        background: transparent !important;
+    }
+
+    .table-spot-container th,
+    .table-spot-container td {
+        padding: 12px 0;
+    }
+
+    .table-spot-container thead th,
+    .table-spot-container tbody td {
+        width: 25%;
+    }
+
+    .card-spot-price h4 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-spot-name {
+        gap: 4px;
+    }
+
+    .card-spot-name h3 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--primary-text-color);
+    }
+
+    /* Future */
+    .nav-future {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 10px;
+    }
+
+    .future-nav-link {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--primary-text-color);
+        padding: 10px;
+        border-radius: 2px;
+        background: none;
+        border: none;
+        height: 34px;
+        min-width: 68px;
+    }
+
+    .future-nav-link.future-active {
+        background: var(--text-gradient-color);
+    }
+
+    .table-future-container {
+        padding: 0 12px;
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .table-future-container table {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .table-future-container thead {
+        background: transparent !important;
+    }
+
+    .table-future-container th,
+    .table-future-container td {
+        padding: 12px 0;
+    }
+
+    .table-future-container thead th,
+    .table-future-container tbody td {
+        width: 25%;
+    }
+
+    .card-future-price h4 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-future-name {
+        gap: 4px;
+    }
+
+    .card-future-name h3 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--primary-text-color);
+    }
+
+    .card-future-name p {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    /* New listing */
+    .nav-new-listing {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 10px;
+    }
+
+    .listing-nav-link {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: var(--primary-text-color);
+        padding: 10px;
+        border-radius: 2px;
+        background: none;
+        border: none;
+        height: 34px;
+        min-width: 68px;
+    }
+
+    .listing-nav-link.listing-active {
+        background: var(--text-gradient-color);
+    }
+
+    .table-new-listing-container {
+        padding: 0 12px;
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .table-new-listing-container table {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .table-new-listing-container thead {
+        background: transparent !important;
+    }
+
+    .table-new-listing-container th,
+    .table-new-listing-container td {
+        padding: 12px 0;
+    }
+
+    .table-new-listing-container thead th:nth-child(1),
+    .table-new-listing-container tbody td:nth-child(1) {
+        width: 50%;
+    }
+
+    .table-new-listing-container thead th:nth-child(2),
+    .table-new-listing-container thead th:nth-child(3),
+    .table-new-listing-container tbody td:nth-child(2),
+    .table-new-listing-container tbody td:nth-child(3) {
+        width: 25%;
+    }
+
+    .name-vol-listing-container {
+        gap: 8px;
+    }
+
+    .name-col-listing {
+        gap: 4px;
+    }
+
+    .name-col-listing p {
+        margin: 0;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-coin-listing {
+        gap: 8px;
+    }
+
+    .card-coin-listing h3 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--text-secondary-color);
+    }
+
+    .card-coin-listing span {
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-coin-listing .divide {
+        font-size: 14px;
+    }
+
+    .card-coin-listing p {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+
+    .card-price-listing {
+        gap: 8px;
+    }
+
+    .card-price-listing h3 {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .card-price-listing .primary {
+        color: var(--text-contrast-color);
+    }
+
+    .card-price-listing .danger {
+        color: var(--text-danger-color);
+    }
+
+    .card-price-listing h4 {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        color: var(--text-grey-color);
+    }
+}

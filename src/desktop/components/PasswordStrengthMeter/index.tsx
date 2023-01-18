@@ -14,24 +14,61 @@ export interface PasswordStrengthMeterProps {
 }
 
 const renderPasswordStrengthMeter = (passwordStrengthMeterLength: number) => (
-    <div
-        className={`password-strength ${passwordStrengthClassName(
-            passwordStrengthMeterLength
-    )}`}></div>
+    <div className="password-strength-container mb-8 mt-8 d-flex justify-content-between align-items-center w-100 bg-transparent">
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 0
+                    ? 'too-weak'
+                    : passwordStrengthMeterLength === 1
+                    ? 'weak'
+                    : passwordStrengthMeterLength === 2
+                    ? 'good'
+                    : passwordStrengthMeterLength === 3
+                    ? 'strong'
+                    : passwordStrengthMeterLength === 4
+                    ? 'very-strong'
+                    : ''
+            }`}></div>
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 1
+                    ? 'weak'
+                    : passwordStrengthMeterLength === 2
+                    ? 'good'
+                    : passwordStrengthMeterLength === 3
+                    ? 'strong'
+                    : passwordStrengthMeterLength === 4
+                    ? 'very-strong'
+                    : ''
+            }`}></div>
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 2
+                    ? 'good'
+                    : passwordStrengthMeterLength === 3
+                    ? 'strong'
+                    : passwordStrengthMeterLength === 4
+                    ? 'very-strong'
+                    : ''
+            }`}></div>
+        <div
+            className={`password-strength ${
+                passwordStrengthMeterLength === 3 ? 'strong' : passwordStrengthMeterLength === 4 ? 'very-strong' : ''
+            }`}></div>
+        <div className={`password-strength ${passwordStrengthMeterLength === 4 ? 'very-strong' : ''}`}></div>
+    </div>
 );
 
 const renderPasswordStrengthTip = (props: PasswordStrengthMeterProps, passwordStrengthMeterLength: number) =>
     props.passwordPopUp ? (
         <div>
             <div>
-                <div>
-                    {props.translate('page.header.signUp.strength.password')}
-                </div>
                 <div
-                    className={`strength-status ${passwordStrengthClassName(
+                    className={`strength-status w-100 text-xs font-bold d-flex justify-content-end ${passwordStrengthClassName(
                         passwordStrengthMeterLength
                     )}`}>
-                    {passwordStrengthStatus(passwordStrengthMeterLength, props.translate)}
+                    <p className="white-text mr-1">{props.translate('page.header.signUp.strength.password')}: </p>
+                    <p className=""> {passwordStrengthStatus(passwordStrengthMeterLength, props.translate)}</p>
                 </div>
             </div>
             <PasswordStrengthTip
@@ -66,7 +103,7 @@ const passwordStrengthStatus = (passwordStrengthMeterLength: number, translate) 
         case 0:
             return translate('page.header.signUp.password.too.weak') || 'TOO WEAK';
         case 1:
-            return translate('page.header.signUp.password.too.weak') || 'WEAK';
+            return translate('page.header.signUp.password.weak') || 'WEAK';
         case 2:
             return translate('page.header.signUp.password.good') || 'GOOD';
         case 3:

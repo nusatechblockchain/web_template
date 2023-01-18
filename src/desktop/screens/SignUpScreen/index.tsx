@@ -2,20 +2,14 @@ import cx from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
-import {
-    injectIntl,
-} from 'react-intl';
-import {
-    connect,
-    MapDispatchToPropsFunction,
-    MapStateToProps,
-} from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { injectIntl } from 'react-intl';
+import { connect, MapDispatchToPropsFunction, MapStateToProps } from 'react-redux';
+import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { isUsernameEnabled } from '../../../api';
 import { captchaType } from '../../../api/config';
 import { Captcha } from '../../../components';
-import { SignUpForm  } from '../../components';
+import { SignUpForm } from '../../components';
 import {
     EMAIL_REGEX,
     ERROR_INVALID_EMAIL,
@@ -29,7 +23,8 @@ import {
 } from '../../../helpers';
 import { IntlProps } from '../../../index';
 import {
-    entropyPasswordFetch, GeetestCaptchaResponse,
+    entropyPasswordFetch,
+    GeetestCaptchaResponse,
     LanguageState,
     resetCaptchaState,
     RootState,
@@ -42,6 +37,7 @@ import {
     selectSignUpRequireVerification,
     signUp,
 } from '../../../modules';
+import './SignUpScreen.pcss';
 
 interface ReduxProps {
     requireVerification?: boolean;
@@ -76,6 +72,7 @@ export const extractRefID = (props: RouterProps) => new URLSearchParams(props.lo
 
 class SignUp extends React.Component<Props> {
     public readonly state = {
+        selectedTabs: 'Email',
         showModal: false,
         username: '',
         email: '',
@@ -120,7 +117,7 @@ class SignUp extends React.Component<Props> {
         const { email } = this.state;
 
         if (!prev.requireVerification && this.props.requireVerification) {
-            this.props.history.push('/email-verification', {email: email});
+            this.props.history.push('/email-verification', { email: email });
         }
     }
 
@@ -169,62 +166,106 @@ class SignUp extends React.Component<Props> {
         const className = cx('pg-sign-up-screen__container', { loading });
 
         return (
-            <SignUpForm
-                labelSignIn={this.props.intl.formatMessage({ id: 'page.header.signIn'})}
-                labelSignUp={this.props.intl.formatMessage({ id: 'page.header.signUp'})}
-                emailLabel={this.props.intl.formatMessage({ id: 'page.header.signUp.email'})}
-                passwordLabel={this.props.intl.formatMessage({ id: 'page.header.signUp.password'})}
-                confirmPasswordLabel={this.props.intl.formatMessage({ id: 'page.header.signUp.confirmPassword'})}
-                referalCodeLabel={this.props.intl.formatMessage({ id: 'page.header.signUp.referalCode'})}
-                termsMessage={this.props.intl.formatMessage({ id: 'page.header.signUp.terms'})}
-                refId={refId}
-                handleChangeRefId={this.handleChangeRefId}
-                isLoading={loading}
-                onSignIn={this.handleSignIn}
-                onSignUp={this.handleSignUp}
-                username={username}
-                handleChangeUsername={this.handleChangeUsername}
-                email={email}
-                handleChangeEmail={this.handleChangeEmail}
-                password={password}
-                handleChangePassword={this.handleChangePassword}
-                confirmPassword={confirmPassword}
-                handleChangeConfirmPassword={this.handleChangeConfirmPassword}
-                hasConfirmed={hasConfirmed}
-                clickCheckBox={this.handleCheckboxClick}
-                validateForm={this.handleValidateForm}
-                emailError={emailError}
-                passwordError={passwordError}
-                confirmationError={confirmationError}
-                confirmPasswordFocused={confirmPasswordFocused}
-                refIdFocused={refIdFocused}
-                usernameFocused={usernameFocused}
-                emailFocused={emailFocused}
-                passwordFocused={passwordFocused}
-                handleFocusUsername={this.handleFocusUsername}
-                handleFocusEmail={this.handleFocusEmail}
-                handleFocusPassword={this.handleFocusPassword}
-                handleFocusConfirmPassword={this.handleFocusConfirmPassword}
-                handleFocusRefId={this.handleFocusRefId}
-                renderCaptcha={this.renderCaptcha()}
-                reCaptchaSuccess={reCaptchaSuccess}
-                geetestCaptchaSuccess={geetestCaptchaSuccess}
-                captcha_response={captcha_response}
-                currentPasswordEntropy={currentPasswordEntropy}
-                passwordErrorFirstSolved={passwordErrorFirstSolved}
-                passwordErrorSecondSolved={passwordErrorSecondSolved}
-                passwordErrorThirdSolved={passwordErrorThirdSolved}
-                passwordPopUp={passwordPopUp}
-                myRef={this.myRef}
-                passwordWrapper={this.passwordWrapper}
-                translate={this.translate}
-            />
+            <React.Fragment>
+                <div className="row m-0 sign-up-screen">
+                    <div className="col-md-5 dark-bg-accent min-h-full px-0">
+                        <div className="bg-auth" style={{ backgroundImage: `url('img/bg-auth2.png')` }}></div>
+                    </div>
+                    <div className="col-md-7 dark-bg-main min-h-full position-relative">
+                        <div className="text-to-signup mb-24">
+                            <span>
+                                <p className="white-text font-bold">
+                                    Already have an account?
+                                    <Link to="/signin">
+                                        <span className="contrast-text ml-1 cursor-pointer">Sign In</span>{' '}
+                                    </Link>
+                                </p>
+                            </span>
+                        </div>
+                        <div className="main-wrapper d-flex align-items-center">
+                            <div className="main-form position-relative">
+                                <h2 className="title-2 mb-24 white-text font-semibold">Sign Up</h2>
+
+                                <div className="tab-content mb-8" id="myTabContent">
+                                    <div>
+                                        <SignUpForm
+                                            labelSignIn={this.props.intl.formatMessage({
+                                                id: 'page.header.signIn',
+                                            })}
+                                            labelSignUp={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp',
+                                            })}
+                                            emailLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.email',
+                                            })}
+                                            passwordLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.password',
+                                            })}
+                                            confirmPasswordLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.confirmPassword',
+                                            })}
+                                            referalCodeLabel={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.referalCode',
+                                            })}
+                                            termsMessage={this.props.intl.formatMessage({
+                                                id: 'page.header.signUp.terms',
+                                            })}
+                                            refId={refId}
+                                            handleChangeRefId={this.handleChangeRefId}
+                                            isLoading={loading}
+                                            onSignIn={this.handleSignIn}
+                                            onSignUp={this.handleSignUp}
+                                            username={username}
+                                            handleChangeUsername={this.handleChangeUsername}
+                                            email={email}
+                                            type={this.state.selectedTabs}
+                                            handleChangeEmail={this.handleChangeEmail}
+                                            password={password}
+                                            handleChangePassword={this.handleChangePassword}
+                                            confirmPassword={confirmPassword}
+                                            handleChangeConfirmPassword={this.handleChangeConfirmPassword}
+                                            hasConfirmed={hasConfirmed}
+                                            clickCheckBox={this.handleCheckboxClick}
+                                            validateForm={this.handleValidateForm}
+                                            emailError={emailError}
+                                            passwordError={passwordError}
+                                            confirmationError={confirmationError}
+                                            confirmPasswordFocused={confirmPasswordFocused}
+                                            refIdFocused={refIdFocused}
+                                            usernameFocused={usernameFocused}
+                                            emailFocused={emailFocused}
+                                            passwordFocused={passwordFocused}
+                                            handleFocusUsername={this.handleFocusUsername}
+                                            handleFocusEmail={this.handleFocusEmail}
+                                            handleFocusPassword={this.handleFocusPassword}
+                                            handleFocusConfirmPassword={this.handleFocusConfirmPassword}
+                                            handleFocusRefId={this.handleFocusRefId}
+                                            renderCaptcha={this.renderCaptcha()}
+                                            reCaptchaSuccess={reCaptchaSuccess}
+                                            geetestCaptchaSuccess={geetestCaptchaSuccess}
+                                            captcha_response={captcha_response}
+                                            currentPasswordEntropy={currentPasswordEntropy}
+                                            passwordErrorFirstSolved={passwordErrorFirstSolved}
+                                            passwordErrorSecondSolved={passwordErrorSecondSolved}
+                                            passwordErrorThirdSolved={passwordErrorThirdSolved}
+                                            passwordPopUp={passwordPopUp}
+                                            myRef={this.myRef}
+                                            passwordWrapper={this.passwordWrapper}
+                                            translate={this.translate}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
         );
     }
 
-    private translate = (key: string) => this.props.intl.formatMessage({id: key});
+    private translate = (key: string) => this.props.intl.formatMessage({ id: key });
 
-    private handleOutsideClick = event => {
+    private handleOutsideClick = (event) => {
         const wrapperElement = this.passwordWrapper.current;
 
         if (wrapperElement && !wrapperElement.contains(event.target)) {
@@ -234,7 +275,7 @@ class SignUp extends React.Component<Props> {
         }
     };
 
-    private handleCheckboxClick = event => {
+    private handleCheckboxClick = (event) => {
         if (event) {
             event.preventDefault();
 
@@ -292,7 +333,7 @@ class SignUp extends React.Component<Props> {
 
         if (this.state.typingTimeout) {
             clearTimeout(this.state.typingTimeout);
-         }
+        }
 
         this.setState({
             password: value,
@@ -305,6 +346,7 @@ class SignUp extends React.Component<Props> {
     private handleChangeConfirmPassword = (value: string) => {
         this.setState({
             confirmPassword: value,
+            confirmPasswordFocus: true,
         });
     };
 
@@ -351,12 +393,7 @@ class SignUp extends React.Component<Props> {
 
     private handleSignUp = () => {
         const { i18n, captcha_response } = this.props;
-        const {
-            username,
-            email,
-            password,
-            refId,
-        } = this.state;
+        const { username, email, password, refId } = this.state;
         const payload = {
             email,
             password,
@@ -375,7 +412,7 @@ class SignUp extends React.Component<Props> {
     private extractRefID = (url: string) => new URLSearchParams(url).get('refid');
 
     private handleValidateForm = () => {
-        const {email, password, confirmPassword} = this.state;
+        const { email, password, confirmPassword } = this.state;
         const isEmailValid = email.match(EMAIL_REGEX);
         const isPasswordValid = password.match(PASSWORD_REGEX);
         const isConfirmPasswordValid = password === confirmPassword;
@@ -434,7 +471,7 @@ class SignUp extends React.Component<Props> {
     };
 }
 
-const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
+const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => ({
     i18n: selectCurrentLanguage(state),
     requireVerification: selectSignUpRequireVerification(state),
     signUpError: selectSignUpError(state),
@@ -444,15 +481,14 @@ const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
     geetestCaptchaSuccess: selectGeetestCaptchaSuccess(state),
 });
 
-const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> =
-    dispatch => ({
-        signUp: credentials => dispatch(signUp(credentials)),
-        fetchCurrentPasswordEntropy: payload => dispatch(entropyPasswordFetch(payload)),
-        resetCaptchaState: () => dispatch(resetCaptchaState()),
-    });
+const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
+    signUp: (credentials) => dispatch(signUp(credentials)),
+    fetchCurrentPasswordEntropy: (payload) => dispatch(entropyPasswordFetch(payload)),
+    resetCaptchaState: () => dispatch(resetCaptchaState()),
+});
 
 export const SignUpScreen = compose(
     injectIntl,
     withRouter,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps, mapDispatchToProps)
 )(SignUp) as React.ComponentClass;

@@ -31,11 +31,45 @@ import {
 } from '../../modules';
 
 import {
+    SignInMobileScreen,
+    SignUpMobileScreen,
+    EmailVerificationMobileScreen,
+    ForgotPasswordMobileScreen,
+    ResetPasswordMobileScreen,
+    HomeMobileScreen,
+    ProfileMobileScreen,
+    TwoFaActivationMobileScreen,
+    TwoFaMobileScreen,
+    ChangePasswordMobileScreen,
+    ApiListMobileScreen,
+    ChangePhoneMobileScreen,
+    CreateApiMobileScreen,
+    ReferralMobileScreen,
+    MarketDetailMobileScreen,
+    MarketListlMobileScreen,
+    TwoFaAuthenticationMobileScreen,
+    WalletListMobileScreen,
+    WalletDetailMobileScreen,
+    MarketOrderMobileScreen,
+    HistoryTransactionMobileScreen,
+    TradingMobileScreen,
+    TradingFutureMobileScreen,
+    InternalTransferMobileScreen,
+    WalletDepositMobileScreen,
+    LostTwoFaMobileScreen,
+    WalletWithdrawMobileScreen,
+    KycMobileScreen,
+    SecurityMobileScreen,
+    DeviceManagementMobileScreen,
+} from '../../mobile/screens';
+
+import {
     LandingScreen,
     SignInScreen,
     SignUpScreen,
     WalletsScreen,
     WalletDeposit,
+    WalletWitdrawal,
     EmailVerificationScreen,
     ForgotPasswordScreen,
     PasswordResetScreen,
@@ -43,6 +77,25 @@ import {
     ReferralScreen,
     ApiKeyScreen,
     ProfileTwoFactorAuthScreen,
+    Lost2FAScreen,
+    TwoFaActivationScreen,
+    KycScreen,
+    MarketListScreen,
+    HistoryTransactionScreen,
+    Security,
+    MarketDetailScreen,
+    MarketOpen,
+    TradingFutureScreen,
+    TradingScreen,
+    HistoryTrade,
+    AnnouncementScreen,
+    FAQScreen,
+    ChangeEmail,
+    ProfileSetting,
+    P2PScreen,
+    P2PProfileScreen,
+    P2POrderScreen,
+    P2PWalletScreen,
 } from '../../desktop/screens';
 
 interface ReduxProps {
@@ -91,7 +144,7 @@ const PrivateRoute: React.FunctionComponent<any> = ({ component: CustomComponent
     if (loading) {
         return renderLoader();
     }
-    const renderCustomerComponent = props => <CustomComponent {...props} />;
+    const renderCustomerComponent = (props) => <CustomComponent {...props} />;
 
     if (isLogged) {
         return <Route {...rest} render={renderCustomerComponent} />;
@@ -111,24 +164,20 @@ const PublicRoute: React.FunctionComponent<any> = ({ component: CustomComponent,
     }
 
     if (isLogged) {
-        return <Route {...rest}><Redirect to={'/wallets'} /></Route>;
+        return (
+            <Route {...rest}>
+                <Redirect to={'/wallets'} />
+            </Route>
+        );
     }
 
-    const renderCustomerComponent = props => <CustomComponent {...props} />;
+    const renderCustomerComponent = (props) => <CustomComponent {...props} />;
 
     return <Route {...rest} render={renderCustomerComponent} />;
 };
 
 class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
-    public static eventsListen = [
-        'click',
-        'keydown',
-        'scroll',
-        'resize',
-        'mousemove',
-        'TabSelect',
-        'TabHide',
-    ];
+    public static eventsListen = ['click', 'keydown', 'scroll', 'resize', 'mousemove', 'TabSelect', 'TabHide'];
 
     public timer;
     public walletsFetchInterval;
@@ -144,9 +193,11 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
     public componentDidMount() {
         if (
-            !(this.props.location.pathname.includes('/magic-link')
-            || this.props.location.pathname.includes('/maintenance')
-            || this.props.location.pathname.includes('/restriction'))
+            !(
+                this.props.location.pathname.includes('/magic-link') ||
+                this.props.location.pathname.includes('/maintenance') ||
+                this.props.location.pathname.includes('/restriction')
+            )
         ) {
             switch (this.props.platformAccessStatus) {
                 case 'restricted':
@@ -171,10 +222,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
     public componentWillReceiveProps(nextProps: LayoutProps) {
         if (
-            !(nextProps.location.pathname.includes('/magic-link')
-            || nextProps.location.pathname.includes('/restriction')
-            || nextProps.location.pathname.includes('/maintenance'))
-            || this.props.platformAccessStatus !== nextProps.platformAccessStatus
+            !(
+                nextProps.location.pathname.includes('/magic-link') ||
+                nextProps.location.pathname.includes('/restriction') ||
+                nextProps.location.pathname.includes('/maintenance')
+            ) ||
+            this.props.platformAccessStatus !== nextProps.platformAccessStatus
         ) {
             switch (nextProps.platformAccessStatus) {
                 case 'restricted':
@@ -204,9 +257,16 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         if (!isLoggedIn && prevProps.isLoggedIn && !userLoading) {
             this.props.walletsReset();
 
-            if (!this.props.location.pathname.includes('/trading')) {
-                this.props.history.push('/trading/');
+            if (!this.props.location.pathname.includes('/trading/ethusdt')) {
+                this.props.history.push('/trading/ethusdt');
             }
+        }
+
+        if (
+            this.props.location.pathname === '/wallets/deposit' ||
+            this.props.location.pathname === '/wallets/withdraw'
+        ) {
+            this.props.history.push('/wallets');
         }
     }
 
@@ -218,22 +278,15 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         clearInterval(this.walletsFetchInterval);
     }
 
-    public translate = (key: string) => this.props.intl.formatMessage({id: key});
+    public translate = (key: string) => this.props.intl.formatMessage({ id: key });
 
     public render() {
-        const {
-            colorTheme,
-            isLoggedIn,
-            isMobileDevice,
-            userLoading,
-            location,
-            platformAccessStatus,
-        } = this.props;
+        const { colorTheme, isLoggedIn, isMobileDevice, userLoading, location, platformAccessStatus } = this.props;
         const { isShownExpSessionModal } = this.state;
-        const desktopCls = classnames('container-fluid pg-layout', {
+        const desktopCls = classnames('container-fluid p-0 pg-layout', {
             'trading-layout': location.pathname.includes('/trading'),
         });
-        const mobileCls = classnames('container-fluid pg-layout pg-layout--mobile', {
+        const mobileCls = classnames(' pg-layout pg-layout--mobile', {
             'pg-layout--mobile-setup': location.pathname.includes('/setup'),
         });
         toggleColorTheme(colorTheme);
@@ -246,7 +299,204 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
             return (
                 <div className={mobileCls}>
                     <Switch>
-                        <Route path="**"><Redirect to="/trading/" /></Route>
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/signin"
+                            component={SignInMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/signup"
+                            component={SignUpMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/email-verification"
+                            component={EmailVerificationMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/profile/kyc"
+                            component={KycMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/security"
+                            component={SecurityMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/profile"
+                            component={ProfileMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/forgot-password"
+                            component={ForgotPasswordMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/reset-password"
+                            component={ResetPasswordMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/change-password"
+                            component={ChangePasswordMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/two-fa-activation"
+                            component={TwoFaActivationMobileScreen}
+                        />
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/lost-two-fa"
+                            component={LostTwoFaMobileScreen}
+                        />
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/two-fa"
+                            component={TwoFaMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/change-phone"
+                            component={ChangePhoneMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/api-key"
+                            component={ApiListMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/referral"
+                            component={ReferralMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/device-management"
+                            component={DeviceManagementMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/create-api"
+                            component={CreateApiMobileScreen}
+                        />
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/transfer"
+                            component={InternalTransferMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/withdraw"
+                            component={WalletWithdrawMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/deposit"
+                            component={WalletDepositMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets/:currency/detail"
+                            component={WalletDetailMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/wallets"
+                            component={WalletListMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/markets/detail/:currency"
+                            component={MarketDetailMobileScreen}
+                        />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            path="/trading-future/:currency"
+                            component={TradingFutureMobileScreen}
+                        />
+
+                        <PublicRoute loading={userLoading} path="/trading/:currency" component={TradingMobileScreen} />
+
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/markets"
+                            component={MarketListlMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/two-fa-authentication"
+                            component={TwoFaAuthenticationMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/order"
+                            component={MarketOrderMobileScreen}
+                        />
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/history-transaction"
+                            component={HistoryTransactionMobileScreen}
+                        />
+
+                        {/* <PublicRoute loading={userLoading} path="/trading" component={TradingMobileScreen} />    */}
+
+                        <PublicRoute loading={userLoading} path="/" component={HomeMobileScreen} />
+
+                        <Route path="**">
+                            <Redirect to="/markets" />
+                        </Route>
                     </Switch>
                     {isLoggedIn && <WalletsFetch />}
                     {isShownExpSessionModal && this.handleRenderExpiredSessionModal()}
@@ -259,19 +509,168 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                 <Switch>
                     <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signin" component={SignInScreen} />
                     <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signup" component={SignUpScreen} />
-                    <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/wallets/:currency/deposit" component={WalletDeposit} />
-                    <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/wallets" component={WalletsScreen} />
-                    <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/email-verification" component={EmailVerificationScreen} />
-                    <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/forgot_password" component={ForgotPasswordScreen} />
-                    <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/accounts/password_reset" component={PasswordResetScreen} />
-                    <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/referral" component={ReferralScreen} />
-                    <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/api-key" component={ApiKeyScreen} />
-                    <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile" component={ProfileScreen} />
-                    <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/security/2fa" component={ProfileTwoFactorAuthScreen} />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/wallets/:currency/deposit"
+                        component={WalletDeposit}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/wallets/:currency/withdraw"
+                        component={WalletWitdrawal}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/wallets"
+                        component={WalletsScreen}
+                    />
+
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/email-verification"
+                        component={EmailVerificationScreen}
+                    />
+
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/forgot_password"
+                        component={ForgotPasswordScreen}
+                    />
+
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/accounts/password_reset"
+                        component={PasswordResetScreen}
+                    />
+
+                    <PublicRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/lost-two-fa"
+                        component={Lost2FAScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/referral"
+                        component={ReferralScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/api-key"
+                        component={ApiKeyScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/two-fa-activation"
+                        component={TwoFaActivationScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/kyc"
+                        component={KycScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/security"
+                        component={Security}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile/setting"
+                        component={ProfileSetting}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/profile"
+                        component={ProfileScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/security/2fa"
+                        component={ProfileTwoFactorAuthScreen}
+                    />
+
+                    <PublicRoute
+                        loading={userLoading}
+                        path="/markets/detail/:currency"
+                        component={MarketDetailScreen}
+                    />
+
+                    <PublicRoute
+                        loading={userLoading}
+                        path="/markets/trading-future/:currency"
+                        component={TradingFutureScreen}
+                    />
+                    <PublicRoute loading={userLoading} path="/markets/trading/:currency" component={TradingScreen} />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/markets-open"
+                        component={MarketOpen}
+                    />
+
+                    <PublicRoute loading={userLoading} path="/markets" component={MarketListScreen} />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/history-transaction"
+                        component={HistoryTransactionScreen}
+                    />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/trade-history"
+                        component={HistoryTrade}
+                    />
+
+                    <PublicRoute loading={userLoading} path="/announcement" component={AnnouncementScreen} />
+                    <PublicRoute loading={userLoading} path="/faq" component={FAQScreen} />
+
+                    <PrivateRoute
+                        loading={userLoading}
+                        isLogged={isLoggedIn}
+                        path="/change-email"
+                        component={ChangeEmail}
+                    />
+
+                    <PublicRoute loading={userLoading} path="/p2p/order" component={P2POrderScreen} />
+                    <PublicRoute loading={userLoading} path="/p2p/wallets" component={P2PWalletScreen} />
+                    <PublicRoute loading={userLoading} path="/p2p/profile" component={P2PProfileScreen} />
+                    <PublicRoute loading={userLoading} path="/p2p" component={P2PScreen} />
                     <Route exact={true} path="/" component={LandingScreen} />
-                    <Route path="**"><Redirect to="/trading/" /></Route>
+                    <Route path="**">
+                        <Redirect to="/markets/" />
+                    </Route>
                 </Switch>
-                {isLoggedIn && <WalletsFetch/>}
+                {isLoggedIn && <WalletsFetch />}
                 {isShownExpSessionModal && this.handleRenderExpiredSessionModal()}
             </div>
         );
@@ -345,7 +744,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
     };
 }
 
-const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
+const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = (state) => ({
     colorTheme: selectCurrentColorTheme(state),
     currentMarket: selectCurrentMarket(state),
     user: selectUserInfo(state),
@@ -356,7 +755,7 @@ const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
     abilities: selectAbilities(state),
 });
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch => ({
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch) => ({
     logout: () => dispatch(logoutFetch()),
     toggleChartRebuild: () => dispatch(toggleChartRebuild()),
     userFetch: () => dispatch(userFetch()),
@@ -366,5 +765,5 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch => ({
 export const Layout = compose(
     injectIntl,
     withRouter,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps, mapDispatchToProps)
 )(LayoutComponent) as any;

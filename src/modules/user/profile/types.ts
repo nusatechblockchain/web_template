@@ -33,7 +33,7 @@ export interface User {
     data?: string;
     referal_uid: string | null;
     labels: Label[];
-    phone: Phone[];
+    phones: Phone[];
     created_at: string;
     updated_at: string;
 }

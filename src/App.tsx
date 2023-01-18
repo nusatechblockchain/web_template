@@ -26,12 +26,22 @@ const AlertsContainer = React.lazy(() => import('./containers/Alerts').then(({ A
 const LayoutContainer = React.lazy(() => import('./routes').then(({ Layout }) => ({ default: Layout })));
 
 /* Mobile components */
+const AlertsMobileContainer = React.lazy(() =>
+    import('./containers/AlertsMobile').then(({ AlertsMobile }) => ({ default: AlertsMobile }))
+);
 const MobileHeader = React.lazy(() => import('./mobile/components/Header').then(({ Header }) => ({ default: Header })));
 const MobileFooter = React.lazy(() => import('./mobile/components/Footer').then(({ Footer }) => ({ default: Footer })));
 
 /* Desktop components */
-const HeaderContainer = React.lazy(() => import('./desktop/containers/Header').then(({ Header }) => ({ default: Header })));
-const FooterContainer = React.lazy(() => import('./desktop/containers/Footer').then(({ Footer }) => ({ default: Footer })));
+const HeaderContainer = React.lazy(() =>
+    import('./desktop/containers/Header').then(({ Header }) => ({ default: Header }))
+);
+const FooterContainer = React.lazy(() =>
+    import('./desktop/containers/Footer').then(({ Footer }) => ({ default: Footer }))
+);
+const SidebarContainer = React.lazy(() =>
+    import('./desktop/containers/Sidebar').then(({ Sidebar }) => ({ default: Sidebar }))
+);
 
 const getTranslations = (lang: string, isMobileDevice: boolean) => {
     if (isMobileDevice) {
@@ -50,6 +60,7 @@ const RenderDeviceContainers = () => {
             <React.Fragment>
                 <HeaderContainer />
                 <AlertsContainer />
+                <SidebarContainer />
                 <LayoutContainer />
                 <FooterContainer />
             </React.Fragment>
@@ -59,8 +70,8 @@ const RenderDeviceContainers = () => {
     return (
         <div className="pg-mobile-app">
             <MobileHeader />
-            <AlertsContainer/>
-            <LayoutContainer/>
+            <AlertsMobileContainer />
+            <LayoutContainer />
             <MobileFooter />
         </div>
     );

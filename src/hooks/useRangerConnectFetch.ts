@@ -14,10 +14,10 @@ export const useRangerConnectFetch = () => {
     const { connected, withAuth } = useSelector(selectRanger);
 
     React.useEffect(() => {
-        if (!connected && shouldFetch && ((!userLoggedIn && !userLoading) || (userLoggedIn && !abilitiesLoading))) {
-            dispatch(rangerConnectFetch({ withAuth: userLoggedIn}));
-        } else if (connected && ((!withAuth && userLoggedIn && !abilitiesLoading) )) {
+        if (!connected && shouldFetch && ((!userLoggedIn && !userLoading) || userLoggedIn)) {
+            dispatch(rangerConnectFetch({ withAuth: userLoggedIn }));
+        } else if (connected && !withAuth && userLoggedIn) {
             dispatch(rangerConnectFetch({ withAuth: userLoggedIn }));
         }
-    }, [dispatch, shouldFetch, abilitiesLoading, connected, withAuth, userLoggedIn, abilities]);
+    }, [dispatch, shouldFetch, connected, withAuth, userLoggedIn, abilities]);
 };

@@ -1,0 +1,298 @@
+/* main content */
+.market-trade-screen {
+    .content-wrapper {
+        position: relative;
+        margin-left: 223px;
+        width: calc(100% - 223px);
+        min-height: 100%;
+        .grid-wrapper {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: 425px 425px 425px;
+            .grid-item {
+                background: var(--body-background-color);
+                &.order-book {
+                    grid-row: 1/3;
+                    grid-column: 1/4;
+
+                    .table-ask {
+                        display: flex;
+                        flex-direction: column-reverse;
+                    }
+                }
+                &.chart {
+                    grid-column: 4/10;
+                }
+                &.market-list {
+                    grid-column: 10/13;
+
+                    table tr:hover {
+                        background: var(--notification-background-color);
+                    }
+
+                    table tr.active {
+                        background: var(--notification-background-color);
+                    }
+                }
+                &.recent-trades {
+                    grid-row: 2/3;
+                    grid-column: 10/13;
+                }
+                &.order-form {
+                    grid-row: 2/3;
+                    grid-column: 4/10;
+
+                    input:focus {
+                        box-shadow: none;
+                        outline: none;
+                    }
+                }
+                &.open-orders {
+                    grid-row: 3/4;
+                    grid-column: 1/13;
+                }
+                #tradingview_2d0d5 {
+                    height: 400px;
+                }
+            }
+        }
+
+        .sort-filter {
+            position: sticky;
+            top: 0;
+        }
+
+        .table {
+            margin-bottom: 0;
+            thead {
+                position: sticky;
+                top: 0;
+                background: var(--main-background-color);
+
+                th {
+                    padding: 6px 4px;
+                    font-weight: 600;
+                    border: 0;
+                }
+                td {
+                    padding: 6px 3px;
+                    border: 0;
+                }
+            }
+            tr {
+                border: 0;
+            }
+            td {
+                padding: 6px 3px;
+                border: 0;
+            }
+        }
+
+        .table-open-order {
+            thead {
+                position: sticky;
+                top: 44px !important;
+                background: var(--main-background-color);
+            }
+            td {
+                padding: 10px 3px;
+            }
+        }
+
+        .max-400 {
+            max-height: 340px;
+            overflow: auto;
+        }
+
+        .max-300 {
+            max-height: 260px;
+            overflow: auto;
+        }
+        .table-background {
+            position: absolute;
+            top: auto;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            pointer-events: none;
+            &.top-30 {
+                top: 0;
+                bottom: auto;
+            }
+
+            .table-background-ask {
+                flex-direction: column-reverse;
+            }
+        }
+        .table-background-row {
+            &.danger {
+                height: 31px;
+                margin: 1px 0;
+                background: var(--text-danger-color);
+                opacity: 0.2;
+            }
+            &.good {
+                height: 31px;
+                margin: 1px 0;
+                background: var(--text-success-color);
+                opacity: 0.2;
+            }
+        }
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 12px;
+            cursor: pointer;
+        }
+
+        .form-control {
+            height: 48px;
+            border-radius: 6px;
+            padding: 12px 16px 12px 16px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 15px;
+            color: var(--text-secondary-color);
+            background: var(--body-background-color);
+            border: 1px solid var(--border-color);
+            &.input-search {
+                padding-left: 40px !important;
+            }
+
+            /* &::placeholder {
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 15px;
+                color: var(--text-primary-color);
+            } */
+        }
+        .order-form {
+            .input-timeline {
+                height: 20px;
+                .line-wrap {
+                    .line {
+                        height: 2px;
+                        background: var(--text-success-color);
+                        width: 100%;
+                    }
+                }
+                .main-input {
+                    position: absolute;
+                    top: -10px;
+                    left: 0;
+                    right: 0;
+                    .dots-wrap {
+                        background: var(--text-grey-color);
+                        border-radius: 100px;
+                        width: 16px;
+                        height: 16px;
+                        padding: 4px;
+                        &.active,
+                        &.check {
+                            background: var(--text-success-color);
+                        }
+                        .dots {
+                            background: var(--light-background-color);
+                            border-radius: 100px;
+                            width: 8px;
+                            height: 8px;
+                            &.check {
+                                background: none;
+                                background-image: url(/src/assets/check.svg) !important;
+                            }
+                        }
+                    }
+                    .input-item {
+                        width: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding-top: 5px;
+                        margin-top: -2px;
+                        img {
+                            display: none;
+                        }
+                        .show {
+                            display: block;
+                        }
+                        &.start {
+                            align-items: start;
+                        }
+                        &.end {
+                            align-items: end;
+                        }
+                    }
+                }
+            }
+
+            label {
+                color: var(--text-secondary-color);
+            }
+            .input-order-form {
+                padding-left: 66px;
+                padding-right: 56px;
+                color: var(--text-primary-color);
+            }
+            .input-order-label-left {
+                position: absolute;
+                top: 16px;
+                left: 10px;
+                font-size: 12px;
+            }
+            .input-order-label-right {
+                position: absolute;
+                top: 16px;
+                right: 10px;
+                font-size: 12px;
+            }
+            .line-wrap {
+                height: 2px;
+                background: var(--grey-background-color);
+                width: 100%;
+                .line {
+                    height: 2px;
+                    background: var(--text-success-color);
+                    width: 100%;
+                }
+            }
+        }
+        .content-right {
+            display: flex;
+            justify-content: center;
+        }
+        .filter-market-trade {
+            &.form-input {
+                width: 100%;
+            }
+        }
+
+        .custom-control-label {
+            color: var(--text-secondary-color);
+            font-size: 14px;
+        }
+        .custom-control-input {
+            min-width: 100px;
+        }
+    }
+
+    .custom-control-label {
+        &::after {
+            border-radius: 4px;
+            background: 50%/50% 50% no-repeat;
+            border: 1px solid var(--border-color);
+            width: 18px;
+            height: 18px;
+        }
+
+        &::before {
+            border-radius: 4px;
+            background: var(--body-background-color);
+            border: 0;
+            width: 18px;
+            height: 18px;
+        }
+    }
+}

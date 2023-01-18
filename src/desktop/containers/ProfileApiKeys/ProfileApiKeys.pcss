@@ -1,0 +1,51 @@
+.api-screen {
+    position: relative;
+    margin-left: 223px;
+    width: calc(100% - 223px);
+    min-height: 100%;
+    .custom-control {
+        position: relative;
+        z-index: 1;
+        display: block;
+        min-height: 1.5rem;
+        padding-left: 1.5rem;
+        -webkit-print-color-adjust: exact;
+    }
+    .custom-control-label {
+        margin-left: 12px;
+        font-size: 12px;
+        color: var(--text-primary-color);
+        position: relative;
+        margin-bottom: 0;
+        vertical-align: top;
+        &:before {
+            background-color: var(--grey-background-color);
+            border-color: var(--grey-background-color);
+            cursor: pointer;
+        }
+        &:after {
+            background-color: var(--body-background-color);
+            cursor: pointer;
+        }
+    }
+
+    .custom-control-input {
+        min-width: 0;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::before {
+        color: #fff;
+        border-color: var(--text-contrast-color);
+        background-color: var(--text-contrast-color);
+    }
+
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+        background-color: var(--body-background-color);
+    }
+}
+
+.modal.show .modal-dialog {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}

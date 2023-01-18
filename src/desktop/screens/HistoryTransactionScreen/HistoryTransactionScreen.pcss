@@ -1,0 +1,70 @@
+.pg-history-transaction-screen {
+    margin-left: 223px;
+    width: calc(100% - 223px);
+    min-height: 100vh;
+
+    &__content-wrapper {
+        padding: 21px 24px;
+        min-height: calc(100vh - 90px);
+    }
+
+    .transaction-history-tabs .nav-link {
+        background: transparent;
+        color: var(--text-secondary-color);
+        margin-right: 24px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        border-radius: 4px;
+        border: none;
+    }
+
+    .transaction-history-tabs .nav-tabs {
+        border: none;
+    }
+
+    .transaction-history-tabs .nav-link.active {
+        background: var(--button-primary-color);
+        color: var(--text-primary-color);
+    }
+
+    .transaction-history-tabs .nav-link.active img {
+        filter: brightness(0) invert(1);
+    }
+
+    .transaction-history-tabs .nav-link:hover {
+        background: var(--button-primary-color);
+        color: var(--text-primary-color);
+        transition: 0.3s ease-in all;
+    }
+
+    .form-control {
+        padding: 6px 14px;
+        background: var(--body-background-color);
+        border-color: var(--border-color);
+        height: 52px;
+        color: var(--text-secondary-color);
+
+        &:focus-visible {
+            border-color: var(--border-color);
+            outline: 0;
+            box-shadow: 0 0 0 0;
+        }
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        color: rgb(255, 255, 255);
+        opacity: 1;
+        display: block;
+        background: url("/public/img/calender.svg") no-repeat;
+        width: 20px;
+        height: 20px;
+        border-width: thin;
+        cursor: pointer;
+        margin-top: 6px;
+    }
+    .cr-copyable-text-field .custom-input .form-control {
+        background: var(--body-background-color);
+        width: 150px;
+        height: 14px !important;
+    }
+}
