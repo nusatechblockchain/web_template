@@ -60,7 +60,8 @@ import {
     WalletWithdrawMobileScreen,
     KycMobileScreen,
     SecurityMobileScreen,
-    DeviceManagementMobileScreen
+    DeviceManagementMobileScreen,
+    OrderHistoryMobileScreen
 } from '../../mobile/screens';
 
 import {
@@ -475,6 +476,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/two-fa-authentication"
                             component={TwoFaAuthenticationMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/trade-history"
+                            component={OrderHistoryMobileScreen}
                         />
 
                         <PrivateRoute
