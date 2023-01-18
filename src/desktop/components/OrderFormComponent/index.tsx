@@ -138,7 +138,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <label htmlFor={labelAmount} className="input-order-label-right">
                         {currentMarket?.base_unit?.toUpperCase()}
                     </label>
-                    {orderType === 'limit' && isLoggedIn && (
+                    {isLoggedIn && (
                         <div className="text-xs grey-text mt-1">Min amount: {currentMarket?.min_amount}</div>
                     )}
                 </div>

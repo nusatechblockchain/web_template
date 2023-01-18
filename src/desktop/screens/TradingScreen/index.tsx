@@ -145,19 +145,23 @@ export const TradingScreen: FC = (): ReactElement => {
     };
     // End Function Market List
 
-    // Function Order Form
+    // =================== Function Order Form =======================
+
+    // buat yang type market
     const totalPrice = getTotalPrice(
         side === 'buy' ? amountBuy : amountSell,
         +tickerItem?.last,
         side === 'buy' ? bids : asks
     );
 
+    // belum kepakai
     const totalAmount = getAmount(
         side === 'buy' ? +usdt : +balance,
         side === 'buy' ? bids : asks,
         side === 'buy' ? orderPercentageBuy : orderPercentageSell
     );
 
+    // buat set amount sell
     React.useEffect(() => {
         const safePrice = +totalPrice / +totalAmount || priceSell;
 
@@ -168,6 +172,7 @@ export const TradingScreen: FC = (): ReactElement => {
         setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
 
+    // buat ngeset total sel
     React.useEffect(() => {
         const safePrice = totalPrice / +amountSell || priceSell;
         // const market =
@@ -185,6 +190,7 @@ export const TradingScreen: FC = (): ReactElement => {
         setTotalSell(orderType === 'market' ? market : limit);
     }, [priceSell, amountSell, orderPercentageSell]);
 
+    // buat order amout buy
     React.useEffect(() => {
         // const safePrice = +totalPrice / +totalAmount || priceBuy;
         const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
@@ -194,6 +200,7 @@ export const TradingScreen: FC = (): ReactElement => {
         setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
 
+    // buat total buy
     React.useEffect(() => {
         const safePrice = totalPrice / +amountBuy || priceBuy;
         // const market =
@@ -211,6 +218,7 @@ export const TradingScreen: FC = (): ReactElement => {
         setTotalBuy(orderType === 'market' ? market : limit);
     }, [priceBuy, amountBuy, orderPercentageBuy]);
 
+    // ketika pindah dari limit dan market dan setelah dispatch
     const resetForm = () => {
         setShowModalSell(false);
         setShowModalBuy(false);
@@ -224,6 +232,7 @@ export const TradingScreen: FC = (): ReactElement => {
         setOrderPercentageBuy(0);
     };
 
+    // ini ngepush data nya
     const handleSubmit = () => {
         const payloadLimit = {
             market: currentMarket?.id,
@@ -245,56 +254,68 @@ export const TradingScreen: FC = (): ReactElement => {
         resetForm();
     };
 
+    // buy sell
     const handleSide = (value: OrderSide) => {
         setSide(value);
     };
 
+    // ganti harga buy
     const handleChangePriceBuy = (e: string) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setPriceBuy(value);
     };
 
+    // ganti harga sell
     const handleChangePriceSell = (e: string) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setPriceSell(value);
     };
 
+    // ganti amount buy
     const handleChangeAmountBuy = (e: string) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmountBuy(value);
         setOrderPercentageBuy(0);
     };
 
+    // ganti amout sell
     const handleChangeAmounSell = (e: string) => {
         const value = e.replace(/[^0-9\.]/g, '');
         setAmountSell(value);
         setOrderPercentageSell(0);
     };
 
+    // ganti select persenan
     const handleSelectPercentageSell = (e: number) => {
         setOrderPercentageSell(e);
     };
 
+    // ganti select persenan
     const handleSelectPercentageBuy = (e: number) => {
         setOrderPercentageBuy(e);
     };
 
+    // close modal sell
     const handleCancelModalSell = () => {
         setShowModalSell(false);
     };
 
+    // close modal buy
     const handleCancelModalBuy = () => {
         setShowModalBuy(false);
     };
 
+    // submit sell
     const handleSubmitSell = () => {
         setShowModalSell(true);
     };
 
+    // submit buy
     const handleSubmitBuy = () => {
         setShowModalBuy(true);
     };
 
+    // order type
     const handleSelectOrderType = (e: string) => {
         setOrderType(e);
         resetForm();
