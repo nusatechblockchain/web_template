@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { OrderPercentage } from '../../components';
+// import { OrderPercentage } from '../../components';
 import { Decimal } from '../../../components';
 import { selectUserLoggedIn, selectMarketTickers, selectCurrentMarket, Ticker, selectWallets } from '../../../modules';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import { MinusIcon, PlusIcon } from '../../assets/Trading';
 
 export interface OrderFormProps {
     loading: boolean;
@@ -81,90 +82,90 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
     return (
         <React.Fragment>
             <form action="">
-                <div className="form-group mb-3 position-relative  w-100">
+                <div className="input-group mb-8">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">
+                            <PlusIcon />
+                        </span>
+                    </div>
                     <input
-                        type="text"
                         disabled={orderType === 'market'}
-                        defaultValue={
-                            orderType === 'market'
-                                ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
-                                : price
-                        }
+                        type="text"
+                        className={`form-control  ${orderType === 'market' && 'text-sm grey-text'}`}
+                        placeholder="Price"
                         value={
                             orderType === 'market'
                                 ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
                                 : price
                         }
                         onChange={(e) => handleChangePrice(e.target.value)}
-                        className={`form-control input-order-form ${orderType === 'market' && 'text-sm grey-text'}`}
                         id={labelPrice}
                     />
-                    <label htmlFor={labelPrice} className="input-order-label-left">
-                        Price
-                    </label>
-                    <label htmlFor={labelPrice} className="input-order-label-right">
-                        {currentMarket?.quote_unit?.toUpperCase()}
-                    </label>
+                    <div className="input-group-append">
+                        <span className="input-group-text">
+                            <MinusIcon />
+                        </span>
+                    </div>
                 </div>
-                <div className="form-group mb-3 position-relative w-100">
+                <div className="input-group mb-8">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">
+                            <PlusIcon />
+                        </span>
+                    </div>
                     <input
                         type="text"
                         // placeholder={Decimal.format('0', currentMarket?.amount_precision)}
-                        defaultValue={
-                            amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount
-                        }
                         value={amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount}
                         onChange={(e) => {
                             handleChangeAmount(e.target.value);
                             handleSide(side === 'Sell' ? 'sell' : 'buy');
                         }}
-                        className="form-control input-order-form"
+                        className="form-control"
                         id={labelAmount}
+                        placeholder="Amount BTC"
                     />
-                    <label htmlFor={labelAmount} className="input-order-label-left">
-                        Amount
-                    </label>
-                    <label htmlFor={labelAmount} className="input-order-label-right">
-                        {currentMarket?.base_unit?.toUpperCase()}
-                    </label>
-                    {isLoggedIn && (
-                        <div className="text-xs grey-text mt-1">Min amount: {currentMarket?.min_amount}</div>
-                    )}
+                    <div className="input-group-append">
+                        <span className="input-group-text">
+                            <MinusIcon />
+                        </span>
+                    </div>
                 </div>
-                <OrderPercentage
-                    orderPercentage={orderPercentage}
-                    handleSelectPercentage={(e) => handleSelectPercentage(e)}
-                    label0={labelPercent0}
-                    label25={labelPercent25}
-                    label50={labelPercent50}
-                    label75={labelPercent75}
-                    label100={labelPercent100}
-                    handleSide={handleSide}
-                    side={side}
-                />
-
-                <div className="form-group mb-3 position-relative  w-100">
+                <div className="badge-container d-flex justify-content-between align-items-center flex-wrap mb-8">
+                    <div className="badge">25%</div>
+                    <div className="badge">50%</div>
+                    <div className="badge">75%</div>
+                    <div className="badge">100%</div>
+                </div>
+                <div className="input-group mb-8">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">
+                            <PlusIcon />
+                        </span>
+                    </div>
                     <input
                         type="text"
                         placeholder={
-                            total.includes('NaN')
-                                ? Decimal.format('0', currentMarket?.price_precision)
-                                : Decimal.format(+total, currentMarket?.price_precision)
+                            amount
+                                ? total.includes('NaN')
+                                    ? Decimal.format('0', currentMarket?.price_precision)
+                                    : Decimal.format(+total, currentMarket?.price_precision)
+                                : 'Total'
                         }
                         readOnly
-                        className="form-control input-order-form"
+                        className="form-control"
                         id={labelTotal}
                     />
-                    <label htmlFor={labelTotal} className="input-order-label-left">
-                        Total
-                    </label>
-                    <label htmlFor={labelTotal} className="input-order-label-right">
-                        {currentMarket?.quote_unit?.toUpperCase()}
-                    </label>
+                    <div className="input-group-append">
+                        <span className="input-group-text">
+                            <MinusIcon />
+                        </span>
+                    </div>
                 </div>
-                <div className="mb-3 d-flex justify-content-between">
-                    <p className="text-sm grey-text-accent"> Avaliable </p>
-                    <p className="text-sm white-text">
+
+                <div className="mb-0 d-flex justify-content-between">
+                    <p className="text-xxs mb-2 grey-text-accent"> Avaliable </p>
+                    <p className="text-xxs mb-2 white-text">
                         {side === 'Buy' ? (
                             <>
                                 {Decimal.format(usdt, currentMarket?.price_precision)}{' '}
@@ -181,9 +182,11 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                 <button
                     type="button"
                     className={`btn btn-block ${side === 'Buy' ? 'btn-success' : 'btn-danger'}`}
+                    data-toggle="modal"
+                    disabled={disabledButton()}
                     onClick={handleSubmit}
-                    disabled={disabledButton()}>
-                    {side} {currentMarket?.base_unit?.toUpperCase()}
+                    data-target="#modal-confirm-buy">
+                    {side}
                 </button>
             </form>
         </React.Fragment>
