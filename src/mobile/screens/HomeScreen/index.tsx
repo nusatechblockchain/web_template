@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import { selectMarkets, selectMarketTickers, selectCurrencies } from '../../../modules';
 import { useMarketsFetch, useMarketsTickersFetch, useWalletsFetch, useDocumentTitle } from '../../../hooks';
 import { Decimal } from '../../../components';
@@ -13,6 +15,7 @@ import { BgCardSmall } from '../../assets/BackgroundCard';
 import { Table } from '../../../components';
 import { ArrowRight } from '../../assets/Arrow';
 import { ChartLandingMobile } from 'src/mobile/components';
+import { DocIcon } from 'src/mobile/assets/Wallet';
 
 const noHeaderRoutes = ['/'];
 
@@ -33,7 +36,7 @@ const HomeMobileScreen: React.FC = () => {
     useMarketsTickersFetch();
 
     const [loading, setLoading] = React.useState(true);
-
+    const { formatMessage } = useIntl();
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
@@ -68,7 +71,7 @@ const HomeMobileScreen: React.FC = () => {
             ),
         }));
 
-    const dataTranding = [...marketList].sort((a, b) => Number(+b.volume) - Number(+a.volume));
+    const dataTranding = [...marketList].sort((a, b) => Number(b.volume) - Number(a.volume));
     const dataAll = [...marketList];
     const dataGainers = [...marketList]
         .filter((data) => data.price_change_percent.includes('+'))
@@ -120,25 +123,25 @@ const HomeMobileScreen: React.FC = () => {
 
     const renderDataTable = (data) => {
         return data.map((item) => [
-            <div className="d-flex align-items-center text-sm">
+            <Link
+                to={item && item.type == 'spot' ? `/trading/${item && item.id}` : `/trading-future/${item && item.id}`}
+                className="d-flex align-items-center text-sm">
                 <img src={item && item.currency && item.currency.icon_url} alt="coin" className="small-coin-icon" />
                 <p className="mb-0 white-text text-sm ml-2">{item && item.currency && item.currency.name}</p>
                 <p className="mb-0 grey-text text-xs ml-2">
                     {item && item.currency && item.currency.id && item.currency.id.toUpperCase()}
                 </p>
-            </div>,
+            </Link>,
             <div className="">
                 <ChartLandingMobile
                     statusBd={
                         parseFloat(item && item.price_change_percent) <= 0 ? 'rgba(255,68,69, 1)' : 'rgba(2,195,189, 1)'
                     }
-                    gradient1={
-                        parseFloat(item && item.price_change_percent) <= 0
-                            ? 'rgba(255,68,69, 0.5)'
-                            : 'rgba(2,195,189, 0.5)'
+                    bgGradient={
+                        parseFloat(item && item.price_change_percent) <= 0 ? 'rgba(255,68,69, 1)' : 'rgba(2,195,189, 1)'
                     }
-                    label={item.kline}
-                    data={item.kline}
+                    label={item.kline.map((e) => e[0])}
+                    data={item.kline.map((e) => e[2])}
                     width={120}
                     height={60}
                 />
@@ -221,7 +224,14 @@ const HomeMobileScreen: React.FC = () => {
 
                             <Tab eventKey="loser" title="Loser" className="mb-3">
                                 <div className="table-mobile-wrapper">
-                                    <Table data={renderDataTable(dataLosers)} />
+                                    {!dataLosers[0] || dataLosers === null ? (
+                                        <div className="empty-chart-data">
+                                            <DocIcon className="icon-empty mb-2" />
+                                            <h6 className="text-secondary">No data show</h6>
+                                        </div>
+                                    ) : (
+                                        <Table data={renderDataTable(dataLosers)} />
+                                    )}
                                 </div>
                             </Tab>
                         </Tabs>
