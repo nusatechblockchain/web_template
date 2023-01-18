@@ -27,8 +27,7 @@ const formatValue = (value: number) =>
     Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        maximumSignificantDigits: 5,
-        notation: 'compact',
+        maximumSignificantDigits: 3,
     }).format(value);
 
 const ChartLandingMobile: React.FC<ChartLandingMobileProps> = ({

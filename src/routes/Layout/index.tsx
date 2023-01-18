@@ -60,7 +60,8 @@ import {
     WalletWithdrawMobileScreen,
     KycMobileScreen,
     SecurityMobileScreen,
-    DeviceManagementMobileScreen
+    DeviceManagementMobileScreen,
+    OrderHistoryMobileScreen
 } from '../../mobile/screens';
 
 import {
@@ -257,8 +258,8 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         if (!isLoggedIn && prevProps.isLoggedIn && !userLoading) {
             this.props.walletsReset();
 
-            if (!this.props.location.pathname.includes('/trading')) {
-                this.props.history.push('/trading/');
+            if (!this.props.location.pathname.includes('/trading/ethusdt')) {
+                this.props.history.push('/trading/ethusdt');
             }
         }
 
@@ -475,6 +476,13 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             isLogged={isLoggedIn}
                             path="/two-fa-authentication"
                             component={TwoFaAuthenticationMobileScreen}
+                        />
+
+                        <PrivateRoute
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/trade-history"
+                            component={OrderHistoryMobileScreen}
                         />
 
                         <PrivateRoute

@@ -123,7 +123,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         }}
                         className="form-control"
                         id={labelAmount}
-                        placeholder="Amount BTC"
+                        placeholder="Amount"
                     />
                     <div className="input-group-append">
                         <span className="input-group-text">

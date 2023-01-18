@@ -37,10 +37,10 @@ export const OrderForm: React.FunctionComponent = (props) => {
     const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
-    const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
+    const [priceBuy, setPriceBuy] = React.useState('');
     const [amountBuy, setAmountBuy] = React.useState('');
     const [totalBuy, setTotalBuy] = React.useState('');
-    const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
+    const [priceSell, setPriceSell] = React.useState('');
     const [amountSell, setAmountSell] = React.useState('');
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
@@ -77,17 +77,11 @@ export const OrderForm: React.FunctionComponent = (props) => {
     React.useEffect(() => {
         const safePrice = +totalPrice / +totalAmount || priceSell;
 
-        const market =
-            orderPercentageSell !== 0
-                ? Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision)
-                : Decimal.format(amountSell, currentMarket?.amount_precision);
+        const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
 
-        const limit =
-            orderPercentageSell !== 0
-                ? Decimal.format(+totalSell / +priceSell, currentMarket?.amount_precision)
-                : Decimal.format(amountSell, currentMarket?.amount_precision);
+        const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
 
-        setAmountSell(orderType === 'market' ? market : limit);
+        setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
 
     // buat ngeset total sel
@@ -106,17 +100,11 @@ export const OrderForm: React.FunctionComponent = (props) => {
 
     // buat order amout buy
     React.useEffect(() => {
-        const market =
-            orderPercentageBuy !== 0
-                ? Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.amount_precision)
-                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+        const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
 
-        const limit =
-            orderPercentageBuy !== 0
-                ? Decimal.format(+totalBuy / +priceBuy, currentMarket?.amount_precision)
-                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+        const limit = orderPercentageBuy !== 0 ? +totalBuy / +priceBuy : amountBuy;
 
-        setAmountBuy(orderType === 'market' ? market : limit);
+        setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
 
     // buat total buy
@@ -137,8 +125,8 @@ export const OrderForm: React.FunctionComponent = (props) => {
         setShowModalBuy(false);
         setAmountBuy('');
         setAmountSell('');
-        setPriceBuy(Decimal.format('0', currentMarket?.price_precision));
-        setPriceSell(Decimal.format('0', currentMarket?.price_precision));
+        setPriceBuy('');
+        setPriceSell('');
         setTotalBuy('');
         setTotalSell('');
         setOrderPercentageSell(0);
