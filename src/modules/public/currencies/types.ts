@@ -16,6 +16,7 @@ export interface BlockchainCurrencies {
     protocol: string;
     currency_id: string;
     deposit_fee: string;
+    parent_id: string;
     min_deposit_amount: string;
     withdraw_fee: string;
     min_withdraw_amount: string;

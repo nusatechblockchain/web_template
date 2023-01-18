@@ -1,0 +1,44 @@
+.modal-content {
+    background: var(--main-background-color);
+}
+
+.tos-content {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.container-phone {
+    .input-phone {
+        width: 100%;
+        height: 48px;
+        padding-left: 52px;
+        margin-top: 8px;
+        background: var(--main-background-color);
+        border-color: var(--input-border-color);
+    }
+
+    .input-phone:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    .button-phone {
+        background: transparent;
+        border: 0;
+        .selected-flag:hover {
+            background: transparent !important;
+        }
+        .selected-flag {
+            background: transparent !important;
+            padding-left: 1.5rem;
+        }
+
+        &.open {
+            background: transparent;
+        }
+    }
+
+    .react-tel-input .flag-dropdown.open {
+        background: transparent;
+    }
+}

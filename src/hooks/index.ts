@@ -5,6 +5,7 @@ export * from './useDocumentationFetch';
 export * from './useDocumentTitle';
 export * from './useHistoryFetch';
 export * from './useMarketsFetch';
+export * from './useBlogsFetch';
 export * from './useRangerConnectFetch';
 export * from './useResetCaptchaState';
 export * from './usePrevious';

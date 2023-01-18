@@ -1,7 +1,8 @@
 import { AbilitiesInterface, Wallet } from 'src/modules';
 import { API_URL } from '../config';
+import { primaryCurrency } from '../api';
 
-export const PG_TITLE_PREFIX = 'Crypto Exchange';
+export const PG_TITLE_PREFIX = 'Heaven Exchange';
 
 export const pgRoutes = (isLoggedIn: boolean, abilities: AbilitiesInterface, isLight?: boolean): string[][] => {
     const routes = [
@@ -20,7 +21,7 @@ export const pgRoutes = (isLoggedIn: boolean, abilities: AbilitiesInterface, isL
         ['page.header.navbar.api', '/docs', `api${isLight ? 'Light' : ''}`],
     ];
 
-    return isLoggedIn ? routes.filter(i => Boolean(i)) : routesUnloggedIn;
+    return isLoggedIn ? routes.filter((i) => Boolean(i)) : routesUnloggedIn;
 };
 
 export const DEFAULT_WALLET: Wallet = {
@@ -29,7 +30,7 @@ export const DEFAULT_WALLET: Wallet = {
     balance: '',
     type: 'coin',
     fixed: 0,
-    networks: [{blockchain_key: '', fee: 0, protocol: ''}],
+    networks: [{ blockchain_key: '', fee: 0, protocol: '' }],
     account_type: '',
 };
 
@@ -38,7 +39,7 @@ export const GLOBAL_PLATFORM_CURRENCY = 'USDT';
 export const DEFAULT_CCY_PRECISION = 4;
 export const DEFAULT_FIAT_PRECISION = 2;
 export const DEFAULT_TRADING_VIEW_INTERVAL = '15';
-export const VALUATION_PRIMARY_CURRENCY = 'USD';
+export const VALUATION_PRIMARY_CURRENCY = primaryCurrency().toUpperCase();
 export const VALUATION_SECONDARY_CURRENCY = 'ETH';
 
 export const PASSWORD_ENTROPY_STEP = 6;
@@ -101,24 +102,24 @@ export const colors = {
     dark: {
         chart: {
             primary: 'var(--rgb-body-background-color)',
-            up: 'var(--rgb-bids)',
-            down: 'var(--rgb-asks)',
+            up: 'var(--rgb-text-contrast-color)',
+            down: 'var(--rgb-system-red)',
         },
         navbar: {
             sun: 'var(--primary-text-color)',
             moon: 'var(--icons)',
         },
         orderBook: {
-            asks: 'var(--asks-level-4)',
-            bids: 'var(--bids-level-4)',
+            asks: 'var(--rgb-text-contrast-color)',
+            bids: 'var(--rgb-system-red)',
         },
         depth: {
-            fillAreaAsk: 'var(--rgb-asks)',
-            fillAreaBid: 'var(--rgb-bids)',
-            gridBackgroundStart: 'var(--rgb-asks)',
-            gridBackgroundEnd: 'var(--rgb-asks)',
-            strokeAreaAsk: 'var(--rgb-asks)',
-            strokeAreaBid: 'var(--rgb-bids)',
+            fillAreaAsk: 'var(--rgb-system-red)',
+            fillAreaBid: 'var(--rgb-text-contrast-color)',
+            gridBackgroundStart: 'var(--rgb-system-red)',
+            gridBackgroundEnd: 'var(--rgb-system-red)',
+            strokeAreaAsk: 'var(--rgb-system-red)',
+            strokeAreaBid: 'var(--rgb-text-contrast-color)',
             strokeGrid: 'var(--rgb-secondary-contrast-cta-color)',
             strokeAxis: 'var(--rgb-primary-text-color)',
         },

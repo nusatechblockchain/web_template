@@ -29,6 +29,7 @@ export interface Market {
     price_precision: number;
     state?: string;
     filters?: MarketFilter[];
+    type?: string;
 }
 
 export interface Ticker {

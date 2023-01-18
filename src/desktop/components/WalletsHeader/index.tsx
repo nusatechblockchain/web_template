@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { FilterInput } from '..';
 import { Wallet } from '../../../modules';
@@ -17,41 +17,55 @@ interface ParentProps {
  */
 export const WalletsHeader: React.FunctionComponent<ParentProps> = (props: ParentProps) => {
     const { wallets, nonZeroSelected } = props;
+
+    const [active, setActive] = React.useState(false);
+
     const intl = useIntl();
 
     const searchFilter = (row: Wallet, searchKey: string) => {
         props.setFilterValue(searchKey);
-        return row ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) || row.currency?.toLowerCase().includes(searchKey.toLowerCase()) : false;
+        return row
+            ? row.name?.toLowerCase().includes(searchKey.toLowerCase()) ||
+                  row.currency?.toLowerCase().includes(searchKey.toLowerCase())
+            : false;
     };
 
     const handleFilter = (result: object[]) => {
         props.setFilteredWallets(result as Wallet[]);
     };
 
-    const handleToggleCheckbox = React.useCallback(event => {
-        event.preventDefault();
-        props.handleClickCheckBox(!nonZeroSelected);
-    }, [nonZeroSelected, props.handleClickCheckBox]);
+    const handleToggleCheckbox = React.useCallback(
+        (event) => {
+            event.preventDefault();
+            props.handleClickCheckBox(!nonZeroSelected);
+        },
+        [nonZeroSelected, props.handleClickCheckBox]
+    );
 
     return (
-        <div className="cr-wallets-header">
-            <div className="cr-wallets-header__search">
+        <div className="cr-wallets-header d-flex align-items-center mb-24">
+            <div className="cr-wallets-header__search ">
                 <FilterInput
                     data={wallets}
                     onFilter={handleFilter}
                     filter={searchFilter}
-                    placeholder={intl.formatMessage({id: 'page.body.wallets.overview.seach'})}
+                    placeholder={intl.formatMessage({ id: 'page.body.wallets.overview.seach' })}
+                    className="mr-24"
                 />
             </div>
-            <Form className="cr-wallets-header__checkbox" onClick={handleToggleCheckbox}>
-                <Form.Check
-                    type="checkbox"
-                    custom
-                    id="nonZeroSelected"
-                    checked={nonZeroSelected}
-                    readOnly={true}
-                    label={intl.formatMessage({id: 'page.body.wallets.overview.nonZero'})}
-                />
+
+            <Form as={Row} className="mb-1 ml-2 " controlid="formHorizontalCheck" onClick={handleToggleCheckbox}>
+                <Col sm={{ span: 20, offset: 0 }}>
+                    <Form.Check
+                        type="checkbox"
+                        custom
+                        id="nonZeroSelected"
+                        checked={nonZeroSelected}
+                        readOnly={true}
+                        label={intl.formatMessage({ id: 'page.body.wallets.overview.nonZero' })}
+                        className="text-sm grey-text-accent m-0 d-flex justify-content-center align-items-center"
+                    />
+                </Col>
             </Form>
         </div>
     );

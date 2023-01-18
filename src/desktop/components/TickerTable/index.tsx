@@ -1,7 +1,9 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { Market } from '../../../modules';
-import { Decimal } from '../../../components';
+import { setCurrentMarket, Market } from '../../../modules';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { numberFormat } from '../../../helpers';
 
 interface Props {
     currentBidUnit: string;
@@ -19,46 +21,67 @@ export const TickerTable: React.FC<Props> = ({
     redirectToTrading,
 }) => {
     const { formatMessage } = useIntl();
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const handleRedirectToTrading = (id: string) => {
+        const currentMarket: Market | undefined = markets.find((item) => item.id === id);
+
+        if (currentMarket) {
+            dispatch(setCurrentMarket(currentMarket));
+            history.push(
+                `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
+            );
+        }
+    };
+
+    const handleToMarket = (id) => {
+        history.push(`markets/detail/${id}`);
+    };
 
     const renderItem = React.useCallback(
         (market, index: number) => {
-            const marketChangeColor = +(market.change || 0) < 0 ? 'negative' : 'positive';
-
+            const marketChangeColor = +(market.change || 0) < 0 ? 'negative-price' : 'positive-price';
             return (
-                <tr key={index} onClick={() => redirectToTrading(market.id)}>
+                <tr key={index}>
                     <td>
-                        <div>{market && market.name}</div>
+                        <div className="d-flex align-items-center">
+                            <img
+                                src={market && market.currency && market.currency.icon_url}
+                                className="small-coin-icon"
+                                alt=""
+                            />
+                            <div className="font-bold ml-2 text-uppercase">{market && market.base_unit}</div>
+                            <div className="font-normal text-sm grey-text-accent ml-3">
+                                {market && market.currency && market.currency.name}
+                            </div>
+                        </div>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
-                                {market.last}
-                            </Decimal>
-                        </span>
+                        <span>$ {market.last}</span>
                     </td>
                     <td>
                         <span className={marketChangeColor}>{market.price_change_percent}</span>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
-                                {market.high}
-                            </Decimal>
-                        </span>
+                        <span>$ {market.high}</span>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
-                                {market.low}
-                            </Decimal>
-                        </span>
+                        <span>$ {market.low}</span>
                     </td>
                     <td>
-                        <span>
-                            <Decimal fixed={market.amount_precision} thousSep=",">
-                                {market.volume}
-                            </Decimal>
-                        </span>
+                        <div className="d-flex">
+                            <p
+                                className="gradient-text font-normal mx-2 text-sm cursor-pointer"
+                                onClick={() => handleToMarket(market.base_unit)}>
+                                Detail
+                            </p>
+                            <p
+                                onClick={() => handleRedirectToTrading(market.id)}
+                                className="gradient-text font-normal mx-2 text-sm cursor-pointer">
+                                Trade
+                            </p>
+                        </div>
                     </td>
                 </tr>
             );
@@ -68,13 +91,12 @@ export const TickerTable: React.FC<Props> = ({
 
     return (
         <div>
-            <h5>Selector</h5>
-            <div className="navbar">
-                <ul className="navbar-nav" role="tablist">
+            <div className="navbar__ticker-table">
+                <ul className="navbar-nav__ticker-table" role="tablist">
                     {currentBidUnitsList.map((item, i) => (
                         <li
                             key={i}
-                            className={`nav-item ${item === currentBidUnit ? 'active' : ''}`}
+                            className={`nav-item__ticker-table ${item === currentBidUnit ? 'active' : ''}`}
                             onClick={() => setCurrentBidUnit(item)}>
                             <span>
                                 {item ? item.toUpperCase() : formatMessage({ id: 'page.body.marketsTable.filter.all' })}
@@ -83,7 +105,6 @@ export const TickerTable: React.FC<Props> = ({
                     ))}
                 </ul>
             </div>
-            <h5>Market</h5>
             <table className="pg-ticker-table__table">
                 <thead>
                     <tr>
@@ -92,7 +113,7 @@ export const TickerTable: React.FC<Props> = ({
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.change' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.high' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.low' })}</th>
-                        <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.volume' })}</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,0 +1,53 @@
+.cr-table-container {
+    width: 100%;
+    overflow-x: auto;
+    table {
+        width: 100%;
+
+        th {
+            color: var(--text-primary-color);
+            font-size: 12px;
+            line-height: 16px;
+            font-weight: 600;
+            padding: 24px 12px 12px 12px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--main-background-color);
+        }
+
+        td {
+            color: var(--text-primary-color);
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: 400;
+            padding: 24px 12px 12px 12px;
+            border-bottom: 1px solid var(--border-color);
+
+            .negative {
+                padding: 4px 6px;
+                border-radius: 4px;
+                background: var(--text-danger-color);
+                color: var(--text-primary-color);
+                font-size: 12px;
+            }
+
+            .positive {
+                padding: 4px 6px;
+                border-radius: 4px;
+                background: var(--text-success-color);
+                color: var(--text-primary-color);
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .cr-table-container {
+        table {
+            th,
+            td {
+                padding: 16px 6px 10px 6px;
+            }
+        }
+    }
+}

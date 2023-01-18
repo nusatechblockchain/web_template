@@ -1,4 +1,3 @@
-import cr from 'classnames';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
@@ -24,6 +23,8 @@ export interface SignInProps {
     onSignUp: () => void;
     onSignIn: () => void;
     className?: string;
+    classNameEmail?: string;
+    classNamePassword?: string;
     email: string;
     emailError: string;
     password: string;
@@ -71,10 +72,13 @@ const SignIn: React.FC<SignInProps> = ({
     geetestCaptchaSuccess,
     reCaptchaSuccess,
     renderCaptcha,
+    classNameEmail,
+    classNamePassword,
 }) => {
     const isMobileDevice = useSelector(selectMobileDeviceState);
     const history = useHistory();
     const { formatMessage } = useIntl();
+    const [selectTab, setSelectTab] = React.useState('email');
 
     const isValidForm = React.useCallback(() => {
         const isEmailValid = email.match(EMAIL_REGEX);
@@ -103,9 +107,10 @@ const SignIn: React.FC<SignInProps> = ({
         [handleChangeFocusField]
     );
 
-    const isButtonDisabled = React.useMemo(() =>
-        !!(captchaLogin() && captchaType !== 'none' && !(reCaptchaSuccess || geetestCaptchaSuccess)),
-    [reCaptchaSuccess, geetestCaptchaSuccess]);
+    const isButtonDisabled = React.useMemo(
+        () => !!(captchaLogin() && captchaType !== 'none' && !(reCaptchaSuccess || geetestCaptchaSuccess)),
+        [reCaptchaSuccess, geetestCaptchaSuccess]
+    );
 
     const handleSubmitForm = React.useCallback(() => {
         refreshError();
@@ -142,11 +147,7 @@ const SignIn: React.FC<SignInProps> = ({
     );
 
     const renderForgotButton = React.useMemo(
-        () => (
-            <div onClick={() => onForgotPassword(email)}>
-                {forgotPasswordLabel || 'Forgot your password?'}
-            </div>
-        ),
+        () => <div onClick={() => onForgotPassword(email)}>{forgotPasswordLabel || 'Forgot your password?'}</div>,
         [forgotPasswordLabel, onForgotPassword, email]
     );
 
@@ -163,7 +164,7 @@ const SignIn: React.FC<SignInProps> = ({
     );
 
     return (
-        <div className='card p-4'>
+        <React.Fragment>
             <div>
                 <CustomInput
                     type="email"
@@ -173,8 +174,10 @@ const SignIn: React.FC<SignInProps> = ({
                     handleChangeInput={handleChangeEmail}
                     inputValue={email}
                     handleFocusInput={() => handleFieldFocus('email')}
-                    classNameLabel="form-label"
+                    classNameLabel="form-label white-text text-sm"
                     autoFocus={!isMobileDevice}
+                    labelVisible
+                    classNameInput={classNameEmail}
                 />
                 {emailError && <div className={'invalid-feedback'}>{emailError}</div>}
             </div>
@@ -188,17 +191,16 @@ const SignIn: React.FC<SignInProps> = ({
                     handleChangeInput={handleChangePassword}
                     inputValue={password}
                     handleFocusInput={() => handleFieldFocus('password')}
-                    classNameLabel="form-label"
+                    classNameLabel="form-label white-text text-sm"
                     autoFocus={false}
+                    labelVisible
+                    classNameInput={classNamePassword}
                 />
                 {passwordError && <div className={'invalid-feedback'}>{passwordError}</div>}
             </div>
 
-            <div className='mt-2 mb-2'>{captchaLogin() && renderCaptcha}</div>
-
-            <div>{renderForgotButton}</div>
-
-            <div className='mt-4'>
+            <div className="mt-2 mb-2">{captchaLogin() && renderCaptcha}</div>
+            <div className="mt-4">
                 <Button
                     block={true}
                     type="button"
@@ -209,8 +211,12 @@ const SignIn: React.FC<SignInProps> = ({
                     {isLoading ? 'Loading...' : labelSignIn ? labelSignIn : 'Sign in'}
                 </Button>
             </div>
-            <div className='mt-4'>{renderRegister}</div>
-        </div>
+            <div className="position-relative mt-2">
+                <div className="text-xs grey-text position-absolute right-position cursor-pointer">
+                    {renderForgotButton}
+                </div>
+            </div>
+        </React.Fragment>
     );
 };
 

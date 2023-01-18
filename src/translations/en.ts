@@ -4,6 +4,7 @@ import { nationalitiesNames } from './nationalities';
 
 export const en = {
     'page.header.navbar.signIn': 'Sign In',
+    'page.header.navbar.signUp': 'Sign Up',
     'page.header.navbar.quick.exchange': 'Quick exchange',
     'page.header.navbar.trade': 'Trade',
     'page.header.navbar.wallets': 'Wallets',
@@ -12,9 +13,26 @@ export const en = {
     'page.header.navbar.api': 'API Documentation',
     'page.header.navbar.internal.transfer': 'Internal transfer',
     'page.header.navbar.p2p': 'P2P',
+    'page.header.navbar.home': 'Home',
+    'page.header.navbar.market': 'Market',
+    'page.header.navbar.support': 'Support',
+    'page.header.navbar.announcement': 'Announcement',
 
     'page.header.navbar.profile': 'Profile',
     'page.header.navbar.logout': 'Logout',
+
+    'page.header.navbar.trade.24change': '24 Change',
+    'page.header.navbar.trade.24high': '24 High',
+    'page.header.navbar.trade.24low': '24 Low',
+    'page.header.navbar.trade.24volume': '24 Volume',
+
+    'page.header.navbar.dropdown.language': 'Language',
+
+    'page.header.navbar.dropdown.currency': 'Currency',
+    'page.header.navbar.dropdown.usd': 'USD',
+    'page.header.navbar.dropdown.idr': 'IDR',
+    'page.header.navbar.dropdown.language.usd': 'USDT',
+    'page.header.navbar.dropdown.language.idr': 'IDR',
 
     'page.sidebar.group.text': 'Fee Group:',
     'page.sidebar.group.value': 'Base',
@@ -97,7 +115,7 @@ export const en = {
     'page.body.trade.header.openOrders.content.total': 'Value',
     'page.body.trade.header.openOrders.content.trigger': 'Trigger',
     'page.body.trade.header.openOrders.content.filled': 'Filled',
-    'page.body.trade.header.openOrders.hideOtherPairs': 'Hide other pairs',
+    'page.body.trade.header.openOrders.hideOtherPairs': 'Hide other pairs',
     'page.body.trade.header.openOrders.lastPrice': 'Last price',
 
     /* Charts */
@@ -113,13 +131,12 @@ export const en = {
     'page.body.marketsTable.header.low': '24 low',
     'page.body.marketsTable.header.volume': '24 Volume',
 
-
     /* Landing */
     'page.body.landing.header.button1': 'profile',
     'page.body.landing.header.button2': 'log in',
     'page.body.landing.header.button3': 'register',
 
-    'page.body.landing.marketInfo.title.text1': 'Welcome to NusaExchange.',
+    'page.body.landing.marketInfo.title.text1': 'Welcome to Heaven Exchange.',
     'page.body.landing.marketInfo.title.text2': 'Buy, sell and trade digital currency.',
     'page.body.landing.marketInfo.title.button': 'start trading',
 
@@ -131,32 +148,56 @@ export const en = {
     'page.body.landing.platformInfo.item.third.title': 'Countries supported',
 
     'page.body.landing.register.item.title': 'No matter your experience level',
-    'page.body.landing.register.item.text': 'NusaExchange offers an intuitive interface with real time orderbooks, charting tools, trade history, and a simple order process so you can trade from day one.',
+    'page.body.landing.register.item.text':
+        'Heaven Exchange offers an intuitive interface with real time orderbooks, charting tools, trade history, and a simple order process so you can trade from day one.',
     'page.body.landing.register.item.button': 'register',
 
-    'page.body.landing.features.title': 'NusaExchange platform features',
+    'page.body.landing.features.title': 'Heaven Exchange platform features',
     'page.body.landing.features.features.item1.title': 'Exchange',
     'page.body.landing.features.features.item2.title': 'Order Types',
     'page.body.landing.features.features.item3.title': 'Customizable Interface',
     'page.body.landing.features.features.item4.title': 'Security',
     'page.body.landing.features.features.item5.title': 'Community',
     'page.body.landing.features.features.item6.title': 'Industry leading API',
-    'page.body.landing.features.features.item1.text': 'NusaExchange offers the most liquid order book in the world, allowing users to easily exchange Bitcoin, Ethereum, EOS, Litecoin, Ripple, NEO and many other digital assets with minimal slippage.',
-    'page.body.landing.features.features.item2.text': 'NusaExchange offers a suite of order types to give traders the tools they need for every scenario. Discover more about our most advanced Algorithmic orders types.',
-    'page.body.landing.features.features.item3.text': 'Organize your workspace according to your needs: compose your layout, choose between themes, set up notifications and data preferences.',
-    'page.body.landing.features.features.item4.text': 'Security of user information and funds is our first priority. Contact us to learn more about our security features and integrations.',
+    'page.body.landing.features.features.item1.text':
+        'Heaven Exchange offers the most liquid order book in the world, allowing users to easily exchange Bitcoin, Ethereum, EOS, Litecoin, Ripple, NEO and many other digital assets with minimal slippage.',
+    'page.body.landing.features.features.item2.text':
+        'Heaven Exchange offers a suite of order types to give traders the tools they need for every scenario. Discover more about our most advanced Algorithmic orders types.',
+    'page.body.landing.features.features.item3.text':
+        'Organize your workspace according to your needs: compose your layout, choose between themes, set up notifications and data preferences.',
+    'page.body.landing.features.features.item4.text':
+        'Security of user information and funds is our first priority. Contact us to learn more about our security features and integrations.',
     'page.body.landing.features.features.item5.text': 'Join a global community that believes in the power of crypto.',
-    'page.body.landing.features.features.item6.text': 'Our Websocket feed lets you easily gain access to real-time market data, while our trading API lets you develop secure, programmatic trading bots.',
+    'page.body.landing.features.features.item6.text':
+        'Our Websocket feed lets you easily gain access to real-time market data, while our trading API lets you develop secure, programmatic trading bots.',
 
     'page.body.landing.tradeOnTheGo.item.title': 'Trade on the go',
     'page.body.landing.tradeOnTheGo.item.text1': 'Our platform is optimized for trading on any device.',
     'page.body.landing.tradeOnTheGo.item.text2': 'And you don’t need to download any additional applications.',
-    'page.body.landing.tradeOnTheGo.item.text3': 'All the power of NusaExchange cryptocurrency exchange, in the palm of your hand.',
+    'page.body.landing.tradeOnTheGo.item.text3':
+        'All the power of Heaven Exchange cryptocurrency exchange, in the palm of your hand.',
     'page.body.landing.tradeOnTheGo.item.button': 'let’s try',
 
     'page.body.landing.startTrading.title': 'Start trading now',
     'page.body.landing.startTrading.button1': 'register',
     'page.body.landing.startTrading.button2': 'Start trading',
+
+    'page.body.landing.footer.links': 'Links',
+    'page.body.landing.footer.links.how': 'How it works',
+    'page.body.landing.footer.links.cryptos': 'Cryptos',
+    'page.body.landing.footer.links.features': 'Features',
+    'page.body.landing.footer.links.testimonial': 'Testimonial',
+    'page.body.landing.footer.links.blogs': 'Blogs',
+
+    'page.body.landing.footer.legal': 'Legal',
+    'page.body.landing.footer.legal.tos': 'Term of use',
+    'page.body.landing.footer.legal.toc': 'Term of conditions',
+    'page.body.landing.footer.legal.privacy': 'Privacy Policy',
+    'page.body.landing.footer.legal.cookie': 'Cookie Policy',
+
+    'page.body.landing.footer.newsletter': 'Newsletter',
+    'page.body.landing.footer.subscribe': 'Subscribe',
+    'page.body.landing.footer.newsletter.email': 'We don’t sell your email and spam',
 
     'page.body.landing.footer.exchange': 'Exchange',
     'page.body.landing.footer.wallets': 'Wallets',
@@ -167,10 +208,11 @@ export const en = {
     'page.body.landing.footer.about': 'About us',
     'page.body.landing.footer.community': 'Community',
     'page.body.landing.footer.info': 'Info',
-    'page.body.landing.footer.rights': 'NusaExchange © All rights reserved.',
+    'page.body.landing.footer.rights': 'Heaven Exchange © All rights reserved.',
+
+    'page.body.landing.footer.email': 'We don’t sell your email and spam',
 
     'pagy.body.footer.powered_by': 'Powered by',
-
 
     /* Wallets */
     'page.body.wallets.estimated_value': 'Estimated Value',
@@ -181,7 +223,8 @@ export const en = {
     'page.body.wallets.balance.available': 'Available',
     'page.body.wallets.tabs.deposit': 'Deposit',
     'page.body.wallets.tabs.deposit.disabled.message': 'Deposit was disabled by administration',
-    'page.body.wallets.tabs.deposit.ccy.message.submit': 'Please submit a deposit payment using one of the following options. You deposit will be reflected in your account after {confirmations} confirmations',
+    'page.body.wallets.tabs.deposit.ccy.message.submit':
+        'Please submit a deposit payment using one of the following options. You deposit will be reflected in your account after {confirmations} confirmations',
     'page.body.wallets.tabs.deposit.ccy.message.address': 'Deposit Address',
     'page.body.wallets.tabs.deposit.ccy.message.button': 'COPY',
     'page.body.wallets.tabs.deposit.ccy.message.success': 'Address copied',
@@ -192,19 +235,23 @@ export const en = {
     'page.body.wallets.tabs.deposit.ccy.blockchain.networks': 'Blockchain network',
     'page.body.wallets.tabs.deposit.ccy.tip': 'Select a blockchain network that you want to use to send your deposit.',
     'page.body.wallets.tabs.deposit.ccy.hint.title': 'Send only {currency} to this deposit address.',
-    'page.body.wallets.tabs.deposit.ccy.hint': 'Sending coin or token other than {currency} to this address may result in the loss of your deposit.',
+    'page.body.wallets.tabs.deposit.ccy.hint':
+        'Sending coin or token other than {currency} to this address may result in the loss of your deposit.',
     'page.body.wallets.tabs.deposit.ccy.disabled': 'Deposits of {currency} on that network is temporary suspended',
     'page.body.wallets.tabs.deposit.ccy.memo': 'Memo',
-    'page.body.wallets.tabs.deposit.ccy.memo.warning': 'Both a MEMO and an Address are required to successfully deposit your USDT BEP2 tokens to Binance.',
+    'page.body.wallets.tabs.deposit.ccy.memo.warning':
+        'Both a MEMO and an Address are required to successfully deposit your USDT BEP2 tokens to Binance.',
     'page.body.wallets.warning.deposit.disabled': 'Deposit disabled: ',
     'page.body.wallets.warning.no.networks': 'No network configured for deposits',
     'page.body.wallets.warning.deposit.verification': 'Deposit are allowed after passing KYC verification',
-    'page.body.wallets.warning.deposit.networks.hint': 'Currently, that currency can’t be deposited as no blockchain network was configured or enabled. Please, use another currency to make a deposit.',
+    'page.body.wallets.warning.deposit.networks.hint':
+        'Currently, that currency can’t be deposited as no blockchain network was configured or enabled. Please, use another currency to make a deposit.',
     'page.body.wallets.warning.deposit.kyc.hint': `Your current verification level doesn't allow you to make a deposit. Please, submit the required KYC information to get deposit permission.`,
     'page.body.wallets.warning.deposit.verification.button': 'Verify Your Account',
 
     'page.body.wallets.tabs.deposit.fiat.message1': 'Deposit using bank transfer',
-    'page.body.wallets.tabs.deposit.fiat.message2': 'Please use the following credentials to initiate your bank transfer. Your deposit will be reflected in your account within 2 business days.',
+    'page.body.wallets.tabs.deposit.fiat.message2':
+        'Please use the following credentials to initiate your bank transfer. Your deposit will be reflected in your account within 2 business days.',
     'page.body.wallets.tabs.deposit.fiat.bankName': 'Bank Name',
     'page.body.wallets.tabs.deposit.fiat.accountNumber': 'Account number',
     'page.body.wallets.tabs.deposit.fiat.accountName': 'Account name',
@@ -214,7 +261,8 @@ export const en = {
     'page.body.wallets.table.rejected': 'Rejected',
     'page.body.wallets.tabs.deposit.fiat.admin': ' To initiate a fiat withdrawal, please contact administrator!',
     'page.body.wallets.tabs.deposit.min.deposit': 'Min. deposit:',
-    'page.body.wallets.tabs.deposit.min.amount.tip': 'To create a deposit request the amount should be ≥ the minimum deposit amount',
+    'page.body.wallets.tabs.deposit.min.amount.tip':
+        'To create a deposit request the amount should be ≥ the minimum deposit amount',
 
     'page.body.wallets.tabs.withdraw': 'Withdraw',
     'page.body.wallets.tabs.withdraw.content.amount': 'Withdrawal Amount',
@@ -226,12 +274,15 @@ export const en = {
     'page.body.wallets.warning.withdraw.disabled': 'Withdrawal disabled: ',
     'page.body.wallets.warning.withdraw.no.networks': 'No network configured for withdrawals',
     'page.body.wallets.warning.withdraw.verification': 'Withdraw are allowed after passing KYC verification',
-    'page.body.wallets.warning.withdraw.no.networks.hint': 'Currently, that currency can’t be withdrawed as no blockchain network was configured or enabled. Please, use another currency to make a withdraw.',
+    'page.body.wallets.warning.withdraw.no.networks.hint':
+        'Currently, that currency can’t be withdrawed as no blockchain network was configured or enabled. Please, use another currency to make a withdraw.',
     'page.body.wallets.warning.withdraw.verification.hint': `Your current verification level doesn't allow you to make a withdraw. Please, submit the required KYC information to get withdraw permission.`,
     'page.body.wallets.warning.withdraw.otp.hint': 'Please, enable 2FA to get withdraw permission.',
     'page.body.wallets.warning.withdraw.verification.button': 'Verify Your Account',
-    'page.body.wallets.tabs.withdraw.ccy.tip': 'You are going to withdraw using selected network. To withdraw on a different network, create or use an existing beneficiary with a needed network.',
-    'page.body.wallets.tabs.withdraw.min.amount.tip': 'To create a withdrawal request the amount should be ≥ the minimum withdrawal amount',
+    'page.body.wallets.tabs.withdraw.ccy.tip':
+        'You are going to withdraw using selected network. To withdraw on a different network, create or use an existing beneficiary with a needed network.',
+    'page.body.wallets.tabs.withdraw.min.amount.tip':
+        'To create a withdrawal request the amount should be ≥ the minimum withdrawal amount',
 
     'page.body.wallets.tabs.withdraw.modal.title': 'Withdraw',
     'page.body.wallets.tabs.withdraw.modal.withdrawTo': 'Withdraw to',
@@ -248,7 +299,8 @@ export const en = {
     'page.body.wallets.tabs.withdraw.content.enable2faButton': 'Enable 2FA',
 
     'page.body.wallets.tabs.withdraw.content.withdrawal.limit': 'Withdrawal limits',
-    'page.body.wallets.tabs.withdraw.content.withdrawal.limit.tip': 'Withdrawal limits depend on your group. Limits reset every 24h and every month correspondingly. Still, you can create a withdrawal request that exceeds your limit but it will be processed manually.',
+    'page.body.wallets.tabs.withdraw.content.withdrawal.limit.tip':
+        'Withdrawal limits depend on your group. Limits reset every 24h and every month correspondingly. Still, you can create a withdrawal request that exceeds your limit but it will be processed manually.',
 
     'success.beneficiaries.created': 'Beneficiaries: successfully created',
     'success.beneficiaries.activated': 'Beneficiaries: successfully activated',
@@ -287,8 +339,10 @@ export const en = {
     'page.body.wallets.beneficiaries.addAddressModal.body.fiatAccountNumber': 'Account Number',
     'page.body.wallets.beneficiaries.addAddressModal.body.fiatBankName': 'Bank Name',
     'page.body.wallets.beneficiaries.addAddressModal.body.fiatBankSwiftCode': 'Bank Swift Code (optional)',
-    'page.body.wallets.beneficiaries.addAddressModal.body.fiatIntermediaryBankName': 'Intermediary Bank Name (optional)',
-    'page.body.wallets.beneficiaries.addAddressModal.body.fiatIntermediaryBankSwiftCode': 'Intermediary Bank Swift Code (optional)',
+    'page.body.wallets.beneficiaries.addAddressModal.body.fiatIntermediaryBankName':
+        'Intermediary Bank Name (optional)',
+    'page.body.wallets.beneficiaries.addAddressModal.body.fiatIntermediaryBankSwiftCode':
+        'Intermediary Bank Swift Code (optional)',
 
     'page.body.wallets.beneficiaries.network.fee': 'Network Fee',
     'page.body.wallets.beneficiaries.min.withdraw': 'Min. withdraw:',
@@ -302,7 +356,8 @@ export const en = {
     'page.body.wallets.beneficiaries.addAddressModal.body.button': 'Submit for confirmation',
 
     'page.body.wallets.beneficiaries.confirmationModal.header': 'Confirm new address',
-    'page.body.wallets.beneficiaries.confirmationModal.body.text': 'We have sent you an email containing a confirmation code pin, please enter it below to save the new address:',
+    'page.body.wallets.beneficiaries.confirmationModal.body.text':
+        'We have sent you an email containing a confirmation code pin, please enter it below to save the new address:',
     'page.body.wallets.beneficiaries.confirmationModal.body.confirmationModalCode': 'Pin code',
     'page.body.wallets.beneficiaries.confirmationModal.body.resendButton': 'Resend pin',
     'page.body.wallets.beneficiaries.confirmationModal.body.button': 'Confirm',
@@ -409,7 +464,7 @@ export const en = {
     'page.body.profile.header.account.content.password.button.save': 'Save',
     'page.body.profile.header.account.content.password.button.cancel': 'Cancel',
     'page.body.profile.header.account.content.password.conf': 'Password Confirmation',
-    'page.body.profile.header.account.content.password.dont.match': 'Passwords don\'t match',
+    'page.body.profile.header.account.content.password.dont.match': "Passwords don't match",
     'page.body.profile.header.account.content.password.change.success': 'Success!',
     'page.body.profile.header.account.content.password.change': 'Change password',
 
@@ -417,17 +472,22 @@ export const en = {
     'page.body.profile.header.account.content.twoFactorAuthentication.message.enable': 'Enabled',
     'page.body.profile.header.account.content.twoFactorAuthentication.message.disable': 'Disabled',
     'page.body.profile.header.account.content.twoFactorAuthentication.header': 'Google Authenticator',
-    'page.body.profile.header.account.content.twoFactorAuthentication.message.1': 'Download and install Google Authenticator application from ',
+    'page.body.profile.header.account.content.twoFactorAuthentication.message.1':
+        'Download and install Google Authenticator application from ',
     'page.body.profile.header.account.content.twoFactorAuthentication.message.or': 'or ',
-    'page.body.profile.header.account.content.twoFactorAuthentication.message.2': 'Scan QR code or use secret MFA code:',
-    'page.body.profile.header.account.content.twoFactorAuthentication.message.3': '* Save this secret in a secure location. This code can be used to gain 2FA access from a different device.',
+    'page.body.profile.header.account.content.twoFactorAuthentication.message.2':
+        'Scan QR code or use secret MFA code:',
+    'page.body.profile.header.account.content.twoFactorAuthentication.message.3':
+        '* Save this secret in a secure location. This code can be used to gain 2FA access from a different device.',
     'page.body.profile.header.account.content.twoFactorAuthentication.message.mfa': 'MFA code',
     'page.body.profile.header.account.content.twoFactorAuthentication.message.4': 'Enter 2fa code from the app',
     'page.body.profile.header.account.content.twoFactorAuthentication.subHeader': '2FA code',
     'page.body.profile.header.account.content.twoFactorAuthentication.enable': 'ENABLE',
     'page.body.profile.header.account.content.twoFactorAuthentication.disable': 'DISABLE 2FA',
-    'page.body.profile.header.account.content.twoFactorAuthentication.modalBody': 'Please сontact administrator to disable',
-    'page.body.profile.header.account.content.twoFactorAuthentication.modalHeader': 'Two-factor authentication is enabled',
+    'page.body.profile.header.account.content.twoFactorAuthentication.modalBody':
+        'Please сontact administrator to disable',
+    'page.body.profile.header.account.content.twoFactorAuthentication.modalHeader':
+        'Two-factor authentication is enabled',
 
     'page.body.profile.header.account.profile': 'Profile Verification',
     'page.body.profile.header.account.profile.email.title': 'Email verified',
@@ -439,14 +499,17 @@ export const en = {
     'page.body.profile.header.account.profile.identity.title': 'Identity verified',
     'page.body.profile.header.account.profile.identity.message': 'Withdraw enabled',
 
-    'page.body.profile.referral.invite': 'Invite Friends.',
+    'page.body.profile.referral.title': 'Referral Bonus',
+    'page.body.profile.referral.rewards': 'Your Total Rewards',
     'page.body.profile.referral.earn': 'Earn Crypto Together',
-    'page.body.profile.referral.commission': 'Earn up to 40% commission every time your friends make a trade',
+    'page.body.profile.referral.commission':
+        'Invite your friend and earn 50% commission on their exchange trasaction, Copy link bellow and share referral link to your friends',
     'page.body.profile.header.referralProgram': 'Referral Link',
     'page.body.profile.content.copyLink': 'Copy',
 
     'page.body.profile.payment.title': 'P2P payment methods',
-    'page.body.profile.payment.desc': 'When you sell cryptocurrencies, the payment method added will be displayed to buyer as options to accept payment, please ensure that the account owner’s name is consistent with your verified name. You can add up to 20 payment methods.',
+    'page.body.profile.payment.desc':
+        'When you sell cryptocurrencies, the payment method added will be displayed to buyer as options to accept payment, please ensure that the account owner’s name is consistent with your verified name. You can add up to 20 payment methods.',
     'page.body.profile.payment.button.add': '+ Add a payment method',
     'page.body.profile.payment.button.edit': 'Edit',
     'page.body.profile.payment.button.delete': 'Delete',
@@ -463,7 +526,7 @@ export const en = {
     'page.body.profile.apiKeys.header': 'My API Keys',
     'page.body.profile.apiKeys.header.create': 'Create new',
 
-    'page.body.profile.apiKeys.noOtp': 'Please enable Two-factor authentication',
+    'page.body.profile.apiKeys.noOtp': 'Please enable Two-Factor Authentication',
     'page.body.profile.apiKeys.show': 'Show',
     'page.body.profile.apiKeys.noKeys': 'You have no API keys',
 
@@ -474,10 +537,11 @@ export const en = {
     'page.body.profile.apiKeys.modal.btn.disabled': 'Disable',
     'page.body.profile.apiKeys.modal.btn.delete': 'Delete',
     'page.body.profile.apiKeys.modal.header': '2FA Verification',
-    'page.body.profile.apiKeys.modal.created_header': 'Created',
+    'page.body.profile.apiKeys.modal.created_header': 'Created API Key',
     'page.body.profile.apiKeys.modal.access_key': 'Access Key',
     'page.body.profile.apiKeys.modal.secret_key': 'Secret Key',
-    'page.body.profile.apiKeys.modal.secret_key_info': 'This information will be shown only once and cannot be retrieved once lost.',
+    'page.body.profile.apiKeys.modal.secret_key_info':
+        'This information will be shown only once and cannot be retrieved once lost.',
     'page.body.profile.apiKeys.modal.secret_key_store': 'Please store it properly.',
     'page.body.profile.apiKeys.modal.note': 'Note',
     'page.body.profile.apiKeys.modal.note_content': `To avoid asset loss, please do not tell your Secret Key and Private Key to others.\
@@ -516,7 +580,6 @@ export const en = {
     'page.body.profile.content.result.failed': 'Failed',
     'page.body.profile.content.result.denied': 'Denied',
 
-
     /* Profile - verification */
     'page.body.profile.verification.email.title': 'Email address',
     'page.body.profile.verification.email.subtitle': 'Withdrawal allowed',
@@ -538,22 +601,31 @@ export const en = {
     'page.body.profile.verification.verify': 'Verify',
     'page.body.profile.verification.verified': 'Verified',
     'page.body.profile.verification.progress.level': 'Level',
-    'page.body.profile.verification.progress.tooltip.email.default': 'Email address to to get level 1 and allow Withdrawal',
+    'page.body.profile.verification.progress.tooltip.email.default':
+        'Email address to to get level 1 and allow Withdrawal',
     'page.body.profile.verification.progress.tooltip.email.rejected': 'Your email was rejected',
-    'page.body.profile.verification.progress.tooltip.email.pending': 'Email address verification may take 1-3 business days.',
-    'page.body.profile.verification.progress.tooltip.phone.default': 'Verify Phone number to get level 2 and allow Deposits and Trades',
+    'page.body.profile.verification.progress.tooltip.email.pending':
+        'Email address verification may take 1-3 business days.',
+    'page.body.profile.verification.progress.tooltip.phone.default':
+        'Verify Phone number to get level 2 and allow Deposits and Trades',
     'page.body.profile.verification.progress.tooltip.phone.rejected': 'Your phone was rejected',
-    'page.body.profile.verification.progress.tooltip.phone.pending': 'Phone number verification may take 1-3 business days.',
-    'page.body.profile.verification.progress.tooltip.profile.default': 'Complete your profile to get level 3 and Increase Withdrawal limit to 1 BTC',
+    'page.body.profile.verification.progress.tooltip.phone.pending':
+        'Phone number verification may take 1-3 business days.',
+    'page.body.profile.verification.progress.tooltip.profile.default':
+        'Complete your profile to get level 3 and Increase Withdrawal limit to 1 BTC',
     'page.body.profile.verification.progress.tooltip.profile.rejected': 'Your profile was rejected',
-    'page.body.profile.verification.progress.tooltip.profile.pending': 'Profile verification may take 1-3 business days.',
-    'page.body.profile.verification.progress.tooltip.document.default': 'Verify you identity to get level 4 and Increase Withdrawal limit to 10 BTC',
+    'page.body.profile.verification.progress.tooltip.profile.pending':
+        'Profile verification may take 1-3 business days.',
+    'page.body.profile.verification.progress.tooltip.document.default':
+        'Verify you identity to get level 4 and Increase Withdrawal limit to 10 BTC',
     'page.body.profile.verification.progress.tooltip.document.rejected': 'Your identity was rejected',
-    'page.body.profile.verification.progress.tooltip.document.pending': 'Identity verification may take 1-3 business days.',
-    'page.body.profile.verification.progress.tooltip.address.default': 'Verify Proof of residence to get level 5 and Increase Withdrawal limit to 100 BTC',
+    'page.body.profile.verification.progress.tooltip.document.pending':
+        'Identity verification may take 1-3 business days.',
+    'page.body.profile.verification.progress.tooltip.address.default':
+        'Verify Proof of residence to get level 5 and Increase Withdrawal limit to 100 BTC',
     'page.body.profile.verification.progress.tooltip.address.rejected': 'Your proof of residence was rejected',
-    'page.body.profile.verification.progress.tooltip.address.pending': 'Proof of residence verification may take 1-3 business days.',
-
+    'page.body.profile.verification.progress.tooltip.address.pending':
+        'Proof of residence verification may take 1-3 business days.',
 
     /* KYC */
     'page.confirm.title.email': 'Get Verified your email',
@@ -604,7 +676,8 @@ export const en = {
     'page.body.kyc.address.uploadFile.sizeMinMax': 'Minimum file size is {min}MB, maximum file size is {value}MB',
     'page.body.kyc.address.uploadFile.sizeMax': 'Maximum file size is {value}MB',
     'page.body.kyc.address.uploadFile.formats': 'JPG, JPEG, PNG, PDF formats',
-    'page.body.kyc.address.uploadFile.tip': 'Please take a photo or scan of a utility bill showing your name/surname and your address. For the verification to work, the bill must be issued in your name and less than a 3 months ago',
+    'page.body.kyc.address.uploadFile.tip':
+        'Please take a photo or scan of a utility bill showing your name/surname and your address. For the verification to work, the bill must be issued in your name and less than a 3 months ago',
 
     'page.body.kyc.phone.head': 'Verify Phone',
     'page.body.kyc.phone.enterPhone': 'Enter phone number',
@@ -647,7 +720,7 @@ export const en = {
     'page.header.signIn.email': 'Email',
     'page.header.signIn.password': 'Password',
     'page.header.signIn.password.message.error': 'Password is invalid',
-    'page.header.signIn.receiveConfirmation': 'Didn\'t receive your confirmation email?',
+    'page.header.signIn.receiveConfirmation': "Didn't receive your confirmation email?",
     'page.header.signIn.forgotPassword': 'Forgot your password?',
     'page.header.signIn.resetPassword.title': 'Reset password',
     'page.header.signIn.resetPassword.newPassword': 'New password',
@@ -662,16 +735,18 @@ export const en = {
     'page.header.signUp.email': 'Email',
     'page.header.signUp.email.message.error': 'Email is invalid',
     'page.header.signUp.password': 'Password',
-    'page.header.signUp.password.message.error': 'Password must contain at least 8 characters, at least one capital letter and one digit',
+    'page.header.signUp.password.message.error':
+        'Password must contain at least 8 characters, at least one capital letter and one digit',
     'page.header.signUp.confirmPassword': 'Confirm Password',
-    'page.header.signUp.confirmPassword.message.error': 'Passwords don\'t match',
+    'page.header.signUp.confirmPassword.message.error': "Passwords don't match",
     'page.header.signUp.referalCode': 'Referral Code',
     'page.header.signUp.terms': 'I have read and agree to the Terms of Service',
     'page.header.signUp.modal.header': 'VERIFY YOUR EMAIL ADDRESS',
-    'page.header.signUp.modal.body': 'To complete registration, check for an ' +
-                                      'email in your inbox with further ' +
-                                      'instruction. If you cannot find the email, ' +
-                                      'please check your spam folder',
+    'page.header.signUp.modal.body':
+        'To complete registration, check for an ' +
+        'email in your inbox with further ' +
+        'instruction. If you cannot find the email, ' +
+        'please check your spam folder',
     'page.header.signUp.modal.footer': 'OK',
     'page.header.signUp.strength.password': 'Password Strength',
     'page.header.signUp.password.too.weak': 'TOO WEAK',
@@ -683,7 +758,7 @@ export const en = {
     'page.forgotPassword': 'Forgot Password',
     'page.forgotPassword.message': 'Enter email to reset password',
     'page.password2fa': '2FA verification',
-    'page.password2fa.message': 'Enter 2fa code from the app',
+    'page.password2fa.message': 'Please enter 6 Digits authentication code from your App',
     'page.forgotPassword.email': 'Email',
     'page.forgotPassword.send': 'Send',
     'page.noDataToShow': 'There is no data to show',
@@ -694,7 +769,6 @@ export const en = {
 
     'page.modal.expired.title': 'Your session has expired',
     'page.modal.expired.submit': 'Log in again',
-
 
     /* Customization */
     'page.body.customization.tabs.themes': 'Colors',
@@ -745,7 +819,6 @@ export const en = {
     'page.body.customization.images.field.url.placeholder': 'https://yourimage',
 
     'page.body.customization.images.header_logo.title': 'Header logo',
-
 
     /* Documentation */
     'page.documentation.header.version.title': 'Version:',
@@ -815,7 +888,6 @@ export const en = {
     'page.body.500.maintenance': 'The platform is under maintenance',
     'page.body.500.availableSoon': 'It will be available as soon as possible',
 
-
     // success messages
     'success.addresses.accepted': 'Addresses upload was successful',
     'success.documents.accepted': 'Documents upload was successful',
@@ -824,7 +896,7 @@ export const en = {
     'success.otp.enabled': '2FA was enabled',
     'success.otp.disabled': '2FA was disabled',
     'success.password.changed': 'Password was changed',
-    'success.password.forgot': 'Password reset link has been sent to your email',
+    'success.password.forgot': 'Password reset code has been sent to your email',
     'success.password.changed.successfuly': 'Password was changed',
     'success.order.cancelling': 'Order is being cancelled',
     'success.order.canceled': 'Order was cancelled',
@@ -852,9 +924,10 @@ export const en = {
     'error.request_entity_too_large': 'Order - request entity too large',
 
     // account
-    'resource.labels.private': 'Can\'t update label',
+    'resource.labels.private': "Can't update label",
     'resource.user.no_activity': 'No activity recorded or wrong topic',
     'resource.profile.not_exist': 'User has no profile',
+    // 'resource.profile.doesnt_exist_or_not_editable': 'Resource profile doesnt exist ',
     'resource.profile.exist': 'Profile already exists',
     'resource.api_key.2fa_disabled': 'Only accounts with enabled 2FA alowed',
     'resource.api_key.missing_otp': 'Theaccount has enabled 2FA but OTP code is missing',
@@ -864,11 +937,12 @@ export const en = {
     'resource.phone.exists': 'Phone number was not verified. Verification code was resent.',
     'resource.phone.number_exist': 'Phone number already exists',
     'resource.phone.verification_invalid': 'Phone is not found or verification code is invalid',
+    'resource.phone.too_many_unverified': 'Too many unverified phone numbers',
     'resource.documents.limit_reached': 'Maximum number of documents already reached',
     'resource.documents.limit_will_be_reached': 'Documents amount will reach limit by this upload',
-    'resource.otp.already_enabled':'2FA has been already enabled for this account',
+    'resource.otp.already_enabled': '2FA has been already enabled for this account',
     'resource.otp.invalid': 'OTP code is invalid',
-    'resource.password.doesnt_match': 'New passwords don\'t match',
+    'resource.password.doesnt_match': "New passwords don't match",
     'resource.password.prev_pass_not_correct': 'Previous password is not correct',
     'resource.password.no_change_provided': 'New password cant be the same, as old one',
     'resource.document.empty_doc_expire': 'Expiration Date is invalid',
@@ -876,16 +950,20 @@ export const en = {
     'password.password.password_strength': 'Password is too weak',
 
     'email.taken': 'Email already have been taken',
+    'success.confirm.code.created': 'Account created',
+    'account.wallet.not_found': 'Something went wrong, please try again later',
 
     'identity.user.invalid_referral_format': 'Invalid referral uid format',
-    'identity.user.referral_doesnt_exist': 'Referral doesn\'t exist',
-    'identity.user.active_or_doesnt_exist': 'User doesn\'t exist or has already been activated',
-    'identity.password.user_doesnt_exist': 'User doesn\'t exist',
-    'identity.user.passwords_doesnt_match': 'Passwords don\'t match',
-    'identity.user.utilized_token': 'JWT has already been used',
+    'identity.user.referral_doesnt_exist': "Referral doesn't exist",
+    'identity.user.active_or_doesnt_exist': "User doesn't exist or has already been activated",
+    'identity.password.user_doesnt_exist': "User doesn't exist",
+    'identity.user.passwords_doesnt_match': "Passwords don't match",
+    'identity.user.utilized_token': 'Code incorrect, please try again',
+    'identity.user.wrong_code_error': 'Code incorrect, please try again',
     'identity.session.invalid_login_params': 'Invalid Email or Password',
     'identity.session.invalid': 'Invalid Session',
-    'identity.captcha.required': 'captcha_response is required',
+    'identity.captcha.required': 'Captcha is required',
+    'identity.captcha.verification_failed': 'Captcha response is required',
     'identity.captcha.mandatory_fields': 'Mandatory fields must be filled in',
     'identity.session.not_active': 'Your account is not active',
     'identity.session.banned': 'Your account is banned',
@@ -914,13 +992,13 @@ export const en = {
     'jwt.decode_and_verify': 'Failed to decode and verify JWT',
     'authz.invalid_session': 'Failed to decode cookies',
     'authz.user_not_active': 'User is not active',
-    'authz.invalid_signature': 'API Key header \'signature\' is invalid',
-    'authz.apikey_not_active': 'API Key state is \'inactive',
+    'authz.invalid_signature': "API Key header 'signature' is invalid",
+    'authz.apikey_not_active': "API Key state is 'inactive",
     'authz.disabled_2fa': 'API Key owner has disabled 2FA',
     'authz.invalid_api_key_headers': 'Blank or missing API Key headers',
     'authz.permission_denied': 'Path is denylisted',
     'authz.unexistent_apikey': 'X-Auth-Apikey header is invalid',
-    'authz.client_session_mismatch': 'Session mismatch',
+    'authz.client_session_mismatch': 'Login session has expired',
     'authz.csrf_token_mismatch': 'CSRF token mismatch',
 
     // validation errors
@@ -941,6 +1019,8 @@ export const en = {
     'identity.session.invalid_captcha_format': 'Invalid captcha format',
 
     // resource module
+    'resource.email.code_sent_too_fast': 'You sent the verification email code too fast',
+
     'resource.otp.missing_code': 'OTP code is missing',
     'resource.otp.empty_code': 'OTP code is missing or empty',
 
@@ -951,13 +1031,12 @@ export const en = {
 
     'resource.documents.missing_doc_expire': 'Documents expiration date is missing',
     'resource.documents.empty_doc_expire': 'Documents expiration date is missing or empty',
-    'resource.documents.expire_not_a_date' : 'Documents expiration is not a date',
+    'resource.documents.expire_not_a_date': 'Documents expiration is not a date',
     'resource.documents.missing_doc_type': 'Documents type is missing',
     'resource.documents.empty_doc_type': 'Documents type is missing or empty',
     'resource.documents.missing_doc_number': 'Documents number is missing',
     'resource.documents.empty_doc_number': 'Documents number is missing or empty',
     'resource.documents.missing_upload': 'Attachment is missing',
-
 
     'resource.user.missing_topic': 'Topic is missing',
     'resource.user.empty_topic': 'Topic is missing or empty',
@@ -990,9 +1069,10 @@ export const en = {
     'resource.phone.empty_phone_number': 'Phone number is missing or empty',
     'resource.phone.missing_verification_code': 'Verification code is missing',
     'resource.phone.empty_verification_code': 'Verification code is missing or empty',
+    'resource.phone.too_many_retries': 'You have retried the request verification code too many times',
 
     'account.currency.withdrawal.disabled': 'Withdraw is currenctly disabled for currency',
-    'account.currency.doesnt_exist': 'Currency doesn\'t exist',
+    'account.currency.doesnt_exist': "Currency doesn't exist",
     'account.currency.deposit_disabled': 'Deposit is currently disabled',
     'account.deposit.invalid_state': 'Deposit invalid state',
     'account.deposit.non_integer_limit': 'Value you send could not be parsed into Integer type',
@@ -1000,7 +1080,7 @@ export const en = {
     'account.deposit.non_positive_page': 'Page value must be positive',
     'account.deposit.empty_txid': 'Txid is missing, txid is empty',
     'account.deposit_address.invalid_address_format': 'Invalid deposit address format',
-    'account.deposit_address.doesnt_support_cash_address_format': 'Currency doesn\'t support cash address format',
+    'account.deposit_address.doesnt_support_cash_address_format': "Currency doesn't support cash address format",
     'account.withdraw.non_integer_limit': 'Limit Value you send could not be parsed into Integer type',
     'account.withdraw.invalid_limit': 'Invalid limit',
     'account.withdraw.non_positive_page': 'Page value must be positive',
@@ -1018,10 +1098,10 @@ export const en = {
     'account.withdraw.disabled_api': 'Withdrawal API is disabled',
 
     'account.beneficiary.invalid_pin': 'Invalid beneficiary activation pin',
-    'account.beneficiary.cant_resend_within_1_minute': 'Can\'t resend activation pin within 1 minute',
+    'account.beneficiary.cant_resend_within_1_minute': "Can't resend activation pin within 1 minute",
     'account.beneficiary.duplicate_address': 'Beneficiary address already exists',
 
-    'market.market.doesnt_exist': 'Market doesn\'t exist',
+    'market.market.doesnt_exist': "Market doesn't exist",
     'market.order.invalid_state': 'Invalid deposit state',
     'market.order.invalid_limit': 'Invalid limit',
     'market.order.non_integer_limit': 'Limit value you send could not be parsed into Integer type',
@@ -1044,13 +1124,13 @@ export const en = {
     'market.order.invalid_volume_or_price': 'Invalid volume or price',
     'market.order.create_error': 'Failed to create error',
     'market.order.cancel_error': 'Failed to cancel error',
-    'market.order.market_order_price': 'Market order doesn\'t have price',
+    'market.order.market_order_price': "Market order doesn't have price",
     'market.trade.not_permitted': 'Please, pass the corresponding verification steps to enable trading',
     'market.account.insufficient_balance': 'Account balance is insufficient',
 
-    'public.currency.doesnt_exist': 'Currency doesn\'t exist',
+    'public.currency.doesnt_exist': "Currency doesn't exist",
     'public.currency.invalid_type': 'Invalid currency type',
-    'public.market.doesnt_exist': 'Market doesn\'t exist',
+    'public.market.doesnt_exist': "Market doesn't exist",
     'public.order_book.non_integer_ask_limit': 'Ask limit value you send could not be parsed into Integer type',
     'public.order_book.invalid_ask_limit': 'Invlalid ask limit',
     'public.order_book.non_integer_bid_limit': 'Bid limir value you send could not be parsed into Integer type',
@@ -1081,8 +1161,9 @@ export const en = {
     // metamask
     'metamask.success.connected': '[MetaMask] Account connected',
 
-    'metamask.error.noExtension': '[MetaMask] No Ethereum browser extension detected, install MetaMask on desktop or visit from a dApp browser on mobile',
-    'metamask.error.unsupportedNetwork': '[MetaMask] You\'re connected to an unsupported network',
+    'metamask.error.noExtension':
+        '[MetaMask] No Ethereum browser extension detected, install MetaMask on desktop or visit from a dApp browser on mobile',
+    'metamask.error.unsupportedNetwork': "[MetaMask] You're connected to an unsupported network",
     'metamask.error.unauthorized': '[MetaMask] Please authorize this website to access your Ethereum account',
     'metamask.error.unknown': '[MetaMask] An unknown error occurred. Check the console for more details',
 
@@ -1103,7 +1184,8 @@ export const en = {
 
     'page.body.internal.transfer.continue': 'Continue',
 
-    'page.body.internal.transfer.please.enable.2fa': 'Please, enable 2FA to be able to use internal transfers functionality',
+    'page.body.internal.transfer.please.enable.2fa':
+        'Please, enable 2FA to be able to use internal transfers functionality',
     'page.body.internal.transfer.enable': 'Enable',
 
     'page.body.internal.transfer.notice.uid': `All transactions are final! Please, double check receiver's uid before sending.`,
@@ -1114,7 +1196,8 @@ export const en = {
     'page.body.internal.transfer.account.balance': 'Available balance: ',
     'page.body.internal.transfer.insufficient.balance': ' - Insufficient balance',
 
-    'page.body.internal.transfer.header.input.username': '1. Enter a valid username of a user whom you want to transfer money',
+    'page.body.internal.transfer.header.input.username':
+        '1. Enter a valid username of a user whom you want to transfer money',
     'page.body.internal.transfer.label.username': 'Send to account (username)',
     'page.body.internal.transfer.placeholder.username': 'Send to account (username)',
     'page.body.internal.transfer.notice.username': `All transactions are final! Please, double check receiver's username before sending.`,
@@ -1177,14 +1260,16 @@ export const en = {
     'page.body.p2p.create.offer.description': 'Description (optional)',
     'page.body.p2p.create.offer.description.placeholder': 'Add any description to your order',
     'page.body.p2p.create.offer.replyMessage': 'Auto reply (optional)',
-    'page.body.p2p.create.offer.replyMessage.placeholder': 'Auto reply message will be sent to the counterparty once the order is created',
+    'page.body.p2p.create.offer.replyMessage.placeholder':
+        'Auto reply message will be sent to the counterparty once the order is created',
     'page.body.p2p.create.offer.create_order': 'Create offer',
     'page.body.p2p.create.offer.header': 'Confirm offer',
     'page.body.p2p.create.offer.type': 'Type',
     'page.body.p2p.create.offer.currency': 'Currency (Fiat)',
     'page.body.p2p.create.offer.confirm': 'Confirm',
     'page.body.p2p.create.offer.cancel': 'Cancel',
-    'page.body.p2p.create.offer.confirm.info': 'After confirmation of the {side} order, the trading assets will be frozen',
+    'page.body.p2p.create.offer.confirm.info':
+        'After confirmation of the {side} order, the trading assets will be frozen',
 
     'page.body.p2p.modal.header.buy': 'Buy',
     'page.body.p2p.modal.header.sell': 'Sell',
@@ -1267,13 +1352,17 @@ export const en = {
     'page.body.p2p.order.transfer.price': 'Price',
     'page.body.p2p.order.transfer.quantity': 'Quantity',
     'page.body.p2p.order.transfer.info.1': '1. Make the payment and notify the seller that you completed the payment.',
-    'page.body.p2p.order.transfer.info.2': '2. Click the "I have paid" button to notify the seller that you made the payment.',
+    'page.body.p2p.order.transfer.info.2':
+        '2. Click the "I have paid" button to notify the seller that you made the payment.',
     'page.body.p2p.order.transfer.order.wait.timer.prepared': 'Payment to be made',
     'page.body.p2p.order.transfer.order.wait.timer.wait': 'Time to confirm',
-    'page.body.p2p.order.transfer.order.wait.warning.prepared': 'Please make a payment within {time} mins, otherwise, the order will be cancelled.',
-    'page.body.p2p.order.transfer.order.wait.warning.wait': 'Please confirm that you have received funds to your bank account.',
+    'page.body.p2p.order.transfer.order.wait.warning.prepared':
+        'Please make a payment within {time} mins, otherwise, the order will be cancelled.',
+    'page.body.p2p.order.transfer.order.wait.warning.wait':
+        'Please confirm that you have received funds to your bank account.',
 
-    'page.body.p2p.order.transfer.order.wait.confirm.checkbox.prepared': 'I have transferred {amount} to the seller’s account',
+    'page.body.p2p.order.transfer.order.wait.confirm.checkbox.prepared':
+        'I have transferred {amount} to the seller’s account',
     'page.body.p2p.order.transfer.order.wait.confirm.checkbox.wait': 'I have received {amount} to my bank account',
     'page.body.p2p.order.transfer.have.paid': 'I have paid',
     'page.body.p2p.order.transfer.cancel.order': 'Cancel order',
@@ -1281,20 +1370,25 @@ export const en = {
     'page.body.p2p.order.transfer.order.wait.logDispute': 'Log dispute',
     'page.body.p2p.order.transfer.order.wait.info': 'Buyer has confirmed the payment',
     'page.body.p2p.order.transfer.tips': 'Tips',
-    'page.body.p2p.order.transfer.tips.text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariaturLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...',
+    'page.body.p2p.order.transfer.tips.text':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariaturLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...',
 
     'page.body.p2p.order.transfer.wait.payment.confirmation.wait': 'Order paid',
-    'page.body.p2p.order.transfer.wait.payment.confirmation.prepared': 'Waiting for buyer\'s payment confirmation.',
-    'page.body.p2p.order.transfer.wait.payment.confirmation.wait.desc': 'You have paid. Wait for the seller\'s payment confirmation before releasing the crypto. It may take {time} min',
-    'page.body.p2p.order.transfer.wait.payment.confirmation.prepared.desc': 'Wait for the buyer\'s payment confirmation before. It may take {time} min.',
+    'page.body.p2p.order.transfer.wait.payment.confirmation.prepared': "Waiting for buyer's payment confirmation.",
+    'page.body.p2p.order.transfer.wait.payment.confirmation.wait.desc':
+        "You have paid. Wait for the seller's payment confirmation before releasing the crypto. It may take {time} min",
+    'page.body.p2p.order.transfer.wait.payment.confirmation.prepared.desc':
+        "Wait for the buyer's payment confirmation before. It may take {time} min.",
     'page.body.p2p.order.transfer.wait.payment.confirmation.timer.prepared': 'Payment to be made',
     'page.body.p2p.order.transfer.wait.payment.confirmation.timer.wait': 'Seller confirmation pending',
     'page.body.p2p.order.transfer.wait.payment.confirmation.timer.sell': 'Payment to be made',
     'page.body.p2p.order.transfer.wait.payment.confirmation.logDispute': 'Log dispute',
-    'page.body.p2p.order.transfer.wait.payment.confirmation.warning.prepared': 'Waiting for confirmation. Time limit: {time} mins, otherwise, the order will be cancelled.',
+    'page.body.p2p.order.transfer.wait.payment.confirmation.warning.prepared':
+        'Waiting for confirmation. Time limit: {time} mins, otherwise, the order will be cancelled.',
 
     'page.body.p2p.dispute.title': 'Log transaction dispute',
-    'page.body.p2p.dispute.description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
+    'page.body.p2p.dispute.description':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
     'page.body.p2p.dispute.attachment.label': 'Upload proof of payment',
     'page.body.p2p.dispute.attachment.btn': 'select file',
     'page.body.p2p.dispute.attachment.description': ' JPG, SVG, PNG, GIF and PDF. Maximum file size is 20MB.',
@@ -1329,7 +1423,7 @@ export const en = {
     'page.body.wallets.overview.action.transfer': 'Transfer',
     'page.body.wallets.overview.action.p2p': 'P2P',
     'page.body.wallets.overview.seach': 'Search',
-    'page.body.wallets.overview.nonZero': 'Non Zero Balances',
+    'page.body.wallets.overview.nonZero': 'Hide 0 Balance Wallet',
     'page.body.wallets.transfers.transferType': 'Transfer Type',
     'page.body.wallets.transfers.from': 'From',
     'page.body.wallets.transfers.to': 'To',
@@ -1339,7 +1433,8 @@ export const en = {
     'page.body.wallets.transfers.form.available': 'Available',
     'page.body.wallets.transfers.form.confirm': 'Confirm',
     'page.body.wallets.transfers.note': 'Note',
-    'page.body.wallets.transfers.note.message': 'Internal transfers are free and instant. You can use them to manage your funds between different accounts on the platform',
+    'page.body.wallets.transfers.note.message':
+        'Internal transfers are free and instant. You can use them to manage your funds between different accounts on the platform',
 
     // p2p success messages
     'success.p2p.transfer.created': 'Transfer was created',

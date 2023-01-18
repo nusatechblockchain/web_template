@@ -1,0 +1,30 @@
+.custom-modal-mobile {
+    z-index: 99999999;
+    background: var(--modal-background-color) !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1 !important;
+
+    display: flex;
+
+    .custom-modal-dialog {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        margin-top: 0;
+    }
+
+    .custom-modal-content {
+        background-color: var(--main-background-color);
+        padding: 12px;
+        width: 100%;
+        overflow: auto;
+        .body {
+            /* max-height: 60vh; */
+            overflow-y: auto;
+        }
+    }
+}

@@ -1,0 +1,48 @@
+.profile-detail {
+    .img-profile-detail {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+
+    .rotate-90 {
+        transform: rotate(-90deg);
+    }
+
+    .arrow-profile {
+        height: 7px;
+        margin-top: -2px;
+    }
+
+    .profile-menu {
+        .close-icon img {
+            position: absolute;
+            right: 10px;
+            top: 16px;
+            cursor: pointer;
+        }
+        .icon-bg {
+            height: 48px;
+            width: 48px;
+            border-radius: 50%;
+            background-color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-menu {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .menu-item {
+            width: 45%;
+            border-bottom: 1px solid var(--dark-400);
+            .check {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+        }
+    }
+}
