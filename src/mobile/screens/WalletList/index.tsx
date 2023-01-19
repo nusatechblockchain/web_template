@@ -36,7 +36,6 @@ interface ExtendedWallet extends Wallet {
 
 const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     useWalletsFetch();
-    useMarketsTickersFetch();
     useMarketsFetch();
     useDocumentTitle('Wallets');
 
@@ -81,6 +80,10 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
         }
     }, [wallets, currencies, isP2PEnabled]);
 
+    /**
+     * Render data wallet into table include currency, total balance and estimated value
+     * and filtering data wallet by balance
+     */
     const renderTableData = React.useCallback(
         (data) => {
             const list = nonZeroSelected
@@ -203,7 +206,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
 
     return (
         <React.Fragment>
-            <div className="mobile-container wallet-list no-header dark-bg-main">
+            <div className="mobile-container wallet-list no-header dark-bg-main position-relative">
                 <h1 className="w-100 heading-one mb-24 mt-0">{formatMessage({ id: 'page.mobile.wallets.balance' })}</h1>
                 <div className="estimate-container d-flex flex-column w-100">
                     <div className="total-container w-50 d-flex flex-column">
@@ -276,7 +279,19 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                         />
                     </div>
                 </div>
-                <Table data={renderTableData(wallets)} />
+                {!filteredWallets.length ? (
+                    <div className="w-100 h-100 grey-text-accent">
+                        <div className="bg-transparent d-flex justify-content-center align-items-center">
+                            <span
+                                className="spinner-border spinner-border-sm mr-2"
+                                role="status"
+                                aria-hidden="true"></span>
+                            <span>Loading Data...</span>
+                        </div>
+                    </div>
+                ) : (
+                    <Table data={renderTableData(wallets)} />
+                )}
             </div>
 
             {/* ========= Show Modal Locked 2FA =========== */}
