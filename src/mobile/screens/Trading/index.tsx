@@ -63,6 +63,8 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
     useMarketsFetch();
 
+    const ask = [...asks].sort((a, b) => +b[0] - +a[0]);
+
     const translate = React.useCallback((id: string) => formatMessage({ id: id }), [formatMessage]);
 
     const defaultTicker = {
@@ -341,7 +343,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
 
                     <div className={`w-40 ${isMobileDevice && 'mobile-device order-book-mobile'}`}>
                         <OrderBook
-                            asks={asks}
+                            asks={ask}
                             bids={bids}
                             loading={loading}
                             handleSelectPriceAsks={handleSelectPriceAsks}
