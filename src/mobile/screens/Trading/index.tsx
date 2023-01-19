@@ -205,32 +205,6 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
         }
     }, [listOrder, filterBuy, filterSell, hideOtherPairs]);
 
-    // ganti harga buy
-    const handleChangePriceBuy = (e: string) => {
-        const value = e.replace(/[^0-9\.]/g, '');
-        setPriceBuy(value);
-    };
-
-    // ganti harga sell
-    const handleChangePriceSell = (e: string) => {
-        const value = e.replace(/[^0-9\.]/g, '');
-        setPriceSell(value);
-    };
-
-    // ganti amount buy
-    const handleChangeAmountBuy = (e: string) => {
-        const value = e.replace(/[^0-9\.]/g, '');
-        setAmountBuy(value);
-        setOrderPercentageBuy(0);
-    };
-
-    // ganti amout sell
-    const handleChangeAmounSell = (e: string) => {
-        const value = e.replace(/[^0-9\.]/g, '');
-        setAmountSell(value);
-        setOrderPercentageSell(0);
-    };
-
     const handleFilterSell = () => {
         setFilterSell(!filterSell);
     };

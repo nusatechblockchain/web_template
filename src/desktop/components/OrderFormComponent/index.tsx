@@ -79,8 +79,6 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
     const safePrice = totalPrice / Number(amount) || price;
     const precision = (+currentMarket?.min_amount + '').split('.')[1];
 
-    console.log(precision);
-
     return (
         <React.Fragment>
             <form action="">
@@ -90,9 +88,9 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         disabled={orderType === 'market'}
                         defaultValue={
                             orderType === 'market'
-                                ? amount
+                                ? amount != '0'
                                     ? handleSetValue(
-                                          +Decimal.format(safePrice, currentMarket?.price_precision, ','),
+                                          Decimal.format(+safePrice, currentMarket?.price_precision, ','),
                                           tickerItem.last
                                       )
                                     : tickerItem.last
@@ -100,9 +98,9 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         }
                         value={
                             orderType === 'market'
-                                ? amount
+                                ? amount != '0'
                                     ? handleSetValue(
-                                          +Decimal.format(safePrice, currentMarket?.price_precision, ','),
+                                          Decimal.format(+safePrice, currentMarket?.price_precision, ','),
                                           tickerItem.last
                                       )
                                     : tickerItem.last
@@ -152,6 +150,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     label100={labelPercent100}
                     handleSide={handleSide}
                     side={side}
+                    amount={amount}
                 />
 
                 <div className="form-group mb-3 position-relative  w-100">

@@ -2,7 +2,7 @@ import React, { FC, ReactElement, useMemo, useCallback, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDepthFetch, useOpenOrdersFetch } from 'src/hooks';
+import { useDepthFetch, useOpenOrdersFetch } from '../../../hooks';
 import { Decimal } from '../../../components';
 import { localeDate, setTradeColor } from '../../../helpers';
 import {
@@ -25,13 +25,14 @@ import {
     selectWallets,
     selectOrderExecuteLoading,
     orderExecuteFetch,
-} from 'src/modules';
-import { incrementalOrderBook } from 'src/api';
+} from '../../../modules';
+import { incrementalOrderBook } from '../../../api';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
 import { OrderCommon, OrderSide } from '../../../modules/types';
 import { getTriggerSign } from './helpers';
 import { getTotalPrice, getAmount } from '../../../helpers';
-import { CloseIconTrade } from 'src/assets/images/CloseIcon';
+import { CloseIconTrade } from '../../../assets/images/CloseIcon';
+import { Modal } from '../../../desktop/components';
 
 export const TradingScreen: FC = (): ReactElement => {
     const { currency = '' } = useParams<{ currency?: string }>();
@@ -50,11 +51,15 @@ export const TradingScreen: FC = (): ReactElement => {
     const wallets = useSelector(selectWallets);
     const orderLoading = useSelector(selectOrderExecuteLoading);
 
+    // State Open Order
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
     const [list, setList] = useState([]);
     const [filterSell, setFilterSell] = useState(false);
     const [filterBuy, setFilterBuy] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showModalCancel, setShowModalCancel] = useState(false);
+    const [showModalCancelAll, setShowModalCancelAll] = useState(false);
+    // End State Open Order
 
     // State Order Form
     const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
@@ -69,7 +74,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
-    // End Order Form
+    // End State Order Form
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
     useDepthFetch();
@@ -112,23 +117,23 @@ export const TradingScreen: FC = (): ReactElement => {
             const data =
                 listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
             setList(data);
-        }
-        if (list && list[0] && filterSell) {
-            const sell = list.filter((item) => item.side === 'sell');
-            setList(sell);
-        }
 
-        if (list && list[0] && filterBuy) {
-            const buy = list.filter((item) => item.side === 'buy');
-            setList(buy);
-        }
+            const temp = data;
+            if (list && list[0] && filterSell && !filterBuy) {
+                const sell = temp.filter((item) => item.side === 'sell');
+                setList(sell);
+            } else if (list && list[0] && filterBuy && !filterSell) {
+                const buy = temp.filter((item) => item.side === 'buy');
+                setList(buy);
+            }
 
-        if (hideOtherPairs) {
-            setList([]);
+            if (hideOtherPairs) {
+                setList([]);
+            }
         }
     }, [listOrder, filterBuy, filterSell, hideOtherPairs]);
 
-    // Function Market List
+    // ======================= Function Market List =======================
     const handleRedirectToTrading = (id: string) => {
         const currentMarket: Market | undefined = markets.find((item) => item.id === id);
 
@@ -141,12 +146,12 @@ export const TradingScreen: FC = (): ReactElement => {
             history.push(
                 `/markets/${currentMarket.type == 'spot' ? 'trading/' : '/trading-future/'}${currentMarket.id}`
             );
+            resetForm();
         }
     };
-    // End Function Market List
+    // ======================= End Function Market List =======================
 
-    // =================== Function Order Form =======================
-
+    // ======================= Function Order Form =======================
     // buat yang type market
     const totalPrice = getTotalPrice(
         side === 'buy' ? amountBuy : amountSell,
@@ -167,7 +172,16 @@ export const TradingScreen: FC = (): ReactElement => {
 
         const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
 
-        const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
+        let limit: string | number;
+        if (orderPercentageSell !== 0) {
+            if (priceSell === '0' || priceSell === '') {
+                limit = '0';
+            } else {
+                limit = +totalSell / +priceSell;
+            }
+        } else {
+            limit = amountSell;
+        }
 
         setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
@@ -195,8 +209,16 @@ export const TradingScreen: FC = (): ReactElement => {
         // const safePrice = +totalPrice / +totalAmount || priceBuy;
         const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
 
-        const limit = orderPercentageBuy !== 0 ? +totalBuy / +priceBuy : amountBuy;
-
+        let limit: string | number;
+        if (orderPercentageBuy !== 0) {
+            if (priceBuy === '0' || priceBuy === '') {
+                limit = '0';
+            } else {
+                limit = +totalBuy / +priceBuy;
+            }
+        } else {
+            limit = amountBuy;
+        }
         setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
 
@@ -320,9 +342,9 @@ export const TradingScreen: FC = (): ReactElement => {
         setOrderType(e);
         resetForm();
     };
-    // End Order Form
+    // ======================= End Function Order Form =======================
 
-    // Function Order Book
+    // ======================= Function Order Book =======================
     const handleSelectPriceAsks = (e: string) => {
         setPriceSell(e);
         setPriceBuy(e);
@@ -332,9 +354,30 @@ export const TradingScreen: FC = (): ReactElement => {
         setPriceBuy(e);
         setPriceSell(e);
     };
-    // End Function Order Book
+    // ======================= End Function Order Book =======================
 
-    // Function Open Orders
+    // ======================= Function Open Orders =======================
+    const handleCancel = (order: OrderCommon) => {
+        dispatch(openOrdersCancelFetch({ order, list }));
+        setTimeout(() => {
+            if (current) {
+                dispatch(userOpenOrdersFetch({ market: current }));
+            }
+        }, 1000);
+    };
+
+    const handleCancelAll = () => {
+        if (currency) {
+            dispatch(ordersCancelAllFetch({ market: currency }));
+        }
+
+        setTimeout(() => {
+            if (currency) {
+                dispatch(userOpenOrdersFetch({ market: current }));
+            }
+        }, 1000);
+    };
+
     const headersKeys = useMemo(
         () => [
             'Date',
@@ -367,7 +410,9 @@ export const TradingScreen: FC = (): ReactElement => {
             'Trigger',
             'Filled',
             'Side',
-            <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
+            <p
+                className="text-sm danger-text text-right font-bold mb-0 ml-2 cursor-pointer"
+                onClick={() => handleCancelAll()}>
                 Cancel All{' '}
                 <span className="ml-2">
                     <CloseIconTrade />
@@ -447,36 +492,19 @@ export const TradingScreen: FC = (): ReactElement => {
                         </Decimal>
                         %
                     </span>,
-                    side,
-                    <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
-                        Cancel
-                    </button>,
+                    <p className={`m-0 p-0 text-sm font-semibold ${side === 'sell' ? 'danger-text' : 'contrast-text'}`}>
+                        {side === 'sell' ? 'Sell' : 'Buy'}
+                    </p>,
+                    <div className="d-flex justify-content-end">
+                        <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
+                            Cancel
+                        </button>
+                    </div>,
                 ];
             });
         },
         [markets]
     );
-
-    const handleCancel = (order: OrderCommon) => {
-        dispatch(openOrdersCancelFetch({ order, list }));
-        setTimeout(() => {
-            if (current) {
-                dispatch(userOpenOrdersFetch({ market: current }));
-            }
-        }, 1000);
-    };
-
-    const handleCancelAll = () => {
-        if (currency) {
-            dispatch(ordersCancelAllFetch({ market: currency }));
-        }
-
-        setTimeout(() => {
-            if (currency) {
-                dispatch(userOpenOrdersFetch({ market: current }));
-            }
-        }, 1000);
-    };
 
     const handleToggleCheckbox = React.useCallback(
         (event) => {
@@ -487,13 +515,21 @@ export const TradingScreen: FC = (): ReactElement => {
     );
 
     const handleFilterSell = () => {
+        setFilterBuy(false);
         setFilterSell(!filterSell);
     };
 
     const handleFilterBuy = () => {
+        setFilterSell(false);
         setFilterBuy(!filterBuy);
     };
-    // End Function Open Orders
+
+    // const renderModalContent = () {
+    //     return (
+
+    //     )
+    // }
+    // ======================= End Function Open Orders =======================
 
     return (
         <React.Fragment>
@@ -546,6 +582,8 @@ export const TradingScreen: FC = (): ReactElement => {
                                     orderLoading={orderLoading}
                                     handleSide={handleSide}
                                     handleSelectOrderType={handleSelectOrderType}
+                                    balanceCoin={balance}
+                                    balanceQuote={usdt}
                                 />
                             </div>
                             <div className="grid-item recent-trades">

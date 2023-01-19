@@ -51,8 +51,9 @@ interface ExtendedWalletMobile extends Wallet {
 }
 
 const WalletDetailMobileScreen: React.FC<Props> = (props: Props) => {
+
     // useWalletsFetch();
-    // useMarketsTickersFetch();
+    // useMarketsTickersFetch(); 
     useMarketsFetch();
 
     const { currency = '' } = useParams<{ currency?: string }>();
