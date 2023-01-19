@@ -79,8 +79,6 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
     const safePrice = totalPrice / Number(amount) || price;
     const precision = (+currentMarket?.min_amount + '').split('.')[1];
 
-    console.log(precision);
-
     return (
         <React.Fragment>
             <form action="">

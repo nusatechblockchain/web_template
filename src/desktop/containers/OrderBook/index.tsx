@@ -50,6 +50,11 @@ const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handle
                     </div>
                 ) : (
                     <React.Fragment>
+                        <div className="d-flex  w-100 order-book-title">
+                            <span className="text-left text-left text-sm font-bold grey-text">Price</span>
+                            <span className="text-left text-center text-sm font-bold grey-text">Amount</span>
+                            <span className="text-left text-right text-sm font-bold grey-text">Total</span>
+                        </div>
                         <div className="max-400 position-relative table-ask">
                             <div className="table-background">
                                 {ask &&
@@ -61,14 +66,9 @@ const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handle
                                         />
                                     ))}
                             </div>
+
                             <table id="example" className="table hidden-filter table-small" style={{ width: '100%' }}>
-                                <thead>
-                                    <tr>
-                                        <th className="text-left grey-text">Price</th>
-                                        <th className="text-right grey-text">Amount</th>
-                                        <th className="text-right grey-text">Total</th>
-                                    </tr>
-                                </thead>
+                                <thead></thead>
                                 {!ask || !ask[0] ? (
                                     <tbody>
                                         <tr>
