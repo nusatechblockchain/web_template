@@ -59,6 +59,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const [loading, setLoading] = useState(false);
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalCancelAll, setShowModalCancelAll] = useState(false);
+    const [deleteRow, setDeleteRow] = useState<OrderCommon>();
     // End State Open Order
 
     // State Order Form
@@ -359,6 +360,7 @@ export const TradingScreen: FC = (): ReactElement => {
     // ======================= Function Open Orders =======================
     const handleCancel = (order: OrderCommon) => {
         dispatch(openOrdersCancelFetch({ order, list }));
+        setShowModalCancel(false);
         setTimeout(() => {
             if (current) {
                 dispatch(userOpenOrdersFetch({ market: current }));
@@ -369,6 +371,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const handleCancelAll = () => {
         if (currency) {
             dispatch(ordersCancelAllFetch({ market: currency }));
+            setShowModalCancelAll(false);
         }
 
         setTimeout(() => {
@@ -412,7 +415,7 @@ export const TradingScreen: FC = (): ReactElement => {
             'Side',
             <p
                 className="text-sm danger-text text-right font-bold mb-0 ml-2 cursor-pointer"
-                onClick={() => handleCancelAll()}>
+                onClick={() => setShowModalCancelAll(true)}>
                 Cancel All{' '}
                 <span className="ml-2">
                     <CloseIconTrade />
@@ -496,7 +499,13 @@ export const TradingScreen: FC = (): ReactElement => {
                         {side === 'sell' ? 'Sell' : 'Buy'}
                     </p>,
                     <div className="d-flex justify-content-end">
-                        <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
+                        <button
+                            className="btn-danger"
+                            type="button"
+                            onClick={() => {
+                                setShowModalCancel(true);
+                                setDeleteRow(item);
+                            }}>
                             Cancel
                         </button>
                     </div>,
@@ -524,11 +533,40 @@ export const TradingScreen: FC = (): ReactElement => {
         setFilterBuy(!filterBuy);
     };
 
-    // const renderModalContent = () {
-    //     return (
+    const renderModalContentCancel = () => (
+        <React.Fragment>
+            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Cancel Orders?</h6>
+            <p className="text-sm grey-text-accent m-0 p-0 mb-24">
+                The order you made for this transaction will be canceled and you will have to repeat the transaction
+                again
+            </p>
+            <div className="d-flex">
+                <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalCancel(false)}>
+                    Close
+                </button>
+                <button onClick={() => handleCancel(deleteRow)} type="button" className="btn btn-primary sm px-5">
+                    Confirm
+                </button>
+            </div>
+        </React.Fragment>
+    );
 
-    //     )
-    // }
+    const renderModalContentCancelAll = () => (
+        <React.Fragment>
+            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Cancel All your Orders?</h6>
+            <p className="text-sm grey-text-accent m-0 p-0 mb-24">
+                All order transactions that you make will be cancelled, are you sure to cancel all orders?
+            </p>
+            <div className="d-flex">
+                <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalCancelAll(false)}>
+                    Close
+                </button>
+                <button onClick={() => handleCancelAll()} type="button" className="btn btn-primary sm px-5">
+                    Confirm
+                </button>
+            </div>
+        </React.Fragment>
+    );
     // ======================= End Function Open Orders =======================
 
     return (
@@ -605,6 +643,9 @@ export const TradingScreen: FC = (): ReactElement => {
                         </div>
                     </div>
                 </div>
+
+                {showModalCancel && <Modal show={showModalCancel} content={renderModalContentCancel()} />}
+                {showModalCancelAll && <Modal show={showModalCancelAll} content={renderModalContentCancelAll()} />}
             </div>
         </React.Fragment>
     );
