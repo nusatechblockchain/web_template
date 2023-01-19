@@ -492,7 +492,9 @@ export const TradingScreen: FC = (): ReactElement => {
                         </Decimal>
                         %
                     </span>,
-                    side,
+                    <p className={`m-0 p-0 text-sm font-semibold ${side === 'sell' ? 'danger-text' : 'contrast-text'}`}>
+                        {side === 'sell' ? 'Sell' : 'Buy'}
+                    </p>,
                     <div className="d-flex justify-content-end">
                         <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
                             Cancel
