@@ -169,11 +169,6 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     </div>
                 </div>
                 <div className="input-group mb-8">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">
-                            <PlusIcon />
-                        </span>
-                    </div>
                     <input
                         type="text"
                         placeholder={
@@ -187,11 +182,6 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         className="form-control"
                         id={labelTotal}
                     />
-                    <div className="input-group-append">
-                        <span className="input-group-text">
-                            <MinusIcon />
-                        </span>
-                    </div>
                 </div>
 
                 <div className="mb-0 d-flex justify-content-between">

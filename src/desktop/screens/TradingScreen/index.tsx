@@ -410,7 +410,9 @@ export const TradingScreen: FC = (): ReactElement => {
             'Trigger',
             'Filled',
             'Side',
-            <p className="text-sm danger-text font-bold mb-0 ml-2 cursor-pointer" onClick={() => handleCancelAll()}>
+            <p
+                className="text-sm danger-text text-right font-bold mb-0 ml-2 cursor-pointer"
+                onClick={() => handleCancelAll()}>
                 Cancel All{' '}
                 <span className="ml-2">
                     <CloseIconTrade />
@@ -491,9 +493,11 @@ export const TradingScreen: FC = (): ReactElement => {
                         %
                     </span>,
                     side,
-                    <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
-                        Cancel
-                    </button>,
+                    <div className="d-flex justify-content-end">
+                        <button className="btn-danger" type="button" onClick={() => handleCancel(item)}>
+                            Cancel
+                        </button>
+                    </div>,
                 ];
             });
         },
