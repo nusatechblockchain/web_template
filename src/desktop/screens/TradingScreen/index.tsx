@@ -25,6 +25,7 @@ import {
     selectWallets,
     selectOrderExecuteLoading,
     orderExecuteFetch,
+    alertPush,
 } from 'src/modules';
 import { incrementalOrderBook } from 'src/api';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
@@ -168,7 +169,16 @@ export const TradingScreen: FC = (): ReactElement => {
 
         const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
 
-        const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
+        let limit: string | number;
+        if (orderPercentageSell !== 0) {
+            if (priceSell === '0' || priceSell === '') {
+                limit = '0';
+            } else {
+                limit = +totalSell / +priceSell;
+            }
+        } else {
+            limit = amountSell;
+        }
 
         setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
@@ -196,8 +206,16 @@ export const TradingScreen: FC = (): ReactElement => {
         // const safePrice = +totalPrice / +totalAmount || priceBuy;
         const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
 
-        const limit = orderPercentageBuy !== 0 ? +totalBuy / +priceBuy : amountBuy;
-
+        let limit: string | number;
+        if (orderPercentageBuy !== 0) {
+            if (priceBuy === '0' || priceBuy === '') {
+                limit = '0';
+            } else {
+                limit = +totalBuy / +priceBuy;
+            }
+        } else {
+            limit = amountBuy;
+        }
         setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
 
