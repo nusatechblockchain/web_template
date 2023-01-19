@@ -79,9 +79,10 @@ export const OrderForm: React.FunctionComponent = (props) => {
 
         const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
 
-        const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
+        let limit =
+            // const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
 
-        setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
+            setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
 
     // buat ngeset total sel
@@ -341,8 +342,6 @@ export const OrderForm: React.FunctionComponent = (props) => {
     const handleChangetoSell = () => {
         setMerketType('sell');
     };
-
-    console.log(orderType);
 
     return (
         <React.Fragment>
