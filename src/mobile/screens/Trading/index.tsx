@@ -49,12 +49,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const asks = useSelector(selectDepthAsks);
     const bids = useSelector(selectDepthBids);
     const isMobileDevice = useSelector(selectMobileDeviceState);
-    const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
-    const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
-    const [amountBuy, setAmountBuy] = React.useState('');
-    const [amountSell, setAmountSell] = React.useState('');
     const [loading, setLoading] = React.useState(false);
-    const [marketType, setMerketType] = React.useState('buy');
     const [filterSell, setFilterSell] = React.useState(false);
     const [filterBuy, setFilterBuy] = React.useState(false);
     const [hideOtherPairs, setHideOtherPairs] = React.useState<boolean>(false);
@@ -62,8 +57,6 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const [showSidebar, setShowSidebar] = React.useState(false);
     const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
     const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
-    const [key, setKey] = React.useState('USDT');
-    const isLoggedin = useSelector(selectUserLoggedIn);
 
     useDocumentTitle('Trading');
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
@@ -95,11 +88,13 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const handleSelectPriceAsks = (e: string) => {
         setPriceSell(e);
         setPriceBuy(e);
+        console.log('bismilah');
     };
 
     const handleSelectPriceBids = (e: string) => {
         setPriceBuy(e);
         setPriceSell(e);
+        console.log(priceSell, 'INI PRICE SELL');
     };
 
     const handleToggleCheckbox = React.useCallback(
@@ -342,7 +337,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     </div>
                 )}
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
-                    <OrderForm />
+                    <OrderForm priceBuy={priceBuy} priceSell={priceSell} />
 
                     <div className={`w-40 ${isMobileDevice && 'mobile-device order-book-mobile'}`}>
                         <OrderBook

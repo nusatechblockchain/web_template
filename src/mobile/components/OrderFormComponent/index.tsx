@@ -1,8 +1,15 @@
 import * as React from 'react';
 // import { OrderPercentage } from '../../components';
 import { Decimal } from '../../../components';
-import { selectUserLoggedIn, selectMarketTickers, selectCurrentMarket, Ticker, selectWallets } from '../../../modules';
-import { useSelector } from 'react-redux';
+import {
+    selectUserLoggedIn,
+    selectMarketTickers,
+    selectCurrentMarket,
+    Ticker,
+    selectWallets,
+    alertPush,
+} from '../../../modules';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { MinusIcon, PlusIcon } from '../../assets/Trading';
 
@@ -29,6 +36,8 @@ export interface OrderFormProps {
     handleSide: (e: string) => void;
     handleSubmit: () => void;
     disabledButton: any;
+    handleChangeValueByButton: (increase: boolean, type: string) => void;
+    handleChangeValueAmountByButton: (increase: boolean, type: string) => void;
 }
 
 export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (props) => {
@@ -55,14 +64,26 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
         handleSide,
         handleSubmit,
         disabledButton,
+        handleChangeValueByButton,
+        handleChangeValueAmountByButton,
     } = props;
 
     const isLoggedIn = useSelector(selectUserLoggedIn);
     const tickers = useSelector(selectMarketTickers);
     const currentMarket = useSelector(selectCurrentMarket);
     const wallets = useSelector(selectWallets);
+    const dispatch = useDispatch();
 
     const [disabled, setDisabled] = React.useState(true);
+
+    React.useEffect(() => {
+        if (
+            Decimal.format(+total, currentMarket?.price_precision) >
+            Decimal.format(usdt, currentMarket?.price_precision)
+        ) {
+            dispatch(alertPush({ message: ['Total exceeds your balance'], type: 'error' }));
+        }
+    }, [totalPrice]);
 
     const { currency = '' } = useParams<{ currency?: string }>();
     const tickerItem: Ticker = tickers[currency];
@@ -84,7 +105,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
             <form action="">
                 <div className="input-group mb-8">
                     <div className="input-group-prepend">
-                        <span className="input-group-text">
+                        <span className="input-group-text" onClick={() => handleChangeValueByButton(true, side)}>
                             <PlusIcon />
                         </span>
                     </div>
@@ -102,14 +123,14 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         id={labelPrice}
                     />
                     <div className="input-group-append">
-                        <span className="input-group-text">
+                        <span className="input-group-text" onClick={() => handleChangeValueByButton(false, side)}>
                             <MinusIcon />
                         </span>
                     </div>
                 </div>
                 <div className="input-group mb-8">
                     <div className="input-group-prepend">
-                        <span className="input-group-text">
+                        <span className="input-group-text" onClick={() => handleChangeValueAmountByButton(true, side)}>
                             <PlusIcon />
                         </span>
                     </div>
@@ -126,7 +147,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         placeholder="Amount"
                     />
                     <div className="input-group-append">
-                        <span className="input-group-text">
+                        <span className="input-group-text" onClick={() => handleChangeValueAmountByButton(false, side)}>
                             <MinusIcon />
                         </span>
                     </div>

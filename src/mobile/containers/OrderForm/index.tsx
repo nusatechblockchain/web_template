@@ -21,7 +21,12 @@ import { CustomStylesSelect } from 'src/desktop/components';
 import { ArrowDownIcon, MinusIcon, PlusIcon, SidebarMenuIcon } from '../../assets/Trading';
 import { getTotalPrice, getAmount } from '../../../helpers';
 
-export const OrderForm: React.FunctionComponent = (props) => {
+export interface OrderFormProps {
+    priceSell?: string;
+    priceBuy?: string;
+}
+
+export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
     const { currency = '' } = useParams<{ currency?: string }>();
     const dispatch = useDispatch();
     const currentMarket = useSelector(selectCurrentMarket);
@@ -66,6 +71,58 @@ export const OrderForm: React.FunctionComponent = (props) => {
         side === 'buy' ? bids : asks
     );
 
+    React.useEffect(() => {
+        setPriceBuy(props.priceBuy);
+    }, [props.priceBuy]);
+
+    React.useEffect(() => {
+        setPriceBuy(props.priceSell);
+    }, [props.priceSell]);
+
+    const handleChangeValueByButton = (increase: boolean, type: string) => {
+        let updatedValue: string;
+        if (type == 'Buy') {
+            updatedValue = priceBuy;
+        } else {
+            updatedValue = priceSell;
+        }
+        const increasedValue = (+updatedValue + 10 ** -currentMarket?.price_precision).toFixed(
+            currentMarket?.price_precision
+        );
+        const decreasedValue = (+updatedValue - 10 ** -currentMarket?.price_precision).toFixed(
+            currentMarket?.price_precision
+        );
+
+        updatedValue = increase ? increasedValue : +decreasedValue >= 0 ? decreasedValue : updatedValue;
+        if (type == 'Buy') {
+            setPriceBuy(String(updatedValue));
+        } else {
+            setPriceSell(String(updatedValue));
+        }
+    };
+
+    const handleChangeValueAmountByButton = (increase: boolean, type: string) => {
+        let updatedValue: string;
+        if (type == 'Buy') {
+            updatedValue = priceBuy;
+        } else {
+            updatedValue = priceSell;
+        }
+        const increasedValue = (+updatedValue + 10 ** -currentMarket?.amount_precision).toFixed(
+            currentMarket?.amount_precision
+        );
+        const decreasedValue = (+updatedValue - 10 ** -currentMarket?.amount_precision).toFixed(
+            currentMarket?.amount_precision
+        );
+
+        updatedValue = increase ? increasedValue : +decreasedValue >= 0 ? decreasedValue : updatedValue;
+        if (type == 'Buy') {
+            setAmountBuy(String(updatedValue));
+        } else {
+            setAmountSell(String(updatedValue));
+        }
+    };
+
     // belum kepakai
     const totalAmount = getAmount(
         side === 'buy' ? +usdt : +balance,
@@ -79,10 +136,18 @@ export const OrderForm: React.FunctionComponent = (props) => {
 
         const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
 
-        let limit =
-            // const limit = orderPercentageSell !== 0 ? +totalSell / +priceSell : amountSell;
+        let limit: string | number;
+        if (orderPercentageSell !== 0) {
+            if (priceSell === '0' || priceSell === '') {
+                limit = '0';
+            } else {
+                limit = +totalSell / +priceSell;
+            }
+        } else {
+            limit = amountSell;
+        }
 
-            setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
+        setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageSell, totalSell, priceSell]);
 
     // buat ngeset total sel
@@ -103,7 +168,16 @@ export const OrderForm: React.FunctionComponent = (props) => {
     React.useEffect(() => {
         const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
 
-        const limit = orderPercentageBuy !== 0 ? +totalBuy / +priceBuy : amountBuy;
+        let limit: string | number;
+        if (orderPercentageBuy !== 0) {
+            if (priceBuy === '0' || priceBuy === '') {
+                limit = '0';
+            } else {
+                limit = +totalBuy / +priceBuy;
+            }
+        } else {
+            limit = amountBuy;
+        }
 
         setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
@@ -396,6 +470,8 @@ export const OrderForm: React.FunctionComponent = (props) => {
                         </div>
                         {marketType == 'buy' ? (
                             <OrderFormComponent
+                                handleChangeValueByButton={handleChangeValueByButton}
+                                handleChangeValueAmountByButton={handleChangeValueAmountByButton}
                                 loading={orderLoading}
                                 side={'Buy'}
                                 handleSide={handleSide}
@@ -421,6 +497,8 @@ export const OrderForm: React.FunctionComponent = (props) => {
                             />
                         ) : (
                             <OrderFormComponent
+                                handleChangeValueByButton={handleChangeValueByButton}
+                                handleChangeValueAmountByButton={handleChangeValueAmountByButton}
                                 loading={orderLoading}
                                 side={'Sell'}
                                 handleSide={handleSide}
