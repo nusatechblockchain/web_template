@@ -36,7 +36,6 @@ interface ExtendedWallet extends Wallet {
 
 const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     useWalletsFetch();
-    useMarketsTickersFetch();
     useMarketsFetch();
     useDocumentTitle('Wallets');
 
@@ -81,6 +80,10 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
         }
     }, [wallets, currencies, isP2PEnabled]);
 
+    /**
+     * Render data wallet into table include currency, total balance and estimated value
+     * and filtering data wallet by balance
+     */
     const renderTableData = React.useCallback(
         (data) => {
             const list = nonZeroSelected
@@ -103,7 +106,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                               ? estimateUnitValue(
                                     currency.toUpperCase(),
                                     VALUATION_PRIMARY_CURRENCY,
-                                    +totalBalance,
+                                    Number(totalBalance),
                                     currencies,
                                     markets,
                                     tickers
@@ -111,7 +114,9 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                               : Decimal.format(0, fixed);
 
                       return [
-                          <div className="d-flex justify-content-start align-items-center td-coin">
+                          <Link
+                              to={`/wallets/${currency}/detail`}
+                              className="d-flex justify-content-start align-items-center td-coin">
                               <img
                                   alt={currency?.toUpperCase()}
                                   src={iconUrl}
@@ -121,7 +126,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                                   <h3 className="p-0 m-0 text-one">{name}</h3>
                                   <h4 className="p-0 m-0 text-two">{currency.toUpperCase()}</h4>
                               </div>
-                          </div>,
+                          </Link>,
                           <div className="td-available-order d-flex flex-column justify-content-start align-items-start">
                               <h3 className="p-0 m-0 text-one">Total Balance</h3>
                               <h4 className="p-0 m-0 text-two">
@@ -274,18 +279,19 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                         />
                     </div>
                 </div>
-                {
-                    !filteredWallets.length ? (
-                        <div className='w-100 h-100 grey-text-accent'>
+                {!filteredWallets.length ? (
+                    <div className="w-100 h-100 grey-text-accent">
                         <div className="bg-transparent d-flex justify-content-center align-items-center">
-                          <span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
-                          <span>Loading Data...</span>
+                            <span
+                                className="spinner-border spinner-border-sm mr-2"
+                                role="status"
+                                aria-hidden="true"></span>
+                            <span>Loading Data...</span>
                         </div>
-                          </div>
-                          ) : (
-                <Table data={renderTableData(wallets)} />
-                )
-                }
+                    </div>
+                ) : (
+                    <Table data={renderTableData(wallets)} />
+                )}
             </div>
 
             {/* ========= Show Modal Locked 2FA =========== */}

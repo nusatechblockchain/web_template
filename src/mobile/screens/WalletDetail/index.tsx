@@ -51,9 +51,10 @@ interface ExtendedWalletMobile extends Wallet {
 }
 
 const WalletDetailMobileScreen: React.FC<Props> = (props: Props) => {
-    useWalletsFetch();
-    //useMarketsTickersFetch();
-    //useMarketsFetch();
+
+    // useWalletsFetch();
+    // useMarketsTickersFetch(); 
+    useMarketsFetch();
 
     const { currency = '' } = useParams<{ currency?: string }>();
     useDocumentTitle(`Detail ${currency.toUpperCase()}`);
@@ -235,7 +236,7 @@ const WalletDetailMobileScreen: React.FC<Props> = (props: Props) => {
     }, [totalBalance, currency, currencies, markets, tickers]);
 
     return (
-        <React.Fragment>
+        <>
             <div className="mobile-container wallet-detail dark-bg-main position-relative pg-mobile-wallet-detail">
                 <div className="head-container position-relative mb-24">
                     <Link to={'/wallets'} className="cursor-pointer position-absolute">
@@ -270,7 +271,7 @@ const WalletDetailMobileScreen: React.FC<Props> = (props: Props) => {
                             <h3 className="text-sm grey-text">
                                 {formatMessage({ id: 'page.mobile.wallets.banner.estimated' })}
                             </h3>
-                            <h2 className="text-sm grey-text font-extrabold">{estimatedValue}</h2>
+                            <h2 className="text-sm grey-text estimated-value font-extrabold">{estimatedValue}</h2>
                         </div>
                     </div>
                     ;
@@ -475,7 +476,7 @@ const WalletDetailMobileScreen: React.FC<Props> = (props: Props) => {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 
