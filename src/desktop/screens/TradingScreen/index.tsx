@@ -2,7 +2,7 @@ import React, { FC, ReactElement, useMemo, useCallback, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDepthFetch, useOpenOrdersFetch } from 'src/hooks';
+import { useDepthFetch, useOpenOrdersFetch } from '../../../hooks';
 import { Decimal } from '../../../components';
 import { localeDate, setTradeColor } from '../../../helpers';
 import {
@@ -25,14 +25,14 @@ import {
     selectWallets,
     selectOrderExecuteLoading,
     orderExecuteFetch,
-    alertPush,
-} from 'src/modules';
-import { incrementalOrderBook } from 'src/api';
+} from '../../../modules';
+import { incrementalOrderBook } from '../../../api';
 import { OpenOrders, OrderBook, MarketListTrade, RecentTrades, OrderForm, TradingChart } from '../../containers';
 import { OrderCommon, OrderSide } from '../../../modules/types';
 import { getTriggerSign } from './helpers';
 import { getTotalPrice, getAmount } from '../../../helpers';
-import { CloseIconTrade } from 'src/assets/images/CloseIcon';
+import { CloseIconTrade } from '../../../assets/images/CloseIcon';
+import { Modal } from '../../../desktop/components';
 
 export const TradingScreen: FC = (): ReactElement => {
     const { currency = '' } = useParams<{ currency?: string }>();
@@ -51,11 +51,15 @@ export const TradingScreen: FC = (): ReactElement => {
     const wallets = useSelector(selectWallets);
     const orderLoading = useSelector(selectOrderExecuteLoading);
 
+    // State Open Order
     const [hideOtherPairs, setHideOtherPairs] = useState<boolean>(false);
     const [list, setList] = useState([]);
     const [filterSell, setFilterSell] = useState(false);
     const [filterBuy, setFilterBuy] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showModalCancel, setShowModalCancel] = useState(false);
+    const [showModalCancelAll, setShowModalCancelAll] = useState(false);
+    // End State Open Order
 
     // State Order Form
     const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
@@ -70,7 +74,7 @@ export const TradingScreen: FC = (): ReactElement => {
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
-    // End Order Form
+    // End State Order Form
 
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
     useDepthFetch();
@@ -129,7 +133,7 @@ export const TradingScreen: FC = (): ReactElement => {
         }
     }, [listOrder, filterBuy, filterSell, hideOtherPairs]);
 
-    // Function Market List
+    // ======================= Function Market List =======================
     const handleRedirectToTrading = (id: string) => {
         const currentMarket: Market | undefined = markets.find((item) => item.id === id);
 
@@ -145,10 +149,9 @@ export const TradingScreen: FC = (): ReactElement => {
             resetForm();
         }
     };
-    // End Function Market List
+    // ======================= End Function Market List =======================
 
-    // =================== Function Order Form =======================
-
+    // ======================= Function Order Form =======================
     // buat yang type market
     const totalPrice = getTotalPrice(
         side === 'buy' ? amountBuy : amountSell,
@@ -339,9 +342,9 @@ export const TradingScreen: FC = (): ReactElement => {
         setOrderType(e);
         resetForm();
     };
-    // End Order Form
+    // ======================= End Function Order Form =======================
 
-    // Function Order Book
+    // ======================= Function Order Book =======================
     const handleSelectPriceAsks = (e: string) => {
         setPriceSell(e);
         setPriceBuy(e);
@@ -351,9 +354,30 @@ export const TradingScreen: FC = (): ReactElement => {
         setPriceBuy(e);
         setPriceSell(e);
     };
-    // End Function Order Book
+    // ======================= End Function Order Book =======================
 
-    // Function Open Orders
+    // ======================= Function Open Orders =======================
+    const handleCancel = (order: OrderCommon) => {
+        dispatch(openOrdersCancelFetch({ order, list }));
+        setTimeout(() => {
+            if (current) {
+                dispatch(userOpenOrdersFetch({ market: current }));
+            }
+        }, 1000);
+    };
+
+    const handleCancelAll = () => {
+        if (currency) {
+            dispatch(ordersCancelAllFetch({ market: currency }));
+        }
+
+        setTimeout(() => {
+            if (currency) {
+                dispatch(userOpenOrdersFetch({ market: current }));
+            }
+        }, 1000);
+    };
+
     const headersKeys = useMemo(
         () => [
             'Date',
@@ -476,27 +500,6 @@ export const TradingScreen: FC = (): ReactElement => {
         [markets]
     );
 
-    const handleCancel = (order: OrderCommon) => {
-        dispatch(openOrdersCancelFetch({ order, list }));
-        setTimeout(() => {
-            if (current) {
-                dispatch(userOpenOrdersFetch({ market: current }));
-            }
-        }, 1000);
-    };
-
-    const handleCancelAll = () => {
-        if (currency) {
-            dispatch(ordersCancelAllFetch({ market: currency }));
-        }
-
-        setTimeout(() => {
-            if (currency) {
-                dispatch(userOpenOrdersFetch({ market: current }));
-            }
-        }, 1000);
-    };
-
     const handleToggleCheckbox = React.useCallback(
         (event) => {
             event.preventDefault();
@@ -514,7 +517,13 @@ export const TradingScreen: FC = (): ReactElement => {
         setFilterSell(false);
         setFilterBuy(!filterBuy);
     };
-    // End Function Open Orders
+
+    // const renderModalContent = () {
+    //     return (
+
+    //     )
+    // }
+    // ======================= End Function Open Orders =======================
 
     return (
         <React.Fragment>
