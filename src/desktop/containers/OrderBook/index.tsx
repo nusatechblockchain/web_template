@@ -50,18 +50,18 @@ const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handle
                     </div>
                 ) : (
                     <React.Fragment>
-                        <div className="d-flex  w-100 order-book-title">
+                        <div className="d-flex  w-100 order-book-title justify-content-between">
                             <span className="text-left text-left text-sm font-bold grey-text">Price</span>
                             <span className="text-left text-center text-sm font-bold grey-text">Amount</span>
                             <span className="text-left text-right text-sm font-bold grey-text">Total</span>
                         </div>
                         <div className="max-400 position-relative table-ask">
-                            <div className="table-background">
+                            <div className="table-background pointer-event-none">
                                 {ask &&
                                     ask.map((item, i) => (
                                         <div
                                             key={i}
-                                            className="table-background-row danger"
+                                            className="table-background-row danger pointer-event-none"
                                             style={{ width: `${bgWidthAsk[i].value.toString()}%` }}
                                         />
                                     ))}
