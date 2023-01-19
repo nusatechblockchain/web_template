@@ -83,12 +83,10 @@ const OrderHistoryMobileScreen: React.FC = () => {
 
     const onClickPrevPage = () => {
         setPageIndex(currentPageIndex - 1);
-        console.log(currentPageIndex);
     };
 
     const onClickNextPage = () => {
         setPageIndex(currentPageIndex + 1);
-        console.log(currentPageIndex);
     };
 
     const renderTableHeader = [

@@ -24,6 +24,7 @@ import { getTotalPrice, getAmount } from '../../../helpers';
 export interface OrderFormProps {
     priceSell?: string;
     priceBuy?: string;
+    changeMarket?: boolean;
 }
 
 export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
@@ -50,6 +51,7 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
+    const [changeMarket, setChangeMarket] = React.useState(props.changeMarket);
 
     const tickerItem: Ticker = tickers[currency];
     const totalPriceBuy = getTotalPrice(amountBuy, +tickerItem?.last, bids);
@@ -104,9 +106,9 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
     const handleChangeValueAmountByButton = (increase: boolean, type: string) => {
         let updatedValue: string;
         if (type == 'Buy') {
-            updatedValue = priceBuy;
+            updatedValue = amountBuy;
         } else {
-            updatedValue = priceSell;
+            updatedValue = amountSell;
         }
         const increasedValue = (+updatedValue + 10 ** -currentMarket?.amount_precision).toFixed(
             currentMarket?.amount_precision
@@ -206,7 +208,15 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
         setTotalSell('');
         setOrderPercentageSell(0);
         setOrderPercentageBuy(0);
+        setChangeMarket(false);
     };
+
+    // React.useEffect(() => {
+    //     setChangeMarket(props.changeMarket);
+    //     if (changeMarket) {
+    //         resetForm();
+    //     }
+    // }, [props.changeMarket, changeMarket]);
 
     // ini ngepush data nya
     const handleSubmit = () => {

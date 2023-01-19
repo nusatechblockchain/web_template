@@ -55,6 +55,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const [hideOtherPairs, setHideOtherPairs] = React.useState<boolean>(false);
     const [showTrading, setShowTrading] = React.useState(false);
     const [showSidebar, setShowSidebar] = React.useState(false);
+    const [changeMarket, setChangeMarket] = React.useState(false);
     const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
     const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
 
@@ -88,13 +89,11 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const handleSelectPriceAsks = (e: string) => {
         setPriceSell(e);
         setPriceBuy(e);
-        console.log('bismilah');
     };
 
     const handleSelectPriceBids = (e: string) => {
         setPriceBuy(e);
         setPriceSell(e);
-        console.log(priceSell, 'INI PRICE SELL');
     };
 
     const handleToggleCheckbox = React.useCallback(
@@ -139,6 +138,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                 className="d-flex justify-content-between"
                 onClick={() => {
                     history.push(`/trading/${item.id}`);
+                    setChangeMarket(true);
                     setShowSidebar(false);
                 }}>
                 <div className="td-pair d-flex align-items-center">
@@ -337,7 +337,7 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     </div>
                 )}
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
-                    <OrderForm priceBuy={priceBuy} priceSell={priceSell} />
+                    <OrderForm priceBuy={priceBuy} priceSell={priceSell} changeMarket={changeMarket} />
 
                     <div className={`w-40 ${isMobileDevice && 'mobile-device order-book-mobile'}`}>
                         <OrderBook

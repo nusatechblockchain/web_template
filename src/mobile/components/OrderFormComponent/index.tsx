@@ -76,15 +76,6 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
 
     const [disabled, setDisabled] = React.useState(true);
 
-    React.useEffect(() => {
-        if (
-            Decimal.format(+total, currentMarket?.price_precision) >
-            Decimal.format(usdt, currentMarket?.price_precision)
-        ) {
-            dispatch(alertPush({ message: ['Total exceeds your balance'], type: 'error' }));
-        }
-    }, [totalPrice]);
-
     const { currency = '' } = useParams<{ currency?: string }>();
     const tickerItem: Ticker = tickers[currency];
     const wallet =
