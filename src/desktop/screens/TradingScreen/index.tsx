@@ -113,19 +113,19 @@ export const TradingScreen: FC = (): ReactElement => {
             const data =
                 listOrder.length && listOrder.filter((item) => item.market.toLowerCase() === currency.toLowerCase());
             setList(data);
-        }
-        if (list && list[0] && filterSell) {
-            const sell = list.filter((item) => item.side === 'sell');
-            setList(sell);
-        }
 
-        if (list && list[0] && filterBuy) {
-            const buy = list.filter((item) => item.side === 'buy');
-            setList(buy);
-        }
+            const temp = data;
+            if (list && list[0] && filterSell && !filterBuy) {
+                const sell = temp.filter((item) => item.side === 'sell');
+                setList(sell);
+            } else if (list && list[0] && filterBuy && !filterSell) {
+                const buy = temp.filter((item) => item.side === 'buy');
+                setList(buy);
+            }
 
-        if (hideOtherPairs) {
-            setList([]);
+            if (hideOtherPairs) {
+                setList([]);
+            }
         }
     }, [listOrder, filterBuy, filterSell, hideOtherPairs]);
 
@@ -506,10 +506,12 @@ export const TradingScreen: FC = (): ReactElement => {
     );
 
     const handleFilterSell = () => {
+        setFilterBuy(false);
         setFilterSell(!filterSell);
     };
 
     const handleFilterBuy = () => {
+        setFilterSell(false);
         setFilterBuy(!filterBuy);
     };
     // End Function Open Orders
