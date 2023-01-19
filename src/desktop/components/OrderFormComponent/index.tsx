@@ -150,6 +150,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     label100={labelPercent100}
                     handleSide={handleSide}
                     side={side}
+                    amount={amount}
                 />
 
                 <div className="form-group mb-3 position-relative  w-100">
