@@ -68,11 +68,11 @@ export const WalletWitdrawal: React.FC = () => {
         <React.Fragment>
             <div className="pg-wallet-withdraw-screen dark-bg-main">
                 <div className="header-withdraw dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
-                    <div className="mr-2">
+                    <div className="d-flex mr-2">
                         <Link to="/wallets" className="white-text text-lg">
                             <ArrowLeftIcon className={''} />
-                            Withdrawal Crypto
                         </Link>
+                        <p className=" white-text text-lg mb-0 ml-4">Withdrawal Crypto</p>
                     </div>
 
                     <div className="ml-2">
