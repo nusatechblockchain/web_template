@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { useDocumentTitle, useHistoryFetch } from '../../../hooks';
-import { selectHistory, alertPush } from '../../../modules';
+import { useDocumentTitle, useHistoryFetch, useWithdrawSum } from '../../../hooks';
+import { selectHistory, alertPush, selectWithdrawSum } from '../../../modules';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
@@ -21,8 +21,11 @@ export const WalletWitdrawal: React.FC = () => {
     const history = useHistory();
     const dispatch = useDispatch();
 
+    useWithdrawSum();
+
     const { currency = '' } = useParams<{ currency?: string }>();
     const historys = useSelector(selectHistory);
+    const sum = useSelector(selectWithdrawSum);
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
     useDocumentTitle('Wallet || Withdrawal');
