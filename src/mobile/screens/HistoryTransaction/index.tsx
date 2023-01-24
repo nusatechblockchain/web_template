@@ -72,7 +72,6 @@ const HistoryTransactionMobileScreen: React.FC = () => {
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
     const [showFilter, setShowFilter] = React.useState(false);
-    const [optionStatus, setOptionStatus] = React.useState([]);
 
     // Handle get item pagination
     const firstElementIndex = useSelector((state: RootState) => selectFirstElemIndex(state, 5));
@@ -280,7 +279,19 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                     {getTypeHistoryTransaction(type)}
                 </p>
             </div>,
-
+            // <div className='d-flex flex-row w-1/2'>
+            //     <fieldset className={`m-0 text-xs font-bold text-nowrap text-truncate ${getTypeClassnameHistoryTransaction(type)}`}>
+            //        {item?.txid?.length > 10 ? item.txid.slice(0, 10) + '...' : item.txid}
+            //     </fieldset>
+            //     <div className='cursor-pointer' onClick={()=> navigator.clipboard.writeText(item.txid)}>
+            //         <CopyButton className="copy-icon" />
+            //     </div>
+            // </div>,
+            //     <div>
+            //         <p className={`m-0 text-xs font-bold text-nowrap`}>
+            //         {item.tid}
+            //         </p>
+            // </div>,
             <p className={`m-0 text-sm ${getStatusClassTransaction(item.state)}`}>
                 {item.status === 'pending'
                     ? 'Pending'
@@ -351,6 +362,14 @@ const HistoryTransactionMobileScreen: React.FC = () => {
                     {getTypeHistoryTransaction(type)}
                 </p>
             </div>,
+            // <div className='d-flex flex-row w-1/2'>
+            //     <fieldset className={`m-0 text-xs font-bold text-nowrap text-truncate ${getTypeClassnameHistoryTransaction(type)}`}>
+            //        {item?.rid?.length > 10 ? item.rid.slice(0, 10) + '...' : item.rid}
+            //     </fieldset>
+            //     <div className='cursor-pointer' onClick={()=> navigator.clipboard.writeText(item.rid)}>
+            //         <CopyButton className="copy-icon" />
+            //     </div>
+            // </div>,
             <p className={`m-0 text-sm ${getStatusClassTransaction(item.state)}`}>
                 {item.status === 'pending'
                     ? 'Pending'
@@ -409,29 +428,11 @@ const HistoryTransactionMobileScreen: React.FC = () => {
         setHistorys(list);
     };
 
-    React.useEffect(() => {
-        if (type == 'transfers') {
-            setOptionStatus([
-                { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'processing' },
-                { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'collected' },
-                { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
-            ]);
-        } else if (type == 'withdraws') {
-            setOptionStatus([
-                { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'errored' },
-                { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'failed' },
-                { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'succeed' },
-                { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'pending' },
-            ]);
-        } else if (type == 'deposit') {
-            setOptionStatus([
-                { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'errored' },
-                { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'failed' },
-                { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'collected' },
-                { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'pending' },
-            ]);
-        }
-    }, [type, optionStatus]);
+    const optionStatus = [
+        { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'processing' },
+        { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'collected' },
+        { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
+    ];
 
     return (
         <section className="mobile-container pg-history-transaction no-header dark-bg-main">
