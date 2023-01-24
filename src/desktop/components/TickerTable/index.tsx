@@ -51,10 +51,7 @@ export const TickerTable: React.FC<Props> = ({
                                 className="small-coin-icon"
                                 alt=""
                             />
-                            <div className="font-bold ml-2 text-uppercase">{market && market.base_unit}</div>
-                            <div className="font-normal text-sm grey-text-accent ml-3">
-                                {market && market.currency && market.currency.name}
-                            </div>
+                            <div className="font-bold ml-2 text-uppercase">{market && market.name.toUpperCase()}</div>
                         </div>
                     </td>
                     <td>
