@@ -2,6 +2,7 @@ import * as React from 'react';
 import './CardMarket.pcss';
 import { numberFormat } from '../../../helpers';
 import { NoData } from '../../components';
+import { Decimal } from 'src/components';
 
 export interface CardMarketProps {
     title: string;
@@ -28,7 +29,11 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                                 </div>
                                 <p className="white-text m-0">{el && el.currency && el.currency.id.toUpperCase()}</p>
                             </td>
-                            <td className="white-text pr-8">$ {el.last}</td>
+                            <td className="white-text pr-8">
+                                {title == 'Top Volume Coins'
+                                    ? el && el.volume
+                                    : '$ ' + Decimal.format(el && el.last, el.price_precision)}
+                            </td>
                             <td className={el && el.price_change_percent?.includes('-') ? 'danger' : 'primary'}>
                                 {el && el.price_change_percent}
                             </td>
