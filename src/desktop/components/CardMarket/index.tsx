@@ -31,7 +31,7 @@ export const CardMarket: React.FunctionComponent<CardMarketProps> = (props) => {
                             </td>
                             <td className="white-text pr-8">
                                 {title == 'Top Volume Coins'
-                                    ? el && el.volume
+                                    ? `$ ${el && el.volume}`
                                     : '$ ' + Decimal.format(el && el.last, el.price_precision)}
                             </td>
                             <td className={el && el.price_change_percent?.includes('-') ? 'danger' : 'primary'}>
