@@ -46,7 +46,7 @@ class Landing extends React.Component<Props> {
 
     public render() {
         return (
-            <div className="landing-screen dark-bg-accent">
+            <div className="landing-screen about-screen dark-bg-accent">
                 <div
                     className="content-wrapper no-sidebar "
                     style={{ backgroundImage: `url('img/background-landing.png')` }}>

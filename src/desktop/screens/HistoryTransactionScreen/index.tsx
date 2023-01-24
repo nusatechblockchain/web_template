@@ -12,6 +12,7 @@ import {
     RootState,
     alertPush,
     selectHistoryLoading,
+    selectUserInfo,
 } from '../../../modules';
 import { Table } from '../../../components';
 import { Pagination } from '../../../desktop/components';
@@ -31,6 +32,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     const page = useSelector(selectCurrentPage);
     const list = useSelector(selectHistory);
     const historyLoading = useSelector(selectHistoryLoading);
+    const user = useSelector(selectUserInfo);
 
     const [historys, setHistorys] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(0);
@@ -86,7 +88,7 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
 
     React.useEffect(() => {
         setHistorys(list);
-    }, [list]);
+    }, [list, type]);
 
     React.useEffect(() => {
         if (startDate != '' && endDate != '') {
