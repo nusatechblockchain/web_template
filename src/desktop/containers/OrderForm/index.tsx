@@ -76,14 +76,20 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
 
     const disabledButtonSell = () => {
         if (!isLoggedin) {
+            console.log('1');
+
             return true;
         }
 
         if (orderLoading) {
+            console.log('2');
+
             return true;
         }
 
         if (amountSell < currentMarket?.min_amount) {
+            console.log('3');
+
             return true;
         }
 
@@ -91,12 +97,12 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
         //     return true;
         // }
 
-        if (amountSell === '0') {
-            return true;
-        }
+        if (orderType == 'limit') {
+            if (priceSell === '0') {
+                console.log('4');
 
-        if (priceSell === '0') {
-            return true;
+                return true;
+            }
         }
     };
 
@@ -113,12 +119,10 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
             return true;
         }
 
-        if (amountBuy === '0') {
-            return true;
-        }
-
-        if (priceBuy === '0') {
-            return true;
+        if (orderType == 'limit') {
+            if (priceBuy === '0') {
+                return true;
+            }
         }
     };
 

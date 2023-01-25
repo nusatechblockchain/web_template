@@ -67,11 +67,11 @@ export const TradingScreen: FC = (): ReactElement => {
     const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
-    const [priceBuy, setPriceBuy] = React.useState('0');
-    const [amountBuy, setAmountBuy] = React.useState('0');
+    const [priceBuy, setPriceBuy] = React.useState('');
+    const [amountBuy, setAmountBuy] = React.useState('');
     const [totalBuy, setTotalBuy] = React.useState('');
-    const [priceSell, setPriceSell] = React.useState('0');
-    const [amountSell, setAmountSell] = React.useState('0');
+    const [priceSell, setPriceSell] = React.useState('');
+    const [amountSell, setAmountSell] = React.useState('');
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
@@ -169,16 +169,17 @@ export const TradingScreen: FC = (): ReactElement => {
 
     // buat set amount sell
     React.useEffect(() => {
-        const safePrice = +totalPrice / +totalAmount || priceSell;
-
-        const market = orderPercentageSell !== 0 ? (+balance * orderPercentageSell) / 100 : amountSell;
+        const market =
+            orderPercentageSell !== 0
+                ? Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision)
+                : amountSell;
 
         let limit: string | number;
         if (orderPercentageSell !== 0) {
             if (priceSell === '0' || priceSell === '') {
                 limit = '0';
             } else {
-                limit = +totalSell / +priceSell;
+                limit = Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision);
             }
         } else {
             limit = amountSell;
@@ -189,17 +190,12 @@ export const TradingScreen: FC = (): ReactElement => {
 
     // buat ngeset total sel
     React.useEffect(() => {
-        const safePrice = totalPrice / +amountSell || priceSell;
-        // const market =
-        //     orderPercentageSell !== 0
-        //         ? Decimal.format((+balance * +orderPercentageSell) / 100, currentMarket?.price_precision)
-        //         : Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
-
+        const safePrice = totalPrice / +amountSell || tickerItem?.last;
         const market = Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
 
         const limit =
             orderPercentageSell !== 0
-                ? Decimal.format((+balance * +orderPercentageSell) / 100, currentMarket?.price_precision)
+                ? Decimal.format(+amountSell * +priceSell, currentMarket?.price_precision)
                 : Decimal.format(+priceSell * +amountSell, currentMarket?.price_precision);
 
         setTotalSell(orderType === 'market' ? market : limit);
@@ -207,15 +203,18 @@ export const TradingScreen: FC = (): ReactElement => {
 
     // buat order amout buy
     React.useEffect(() => {
-        // const safePrice = +totalPrice / +totalAmount || priceBuy;
-        const market = orderPercentageBuy !== 0 ? (+usdt * orderPercentageBuy) / 100 : amountBuy;
+        const safePrice = +totalPrice / +totalAmount || tickerItem?.last;
+        const market =
+            orderPercentageBuy !== 0
+                ? Decimal.format(+totalBuy / +safePrice, currentMarket?.amount_precision)
+                : amountBuy;
 
         let limit: string | number;
         if (orderPercentageBuy !== 0) {
             if (priceBuy === '0' || priceBuy === '') {
                 limit = '0';
             } else {
-                limit = +totalBuy / +priceBuy;
+                limit = Decimal.format(+totalBuy / +priceBuy, currentMarket?.amount_precision);
             }
         } else {
             limit = amountBuy;
@@ -225,13 +224,7 @@ export const TradingScreen: FC = (): ReactElement => {
 
     // buat total buy
     React.useEffect(() => {
-        const safePrice = totalPrice / +amountBuy || priceBuy;
-        // const market =
-        //     orderPercentageBuy !== 0
-        //         ? Decimal.format((+usdt * +orderPercentageBuy) / 100, currentMarket?.price_precision)
-        //         : Decimal.format(+amountBuy * +safePrice, currentMarket?.price_precision);
-
-        const market = Decimal.format(+amountBuy * +safePrice, currentMarket?.price_precision);
+        const market = Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.price_precision);
 
         const limit =
             orderPercentageBuy !== 0
@@ -245,10 +238,10 @@ export const TradingScreen: FC = (): ReactElement => {
     const resetForm = () => {
         setShowModalSell(false);
         setShowModalBuy(false);
-        setAmountBuy('0');
-        setAmountSell('0');
-        setPriceBuy('0');
-        setPriceSell('0');
+        setAmountBuy('');
+        setAmountSell('');
+        setPriceBuy('');
+        setPriceSell('');
         setTotalBuy('');
         setTotalSell('');
         setOrderPercentageSell(0);
@@ -311,11 +304,17 @@ export const TradingScreen: FC = (): ReactElement => {
     // ganti select persenan
     const handleSelectPercentageSell = (e: number) => {
         setOrderPercentageSell(e);
+        if (e == 0) {
+            setAmountSell('0');
+        }
     };
 
     // ganti select persenan
     const handleSelectPercentageBuy = (e: number) => {
         setOrderPercentageBuy(e);
+        if (e == 0) {
+            setAmountBuy('0');
+        }
     };
 
     // close modal sell
@@ -535,12 +534,12 @@ export const TradingScreen: FC = (): ReactElement => {
 
     const renderModalContentCancel = () => (
         <React.Fragment>
-            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Cancel Orders?</h6>
-            <p className="text-sm grey-text-accent m-0 p-0 mb-24">
+            <h6 className="text-md white-text font-semibold mb-24  text-center">Are you sure to Cancel Orders?</h6>
+            <p className="text-sm grey-text-accent m-0 p-0 mb-24 text-center">
                 The order you made for this transaction will be canceled and you will have to repeat the transaction
                 again
             </p>
-            <div className="d-flex">
+            <div className="d-flex justify-content-center">
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalCancel(false)}>
                     Close
                 </button>
@@ -582,6 +581,7 @@ export const TradingScreen: FC = (): ReactElement => {
                                     loading={loading}
                                     handleSelectPriceAsks={handleSelectPriceAsks}
                                     handleSelectPriceBids={handleSelectPriceBids}
+                                    orderType={orderType}
                                 />
                             </div>
                             <div className="grid-item chart">

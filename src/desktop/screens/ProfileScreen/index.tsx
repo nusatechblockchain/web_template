@@ -56,6 +56,10 @@ export const ProfileScreen: FC = (): ReactElement => {
     const [profilekycStatus, setProfileKycStatus] = useState('');
     const phone = user.phones.slice(-1);
     const kyc = user.profiles.slice(-1);
+    const label = user.labels;
+
+    const labelPhone = [...label].find((item) => item.key === 'phone');
+    // const label
 
     React.useEffect(() => {
         if (blogs) {
@@ -352,23 +356,21 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 )}
                                 <div className="main-menu">
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={'/change-email'}>
-                                            <div className="d-flex align-items-center position-relative">
-                                                <div className="icon-bg">
-                                                    <EmailProfileIcon />
-                                                </div>
-                                                <div className="ml-3 mr-3">
-                                                    <p className="mb-1 text-ms font-normal white-text">Email</p>
-                                                    <span className="d-block text-xs grey-text-accent font-normal ">
-                                                        {user.email}
-                                                    </span>
-                                                    <span className="text-xs contrast-text font-normal">Verified</span>
-                                                </div>
-                                                <div className="check">
-                                                    <CheckIcon />
-                                                </div>
+                                        <div className="d-flex align-items-center position-relative">
+                                            <div className="icon-bg">
+                                                <EmailProfileIcon />
                                             </div>
-                                        </Link>
+                                            <div className="ml-3 mr-3">
+                                                <p className="mb-1 text-ms font-normal white-text">Email</p>
+                                                <span className="d-block text-xs grey-text-accent font-normal ">
+                                                    {user.email}
+                                                </span>
+                                                <span className="text-xs contrast-text font-normal">Verified</span>
+                                            </div>
+                                            <div className="check">
+                                                <CheckIcon />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
                                         <Link to={kycStatus == 'verified' ? '/profile' : '/profile/kyc'}>
@@ -406,18 +408,14 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                     </span>
                                                     <span
                                                         className={`d-block text-left text-xs  font-normal ${
-                                                            !user.phones[0] ||
-                                                            (phone && phone[0] && phone[0].validated_at === null)
-                                                                ? 'danger-text'
-                                                                : 'contrast-text'
+                                                            labelPhone?.value === 'verified'
+                                                                ? 'contrast-text'
+                                                                : 'danger-text'
                                                         }`}>
-                                                        {!user.phones[0] ||
-                                                        (phone && phone[0] && phone[0].validated_at === null)
-                                                            ? 'Unverified'
-                                                            : 'Verified'}
+                                                        {labelPhone?.value === 'verified' ? 'Verified' : 'Unverified'}
                                                     </span>
                                                 </div>
-                                                {phone && phone[0] && phone[0].validated_at !== null && (
+                                                {labelPhone?.value === 'verified' && (
                                                     <div className="check">
                                                         <CheckIcon />
                                                     </div>
