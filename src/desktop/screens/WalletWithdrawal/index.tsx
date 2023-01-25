@@ -67,7 +67,7 @@ export const WalletWitdrawal: React.FC = () => {
     return (
         <React.Fragment>
             <div className="pg-wallet-withdraw-screen dark-bg-main">
-                <div className="header-withdraw dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
+                <div className="header-withdraw container dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
                     <div className="d-flex mr-2">
                         <Link to="/wallets" className="white-text text-lg">
                             <ArrowLeftIcon className={''} />
@@ -89,7 +89,7 @@ export const WalletWitdrawal: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div className="dark-bg-accent body-withdraw">
+                <div className="dark-bg-accent container body-withdraw">
                     <div className="d-flex justify-content-between align-items-start mb-24 w-100 body-withdraw__content">
                         <div className="w-60">
                             <WalletWithdrawalForm />

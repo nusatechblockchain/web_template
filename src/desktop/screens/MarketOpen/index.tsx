@@ -224,12 +224,12 @@ export const MarketOpen: FC = (): ReactElement => {
 
     const renderModalContentCancel = () => (
         <React.Fragment>
-            <h6 className="text-md white-text font-semibold mb-24">Are you sure to Cancel Orders?</h6>
-            <p className="text-sm grey-text-accent m-0 p-0 mb-24">
+            <h6 className="text-md white-text font-semibold mb-24  text-center">Are you sure to Cancel Orders?</h6>
+            <p className="text-sm grey-text-accent m-0 p-0 mb-24  text-center">
                 The order you made for this transaction will be canceled and you will have to repeat the transaction
                 again
             </p>
-            <div className="d-flex">
+            <div className="d-flex  justify-content-center">
                 <button className="btn btn-danger sm px-5 mr-3" onClick={() => setShowModalCancel(false)}>
                     Close
                 </button>
