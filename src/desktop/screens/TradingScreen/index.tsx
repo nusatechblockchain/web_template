@@ -67,11 +67,11 @@ export const TradingScreen: FC = (): ReactElement => {
     const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
     const [showModalSell, setShowModalSell] = React.useState(false);
     const [showModalBuy, setShowModalBuy] = React.useState(false);
-    const [priceBuy, setPriceBuy] = React.useState('0');
+    const [priceBuy, setPriceBuy] = React.useState('');
     const [amountBuy, setAmountBuy] = React.useState('');
     const [totalBuy, setTotalBuy] = React.useState('');
-    const [priceSell, setPriceSell] = React.useState('0');
-    const [amountSell, setAmountSell] = React.useState('0');
+    const [priceSell, setPriceSell] = React.useState('');
+    const [amountSell, setAmountSell] = React.useState('');
     const [totalSell, setTotalSell] = React.useState('');
     const [orderType, setOrderType] = React.useState('limit');
     const [side, setSide] = React.useState<OrderSide>('buy');
@@ -169,12 +169,10 @@ export const TradingScreen: FC = (): ReactElement => {
 
     // buat set amount sell
     React.useEffect(() => {
-        const safePrice = +totalPrice / +totalAmount || priceSell;
-
         const market =
             orderPercentageSell !== 0
                 ? Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision)
-                : Decimal.format(amountSell, currentMarket?.amount_precision);
+                : amountSell;
 
         let limit: string | number;
         if (orderPercentageSell !== 0) {
@@ -184,7 +182,7 @@ export const TradingScreen: FC = (): ReactElement => {
                 limit = Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision);
             }
         } else {
-            limit = Decimal.format(amountSell, currentMarket?.amount_precision);
+            limit = amountSell;
         }
 
         setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
@@ -193,11 +191,6 @@ export const TradingScreen: FC = (): ReactElement => {
     // buat ngeset total sel
     React.useEffect(() => {
         const safePrice = totalPrice / +amountSell || tickerItem?.last;
-        // const market =
-        //     orderPercentageSell !== 0
-        //         ? Decimal.format((+balance * +orderPercentageSell) / 100, currentMarket?.price_precision)
-        //         : Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
-
         const market = Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
 
         const limit =
@@ -214,7 +207,7 @@ export const TradingScreen: FC = (): ReactElement => {
         const market =
             orderPercentageBuy !== 0
                 ? Decimal.format(+totalBuy / +safePrice, currentMarket?.amount_precision)
-                : Decimal.format(amountBuy, currentMarket?.amount_precision);
+                : amountBuy;
 
         let limit: string | number;
         if (orderPercentageBuy !== 0) {
@@ -224,19 +217,13 @@ export const TradingScreen: FC = (): ReactElement => {
                 limit = Decimal.format(+totalBuy / +priceBuy, currentMarket?.amount_precision);
             }
         } else {
-            limit = Decimal.format(amountBuy, currentMarket?.amount_precision);
+            limit = amountBuy;
         }
         setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
     }, [orderPercentageBuy, totalBuy, priceBuy]);
 
     // buat total buy
     React.useEffect(() => {
-        const safePrice = totalPrice / +amountBuy || priceBuy;
-        // const market =
-        //     orderPercentageBuy !== 0
-        //         ? Decimal.format((+usdt * +orderPercentageBuy) / 100, currentMarket?.price_precision)
-        //         : Decimal.format(+amountBuy * +safePrice, currentMarket?.price_precision);
-
         const market = Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.price_precision);
 
         const limit =
@@ -252,9 +239,9 @@ export const TradingScreen: FC = (): ReactElement => {
         setShowModalSell(false);
         setShowModalBuy(false);
         setAmountBuy('');
-        setAmountSell('0');
-        setPriceBuy('0');
-        setPriceSell('0');
+        setAmountSell('');
+        setPriceBuy('');
+        setPriceSell('');
         setTotalBuy('');
         setTotalSell('');
         setOrderPercentageSell(0);
