@@ -76,7 +76,7 @@ class EmailVerificationComponent extends React.Component<Props, EmailVerificatio
         this.state = {
             code: '',
             resendCodeActive: false,
-            seconds: 3000,
+            seconds: 30000,
             timerActive: false,
             timer: null,
         };
@@ -96,30 +96,22 @@ class EmailVerificationComponent extends React.Component<Props, EmailVerificatio
         }
 
         let time = null;
-        if (previousState.timerActive !== this.state.timerActive) {
+        if (!previousState.timerActive && this.state.timerActive) {
             time = setInterval(() => {
                 this.setState({ seconds: this.state.seconds - 1000 });
 
                 if (this.state.seconds === 0) {
-                    this.setState({ timerActive: false, seconds: 3000 });
+                    clearInterval(this.state.timer);
+                    this.setState({ timerActive: false, seconds: 30000 });
                 }
             }, 1000);
+
             this.setState({ timer: time });
         }
-
-        // if (previousState.seconds === 0) {
-        //     this.setState({ timerActive: false });
-        // }
-
-        // if (previousState.seconds === 0) {
-        //     this.setState({ seconds: 0 });
-        // }
     }
 
     componentWillUnmount() {
         clearInterval(this.state.timer);
-        // this.setState({ timerActive: false, seconds: 3000 });
-        // clearInterval(this.state.seconds);
     }
 
     public translate = (id: string) => this.props.intl.formatMessage({ id });
@@ -188,6 +180,7 @@ class EmailVerificationComponent extends React.Component<Props, EmailVerificatio
                                             <Spinner animation="border" variant="primary" />
                                         ) : (
                                             <button
+                                                disabled={this.state.timerActive}
                                                 className="btn-send-again text-sm grey-text border-none bg-transparent cursor-pointer p-0"
                                                 onClick={this.handleClick}>
                                                 Resend Code
@@ -220,13 +213,13 @@ class EmailVerificationComponent extends React.Component<Props, EmailVerificatio
         );
     }
 
-    private handleChangeConfirmChange = (value: string) => {
+    public handleChangeConfirmChange = (value: string) => {
         this.setState({
             code: value,
         });
     };
 
-    private codeConfirm = () => {
+    public codeConfirm = () => {
         const payload = {
             email: this.props.location.state.email,
             code: this.state.code,
@@ -234,11 +227,11 @@ class EmailVerificationComponent extends React.Component<Props, EmailVerificatio
         this.props.createConfirmationCodeFetch(payload);
     };
 
-    private handleClick = () => {
+    public handleClick = () => {
         const { captcha_response } = this.props;
 
         if (this.props.location.state.email && this.props.captcha_response) {
-            this.setState({ timerActive: !this.state.timerActive });
+            this.setState({ timerActive: true });
         }
 
         switch (captchaType()) {

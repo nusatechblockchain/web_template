@@ -238,14 +238,15 @@ export const ChangePasswordComponent = (props) => {
                         color: '#F2F0FF',
                     }}
                     inputFocusStyle={{ fontSize: '20px', color: '#F2F0FF' }}
-                    autoSelect={true}
+                    autoSelect={false}
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
-                <p
+                <button
                     onClick={() => setShowModalResendCode(!showModalResendCode)}
-                    className="text-right text-sm grey-text cursor-pointer m-0 p-0">
+                    disabled={timerActive}
+                    className="text-right text-sm grey-text cursor-pointer m-0 p-0 btn-transparent">
                     Resend Code
-                </p>
+                </button>
                 <p className={`text-right text-xs cursor-pointer ${timerActive ? 'white-text' : 'grey-text'}`}>
                     {moment(seconds).format('mm:ss')}
                 </p>
