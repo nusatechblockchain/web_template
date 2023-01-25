@@ -114,7 +114,6 @@ export const TickerTable: React.FC<Props> = ({
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.high' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.low' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.volume' })}</th>
-
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
