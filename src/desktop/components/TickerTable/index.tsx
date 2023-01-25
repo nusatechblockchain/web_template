@@ -67,6 +67,9 @@ export const TickerTable: React.FC<Props> = ({
                         <span>$ {market.low}</span>
                     </td>
                     <td>
+                        <span>$ {market.volume}</span>
+                    </td>
+                    <td>
                         <div className="d-flex">
                             <p
                                 className="gradient-text font-normal mx-2 text-sm cursor-pointer"
@@ -110,6 +113,7 @@ export const TickerTable: React.FC<Props> = ({
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.change' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.high' })}</th>
                         <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.low' })}</th>
+                        <th scope="col">{formatMessage({ id: 'page.body.marketsTable.header.volume' })}</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
