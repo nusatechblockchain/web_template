@@ -164,7 +164,7 @@ export const MarketOpen: FC = (): ReactElement => {
 
     const getTableData = (data) => {
         return data.map((item) => [
-            <p className="m-0 text-sm white-text">{moment(item.created_at).format('D MMM YYYY - HH:mm')}</p>,
+            <p className="m-0 text-sm white-text">{moment(item.created_at).format('DD-MM-YYYY HH:mm:ss')}</p>,
             <p className="m-0 text-sm white-text">{item.market.toUpperCase()}</p>,
             <p className={`m-0 text-sm ${item.side == 'buy' ? 'green-text' : 'danger-text'}`}>
                 {item.side === 'buy' ? 'Buy' : 'Sell'}
@@ -331,7 +331,7 @@ export const MarketOpen: FC = (): ReactElement => {
                                 <button
                                     type="button"
                                     onClick={() => setShowModalCancelAll(true)}
-                                    className="btn btn-secondary">
+                                    className="btn btn-danger">
                                     Cancel All Orders <ModalCloseIcon className="small-icon" />
                                 </button>
                             </div>

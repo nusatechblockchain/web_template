@@ -42,7 +42,7 @@ export const WalletWitdrawal: React.FC = () => {
 
     const getTableData = (data) => {
         return data.map((item) => [
-            moment(item.created_at).format('D MMM YYYY - HH:mm'),
+            moment(item.created_at).format('DD-MM-YYYY HH:mm:ss'),
             <>
                 {item.blockchain_txid ? (
                     <fieldset onClick={() => doCopy('item' + String(item.id))}>
