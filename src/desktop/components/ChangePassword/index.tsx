@@ -238,7 +238,7 @@ export const ChangePasswordComponent = (props) => {
                         color: '#F2F0FF',
                     }}
                     inputFocusStyle={{ fontSize: '20px', color: '#F2F0FF' }}
-                    autoSelect={true}
+                    autoSelect={false}
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                 />
                 <button
