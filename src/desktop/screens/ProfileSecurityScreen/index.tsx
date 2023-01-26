@@ -126,7 +126,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
 
     public componentDidUpdate(previousProps, previousState) {
         let time = null;
-        if (previousState === this.state.timerActive) {
+        if (!previousState.timerActive && this.state.timerActive) {
             time = setInterval(() => {
                 this.setState({ seconds: this.state.seconds - 1000 });
 
