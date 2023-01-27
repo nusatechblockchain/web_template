@@ -131,6 +131,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                 this.setState({ seconds: this.state.seconds - 1000 });
 
                 if (this.state.seconds === 0) {
+                    clearInterval(this.state.timer);
                     this.setState({ timerActive: false, seconds: 30000 });
                 }
             }, 1000);
@@ -387,7 +388,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                 type="text"
                                 labelVisible
                                 classNameLabel="white-text text-sm"
-                                handleChangeInput={(e) => this.setState({ newPhone: e })}
+                                handleChangeInput={(e) => this.handleChangePhoneValue(e)}
                                 isDisabled={this.state.phone.length === 4}
                             />
                         </div>
@@ -406,7 +407,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                 classNameLabel="d-none"
                                 classNameInput="spacing-10"
                                 classNameGroup="mb-0 w-100"
-                                handleChangeInput={(e) => this.setState({ verificationCode: e })}
+                                handleChangeInput={(e) => this.handleChangeVerificationCodeValue(e)}
                                 isDisabled={this.state.phone.length === 4}
                             />
                             <button
@@ -670,6 +671,21 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             </React.Fragment>
         );
     };
+
+    public handleChangeVerificationCodeValue = (e) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        this.setState({ verificationCode: value });
+    };
+
+    public handleChangePhoneValue = (e) => {
+        const value = e.replace(/[^0-9+\.]/g, '');
+        this.setState({ newPhone: value });
+    };
+
+    // public handleChangeTwoFaGoogleValue = (e) => {
+    //     const value = e.replace(/[^0-9+\.]/g, '');
+    //     this.setState({twoFaCode: value})
+    // };
 
     // handle focus password focus
     public handleFocusNewPassword = () => {
