@@ -9,14 +9,14 @@ export const FAQScreen: FC = (): ReactElement => {
     useDocumentTitle('FAQ');
     useBlogsFetch('faq');
     const [faq, setFaq] = React.useState<any[]>([]);
-    const [support, setSupport] = React.useState<any>({});
+    const [support, setSupport] = React.useState<any>([]);
 
     const blogs = useSelector(selectBlogs);
 
     React.useEffect(() => {
         if (blogs) {
             let tempFaq = [...blogs].filter((item) => item.slug !== 'support');
-            let tempSupport = [...blogs].find((item) => item.title == 'Contact Support');
+            let tempSupport = [...blogs].filter((item) => item.slug == 'support');
             setFaq(tempFaq);
             setSupport(tempSupport);
         }
@@ -30,9 +30,19 @@ export const FAQScreen: FC = (): ReactElement => {
                     style={{ backgroundImage: `url('img/background-landing.png')` }}>
                     <div className="d-flex flex-column justify-content-center align-items-center py-5">
                         <h3 className="title-1 white-text font-bold mb-24">Heaven Exchange FAQ</h3>
-                        <a href={support?.excerpt} target="__blank" rel="noopener noreferrer" className="btn-primary">
-                            Contact Support
-                        </a>
+
+                        <div className="d-flex justify-content-center align-content-center gap-8">
+                            {support.map((item, i) => (
+                                <a
+                                    key={i}
+                                    href={item?.excerpt}
+                                    target="__blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-primary cursor-pointer">
+                                    {item.title}
+                                </a>
+                            ))}
+                        </div>
                     </div>
                 </div>
                 <div className="container">

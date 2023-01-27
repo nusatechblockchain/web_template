@@ -43,7 +43,7 @@ export const ProfileScreen: FC = (): ReactElement => {
 
     const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
     const [showModalChangePhone, setShowModalChangePhone] = useState(false);
-    const [twoFaGoogleValue, settwoFaGoogleValue] = useState('');
+    const [twoFaGoogleValue, setTwoFaGoogleValue] = useState('');
     const [newPhoneValue, setNewPhoneValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [isChangeNumber, setIsChangeNumber] = useState(false);
@@ -175,6 +175,21 @@ export const ProfileScreen: FC = (): ReactElement => {
         }
     }, [user]);
 
+    const handleChangeVerificationCodeValue = (e) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setVerificationCode(value);
+    };
+
+    const handleChangePhoneValue = (e) => {
+        const value = e.replace(/[^0-9+\.]/g, '');
+        setNewPhoneValue(value);
+    };
+
+    const handleChangeTwoFaGoogleValue = (e) => {
+        const value = e.replace(/[^0-9+\.]/g, '');
+        setTwoFaGoogleValue(value);
+    };
+
     // Render phone modal
     const modalPhoneContent = () => {
         return (
@@ -211,7 +226,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 type="text"
                                 labelVisible
                                 classNameLabel="white-text text-sm"
-                                handleChangeInput={(e) => setNewPhoneValue(e)}
+                                handleChangeInput={(e) => handleChangePhoneValue(e)}
                                 isDisabled={user.phones.length === 4}
                             />
                         </div>
@@ -231,7 +246,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 classNameInput="spacing-10"
                                 classNameGroup="mb-0 w-100"
                                 isDisabled={user.phones.length === 4}
-                                handleChangeInput={(e) => setVerificationCode(e)}
+                                handleChangeInput={(e) => handleChangeVerificationCodeValue(e)}
                             />
                             <button
                                 disabled={disabledButton()}
@@ -330,7 +345,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                             labelVisible
                             classNameInput="text-center spacing-10"
                             classNameLabel="white-text text-sm"
-                            handleChangeInput={(e) => settwoFaGoogleValue(e)}
+                            handleChangeInput={(e) => handleChangeTwoFaGoogleValue(e)}
                         />
                     </div>
                     <button

@@ -188,13 +188,20 @@ class Head extends React.Component<Props, HeaderState> {
                                                 key={index}
                                                 className="dropdown-wallets-item"
                                                 onClick={() => {
-                                                    this.setState({ showProfileDropdown: false });
-                                                    this.setState({ showHeader: false });
+                                                    // localStorage.removeItem('showProfileDropdown');
+                                                    localStorage.setItem('showProfileDropdown', 'false');
+                                                    this.setState({ showProfileDropdown: false, showHeader: false });
                                                 }}>
                                                 <Link to={item.url} className="d-flex">
                                                     {item.icon}
                                                     <div className="pl-3">
-                                                        <p className="mb-0 text-sm font-bold white-text">{item.name}</p>
+                                                        <p
+                                                            onClick={() =>
+                                                                localStorage.setItem('showProfileDropdown', 'false')
+                                                            }
+                                                            className="mb-0 text-sm font-bold white-text">
+                                                            {item.name}
+                                                        </p>
                                                         <span className="text-xs grey-text-accent font-normal">
                                                             {item.desc}
                                                         </span>
