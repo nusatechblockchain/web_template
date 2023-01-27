@@ -201,13 +201,13 @@ export const OrderForm: React.FunctionComponent<OrderFormProps> = (props) => {
                 )}
                 <ul className="nav nav-pills w-100" id="pills-tab" role="tablist">
                     <li
-                        className={`nav-item buy ${side == 'buy' && 'active'}`}
+                        className={`nav-item buy cursor-pointer ${side == 'buy' && 'active'}`}
                         id="buy-tab"
                         onClick={() => handleSide('buy')}>
                         <a className={`nav-link buy ${side == 'buy' && 'active'}`}>Buy</a>
                     </li>
                     <li
-                        className={`nav-item sell ${side == 'sell' && 'active'}`}
+                        className={`nav-item sell cursor-pointer ${side == 'sell' && 'active'}`}
                         id="sell-tab"
                         onClick={() => handleSide('sell')}>
                         <a className={`nav-link sell ${side == 'sell' && 'active'}`}>Sell</a>

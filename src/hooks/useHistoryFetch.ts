@@ -8,7 +8,10 @@ interface HistoryProps {
     limit?: number;
     page?: number;
     market?: string;
+    time_from?: number;
+    time_to?: number; 
 }
+
 
 export const useHistoryFetch = ({ type, currency, market, limit = 6, page = 0 }: HistoryProps) => {
     const dispatch = useDispatch();
