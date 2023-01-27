@@ -35,7 +35,7 @@ export const HistoryTrade: FC = (): ReactElement => {
     const [startDate, setStartDate] = React.useState(new Date().toISOString().slice(0, 10));
     const [endDate, setEndDate] = React.useState(new Date().toISOString().slice(0, 10));
     const [asset, setAsset] = React.useState('');
-    const [currency, setCurrency] = React.useState('');
+    const [market, setMarket] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
     const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
@@ -44,7 +44,7 @@ export const HistoryTrade: FC = (): ReactElement => {
 
     useDocumentTitle('Trade History');
     useMarketsFetch();
-    useHistoryFetch({ type: 'trades', limit: DEFAULT_LIMIT, currency, page: currentPage });
+    useHistoryFetch({ type: 'trades', limit: DEFAULT_LIMIT, market, page: currentPage });
 
     const onClickPrevPage = () => {
         setCurrentPage(Number(page) - 1);
@@ -126,7 +126,7 @@ export const HistoryTrade: FC = (): ReactElement => {
         );
         return {
             label: customLabel,
-            value: item.base_unit,
+            value: item.id,
         };
     });
 
@@ -161,15 +161,12 @@ export const HistoryTrade: FC = (): ReactElement => {
                     <p className="m-0 white-text text-sm mb-8">Assets</p>
                     <Select
                         value={optionAssets.filter(function (option) {
-                            return option.value === currency;
+                            return option.value === market;
                         })}
                         styles={CustomStylesSelect}
                         options={optionAssets}
                         onChange={(e) => {
-                            setCurrency(e.value);
-                            console.log(list);
-
-                            // filterredAsset(e.value);
+                            setMarket(e.value);
                         }}
                     />
                 </div>
