@@ -24,7 +24,7 @@ import {
 } from '../../../modules';
 import { numberFormat } from '../../../helpers';
 import { Logo } from '../../../assets/images/Logo';
-import { IndonesianFlag, AmericanFlag } from '../../../assets/images/Flags';
+import { EnglishFlag, RussiaFlag } from '../../../assets/images/Flags';
 import { MoonIcon, SunIcon } from 'src/assets/images/SwitchTheme';
 import { Api, Dashboard, Logout, Referral, Security, Wallet } from '../../../assets/images/ProfileDropdown';
 
@@ -126,12 +126,12 @@ class Head extends React.Component<Props, HeaderState> {
 
         const LanguageDropdown = [
             {
-                flag: <IndonesianFlag className="mr-2" />,
-                name: 'Indonesia',
+                flag: <EnglishFlag className="mr-2" />,
+                name: 'English',
             },
             {
-                flag: <AmericanFlag className="mr-2" />,
-                name: 'American',
+                flag: <RussiaFlag className="mr-2" />,
+                name: 'Russian',
             },
         ];
 
