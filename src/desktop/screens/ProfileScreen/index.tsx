@@ -135,7 +135,7 @@ export const ProfileScreen: FC = (): ReactElement => {
         setShowModal2FAGoogle(!showModal2FaGoogle);
     };
 
-    const disabledButton = () => {
+    const disabledButtonCode = () => {
         if (phone[0]?.validated_at === null && !isChangeNumber && !timerActive) {
             return false;
         }
@@ -146,6 +146,22 @@ export const ProfileScreen: FC = (): ReactElement => {
 
         if (timerActive) {
             return true;
+        }
+    };
+
+    const disabledButton = () => {
+        if (phone[0]?.validated_at === null && !isChangeNumber) {
+            if (verificationCode.length < 5) {
+                return true;
+            }
+        } else {
+            if (verificationCode.length < 5) {
+                return true;
+            }
+
+            if (!newPhoneValue) {
+                return true;
+            }
         }
     };
 
@@ -249,7 +265,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 handleChangeInput={(e) => handleChangeVerificationCodeValue(e)}
                             />
                             <button
-                                disabled={disabledButton()}
+                                disabled={disabledButtonCode()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
                                 {(!isChangeNumber && phone && phone[0] && phone[0].validated_at === null) ||
@@ -276,15 +292,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                     </div>
                     <button
                         type="submit"
-                        disabled={
-                            phone && phone[0]?.validated_at === null
-                                ? verificationCode.length < 5
-                                    ? true
-                                    : false
-                                : newPhoneValue === '' || verificationCode.length < 5
-                                ? true
-                                : false
-                        }
+                        disabled={disabledButton()}
                         onClick={handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
@@ -292,7 +300,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                         data-dismiss="modal">
                         {!user.phones[0]
                             ? 'Add'
-                            : phone[0] && phone[0].validated_at === null
+                            : phone[0] && phone[0].validated_at === null && !isChangeNumber
                             ? 'Verify'
                             : isChangeNumber
                             ? 'Change'

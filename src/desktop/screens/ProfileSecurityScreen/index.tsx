@@ -41,7 +41,7 @@ interface ProfileSecurityState {
     twoFaPhoneCode: string;
     twoFaPasswordCode: string;
     newPhone: string;
-    confirmationCode: string;
+    verificationCode: string;
     passwordNew: string;
     passwordOld: string;
     passwordConfirm: string;
@@ -97,7 +97,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
             twoFaPhoneCode: '',
             twoFaPasswordCode: '',
             newPhone: '',
-            confirmationCode: '',
+            verificationCode: '',
             passwordNew: '',
             passwordOld: '',
             passwordConfirm: '',
@@ -397,7 +397,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                         <label className="white-text text-sm ">Verification Code</label>
                         <div className="d-flex align-items-center">
                             <CustomInput
-                                inputValue={this.state.confirmationCode}
+                                inputValue={this.state.verificationCode}
                                 label=""
                                 defaultLabel=""
                                 placeholder="_____"
@@ -406,12 +406,12 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                                 classNameLabel="d-none"
                                 classNameInput="spacing-10"
                                 classNameGroup="mb-0 w-100"
-                                handleChangeInput={(e) => this.setState({ confirmationCode: e })}
+                                handleChangeInput={(e) => this.setState({ verificationCode: e })}
                                 isDisabled={this.state.phone.length === 4}
                             />
                             <button
                                 type="submit"
-                                disabled={this.disabledButton()}
+                                disabled={this.disabledButtonCode()}
                                 onClick={this.handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
                                 {(!this.state.isChangeNumber && this.state.phone[0].validated_at === null) ||
@@ -444,15 +444,7 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
                     </div>
 
                     <button
-                        disabled={
-                            this.state.phone[0]?.validate_at === null
-                                ? this.state.confirmationCode.length < 5
-                                    ? true
-                                    : false
-                                : this.state.confirmationCode.length < 5 || this.state.newPhone === ''
-                                ? true
-                                : false
-                        }
+                        disabled={this.disabledButton()}
                         onClick={this.handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
@@ -509,24 +501,40 @@ class ProfileSecurityComponent extends React.Component<Props, ProfileSecuritySta
         if (this.props.user.phones[0] && !this.state.isChangeNumber) {
             verifyPhone({
                 phone_number: `+${this.state.phone[0].number}`,
-                verification_code: this.state.confirmationCode,
+                verification_code: this.state.verificationCode,
             });
         } else {
-            verifyPhone({ phone_number: this.state.newPhone, verification_code: this.state.confirmationCode });
+            verifyPhone({ phone_number: this.state.newPhone, verification_code: this.state.verificationCode });
         }
     };
 
-    public disabledButton = () => {
-        if (this.state.phone[0]?.validate_at === null && !this.state.isChangeNumber && !this.state.timerActive) {
+    public disabledButtonCode = () => {
+        if (this.state.phone[0]?.validate_at == null && !this.state.isChangeNumber) {
             return false;
         }
 
-        if (this.state.newPhone === '' && !this.state.phone[0]) {
+        if (!this.state.newPhone) {
             return true;
         }
 
         if (this.state.timerActive) {
             return true;
+        }
+    };
+
+    public disabledButton = () => {
+        if (this.state.phone[0]?.validated_at === null && !this.state.isChangeNumber) {
+            if (this.state.verificationCode.length < 5) {
+                return true;
+            }
+        } else {
+            if (this.state.verificationCode.length < 5) {
+                return true;
+            }
+
+            if (!this.state.newPhone) {
+                return true;
+            }
         }
     };
     // **END PHONE NUMBER PUBLIC FUNCTION
