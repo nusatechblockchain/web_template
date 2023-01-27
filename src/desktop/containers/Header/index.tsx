@@ -7,6 +7,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { IntlProps } from '../../../';
 import { Decimal } from 'src/components';
+import { languages } from '../../../api/config';
 import '../../../styles/colors.pcss';
 import {
     Market,
@@ -21,6 +22,12 @@ import {
     Currency,
     selectMarketTickers,
     changeColorTheme,
+    selectCurrentLanguage,
+    changeLanguage,
+    Ticker,
+    selectUserInfo,
+    User,
+    changeUserDataFetch,
 } from '../../../modules';
 import { numberFormat } from '../../../helpers';
 import { Logo } from '../../../assets/images/Logo';
@@ -33,7 +40,9 @@ interface ReduxProps {
     colorTheme: string;
     isLoggedIn: boolean;
     currencies: Currency[];
-    tickers: any;
+    tickers: Ticker | undefined | any;
+    currentLanguage: string;
+    user: User;
 }
 
 interface OwnProps {
@@ -44,6 +53,8 @@ interface DispatchProps {
     setMobileWalletUi: typeof setMobileWalletUi;
     logout: typeof logoutFetch;
     changeColorTheme: typeof changeColorTheme;
+    changeLanguange: typeof changeLanguage;
+    changeUserDataFetch: typeof changeUserDataFetch;
 }
 
 interface LocationProps extends RouterProps {
@@ -128,10 +139,12 @@ class Head extends React.Component<Props, HeaderState> {
             {
                 flag: <EnglishFlag className="mr-2" />,
                 name: 'English',
+                code: 'en',
             },
             {
                 flag: <RussiaFlag className="mr-2" />,
                 name: 'Russian',
+                code: 'ru',
             },
         ];
 
@@ -140,16 +153,6 @@ class Head extends React.Component<Props, HeaderState> {
             this.props.currencies.find((item) => item.id === this.props.currentMarket?.base_unit);
 
         const ticker = this.props.tickers[this.props.currentMarket?.id];
-
-        // if (window.performance) {
-        //     console.info('window.performance works fine on this browser');
-        // }
-        // console.info(performance.navigation.type);
-        // if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-        //     console.info('This page is reloaded');
-        // } else {
-        //     console.info('This page is not reloaded');
-        // }
 
         if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
             localStorage.setItem('showProfileDropdown', 'false');
@@ -415,7 +418,11 @@ class Head extends React.Component<Props, HeaderState> {
                                                 {LanguageDropdown.map((item, key) => (
                                                     <div
                                                         key={`language-${key}`}
-                                                        onClick={() => this.setState({ showLanguage: false })}
+                                                        onClick={() => {
+                                                            this.handleChangeLanguage(item.code);
+                                                            this.setState({ showLanguage: false });
+                                                            localStorage.setItem('showLanguage', 'false');
+                                                        }}
                                                         className="dropdown-item grey-text-accent text-sm active cursor-pointer">
                                                         {item.flag} {item.name}
                                                     </div>
@@ -565,6 +572,28 @@ class Head extends React.Component<Props, HeaderState> {
     private handleChangeCurrentStyleMode = (value: string) => {
         this.props.changeColorTheme(value);
     };
+
+    private handleChangeLanguage = (language: string) => {
+        if (this.props.isLoggedIn) {
+            const data = this.props.user.data && JSON.parse(this.props.user.data);
+
+            if (data?.languange !== language) {
+                const payload = {
+                    ...this.props.user,
+                    data: JSON.stringify({
+                        ...data,
+                        language,
+                    }),
+                };
+
+                changeUserDataFetch({ user: payload });
+            }
+        } else {
+            localStorage.setItem('lang_code', language);
+        }
+
+        changeLanguage(language);
+    };
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => ({
@@ -573,6 +602,8 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
     isLoggedIn: selectUserLoggedIn(state),
     currencies: selectCurrencies(state),
     tickers: selectMarketTickers(state),
+    currentLanguage: selectCurrentLanguage(state),
+    user: selectUserInfo(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispatch) => ({
@@ -580,6 +611,8 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> = (dispa
     toggleMarketSelector: () => dispatch(toggleMarketSelector()),
     logout: () => dispatch(logoutFetch()),
     changeColorTheme: (payload) => dispatch(changeColorTheme(payload)),
+    changeLanguange: (payload) => dispatch(changeLanguage(payload)),
+    changeUserDataFetch: (payload) => dispatch(changeUserDataFetch(payload)),
 });
 
 export const Header = compose(
