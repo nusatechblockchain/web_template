@@ -193,7 +193,7 @@ const MarketOrderMobileScreen: React.FC = () => {
         <p className="mb-0 text-sm grey-text">Price</p>,
         <p className="mb-0 text-sm grey-text">Type</p>,
         <p className="mb-0 text-sm grey-text">Status</p>,
-        <p className="mb-0 text-sm grey-text">Action</p>,
+        tab === 'open' && <p className="mb-0 text-sm grey-text">Action</p>,
     ];
 
     const renderDataTable = (data) => {
@@ -213,23 +213,27 @@ const MarketOrderMobileScreen: React.FC = () => {
                         {item.price} {item.market.toUpperCase()}
                     </p>
                     <p className="mb-0 grey-text text-xxs text-nowrap">
-                        {moment(item.created_at).format('D MMM YYYY')}
+                        {moment(item.created_at).format('DD-MM-YYYY HH:mm:ss')}
                     </p>
                 </div>
             </div>,
-            <p className={`badge grey-text text-sm mb-0`}>{item.price}</p>,
+            <p className={`badge grey-text text-sm mb-0`}>
+                {item.ord_type === 'market' ? item.avg_price : item.price}
+            </p>,
             <p className={`badge text-sm mb-0 cursor-pointer gradient-text`}>
                 {item.side.charAt(0).toUpperCase() + item.side.slice(1)}
             </p>,
             <p className={`badge text-sm mb-0 cursor-pointer gradient-text`}>
                 {item.state.charAt(0).toUpperCase() + item.state.slice(1)}
             </p>,
-            <p
-                key={index}
-                className={`badge text-sm mb-0 cursor-pointer danger-text`}
-                onClick={() => handleItemDetail(data[index])}>
-                Cancel
-            </p>,
+            tab === 'open' && (
+                <p
+                    key={index}
+                    className={`badge text-sm mb-0 cursor-pointer danger-text`}
+                    onClick={() => handleItemDetail(data[index])}>
+                    Cancel
+                </p>
+            ),
         ]);
     };
 
@@ -377,14 +381,16 @@ const MarketOrderMobileScreen: React.FC = () => {
                         </Tab>
                     </Tabs>
 
-                    <div className="position-absolute cancel-all-container">
-                        <span
-                            onClick={handleCancelAllOrders}
-                            className="d-flex justify-content-start align-items-center cancel-all">
-                            <p className="p-0 m-0">Cancel All</p>
-                            <CloseIcon />
-                        </span>
-                    </div>
+                    {tab === 'open' && data.length > 0 && (
+                        <div className="position-absolute cancel-all-container">
+                            <span
+                                onClick={handleCancelAllOrders}
+                                className="d-flex justify-content-start align-items-center cancel-all">
+                                <p className="p-0 m-0">Cancel All</p>
+                                <CloseIcon />
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 <div id="off-canvas" className={`position-fixed off-canvas ${showDetail ? ' show' : ''}`}>
