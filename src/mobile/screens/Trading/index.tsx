@@ -16,10 +16,13 @@ import {
     selectMarkets,
     selectOpenOrdersList,
     selectDepthLoading,
-    selectUserLoggedIn,
     selectDepthAsks,
     selectDepthBids,
     selectMobileDeviceState,
+    selectWallets,
+    Ticker,
+    orderExecuteFetch,
+    selectOrderExecuteLoading,
 } from '../../../modules';
 import { Decimal } from '../../../components';
 import { ModalFullScreenMobile } from 'src/mobile/components';
@@ -32,7 +35,7 @@ import { CustomStylesSelect } from 'src/desktop/components';
 import { Table } from '../../../components';
 import { TradingChart, OrderForm } from '../../containers';
 import { CloseIconTrade } from 'src/assets/images/CloseIcon';
-import { localeDate, setTradeColor } from '../../../helpers';
+import { localeDate, setTradeColor, getTotalPrice, getAmount } from '../../../helpers';
 import { getTriggerSign } from './helpers';
 
 export const TradingMobileScreen: React.FC = (): React.ReactElement => {
@@ -48,7 +51,11 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const listOrder = useSelector(selectOpenOrdersList);
     const asks = useSelector(selectDepthAsks);
     const bids = useSelector(selectDepthBids);
+    const wallets = useSelector(selectWallets);
     const isMobileDevice = useSelector(selectMobileDeviceState);
+    const tickers = useSelector(selectMarketTickers);
+    const orderLoading = useSelector(selectOrderExecuteLoading);
+
     const [loading, setLoading] = React.useState(false);
     const [filterSell, setFilterSell] = React.useState(false);
     const [filterBuy, setFilterBuy] = React.useState(false);
@@ -56,14 +63,47 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
     const [showTrading, setShowTrading] = React.useState(false);
     const [showSidebar, setShowSidebar] = React.useState(false);
     const [changeMarket, setChangeMarket] = React.useState(false);
-    const [priceSell, setPriceSell] = React.useState(Decimal.format(0, currentMarket?.price_precision));
-    const [priceBuy, setPriceBuy] = React.useState(Decimal.format(0, currentMarket?.price_precision));
+    const [priceSell, setPriceSell] = React.useState('');
+    const [priceBuy, setPriceBuy] = React.useState('');
+    const [orderType, setOrderType] = React.useState('limit');
+
+    const [marketType, setMerketType] = React.useState('buy');
+    const [orderPercentageBuy, setOrderPercentageBuy] = React.useState(0);
+    const [orderPercentageSell, setOrderPercentageSell] = React.useState(0);
+    const [showModalSell, setShowModalSell] = React.useState(false);
+    const [showModalBuy, setShowModalBuy] = React.useState(false);
+    const [amountBuy, setAmountBuy] = React.useState('');
+    const [totalBuy, setTotalBuy] = React.useState('');
+    const [amountSell, setAmountSell] = React.useState('');
+    const [totalSell, setTotalSell] = React.useState('');
+    const [side, setSide] = React.useState<OrderSide>('buy');
 
     useDocumentTitle('Trading');
     useOpenOrdersFetch(currentMarket, hideOtherPairs);
     useMarketsFetch();
 
     const ask = [...asks].sort((a, b) => +b[0] - +a[0]);
+    const bid = [...bids].sort((a, b) => +b[0] - +a[0]);
+
+    const tickerItem: Ticker = tickers[currency];
+    const totalPriceBuy = getTotalPrice(amountBuy, +tickerItem?.last, bids);
+    const totalPriceSell = getTotalPrice(amountSell, +tickerItem?.last, asks);
+    const wallet =
+        wallets.length &&
+        wallets.find((item) => item.currency.toLowerCase() === currentMarket?.base_unit?.toLowerCase());
+    const balance = wallet && wallet.balance ? wallet.balance.toString() : '0';
+
+    const usd =
+        wallets.length &&
+        wallets.find((item) => item.currency.toLowerCase() === currentMarket?.quote_unit?.toLowerCase());
+    const usdt = usd && usd.balance ? usd.balance.toString() : '0';
+
+    // buat yang type market
+    const totalPrice = getTotalPrice(
+        side === 'buy' ? amountBuy : amountSell,
+        +tickerItem?.last,
+        side === 'buy' ? bids : asks
+    );
 
     const translate = React.useCallback((id: string) => formatMessage({ id: id }), [formatMessage]);
 
@@ -86,6 +126,249 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
             }, 2000);
         }
     }, [currentMarket, orderBookLoading]);
+
+    // ============== ORDER FORM START ==============
+
+    const handleChangeValueByButton = (increase: boolean, type: string) => {
+        let updatedValue: string;
+        if (type == 'Buy') {
+            updatedValue = priceBuy;
+        } else {
+            updatedValue = priceSell;
+        }
+        const increasedValue = (+updatedValue + 10 ** -currentMarket?.price_precision).toFixed(
+            currentMarket?.price_precision
+        );
+        const decreasedValue = (+updatedValue - 10 ** -currentMarket?.price_precision).toFixed(
+            currentMarket?.price_precision
+        );
+
+        updatedValue = increase ? increasedValue : +decreasedValue >= 0 ? decreasedValue : updatedValue;
+        if (type == 'Buy') {
+            setPriceBuy(String(updatedValue));
+        } else {
+            setPriceSell(String(updatedValue));
+        }
+    };
+
+    const handleChangeValueAmountByButton = (increase: boolean, type: string) => {
+        let updatedValue: string;
+        if (type == 'Buy') {
+            updatedValue = amountBuy;
+        } else {
+            updatedValue = amountSell;
+        }
+        const increasedValue = (+updatedValue + 10 ** -currentMarket?.amount_precision).toFixed(
+            currentMarket?.amount_precision
+        );
+        const decreasedValue = (+updatedValue - 10 ** -currentMarket?.amount_precision).toFixed(
+            currentMarket?.amount_precision
+        );
+
+        updatedValue = increase ? increasedValue : +decreasedValue >= 0 ? decreasedValue : updatedValue;
+        if (type == 'Buy') {
+            setAmountBuy(String(updatedValue));
+        } else {
+            setAmountSell(String(updatedValue));
+        }
+    };
+
+    // belum kepakai
+    const totalAmount = getAmount(
+        side === 'buy' ? +usdt : +balance,
+        side === 'buy' ? bids : asks,
+        side === 'buy' ? orderPercentageBuy : orderPercentageSell
+    );
+
+    // buat set amount sell
+    React.useEffect(() => {
+        const market =
+            orderPercentageSell !== 0
+                ? Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision)
+                : amountSell;
+
+        let limit: string | number;
+        if (orderPercentageSell !== 0) {
+            if (priceSell === '0' || priceSell === '') {
+                limit = '0';
+            } else {
+                limit = Decimal.format((+balance * orderPercentageSell) / 100, currentMarket?.amount_precision);
+            }
+        } else {
+            limit = amountSell;
+        }
+
+        setAmountSell(orderType === 'market' ? market.toString() : limit.toString());
+    }, [orderPercentageSell, totalSell, priceSell]);
+
+    // buat ngeset total sel
+    React.useEffect(() => {
+        const safePrice = totalPrice / +amountSell || tickerItem?.last;
+        const market = Decimal.format(+amountSell * +safePrice, currentMarket?.price_precision);
+
+        const limit =
+            orderPercentageSell !== 0
+                ? Decimal.format(+amountSell * +priceSell, currentMarket?.price_precision)
+                : Decimal.format(+priceSell * +amountSell, currentMarket?.price_precision);
+
+        setTotalSell(orderType === 'market' ? market : limit);
+    }, [priceSell, amountSell, orderPercentageSell]);
+
+    // buat order amout buy
+    React.useEffect(() => {
+        const safePrice = +totalPrice / +totalAmount || tickerItem?.last;
+        const market =
+            orderPercentageBuy !== 0
+                ? Decimal.format(+totalBuy / +safePrice, currentMarket?.amount_precision)
+                : amountBuy;
+
+        let limit: string | number;
+        if (orderPercentageBuy !== 0) {
+            if (priceBuy === '0' || priceBuy === '') {
+                limit = '0';
+            } else {
+                limit = Decimal.format(+totalBuy / +priceBuy, currentMarket?.amount_precision);
+            }
+        } else {
+            limit = amountBuy;
+        }
+        setAmountBuy(orderType === 'market' ? market.toString() : limit.toString());
+    }, [orderPercentageBuy, totalBuy, priceBuy]);
+
+    // buat total buy
+    React.useEffect(() => {
+        const market = Decimal.format((+usdt * orderPercentageBuy) / 100, currentMarket?.price_precision);
+
+        const limit =
+            orderPercentageBuy !== 0
+                ? Decimal.format((+usdt * +orderPercentageBuy) / 100, currentMarket?.price_precision)
+                : Decimal.format(+priceBuy * +amountBuy, currentMarket?.price_precision);
+
+        setTotalBuy(orderType === 'market' ? market : limit);
+    }, [priceBuy, amountBuy, orderPercentageBuy]);
+
+    // ketika pindah dari limit dan market dan setelah dispatch
+    const resetForm = () => {
+        setShowModalSell(false);
+        setShowModalBuy(false);
+        setAmountBuy('');
+        setAmountSell('');
+        setPriceBuy('');
+        setPriceSell('');
+        setTotalBuy('');
+        setTotalSell('');
+        setOrderPercentageSell(0);
+        setOrderPercentageBuy(0);
+        setChangeMarket(false);
+    };
+
+    // React.useEffect(() => {
+    //     setChangeMarket(props.changeMarket);
+    //     if (changeMarket) {
+    //         resetForm();
+    //     }
+    // }, [props.changeMarket, changeMarket]);
+
+    // ini ngepush data nya
+    const handleSubmit = () => {
+        const payloadLimit = {
+            market: currentMarket?.id,
+            side: side,
+            volume: side === 'sell' ? amountSell : amountBuy,
+            price: side === 'sell' ? priceSell : priceBuy,
+            ord_type: orderType,
+        };
+
+        const payloadMarket = {
+            market: currentMarket?.id,
+            side: side,
+            volume: side === 'sell' ? amountSell : amountBuy,
+            ord_type: orderType,
+        };
+
+        dispatch(orderExecuteFetch(orderType === 'limit' ? payloadLimit : payloadMarket));
+
+        resetForm();
+    };
+
+    // // ganti harga buy
+    // const handleChangePriceBuy = (e: string) => {
+    //     const value = e.replace(/[^0-9\.]/g, '');
+    //     setPriceBuy(value);
+    // };
+
+    // // ganti harga sell
+    // const handleChangePriceSell = (e: string) => {
+    //     const value = e.replace(/[^0-9\.]/g, '');
+    //     setPriceSell(value);
+    // };
+
+    // ganti amount buy
+    const handleChangeAmountBuy = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setAmountBuy(value);
+        setOrderPercentageBuy(0);
+    };
+
+    // ganti amout sell
+    const handleChangeAmountSell = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setAmountSell(value);
+        setOrderPercentageSell(0);
+    };
+
+    // ganti select persenan
+    const handleSelectPercentageSell = (e: number) => {
+        setOrderPercentageSell(e);
+    };
+
+    // ganti select persenan
+    const handleSelectPercentageBuy = (e: number) => {
+        setOrderPercentageBuy(e);
+    };
+
+    // close modal sell
+    const handleCancelModalSell = () => {
+        setShowModalSell(false);
+    };
+
+    // close modal buy
+    const handleCancelModalBuy = () => {
+        setShowModalBuy(false);
+    };
+
+    // submit sell
+    const handleSubmitSell = () => {
+        setShowModalSell(true);
+    };
+
+    // submit buy
+    const handleSubmitBuy = () => {
+        setShowModalBuy(true);
+    };
+
+    // order type
+    const handleSelectOrderType = (e: string) => {
+        setOrderType(e);
+        resetForm();
+    };
+
+    // ganti harga buy
+    const handleChangePriceBuy = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setPriceBuy(value);
+    };
+
+    // ganti harga sell
+    const handleChangePriceSell = (e: string) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setPriceSell(value);
+    };
+
+    const handleSide = (value: OrderSide) => {
+        setSide(value);
+    };
+    // ============ ORDER FORM END ==========
 
     // Function Order Book
     const handleSelectPriceAsks = (e: string) => {
@@ -291,8 +574,8 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                         <span className="cr-text__opacity">{curMarket?.quote_unit?.toUpperCase()}</span>
                     </span>,
                     <span key={id}>
-                        <Decimal fixed={2} thousSep=",">
-                            {volume}
+                        <Decimal fixed={amountFixed} thousSep=",">
+                            {origin_volume}
                         </Decimal>
                     </span>,
                     <span className={`${side == 'sell' ? 'danger-text' : 'green-text'}`}>{side}</span>,
@@ -339,13 +622,51 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                     </div>
                 )}
                 <div className="d-flex justify-content-between align-items-start trade-container w-100 ">
-                    <OrderForm priceBuy={priceBuy} priceSell={priceSell} changeMarket={changeMarket} />
+                    <OrderForm
+                        changeMarket={changeMarket}
+                        // handleChangePriceBuy={handleChangePriceBuy}
+                        // handleChangePriceSell={handleChangePriceSell}
+                        priceSell={priceSell}
+                        amountSell={amountSell}
+                        totalSell={totalSell}
+                        orderPercentageSell={orderPercentageSell}
+                        handleChangeAmountSell={handleChangeAmountSell}
+                        totalPriceSell={getTotalPrice(amountSell, +tickerItem?.last, asks)}
+                        handleChangePriceSell={handleChangePriceSell}
+                        handleSelectPercentageSell={handleSelectPercentageSell}
+                        showModalSell={showModalSell}
+                        handleCancelModalSell={handleCancelModalSell}
+                        handleSubmitSell={handleSubmitSell}
+                        priceBuy={priceBuy}
+                        amountBuy={amountBuy}
+                        totalBuy={totalBuy}
+                        orderPercentageBuy={orderPercentageBuy}
+                        handleChangeAmountBuy={handleChangeAmountBuy}
+                        totalPriceBuy={getTotalPrice(amountBuy, +tickerItem?.last, bids)}
+                        handleChangePriceBuy={handleChangePriceBuy}
+                        handleSelectPercentageBuy={handleSelectPercentageBuy}
+                        showModalBuy={showModalBuy}
+                        handleCancelModalBuy={handleCancelModalBuy}
+                        handleSubmitBuy={handleSubmitBuy}
+                        handleSubmit={handleSubmit}
+                        resetForm={resetForm}
+                        orderType={orderType}
+                        orderLoading={orderLoading}
+                        handleSide={handleSide}
+                        handleSelectOrderType={handleSelectOrderType}
+                        balanceCoin={balance}
+                        balanceQuote={usdt}
+                        side={side}
+                        handleChangeValueByButton={handleChangeValueByButton}
+                        handleChangeValueAmountByButton={handleChangeValueAmountByButton}
+                    />
 
                     <div className={`w-40 ${isMobileDevice && 'mobile-device order-book-mobile'}`}>
                         <OrderBook
                             asks={ask}
-                            bids={bids}
+                            bids={bid}
                             loading={loading}
+                            orderType={orderType}
                             handleSelectPriceAsks={handleSelectPriceAsks}
                             handleSelectPriceBids={handleSelectPriceBids}
                         />
