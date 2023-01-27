@@ -134,7 +134,7 @@ const WalletsOverview: FC<Props> = (props: Props): ReactElement => {
                 i.currency?.toLocaleLowerCase().includes(filterValue.toLowerCase())
         );
 
-        return !filteredList.length
+        return !filteredList.length && !filterValue
             ? [[[''], [''], <Loading />, [''], [''], ['']]]
             : !filteredList.length && !loading
             ? [[]]
