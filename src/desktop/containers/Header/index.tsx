@@ -411,8 +411,16 @@ class Head extends React.Component<Props, HeaderState> {
                                         }
                                     }}>
                                     {!this.props.isLoggedIn
-                                        ? `${localStorage.getItem('lang_code').toUpperCase()}/USDT`
-                                        : `${localStorage.getItem('lang_code').toUpperCase()}/USDT`}
+                                        ? `${
+                                              localStorage.getItem('lang_code') !== null
+                                                  ? localStorage.getItem('lang_code').toUpperCase()
+                                                  : ''
+                                          }/USDT`
+                                        : `${
+                                              localStorage.getItem('lang_code') !== null
+                                                  ? localStorage.getItem('lang_code').toUpperCase()
+                                                  : ''
+                                          }/USDT`}
                                 </a>
                                 {localStorage.getItem('showLanguage') == 'true' ? (
                                     <div
