@@ -414,12 +414,12 @@ class Head extends React.Component<Props, HeaderState> {
                                         ? `${
                                               localStorage.getItem('lang_code') !== null
                                                   ? localStorage.getItem('lang_code').toUpperCase()
-                                                  : ''
+                                                  : 'EN'
                                           }/USDT`
                                         : `${
                                               localStorage.getItem('lang_code') !== null
                                                   ? localStorage.getItem('lang_code').toUpperCase()
-                                                  : ''
+                                                  : 'EN'
                                           }/USDT`}
                                 </a>
                                 {localStorage.getItem('showLanguage') == 'true' ? (
