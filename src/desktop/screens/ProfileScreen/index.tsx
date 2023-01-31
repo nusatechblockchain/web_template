@@ -32,7 +32,7 @@ import moment from 'moment';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
-    useBlogsFetch('faq');
+    useBlogsFetch({ tag: 'faq' });
     const user = useSelector(selectUserInfo);
     const apiKeys = useSelector(selectApiKeys);
     const blogs = useSelector(selectBlogs);
@@ -113,7 +113,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const handleChangePhone = () => {
-        if (user.phones[0] && !isChangeNumber) {
+        if (phone[0]?.validated_at === null && !isChangeNumber) {
             dispatch(verifyPhone({ phone_number: `+${phone[0].number}`, verification_code: verificationCode }));
         } else {
             dispatch(verifyPhone({ phone_number: newPhoneValue, verification_code: verificationCode }));

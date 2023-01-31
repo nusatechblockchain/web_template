@@ -1,27 +1,15 @@
 import { CommonState } from '../../types';
 import { BlogsAction } from './actions';
 import { BLOGS_DATA, BLOGS_ERROR, BLOGS_FETCH } from './constants';
-
-export interface BlogsPayload {
-    id: String;
-    cover: String;
-    title: String;
-    category: String;
-    content: String;
-    created_at: String;
-    slug: String;
-    url: String;
-    created_at_f: String;
-    loading?: Boolean;
-    published_at: string;
-}
+import { Blogs } from './types';
 
 export interface BlogsState extends CommonState {
-    data?: BlogsPayload[];
+    data?: Blogs[];
     loading: boolean;
 }
 
 export const initialBlogsState: BlogsState = {
+    data: [],
     loading: false,
 };
 
