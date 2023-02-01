@@ -53,8 +53,8 @@ export const MarketDetailScreen: FC = (): ReactElement => {
 
     const dataTranding = [...marketList].sort((a, b) => Number(+b.volume) - Number(+a.volume));
     const dataGainers = [...marketList]
-        .filter((data) => data.price_change_percent.includes('+'))
-        .sort((a, b) => Number(b.price_change_percent.slice(1, -1)) - Number(a.price_change_percent.slice(1, -1)));
+        .filter((data) => data.price_change_percent?.includes('+'))
+        .sort((a, b) => Number(b.price_change_percent?.slice(1, -1)) - Number(a.price_change_percent.slice(1, -1)));
     const dataLosers = [...marketList]
         .filter((data) => data.price_change_percent.includes('-'))
         .sort((a, b) => Number(b.price_change_percent.slice(1, -1)) - Number(a.price_change_percent.slice(1, -1)));
@@ -82,7 +82,7 @@ export const MarketDetailScreen: FC = (): ReactElement => {
                         </div>
                         <div className="col-lg-3 col-4 d-flex flex-column pg-market-detail-screen__content-right">
                             <MarketDetailCalculator detail={detail} />
-                            <CardMarketDetail title="Most Tranding" data={dataTranding} />
+                            <CardMarketDetail title="Top 3 Volumes" data={dataTranding} />
                             <CardMarketDetail title="Top 3 Gainers" data={dataGainers} />
                             <CardMarketDetail title="Top 3 Losers" data={dataLosers} />
                         </div>

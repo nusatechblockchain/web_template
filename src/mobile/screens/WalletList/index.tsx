@@ -72,6 +72,8 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                     ...spotWallet,
                     spotBalance: spotWallet ? spotWallet.balance : '0',
                     spotLocked: spotWallet ? spotWallet.locked : '0',
+                    status: cur.status,
+                    network: cur.networks,
                 };
             });
 
@@ -132,7 +134,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                               <h3 className="p-0 m-0 text-one">Total Balance</h3>
                               <h4 className="p-0 m-0 text-two">
                                   <Decimal key={index} fixed={fixed} thousSep=",">
-                                      {totalBalance ? totalBalance.toString() : '0'}
+                                      {spotBalance ? spotBalance.toString() : '0'}
                                   </Decimal>
                               </h4>
                           </Link>,
@@ -208,7 +210,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
     return (
         <React.Fragment>
             <div className="mobile-container wallet-list no-header dark-bg-main position-relative">
-                <h1 className="w-100 heading-one mb-24 mt-0">{formatMessage({ id: 'page.mobile.wallets.balance' })}</h1>
+                <h1 className="w-100 heading-one mb-24 mt-0 white-text">Overview</h1>
                 <div className="estimate-container d-flex flex-column w-100">
                     <div className="total-container w-50 d-flex flex-column">
                         <h3 className="text-md grey-text font-bold  mb-0">
@@ -280,7 +282,7 @@ const WalletListMobileScreen: React.FC<Props> = (props: Props) => {
                         />
                     </div>
                 </div>
-                {!filteredWallets.length ? (
+                {!filteredWallets.length && !filterValue ? (
                     <div className="w-100 h-100 grey-text-accent">
                         <div className="bg-transparent d-flex justify-content-center align-items-center">
                             <span

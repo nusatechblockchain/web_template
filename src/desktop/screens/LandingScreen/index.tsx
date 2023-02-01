@@ -4,7 +4,6 @@ import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction, MapStateToProps } from 'react-redux';
 import { Link, RouteProps, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
-
 import { IntlProps } from '../../../';
 import { MarketsTable } from '../../containers';
 import { toggleColorTheme } from '../../../helpers';
@@ -46,7 +45,7 @@ class Landing extends React.Component<Props> {
 
     public render() {
         return (
-            <div className="landing-screen dark-bg-accent">
+            <div className="landing-screen about-screen dark-bg-accent">
                 <div
                     className="content-wrapper no-sidebar "
                     style={{ backgroundImage: `url('img/background-landing.png')` }}>
@@ -58,18 +57,18 @@ class Landing extends React.Component<Props> {
                         <div className="wrapper d-flex justify-content-around align-items-center flex-column index-2">
                             <div className="my-5">
                                 <h1 className="text-main-title white-text text-center mb-24 max-w-lg">
-                                    Crypto Increases, Money Saved For Better Life with{' '}
+                                    {this.translate('page.body.landing.marketInfo.title.text1')}{' '}
                                     <span className="gradient-text">HEX Exchange</span>
                                 </h1>
                                 <p className="text-md grey-text-accent text-center mb-24">
-                                    Enjoy your arbitrage on the HEX platform
+                                    {this.translate('page.body.landing.marketInfo.title.text2')}
                                 </p>
                                 <div className="d-flex justify-content-center">
-                                    <Link to={'/market'} className="btn btn-rounded btn-primary mx-3">
-                                        Trade Now
+                                    <Link to={'/markets'} className="btn btn-rounded btn-primary mx-3">
+                                        {this.translate('page.body.landing.marketInfo.title.button1')}
                                     </Link>
                                     <a href="" className="btn btn-rounded btn-outline white-text font-bold mx-3">
-                                        Download App
+                                        {this.translate('page.body.landing.marketInfo.title.button2')}
                                     </a>
                                 </div>
                             </div>
@@ -77,7 +76,7 @@ class Landing extends React.Component<Props> {
                                 <div className="d-flex new-coin justify-content-center">
                                     <div className="new-coin-content">
                                         <p className="mb-0 text-md white-text font-semibold mb-24 text-center">
-                                            New Coins
+                                            {this.translate('page.body.landing.new.coins')}
                                         </p>
                                         <div className="d-flex">
                                             <p className="mb-0 font-semibold white-text mr-4">

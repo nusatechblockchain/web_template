@@ -8,7 +8,17 @@ import { numberFormat, accumulateVolume, calcMaxVolume } from '../../../helpers'
 import { Decimal, Loading } from '../../../components';
 import { NoData } from '../../../desktop/components';
 
-const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handleSelectPriceBids }) => {
+export interface OrderBookProps {
+    asks: any;
+    bids: any;
+    loading: boolean;
+    orderType?: string;
+    handleSelectPriceAsks: (e: string) => void;
+    handleSelectPriceBids: (e: string) => void;
+}
+
+const OrderBookComponent: React.FunctionComponent<OrderBookProps> = (props) => {
+    const { asks, bids, loading, orderType, handleSelectPriceAsks, handleSelectPriceBids } = props;
     useOpenOrdersFetch();
     useDepthFetch();
 
@@ -85,11 +95,14 @@ const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handle
                                                     key={i}
                                                     onClick={() =>
                                                         isLoggedIn &&
+                                                        orderType == 'limit' &&
                                                         handleSelectPriceAsks(
                                                             Decimal.format(+item[0], currentMarket?.price_precision)
                                                         )
                                                     }
-                                                    className={`m-0 p-0 ${isLoggedIn && 'cursor-pointer'}`}>
+                                                    className={`m-0 p-0 ${
+                                                        isLoggedIn && orderType == 'limit' && 'cursor-pointer'
+                                                    }`}>
                                                     <td>
                                                         <p className="text-sm danger-text font-bold m-0 p-0 text-left">
                                                             {Decimal.format(+item[0], currentMarket?.price_precision)}
@@ -150,11 +163,14 @@ const OrderBookComponent = ({ asks, bids, loading, handleSelectPriceAsks, handle
                                                 key={i}
                                                 onClick={() =>
                                                     isLoggedIn &&
+                                                    orderType == 'limit' &&
                                                     handleSelectPriceBids(
                                                         Decimal.format(+item[0], currentMarket?.price_precision)
                                                     )
                                                 }
-                                                className={`m-0 p-0 ${isLoggedIn && 'cursor-pointer'}`}>
+                                                className={`m-0 p-0 ${
+                                                    isLoggedIn && orderType == 'limit' && 'cursor-pointer'
+                                                }`}>
                                                 <td>
                                                     <p className="text-sm green-text font-bold m-0 p-0 text-left">
                                                         {Decimal.format(+item[0], currentMarket?.price_precision)}

@@ -5,9 +5,10 @@ import { ConfigUpdateState, rootConfigUpdateSaga } from './admin/config';
 import { AlertState, rootHandleAlertSaga } from './public/alert';
 import { BlockchainsState } from './public/blockchains';
 import { BlocklistAccessState, rootBlocklistAccessSaga } from './public/blocklistAccess';
-import { BlogsState, rootblogsSaga } from './public/blog';
+import { BlogsState, rootBlogsSaga } from './public/blog';
 import { ConfigsState, rootConfigsSaga } from './public/configs';
 import { CurrenciesState } from './public/currencies';
+import { TradingFeeState } from './public/TradingFee';
 import { ErrorHandlerState, rootErrorHandlerSaga } from './public/errorHandler';
 import { ColorThemeState } from './public/globalSettings';
 import { GridLayoutState } from './public/gridLayout';
@@ -42,6 +43,7 @@ import { rootUserActivitySaga, UserActivityState } from './user/userActivity';
 import { rootWalletsSaga, WalletsState } from './user/wallets';
 import { QuickExchangeState, rootQuickExchangeSaga } from './user/quickExchange';
 import { rootWithdrawLimitSaga, WithdrawLimitState } from './user/withdrawLimit';
+import { rootWithdrawSumSaga, WithdrawSumState } from './user/withdrawSum';
 import { MarketsAdminState, rootMarketsAdminSaga } from './admin/markets';
 import { PlatformCreateState, rootPlatformCreateSaga } from './admin/platform';
 import { P2PState, rootP2PSaga } from './public/p2p';
@@ -63,6 +65,7 @@ export * from './public/blocklistAccess';
 export * from './public/blog';
 export * from './public/configs';
 export * from './public/currencies';
+export * from './public/tradingFee';
 export * from './public/errorHandler';
 export * from './public/globalSettings';
 export * from './public/i18n';
@@ -91,6 +94,7 @@ export * from './user/userActivity';
 export * from './user/wallets';
 export * from './user/feeGroup';
 export * from './user/withdrawLimit';
+export * from './user/withdrawSum';
 export * from './user/quickExchange';
 export * from './user/abilities';
 export * from './user/paymentMethod';
@@ -109,6 +113,7 @@ export interface RootState {
         colorTheme: ColorThemeState;
         configs: ConfigsState;
         currencies: CurrenciesState;
+        tradingFee: TradingFeeState;
         depth: DepthState;
         errorHandler: ErrorHandlerState;
         i18n: LanguageState;
@@ -146,6 +151,7 @@ export interface RootState {
         userActivity: UserActivityState;
         wallets: WalletsState;
         withdrawLimit: WithdrawLimitState;
+        withdrawSum: WithdrawSumState;
         feeGroup: FeeGroupState;
         quickExchange: QuickExchangeState;
         paymentMethod: PaymentMethodState;
@@ -178,7 +184,7 @@ export function* rootSaga() {
         call(rootAuthSaga),
         call(rootBeneficiariesSaga),
         call(rootBlocklistAccessSaga),
-        call(rootblogsSaga),
+        call(rootBlogsSaga),
         call(rootConfigUpdateSaga),
         call(rootDocumentationSaga),
         call(rootEmailVerificationSaga),
@@ -208,6 +214,7 @@ export function* rootSaga() {
         call(rootUserActivitySaga),
         call(rootWalletsSaga),
         call(rootWithdrawLimitSaga),
+        call(rootWithdrawSumSaga),
         call(rootQuickExchangeSaga),
         call(rootPaymentMethodSaga),
         call(rootP2POffersSaga),
