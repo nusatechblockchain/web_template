@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
-import { useDocumentTitle, useHistoryFetch } from '../../../hooks';
-import { selectHistory, alertPush } from '../../../modules';
+import { useDocumentTitle, useHistoryFetch, useWithdrawSum } from '../../../hooks';
+import { selectHistory, alertPush, selectWithdrawSum } from '../../../modules';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from 'src/assets/images/ArrowLeftIcon';
 import './WalletWithdrawal.pcss';
@@ -21,8 +21,11 @@ export const WalletWitdrawal: React.FC = () => {
     const history = useHistory();
     const dispatch = useDispatch();
 
+    useWithdrawSum();
+
     const { currency = '' } = useParams<{ currency?: string }>();
     const historys = useSelector(selectHistory);
+    const sum = useSelector(selectWithdrawSum);
     const [showModalTransfer, setShowModalTransfer] = React.useState(false);
 
     useDocumentTitle('Wallet || Withdrawal');
@@ -39,7 +42,7 @@ export const WalletWitdrawal: React.FC = () => {
 
     const getTableData = (data) => {
         return data.map((item) => [
-            moment(item.created_at).format('D MMM YYYY - HH:mm'),
+            moment(item.created_at).format('DD-MM-YYYY HH:mm:ss'),
             <>
                 {item.blockchain_txid ? (
                     <fieldset onClick={() => doCopy('item' + String(item.id))}>
@@ -64,12 +67,12 @@ export const WalletWitdrawal: React.FC = () => {
     return (
         <React.Fragment>
             <div className="pg-wallet-withdraw-screen dark-bg-main">
-                <div className="header-withdraw dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
-                    <div className="mr-2">
+                <div className="header-withdraw container dark-bg-main d-flex justify-content-between py-4 px-24 mb-24">
+                    <div className="d-flex mr-2">
                         <Link to="/wallets" className="white-text text-lg">
                             <ArrowLeftIcon className={''} />
-                            Withdrawal Crypto
                         </Link>
+                        <p className=" white-text text-lg mb-0 ml-4">Withdrawal Crypto</p>
                     </div>
 
                     <div className="ml-2">
@@ -86,7 +89,7 @@ export const WalletWitdrawal: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div className="dark-bg-accent body-withdraw">
+                <div className="dark-bg-accent container body-withdraw">
                     <div className="d-flex justify-content-between align-items-start mb-24 w-100 body-withdraw__content">
                         <div className="w-60">
                             <WalletWithdrawalForm />

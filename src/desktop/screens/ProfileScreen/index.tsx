@@ -32,7 +32,7 @@ import moment from 'moment';
 
 export const ProfileScreen: FC = (): ReactElement => {
     useDocumentTitle('Profile');
-    useBlogsFetch('faq');
+    useBlogsFetch({ tag: 'faq' });
     const user = useSelector(selectUserInfo);
     const apiKeys = useSelector(selectApiKeys);
     const blogs = useSelector(selectBlogs);
@@ -43,7 +43,7 @@ export const ProfileScreen: FC = (): ReactElement => {
 
     const [showModal2FaGoogle, setShowModal2FAGoogle] = useState(false);
     const [showModalChangePhone, setShowModalChangePhone] = useState(false);
-    const [twoFaGoogleValue, settwoFaGoogleValue] = useState('');
+    const [twoFaGoogleValue, setTwoFaGoogleValue] = useState('');
     const [newPhoneValue, setNewPhoneValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [isChangeNumber, setIsChangeNumber] = useState(false);
@@ -52,10 +52,14 @@ export const ProfileScreen: FC = (): ReactElement => {
 
     const [seconds, setSeconds] = useState(30000);
     const [timerActive, setTimerActive] = useState(false);
+    const [accountVerified, setAccountVerified] = useState(false);
     const [kycStatus, setKycStatus] = useState('');
     const [profilekycStatus, setProfileKycStatus] = useState('');
     const phone = user.phones.slice(-1);
     const kyc = user.profiles.slice(-1);
+    const label = user.labels;
+
+    const labelPhone = [...label].find((item) => item.key === 'phone');
 
     React.useEffect(() => {
         if (blogs) {
@@ -97,7 +101,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const handleSendCodePhone = () => {
-        if (user.phones[0] && !isChangeNumber) {
+        if (phone[0]?.validated_at === null && !isChangeNumber) {
             dispatch(resendCode({ phone_number: `+${phone[0].number}` }));
             setTimerActive(true);
             setResendCodeActive(true);
@@ -109,7 +113,7 @@ export const ProfileScreen: FC = (): ReactElement => {
     };
 
     const handleChangePhone = () => {
-        if (user.phones[0] && !isChangeNumber) {
+        if (phone[0]?.validated_at === null && !isChangeNumber) {
             dispatch(verifyPhone({ phone_number: `+${phone[0].number}`, verification_code: verificationCode }));
         } else {
             dispatch(verifyPhone({ phone_number: newPhoneValue, verification_code: verificationCode }));
@@ -131,8 +135,8 @@ export const ProfileScreen: FC = (): ReactElement => {
         setShowModal2FAGoogle(!showModal2FaGoogle);
     };
 
-    const disabledButton = () => {
-        if (phone[0]?.validated_at === null && !isChangeNumber) {
+    const disabledButtonCode = () => {
+        if (phone[0]?.validated_at === null && !isChangeNumber && !timerActive) {
             return false;
         }
 
@@ -143,6 +147,63 @@ export const ProfileScreen: FC = (): ReactElement => {
         if (timerActive) {
             return true;
         }
+    };
+
+    const disabledButton = () => {
+        if (phone[0]?.validated_at === null && !isChangeNumber) {
+            if (verificationCode.length < 5) {
+                return true;
+            }
+        } else {
+            if (verificationCode.length < 5) {
+                return true;
+            }
+
+            if (!newPhoneValue) {
+                return true;
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (user?.labels[2]?.key == 'otp') {
+            if (
+                user?.labels[0]?.value == 'verified' &&
+                user?.labels[1]?.value == 'verified' &&
+                user?.labels[3]?.value == 'verified' &&
+                user?.labels[4]?.value == 'verified'
+            ) {
+                setAccountVerified(true);
+            } else {
+                setAccountVerified(false);
+            }
+        } else {
+            if (
+                user?.labels[0]?.value == 'verified' &&
+                user?.labels[1]?.value == 'verified' &&
+                user?.labels[2]?.value == 'verified' &&
+                user?.labels[3]?.value == 'verified'
+            ) {
+                setAccountVerified(true);
+            } else {
+                setAccountVerified(false);
+            }
+        }
+    }, [user]);
+
+    const handleChangeVerificationCodeValue = (e) => {
+        const value = e.replace(/[^0-9\.]/g, '');
+        setVerificationCode(value);
+    };
+
+    const handleChangePhoneValue = (e) => {
+        const value = e.replace(/[^0-9+\.]/g, '');
+        setNewPhoneValue(value);
+    };
+
+    const handleChangeTwoFaGoogleValue = (e) => {
+        const value = e.replace(/[^0-9+\.]/g, '');
+        setTwoFaGoogleValue(value);
     };
 
     // Render phone modal
@@ -156,7 +217,11 @@ export const ProfileScreen: FC = (): ReactElement => {
                         'You already add phone number, please verify by click send code button to get OTP number'
                     ) : (user.phones[0] && isChangeNumber) || user.phones[0] !== null ? (
                         <p className="danger-text">
-                            You only have {5 - user.phones.length} chances to change your phone number
+                            {user.phones.length === 4 && isChangeNumber
+                                ? `Sorry, you run out of time for changing your phone number`
+                                : user.phones.length < 4 && isChangeNumber
+                                ? `You only have ${4 - user.phones.length} chances to change your phone number`
+                                : `Please verify your phone number`}
                         </p>
                     ) : (
                         'Set Your New Phone Number And Verified'
@@ -167,17 +232,18 @@ export const ProfileScreen: FC = (): ReactElement => {
                 )}
 
                 <div className="form">
-                    {(isChangeNumber || !user.phones[0] || user.phones[0]?.validated_at !== null) && (
+                    {(isChangeNumber || !phone[0] || phone[0]?.validated_at !== null) && (
                         <div className="form-group mb-24">
                             <CustomInput
-                                defaultLabel={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                defaultLabel={`${!phone[0] ? '' : 'New'} Phone Number`}
                                 inputValue={newPhoneValue}
-                                label={`${!user.phones[0] ? '' : 'New'} Phone Number`}
+                                label={`${!phone[0] ? '' : 'New'} Phone Number`}
                                 placeholder="+6281902912921"
                                 type="text"
                                 labelVisible
                                 classNameLabel="white-text text-sm"
-                                handleChangeInput={(e) => setNewPhoneValue(e)}
+                                handleChangeInput={(e) => handleChangePhoneValue(e)}
+                                isDisabled={user.phones.length === 4}
                             />
                         </div>
                     )}
@@ -195,10 +261,11 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 classNameLabel="d-none"
                                 classNameInput="spacing-10"
                                 classNameGroup="mb-0 w-100"
-                                handleChangeInput={(e) => setVerificationCode(e)}
+                                isDisabled={isChangeNumber && user.phones.length === 4}
+                                handleChangeInput={(e) => handleChangeVerificationCodeValue(e)}
                             />
                             <button
-                                disabled={disabledButton()}
+                                disabled={disabledButtonCode()}
                                 onClick={handleSendCodePhone}
                                 className="btn btn-primary ml-2 text-nowrap">
                                 {(!isChangeNumber && phone && phone[0] && phone[0].validated_at === null) ||
@@ -217,6 +284,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 onClick={() => {
                                     setIsChangeNumber(true);
                                     setTimerActive(false);
+                                    setVerificationCode('');
                                 }}
                                 className="text-right white-text text-xs cursor-pointer">
                                 Change Phone
@@ -225,15 +293,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                     </div>
                     <button
                         type="submit"
-                        disabled={
-                            phone && phone[0]?.validated_at === null
-                                ? verificationCode.length < 5
-                                    ? true
-                                    : false
-                                : newPhoneValue === '' || verificationCode.length < 5
-                                ? true
-                                : false
-                        }
+                        disabled={disabledButton()}
                         onClick={handleChangePhone}
                         className="btn btn-primary btn-block"
                         data-toggle="modal"
@@ -241,9 +301,11 @@ export const ProfileScreen: FC = (): ReactElement => {
                         data-dismiss="modal">
                         {!user.phones[0]
                             ? 'Add'
-                            : user.phones[0] && user.phones[0].validated_at === null && !isChangeNumber
-                            ? 'Veify'
-                            : 'Change'}
+                            : phone[0] && phone[0].validated_at === null
+                            ? 'Verify'
+                            : isChangeNumber
+                            ? 'Change'
+                            : ''}
                     </button>
                 </div>
             </React.Fragment>
@@ -256,9 +318,9 @@ export const ProfileScreen: FC = (): ReactElement => {
                 <h6 className="text-xl font-bold white-text mb-0">
                     {!user.phones[0]
                         ? 'Add Phone Number'
-                        : user.phones[0].validated_at === null && !isChangeNumber
-                        ? 'Veirify Phone Number'
-                        : user.phones[0] !== null || isChangeNumber
+                        : phone[0] && phone[0].validated_at === null && !isChangeNumber
+                        ? 'Verify Phone Number'
+                        : isChangeNumber
                         ? 'Change Phone Number'
                         : ''}
                 </h6>
@@ -267,6 +329,8 @@ export const ProfileScreen: FC = (): ReactElement => {
                     onClick={() => {
                         setShowModalChangePhone(false);
                         setIsChangeNumber(false);
+                        setVerificationCode('');
+                        setNewPhoneValue('');
                     }}
                 />
             </React.Fragment>
@@ -292,7 +356,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                             labelVisible
                             classNameInput="text-center spacing-10"
                             classNameLabel="white-text text-sm"
-                            handleChangeInput={(e) => settwoFaGoogleValue(e)}
+                            handleChangeInput={(e) => handleChangeTwoFaGoogleValue(e)}
                         />
                     </div>
                     <button
@@ -339,7 +403,7 @@ export const ProfileScreen: FC = (): ReactElement => {
                     <div className="profile-menu px-24 mb-24">
                         <div className="row">
                             <div className="col-6 col-lg-8">
-                                {user && user.labels && user.labels.length === 5 ? (
+                                {accountVerified ? (
                                     ''
                                 ) : (
                                     <div className="notification-warning alert show text-ms white-text font-normal position-relative mb-24">
@@ -352,23 +416,21 @@ export const ProfileScreen: FC = (): ReactElement => {
                                 )}
                                 <div className="main-menu">
                                     <div className="menu-item py-24 mb-4">
-                                        <Link to={'/change-email'}>
-                                            <div className="d-flex align-items-center position-relative">
-                                                <div className="icon-bg">
-                                                    <EmailProfileIcon />
-                                                </div>
-                                                <div className="ml-3 mr-3">
-                                                    <p className="mb-1 text-ms font-normal white-text">Email</p>
-                                                    <span className="d-block text-xs grey-text-accent font-normal ">
-                                                        {user.email}
-                                                    </span>
-                                                    <span className="text-xs contrast-text font-normal">Verified</span>
-                                                </div>
-                                                <div className="check">
-                                                    <CheckIcon />
-                                                </div>
+                                        <div className="d-flex align-items-center position-relative">
+                                            <div className="icon-bg">
+                                                <EmailProfileIcon />
                                             </div>
-                                        </Link>
+                                            <div className="ml-3 mr-3">
+                                                <p className="mb-1 text-ms font-normal white-text">Email</p>
+                                                <span className="d-block text-xs grey-text-accent font-normal ">
+                                                    {user.email}
+                                                </span>
+                                                <span className="text-xs contrast-text font-normal">Verified</span>
+                                            </div>
+                                            <div className="check">
+                                                <CheckIcon />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="menu-item py-24 mb-4">
                                         <Link to={kycStatus == 'verified' ? '/profile' : '/profile/kyc'}>
@@ -406,22 +468,14 @@ export const ProfileScreen: FC = (): ReactElement => {
                                                     </span>
                                                     <span
                                                         className={`d-block text-left text-xs  font-normal ${
-                                                            !user.phones[0] ||
-                                                            (user.phones &&
-                                                                user.phones[0] &&
-                                                                user.phones[0].validated_at === null)
-                                                                ? 'danger-text'
-                                                                : 'contrast-text'
+                                                            labelPhone?.value === 'verified'
+                                                                ? 'contrast-text'
+                                                                : 'danger-text'
                                                         }`}>
-                                                        {!user.phones[0] ||
-                                                        (user.phones &&
-                                                            user.phones[0] &&
-                                                            user.phones[0].validated_at === null)
-                                                            ? 'Unverified'
-                                                            : 'Verified'}
+                                                        {labelPhone?.value === 'verified' ? 'Verified' : 'Unverified'}
                                                     </span>
                                                 </div>
-                                                {user.phones && user.phones[0] && user.phones[0].validated_at !== null && (
+                                                {labelPhone?.value === 'verified' && (
                                                     <div className="check">
                                                         <CheckIcon />
                                                     </div>

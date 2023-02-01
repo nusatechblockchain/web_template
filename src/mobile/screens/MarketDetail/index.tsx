@@ -30,11 +30,10 @@ const MarketDetailMobileScreen: React.FC = () => {
     useMarketsFetch();
     useMarketsTickersFetch();
 
+    const { currency } = useParams<{ currency?: string }>();
     const currencies = useSelector(selectCurrencies);
     const markets = useSelector(selectMarkets);
     const marketTickers = useSelector(selectMarketTickers);
-    const marketInfo = useSelector(selectCurrentMarket);
-    const { currency } = useParams<{ currency?: string }>();
     const dispatch = useDispatch();
 
     const marketList = markets
@@ -66,7 +65,7 @@ const MarketDetailMobileScreen: React.FC = () => {
     }, [current]);
 
     return (
-        <React.Fragment>
+        <>
             <div className="mobile-container no-header market-detail dark-bg-main">
                 <div className="mb-3">
                     <Link to={'/markets'} className="cursor-pointer position-absolute">
@@ -97,7 +96,7 @@ const MarketDetailMobileScreen: React.FC = () => {
                         <h1 className="p-0 m-0">$ {detail && detail.last}</h1>
                         <h4
                             className={`p-0 m-0 ${
-                                detail && detail.price_change_percent && detail.price_change_percent.includes('-')
+                                detail && detail.price_change_percent && detail.price_change_percent?.includes('-')
                                     ? 'danger-text'
                                     : 'contrast-text'
                             }`}>
@@ -150,9 +149,9 @@ const MarketDetailMobileScreen: React.FC = () => {
                                 <h4 className="p-0 m-0">Change (1h)</h4>
                                 <p
                                     className={`p-0 m-0 ${
-                                        detail && detail.price_change_percent.includes('+')
+                                        detail && detail.price_change_percent?.includes('+')
                                             ? 'green-text'
-                                            : detail && detail.price_change_percent.includes('-')
+                                            : detail && detail.price_change_percent?.includes('-')
                                             ? 'danger-text'
                                             : 'grey-text-accent'
                                     }`}>
@@ -182,7 +181,7 @@ const MarketDetailMobileScreen: React.FC = () => {
                     </div>
                 </>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 

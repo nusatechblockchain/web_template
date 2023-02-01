@@ -136,9 +136,16 @@ export const en = {
     'page.body.landing.header.button2': 'log in',
     'page.body.landing.header.button3': 'register',
 
-    'page.body.landing.marketInfo.title.text1': 'Welcome to Heaven Exchange.',
+    'page.body.landing.marketInfo.title.text1': 'Crypto Increases, Money Saved For Better Life with',
     'page.body.landing.marketInfo.title.text2': 'Buy, sell and trade digital currency.',
-    'page.body.landing.marketInfo.title.button': 'start trading',
+    'page.body.landing.marketInfo.title.button1': 'Trade Now',
+    'page.body.landing.marketInfo.title.button2': 'Download App',
+
+    'page.body.landing.new.coins': 'New Coins',
+
+    'page.body.landing.popular.coin.title': 'Popular Crypto Coins',
+    'page.body.landing.popular.coin.desc': 'Most popular coins to trade',
+    'page.body.landing.popular.coin.show.more': 'Show More',
 
     'page.body.landing.platformInfo.item.first.value': '30M+',
     'page.body.landing.platformInfo.item.first.title': 'Customers served',
@@ -503,7 +510,7 @@ export const en = {
     'page.body.profile.referral.rewards': 'Your Total Rewards',
     'page.body.profile.referral.earn': 'Earn Crypto Together',
     'page.body.profile.referral.commission':
-        'Invite your friend and earn 50% commission on their exchange trasaction, Copy link bellow and share referral link to your friends',
+        'Invite your friend and earn 50% commission on their exchange transaction, Copy link bellow and share referral link to your friends',
     'page.body.profile.header.referralProgram': 'Referral Link',
     'page.body.profile.content.copyLink': 'Copy',
 

@@ -30,6 +30,7 @@ import {
 import { CommonError } from '../../../modules/types';
 import { Link } from 'react-router-dom';
 import PinInput from 'react-pin-input';
+import moment from 'moment';
 
 interface OwnProps {
     history: History;
@@ -60,23 +61,71 @@ interface ReduxProps {
 
 type Props = DispatchProps & ReduxProps & OwnProps & IntlProps;
 
-class EmailVerificationComponent extends React.Component<Props> {
-    public readonly state = {
-        code: '',
-    };
+interface EmailVerificationState {
+    code: string;
+    resendCodeActive: boolean;
+    seconds: number;
+    timerActive: boolean;
+    timer: any;
+}
+
+class EmailVerificationComponent extends React.Component<Props, EmailVerificationState> {
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            code: '',
+            resendCodeActive: false,
+            seconds: 30000,
+            timerActive: true,
+            timer: null,
+        };
+    }
+
     public componentDidMount() {
         setDocumentTitle('Email verification');
-
         if (!this.props.location.state) {
             this.props.history.push('/signin');
         }
+
+        let time = null;
+        if (this.state.timerActive) {
+            time = setInterval(() => {
+                this.setState({ seconds: this.state.seconds - 1000 });
+
+                if (this.state.seconds === 0) {
+                    clearInterval(this.state.timer);
+                    this.setState({ timerActive: false, seconds: 30000 });
+                }
+            }, 1000);
+
+            this.setState({ timer: time });
+        }
     }
 
-    public componentDidUpdate(prevProps: Props) {
+    public componentDidUpdate(previousProps, previousState) {
         const { history, ConfirmationCodeCreateSuccess } = this.props;
         if (ConfirmationCodeCreateSuccess === true) {
             history.push('/signin');
         }
+
+        let time = null;
+        if (!previousState.timerActive && this.state.timerActive) {
+            time = setInterval(() => {
+                this.setState({ seconds: this.state.seconds - 1000 });
+
+                if (this.state.seconds === 0) {
+                    clearInterval(this.state.timer);
+                    this.setState({ timerActive: false, seconds: 30000 });
+                }
+            }, 1000);
+
+            this.setState({ timer: time });
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.timer);
     }
 
     public translate = (id: string) => this.props.intl.formatMessage({ id });
@@ -145,14 +194,21 @@ class EmailVerificationComponent extends React.Component<Props> {
                                             <Spinner animation="border" variant="primary" />
                                         ) : (
                                             <button
-                                                className="btn-send-again text-sm grey-text border-none bg-transparent cursor-pointer"
-                                                onClick={this.handleClick}
-                                                disabled={this.disableButton()}>
-                                                {/* {button} */}
+                                                disabled={this.state.timerActive}
+                                                className={`btn-send-again text-sm border-none bg-transparent cursor-pointer p-0 ${
+                                                    this.state.timerActive ? 'grey-text' : 'contrast-text'
+                                                }`}
+                                                onClick={this.handleClick}>
                                                 Resend Code
                                             </button>
                                         )}
                                     </div>
+                                    <p
+                                        className={`text-right text-xs cursor-pointer ${
+                                            this.state.timerActive ? 'white-text' : 'grey-text'
+                                        }`}>
+                                        {moment(this.state.seconds).format('mm:ss')}
+                                    </p>
                                     <div className="mt-4 mb-2">{this.renderCaptcha()}</div>
                                 </div>
                                 <Button
@@ -173,13 +229,13 @@ class EmailVerificationComponent extends React.Component<Props> {
         );
     }
 
-    private handleChangeConfirmChange = (value: string) => {
+    public handleChangeConfirmChange = (value: string) => {
         this.setState({
             code: value,
         });
     };
 
-    private codeConfirm = () => {
+    public codeConfirm = () => {
         const payload = {
             email: this.props.location.state.email,
             code: this.state.code,
@@ -187,8 +243,12 @@ class EmailVerificationComponent extends React.Component<Props> {
         this.props.createConfirmationCodeFetch(payload);
     };
 
-    private handleClick = () => {
+    public handleClick = () => {
         const { captcha_response } = this.props;
+
+        if (this.props.location.state.email && this.props.captcha_response) {
+            this.setState({ timerActive: true });
+        }
 
         switch (captchaType()) {
             case 'recaptcha':
@@ -213,6 +273,10 @@ class EmailVerificationComponent extends React.Component<Props> {
         const captchaTypeValue = captchaType();
 
         if (location.state && location.state.email && !location.state.email.match(EMAIL_REGEX)) {
+            return true;
+        }
+
+        if (this.state.code.length < 6) {
             return true;
         }
 

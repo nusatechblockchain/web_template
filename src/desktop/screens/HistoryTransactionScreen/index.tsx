@@ -12,6 +12,7 @@ import {
     RootState,
     alertPush,
     selectHistoryLoading,
+    fetchHistory,
 } from '../../../modules';
 import { Table } from '../../../components';
 import { Pagination } from '../../../desktop/components';
@@ -37,15 +38,15 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     const [currency, setCurrency] = React.useState('');
     const [type, setType] = React.useState('withdraws');
     const [status, setStatus] = React.useState('');
-    const [startDate, setStartDate] = React.useState('');
-    const [endDate, setEndDate] = React.useState('');
+    const [startDate, setStartDate] = React.useState<string | number>();
+    const [endDate, setEndDate] = React.useState<string | number>();
+    const [startDateTransfer, setStartDateTransfer] = React.useState(new Date().toISOString().slice(0, 10));
+    const [endDateTransfer, setEndDateTransfer] = React.useState(new Date().toISOString().slice(0, 10));
     const [loading, setLoading] = React.useState(false);
 
     const firstElemIndex = useSelector((state: RootState) => selectFirstElemIndex(state, DEFAULT_LIMIT));
     const lastElemIndex = useSelector((state: RootState) => selectLastElemIndex(state, DEFAULT_LIMIT));
     const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, DEFAULT_LIMIT));
-
-    useHistoryFetch({ type: type, limit: DEFAULT_LIMIT, currency, page: currentPage });
 
     useDocumentTitle('Transaction History');
     useWalletsFetch();
@@ -58,6 +59,9 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
     const handleChangeType = (e) => {
         setType(e);
         setCurrency('');
+        setStatus('');
+        setStartDateTransfer('');
+        setEndDateTransfer('');
     };
 
     const onClickPrevPage = () => {
@@ -69,47 +73,56 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
 
     const getTableHeaders = (data) => {
         if (type == 'withdraws') {
-            return ['Date', 'Type', 'Asset', 'Ammount', `TXID`, `Address`, 'Status'];
+            return ['Date', 'Type', 'Asset', 'Amount', `TXID`, `Address`, 'Status'];
         } else if (type == 'deposits') {
-            return ['Date', 'Type', 'Asset', 'Ammount', `TXID`, 'TID', 'Status'];
+            return ['Date', 'Type', 'Asset', 'Amount', `TXID`, 'TID', 'Status'];
         } else {
-            return ['Date', 'Type', 'Asset', 'Ammount', `Receiver ID`, 'Sender ID', 'Status'];
+            return ['Date', 'Type', 'Asset', 'Amount', `Receiver ID`, 'Sender ID', 'Status'];
         }
     };
+
+    React.useEffect(() => {
+        const defaultPayload = {
+            type,
+            page: currentPage,
+            limit: DEFAULT_LIMIT,
+        };
+
+        const currencyPayload = {
+            type,
+            page: currentPage,
+            limit: DEFAULT_LIMIT,
+            currency: currency,
+        };
+
+        dispatch(fetchHistory(currency ? currencyPayload : defaultPayload));
+    }, [startDate, endDate, currency, currentPage, status, type]);
 
     React.useEffect(() => {
         setLoading(true);
         if (!historyLoading) {
             setLoading(false);
         }
-    }, [historyLoading, list]);
+    }, [historyLoading]);
 
     React.useEffect(() => {
         setHistorys(list);
     }, [list]);
 
     React.useEffect(() => {
-        if (startDate != '' && endDate != '') {
+        if (startDateTransfer != '' && endDateTransfer != '') {
             const filterredList = list.filter(
                 (item) =>
-                    moment(item.created_at).format() >= moment(startDate).format() &&
-                    moment(item.created_at).format() <= moment(endDate).format()
+                    moment(item.created_at).format() >= moment(startDateTransfer).format() &&
+                    moment(item.created_at).format() <= moment(endDateTransfer).format()
             );
             setHistorys(filterredList);
         }
-    }, [startDate, endDate]);
-
-    const filterredStatus = (id) => {
-        let filterredList;
-        let temp;
-        temp = list;
-        filterredList = temp.filter((item) => item.id === id);
-        setHistorys(filterredList);
-    };
+    }, [startDateTransfer, endDateTransfer]);
 
     const getTableData = (data) => {
         return data.map((item) => [
-            <p className="m-0 text-sm white-text">{moment(item.created_at).format('D MMM YYYY - HH:mm')}</p>,
+            <p className="m-0 text-sm white-text">{moment(item.created_at).format('DD-MM-YYYY HH:mm:ss')}</p>,
             <p
                 className={`m-0 text-sm font-bold ${
                     type === 'deposits' ? 'contrast-text' : type === 'withdraws' ? 'danger-text' : 'blue-text'
@@ -187,10 +200,17 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
         ]);
     };
 
-    const optionStatus = [
+    const optionStatusWithdraw = [
         { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
-        { label: <p className="m-0 text-sm grey-text-accent">Completed</p>, value: 'completed' },
-        { label: <p className="m-0 text-sm grey-text-accent">Canceled</p>, value: 'canceled' },
+        { label: <p className="m-0 text-sm grey-text-accent">Success</p>, value: 'succeed' },
+        { label: <p className="m-0 text-sm grey-text-accent">Error</p>, value: 'errored' },
+        { label: <p className="m-0 text-sm grey-text-accent">Failed</p>, value: 'failed' },
+    ];
+
+    const optionStatusDeposit = [
+        { label: <p className="m-0 text-sm grey-text-accent">Pending</p>, value: 'pending' },
+        { label: <p className="m-0 text-sm grey-text-accent">Collected</p>, value: 'collected' },
+        { label: <p className="m-0 text-sm grey-text-accent">Error</p>, value: 'errored' },
     ];
 
     const optionAssets = currencies.map((item) => {
@@ -218,8 +238,10 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                         type="date"
                         className="form-control mb-24"
                         onChange={(e) => {
-                            setStartDate(e.target.value);
+                            type == 'transfers' ? setStartDateTransfer(e.target.value) : setStartDate(e.target.value);
                         }}
+                        value={type == 'transfers' ? startDateTransfer : startDate}
+                        defaultValue={type !== 'transfers' && new Date().toISOString().slice(0, 10)}
                     />
                 </div>
 
@@ -229,8 +251,10 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                         type="date"
                         className="form-control mb-24"
                         onChange={(e) => {
-                            setEndDate(e.target.value);
+                            type == 'transfers' ? setEndDateTransfer(e.target.value) : setEndDate(e.target.value);
                         }}
+                        value={type == 'transfers' ? endDateTransfer : endDate}
+                        defaultValue={type !== 'transfers' && new Date().toISOString().slice(0, 10)}
                     />
                 </div>
 
@@ -248,20 +272,27 @@ export const HistoryTransactionScreen: FC = (): ReactElement => {
                     />
                 </div>
 
-                <div className="w-20 mr-24">
-                    <p className="m-0 white-text text-sm mb-8">Status</p>
-                    <Select
-                        value={optionStatus.filter(function (option) {
-                            return option.value === status;
-                        })}
-                        styles={CustomStylesSelect}
-                        options={optionStatus}
-                        onChange={(e) => {
-                            setStatus(e.value);
-                            filterredStatus(e.value);
-                        }}
-                    />
-                </div>
+                {type !== 'transfers' && (
+                    <div className="w-20 mr-24">
+                        <p className="m-0 white-text text-sm mb-8">Status</p>
+                        <Select
+                            value={
+                                type == 'withdraws'
+                                    ? optionStatusWithdraw.filter(function (option) {
+                                          return option.value === status;
+                                      })
+                                    : optionStatusDeposit.filter(function (option) {
+                                          return option.value === status;
+                                      })
+                            }
+                            styles={CustomStylesSelect}
+                            options={type == 'withdraws' ? optionStatusWithdraw : optionStatusDeposit}
+                            onChange={(e) => {
+                                setStatus(e.value);
+                            }}
+                        />
+                    </div>
+                )}
             </div>
         );
     };
