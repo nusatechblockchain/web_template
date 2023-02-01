@@ -6,7 +6,7 @@ import {
     selectCurrencies,
     Currency,
     RootState,
-    selectCurrentPageIndex,
+    selectCurrentPage,
     selectFirstElemIndex,
     selectLastElemIndex,
     selectNextPageExists,
@@ -53,7 +53,7 @@ const OrderHistoryMobileScreen: React.FC = () => {
         {} as MarketOrderMobileScreenProps
     );
 
-    const page = useSelector(selectCurrentPageIndex);
+    const page = useSelector(selectCurrentPage);
     const orders = useSelector(selectHistory);
     const currencies: Currency[] = useSelector(selectCurrencies);
 
@@ -62,7 +62,7 @@ const OrderHistoryMobileScreen: React.FC = () => {
             const lastElementIndex = useSelector((state: RootState) => selectLastElemIndex(state, 5));
             const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, 5));
 
-    useHistoryFetch({page: currentPageIndex, type: 'trades', limit: 15});
+    useHistoryFetch({page: currentPageIndex, type: 'trades', limit: 5});
     
     
     const dataListWithIcon = orders.map((item) => ({
