@@ -63,7 +63,11 @@ body {
 }
 
 .bg-warning {
-    backgroung: var(--text-warning-color) !important;
+    background: var(--text-warning-color) !important;
+}
+
+.bg-contrast {
+    background: var(--text-contrast-color) !important;
 }
 
 /* end background color */
@@ -632,6 +636,14 @@ button[disabled] {
 .letter-sm {
     letter-spacing: 8px;
 }
+
+.overflow-visible {
+    overflow: visible !important;
+}
+
+.pointer-event-none {
+    pointer-events: none !important;
+}
 /* another css variable */
 
 /* MOBILE VARIABLE */
@@ -739,7 +751,7 @@ button[disabled] {
     &.blur-mobile {
         &:before {
             position: absolute;
-            content: "PLEASE LOGIN";
+            content: "";
             top: 0;
             left: 0;
             right: 0;

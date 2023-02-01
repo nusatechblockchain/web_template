@@ -880,10 +880,11 @@
                 }
             }
             .table-background {
-                top: 26px !important;
-
+                top: auto !important;
+                bottom: 0;
                 &.bottom-table {
                     top: 0 !important;
+                    bottom: auto;
                 }
 
                 .table-background-row {
@@ -1003,6 +1004,21 @@
                 span {
                     color: var(--text-primary-color);
                     white-space: nowrap;
+                }
+            }
+        }
+    }
+
+    .order-book-mobile {
+        .table-ask {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        table {
+            tr {
+                td {
+                    width: 33.33%;
                 }
             }
         }

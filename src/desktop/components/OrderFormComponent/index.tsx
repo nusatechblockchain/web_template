@@ -77,6 +77,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
 
     const handleSetValue = (value: string | number | undefined, defaultValue: string) => value || defaultValue;
     const safePrice = totalPrice / Number(amount) || price;
+    const precision = (+currentMarket?.min_amount + '').split('.')[1];
 
     return (
         <React.Fragment>
@@ -87,12 +88,22 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                         disabled={orderType === 'market'}
                         defaultValue={
                             orderType === 'market'
-                                ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
+                                ? amount != '0'
+                                    ? handleSetValue(
+                                          Decimal.format(+safePrice, currentMarket?.price_precision, ','),
+                                          tickerItem.last
+                                      )
+                                    : tickerItem.last
                                 : price
                         }
                         value={
                             orderType === 'market'
-                                ? handleSetValue(Decimal.format(safePrice, currentMarket?.price_precision, ','), '0')
+                                ? amount != '0'
+                                    ? handleSetValue(
+                                          Decimal.format(+safePrice, currentMarket?.price_precision, ','),
+                                          tickerItem.last
+                                      )
+                                    : tickerItem.last
                                 : price
                         }
                         onChange={(e) => handleChangePrice(e.target.value)}
@@ -110,10 +121,8 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <input
                         type="text"
                         // placeholder={Decimal.format('0', currentMarket?.amount_precision)}
-                        defaultValue={
-                            amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount
-                        }
-                        value={amount.includes('NaN') ? Decimal.format('0', currentMarket?.amount_precision) : amount}
+                        defaultValue={'0'}
+                        value={amount.includes('NaN') ? '0' : amount}
                         onChange={(e) => {
                             handleChangeAmount(e.target.value);
                             handleSide(side === 'Sell' ? 'sell' : 'buy');
@@ -127,7 +136,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     <label htmlFor={labelAmount} className="input-order-label-right">
                         {currentMarket?.base_unit?.toUpperCase()}
                     </label>
-                    {orderType === 'limit' && isLoggedIn && (
+                    {isLoggedIn && (
                         <div className="text-xs grey-text mt-1">Min amount: {currentMarket?.min_amount}</div>
                     )}
                 </div>
@@ -141,6 +150,7 @@ export const OrderFormComponent: React.FunctionComponent<OrderFormProps> = (prop
                     label100={labelPercent100}
                     handleSide={handleSide}
                     side={side}
+                    amount={amount}
                 />
 
                 <div className="form-group mb-3 position-relative  w-100">
