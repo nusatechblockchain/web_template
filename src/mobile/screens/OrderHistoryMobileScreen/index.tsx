@@ -1,21 +1,16 @@
 import * as React from 'react'
 import { ArrowLeft } from 'src/mobile/assets/Arrow'
 import { useHistory } from 'react-router-dom'
-import { useDocumentTitle, useWalletsFetch, useUserOrdersHistoryFetch, useMarketsFetch } from '../../../hooks';
+import { useDocumentTitle, useWalletsFetch, useUserOrdersHistoryFetch, useMarketsFetch, useHistoryFetch } from '../../../hooks';
 import {
     selectCurrencies,
     Currency,
-    selectMarkets,
-    openOrdersCancelFetch,
-    ordersCancelAllFetch,
     RootState,
     selectCurrentPageIndex,
-    selectOrdersFirstElemIndex,
-    selectOrdersHistory,
-    selectOrdersLastElemIndex,
-    selectOrdersNextPageExists,
-    selectShouldFetchCancelAll,
-    selectShouldFetchCancelSingle,
+    selectFirstElemIndex,
+    selectLastElemIndex,
+    selectNextPageExists,
+    selectHistory
 } from '../../../modules';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -59,41 +54,31 @@ const OrderHistoryMobileScreen : React.FC = () => {
     
     
     const page = useSelector(selectCurrentPageIndex);
-    const orders = useSelector(selectOrdersHistory);
+    const orders = useSelector(selectHistory);
     const currencies: Currency[] = useSelector(selectCurrencies);
 
 
             // Handle get item pagination
-            const firstElementIndex = useSelector((state: RootState) => selectOrdersFirstElemIndex(state, 5));
-            const lastElementIndex = useSelector((state: RootState) => selectOrdersLastElemIndex(state, 5));
-            const nextPageExists = useSelector((state: RootState) => selectOrdersNextPageExists(state));
+            const firstElementIndex = useSelector((state: RootState) => selectFirstElemIndex(state, 5));
+            const lastElementIndex = useSelector((state: RootState) => selectLastElemIndex(state, 5));
+            const nextPageExists = useSelector((state: RootState) => selectNextPageExists(state, 5));
 
-    useUserOrdersHistoryFetch({pageIndex: currentPageIndex, type: tab, limit: 15});
+    useHistoryFetch({page: currentPageIndex, type: 'trades', limit: 15});
     
-    React.useEffect(() => {
-        const filter = orders.filter((order)=> ['done'].includes(order.state));
-        setData(filter);
-    }, [orders]);
-
-    const dataListWithIcon = data.map((item) => ({
+    
+    const dataListWithIcon = orders.map((item) => ({
         ...item,
-        dataCurrency: currencies.find(({ id }) => id == item.market.replace('usdt','')|| id == item.market.replace('trx', '')),
+        dataCurrency: currencies.find(({ id }) => id == item.fee_currency )
     }));
 
 
     const onClickPrevPage = () => {
         setPageIndex(currentPageIndex - 1);
-        console.log(currentPageIndex);
     };
 
     const onClickNextPage = () => {
         setPageIndex(currentPageIndex + 1);
-        console.log(currentPageIndex);
-        
     };
-
-    console.log(data, 'data')
-    console.log(orders, 'orders');
 
     const renderTableHeader = [
         <p className="mb-0 text-sm grey-text">Coins</p>,
@@ -122,7 +107,7 @@ const OrderHistoryMobileScreen : React.FC = () => {
             </div>,
             <p className={`badge grey-text text-sm mb-0`}>{item.price}</p>,
             <p className={`badge text-sm mb-0 cursor-pointer gradient-text`}>{item.side.charAt(0).toUpperCase() + item.side.slice(1)}</p>,
-            <p className={`badge text-sm mb-0 cursor-pointer gradient-text`}>{item.state.charAt(0).toUpperCase() + item.state.slice(1)}</p>,
+            <p className={`badge text-sm mb-0 cursor-pointer gradient-text`}>Done</p>,
             // <p key={index} className={`badge text-sm mb-0 cursor-pointer danger-text`} onClick={()=> handleItemDetail(data[index])}>
             //     Detail
             // </p>,
