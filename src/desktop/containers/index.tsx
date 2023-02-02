@@ -31,3 +31,4 @@ export * from './TradingFutureRecentTrades';
 export * from './KycDocument';
 export * from './KycProfile';
 export * from './TradingChart';
+export * from './FAQHeader';
