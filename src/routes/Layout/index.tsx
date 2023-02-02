@@ -63,6 +63,7 @@ import {
     DeviceManagementMobileScreen,
     OrderHistoryMobileScreen,
     AnnouncementMobileScreen,
+    FAQMobileScreen
 } from '../../mobile/screens';
 
 import {
@@ -301,6 +302,14 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
             return (
                 <div className={mobileCls}>
                     <Switch>
+
+                        <PublicRoute
+                            loading={userLoading}
+                            // isLogged={isLoggedIn}
+                            path="/faq"
+                            component={FAQMobileScreen}
+                        />
+
                         <PublicRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
