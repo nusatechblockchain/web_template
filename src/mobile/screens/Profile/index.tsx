@@ -146,6 +146,8 @@ const ProfileMobileScreen: React.FC = () => {
         history.push('/change-email');
     };
 
+    console.log(user, 'user')
+
     const renderModal = () => (
         <React.Fragment>
             <div className="d-flex justify-content-center">
@@ -340,9 +342,9 @@ const ProfileMobileScreen: React.FC = () => {
                     </div>
                 </div>
                 {!hideWarning && user.level < 3 && (
-                    <div className="alert-mobile-warning px-2 py-3 alert d-flex align-items-center justify-content-between show text-xs warning-text font-normal position-relative mb-24">
-                        <WarningIcon className="mr-2" />
-                        <span className="text-xxs warning-text font-normal">
+                    <div className="alert-mobile-warning px-2 py-3 alert d-flex align-items-center justify-content-center show text-xs warning-text font-normal position-relative mb-24">
+                        <WarningIcon className="mr-4" />
+                        <span className="text-xxs warning-text font-normal ml-2">
                             Complete your identity verify to start trading with heaven exchange
                         </span>
                         {user.level >= 3 && (
@@ -393,18 +395,18 @@ const ProfileMobileScreen: React.FC = () => {
                                     <h4 className="mb-0 text-sm font-bold grey-text-accent">Phone</h4>
                                     <p
                                         className={`mb-0 text-xs ${
-                                            !user.phones[0] ||
-                                            (user.phones && user.phones[0] && user.phones[0].validated_at === null)
+                                            !user.labels[3] ||
+                                            (user.labels[3] && user.phones[0] && user.phones[0].validated_at === null)
                                                 ? 'danger-text'
                                                 : 'contrast-text'
                                         }`}>
-                                        {!user.phones[0] ||
-                                        (user.phones && user.phones[0] && user.phones[0].validated_at === null)
+                                        {!user.labels[3] ||
+                                        (user.labels[3] && user.phones[0] && user.phones[0].validated_at === null)
                                             ? 'Unverified'
                                             : 'Verified'}
                                     </p>
                                 </div>
-                                {user.phones && user.phones[0] && user.phones[0].validated_at !== null && (
+                                {user.labels[3] && user.phones && user.phones[0] && user.phones[0].validated_at !== null && (
                                     <CheckIcon className="check-icon" />
                                 )}
                             </div>
