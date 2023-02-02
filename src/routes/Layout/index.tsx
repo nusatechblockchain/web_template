@@ -303,9 +303,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                 <div className={mobileCls}>
                     <Switch>
 
-                        <PublicRoute
+                        <Route
                             loading={userLoading}
-                            // isLogged={isLoggedIn}
+                            isLogged={isLoggedIn}
                             path="/faq"
                             component={FAQMobileScreen}
                         />
@@ -508,7 +508,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={HistoryTransactionMobileScreen}
                         />
 
-                        <PublicRoute
+                        <Route
                             loading={userLoading}
                             isLogged={isLoggedIn}
                             path="/announcements"
