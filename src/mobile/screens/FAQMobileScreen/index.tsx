@@ -57,7 +57,7 @@ import moment from 'moment';
                                 <div className="row">
                                     {faq &&
                                         faq.map((item, key) => (
-                                            <div key={key} className="col-md-4 col-sm-6 col- mb-4">
+                                            <div key={key} className="col-md-4 col-sm-6 col- my-3">
                                                 <div className="article-item p-4 radius-md dark-bg-main">
                                                     <Logo className="mb-24" />
                                                     <p className="grey-text-accent text-md mb-12">FAQ </p>
