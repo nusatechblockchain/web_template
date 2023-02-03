@@ -62,7 +62,8 @@ import {
     SecurityMobileScreen,
     DeviceManagementMobileScreen,
     OrderHistoryMobileScreen,
-    // AnnouncementMobileScreen
+    AnnouncementMobileScreen,
+    FAQMobileScreen
 } from '../../mobile/screens';
 
 import {
@@ -301,6 +302,14 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
             return (
                 <div className={mobileCls}>
                     <Switch>
+
+                        <Route
+                            loading={userLoading}
+                            isLogged={isLoggedIn}
+                            path="/faq"
+                            component={FAQMobileScreen}
+                        />
+
                         <PublicRoute
                             loading={userLoading}
                             isLogged={isLoggedIn}
@@ -499,12 +508,12 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={HistoryTransactionMobileScreen}
                         />
 
-                        {/* <PrivateRoute
+                        <Route
                             loading={userLoading}
                             isLogged={isLoggedIn}
                             path="/announcements"
                             component={AnnouncementMobileScreen}
-                        /> */}
+                        />
 
                         {/* <PublicRoute loading={userLoading} path="/trading" component={TradingMobileScreen} />    */}
 

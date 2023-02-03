@@ -10,7 +10,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { SplashScreenMobile } from '../SplashScreen';
 import { BgCardSmall } from '../../assets/BackgroundCard';
 import { Table } from '../../../components';
 import { ArrowRight } from '../../assets/Arrow';
@@ -45,10 +44,6 @@ const HomeMobileScreen: React.FC = () => {
     const blogs = useSelector(selectBlogs);
 
     const [type, setType] = React.useState('all');
-
-    React.useEffect(() => {
-        setTimeout(() => setLoading(false), 1000);
-    }, []);
 
     React.useEffect(() => {
         if (blogs) {
@@ -179,9 +174,7 @@ const HomeMobileScreen: React.FC = () => {
 
     return (
         <>
-            {loading ? (
-                <SplashScreenMobile />
-            ) : (
+
                 <div className="mobile-container home-screen dark-bg-main">
                     <div>
                         <div id="heros" className="content-container w-100 mb-3">
@@ -301,7 +294,6 @@ const HomeMobileScreen: React.FC = () => {
                         </Tabs>
                     </div>
                 </div>
-            )}
         </>
     );
 };
