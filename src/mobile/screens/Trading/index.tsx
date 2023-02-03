@@ -767,7 +767,6 @@ export const TradingMobileScreen: React.FC = (): React.ReactElement => {
                                         placeholder="Search"
                                         aria-label="Username"
                                         aria-describedby="basic-addon1"
-                                        onChange={console.log('search')}
                                     />
                                     <div className="input-group-append">
                                         {/* <FilterInput
