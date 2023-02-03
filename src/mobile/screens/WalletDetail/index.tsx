@@ -32,6 +32,7 @@ import { WithdrawlIcon, DepositIcon, TransferIcon, FilterIcon, DocIcon } from '.
 import { Table } from '../../../components';
 import { CircleCloseModalNetworkIcon } from '../../../assets/images/CircleCloseIcon';
 import { InfoModalNetworkIcon } from '../../../assets/images/InfoIcon';
+import { data } from 'jquery';
 
 interface Props {
     isP2PEnabled?: boolean;
@@ -377,37 +378,57 @@ const WalletDetailMobileScreen: React.FC<Props> = (props: Props) => {
                 {/* ================== Modal Add Deposit ============================= */}
 
                 <div id="off-canvas" className={`position-fixed off-canvas ${showNetwork ? 'show' : ''}`}>
-                    <div className="fixed-bottom off-canvas-content-container overflow-auto">
-                        <div className="d-flex justify-content-between align-items-center mb-12">
-                            <h3 className="p-0 m-0 text-ms grey-text-accent">Select Network</h3>
-                            <span onClick={() => setShowNetwork(false)} className="cursor-pointer">
-                                <CircleCloseModalNetworkIcon />
-                            </span>
-                        </div>
-
-                        <div className="d-flex justify-content-start align-items-start mb-24">
-                            <span className="mr-8 curspr-pointer">
-                                <InfoModalNetworkIcon />
-                            </span>
-                            <p className="m-0 p-0 grey-text text-xxs">
-                                Ensure that the selected network is consistent with your method of withdrawal, Otherwise
-                                you are at risk losing your assets,
-                            </p>
-                        </div>
-
-                        {currencyItem &&
-                            currencyItem.networks.map((item, i) => (
-                                <div
-                                    onClick={() =>
-                                        handleSelectNetwork(item && item.blockchain_key, item && item.protocol)
-                                    }
-                                    key={i}
-                                    className="cursor-pointer mb-8">
-                                    <h3 className="p-0 m-0 text-ms grey-text-accent">{item && item.protocol}</h3>
-                                    <p className="m-0 p-0 grey-text text-xxs">{item && item.blockchain_key}</p>
+                    {currencyItem &&
+                    currencyItem.type.toLocaleLowerCase() !== 'fiat' &&
+                    currencyItem.networks.length !== 0 ? (
+                        <>
+                            <div className="fixed-bottom off-canvas-content-container overflow-auto">
+                                <div className="d-flex justify-content-between align-items-center mb-12">
+                                    <h3 className="p-0 m-0 text-ms grey-text-accent">Select Network</h3>
+                                    <span onClick={() => setShowNetwork(false)} className="cursor-pointer">
+                                        <CircleCloseModalNetworkIcon />
+                                    </span>
                                 </div>
-                            ))}
-                    </div>
+
+                                <div className="d-flex justify-content-start align-items-start mb-24">
+                                    <span className="mr-8 curspr-pointer">
+                                        <InfoModalNetworkIcon />
+                                    </span>
+                                    <p className="m-0 p-0 grey-text text-xxs">
+                                        Ensure that the selected network is consistent with your method of withdrawal,
+                                        Otherwise you are at risk losing your assets,
+                                    </p>
+                                </div>
+
+                                {currencyItem &&
+                                    currencyItem.networks.map((item, i) => (
+                                        <div
+                                            onClick={() =>
+                                                handleSelectNetwork(item && item.blockchain_key, item && item.protocol)
+                                            }
+                                            key={i}
+                                            className="cursor-pointer mb-8">
+                                            <h3 className="p-0 m-0 text-ms grey-text-accent">
+                                                {item && item.protocol}
+                                            </h3>
+                                            <p className="m-0 p-0 grey-text text-xxs">{item && item.blockchain_key}</p>
+                                        </div>
+                                    ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="fixed-bottom off-canvas-content-container overflow-auto">
+                            <div className="d-flex mb-12">
+                                <span onClick={() => setShowNetwork(false)} className="cursor-pointer ml-auto">
+                                    <CircleCloseModalNetworkIcon />
+                                </span>
+                            </div>
+                            <div className="empty-data d-flex flex-column align-items-center mb-5 w-100">
+                                <DocIcon className={''} />
+                                <h1>No Network available</h1>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* =================================== Modal filter Date ========================= */}

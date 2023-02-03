@@ -235,7 +235,7 @@ const WalletDepositMobileScreen: React.FC = () => {
                                     <QRCode size={200} value={depositAddress && depositAddress.address} />
                                 </div>
                                 <div className="logo-coin d-flex justify-content-center align-items-center">
-                                    <img src={currencyItem.icon_url} alt="" />
+                                    <img src={currencyItem.icon_url} alt="logo" />
                                 </div>
                             </div>
                             <h2 className="p-0 m-0 text-sm grey-text-accent font-bold mb-8">Network</h2>
