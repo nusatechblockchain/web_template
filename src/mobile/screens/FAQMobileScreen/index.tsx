@@ -25,8 +25,6 @@ import moment from 'moment';
     }
 }, [blogs, contact]);
 
-    console.log('support', support)
-
   return (
     <section className="mobile-container home-screen dark-bg-main">
       <div className="head-container position-relative">
