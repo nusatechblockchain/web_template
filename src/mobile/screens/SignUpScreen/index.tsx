@@ -364,8 +364,7 @@ const SignUpMobileScreen: React.FC = () => {
                     EXCHANGE platform services or any services that are provided, and together with this you agree and
                     bind yourself to all activities in this GTC with the terms and conditions as follows in this GTC
                     with the following terms and conditions: DEFINITIONS as long as the context sentence does not
-                    determine otherwise, the terms or definitions in the GTC have the following meanings : Translated
-                    with www.DeepL.com/Translator (free version)
+                    determine otherwise, the terms or definitions in the GTC have the following meanings :
                 </p>
                 <p className="grey-text-accent">
                     Website refers to an online site with the address https://heavenexchange.io. This website is managed
@@ -380,7 +379,7 @@ const SignUpMobileScreen: React.FC = () => {
                     platform which is the initial verification process to obtain information, statements in the use of
                     platform services Member is a person (individual), business entity, or legal entity that has
                     registered on the HEAVEN EXCHANGE platform, so as to obtain authorization from the HEAVEN EXCHANGE
-                    platform to carry out Translated with www.DeepL.com/Translator (free version)
+                    platform to carry out
                 </p>
                 <div className=" d-flex flex-row justify-content-between align-items-center w-100">
                     <button
