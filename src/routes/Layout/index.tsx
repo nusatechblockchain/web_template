@@ -63,7 +63,7 @@ import {
     DeviceManagementMobileScreen,
     OrderHistoryMobileScreen,
     AnnouncementMobileScreen,
-    FAQMobileScreen
+    FAQMobileScreen,
 } from '../../mobile/screens';
 
 import {
@@ -302,13 +302,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
             return (
                 <div className={mobileCls}>
                     <Switch>
-
-                        <Route
-                            loading={userLoading}
-                            isLogged={isLoggedIn}
-                            path="/faq"
-                            component={FAQMobileScreen}
-                        />
+                        <Route loading={userLoading} isLogged={isLoggedIn} path="/faq" component={FAQMobileScreen} />
 
                         <PublicRoute
                             loading={userLoading}
@@ -405,9 +399,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             component={ApiListMobileScreen}
                         />
 
-                        <PrivateRoute
+                        <PublicRoute
                             loading={userLoading}
-                            isLogged={isLoggedIn}
+                            // isLogged={isLoggedIn}
                             path="/referral"
                             component={ReferralMobileScreen}
                         />
@@ -584,9 +578,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         component={Lost2FAScreen}
                     />
 
-                    <PrivateRoute
+                    <PublicRoute
                         loading={userLoading}
-                        isLogged={isLoggedIn}
+                        // isLogged={isLoggedIn}
                         path="/profile/referral"
                         component={ReferralScreen}
                     />
