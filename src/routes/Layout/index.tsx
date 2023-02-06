@@ -372,9 +372,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                             path="/two-fa-activation"
                             component={TwoFaActivationMobileScreen}
                         />
-                        <PublicRoute
+                        <PrivateRoute
                             loading={userLoading}
-                            // isLogged={isLoggedIn}
+                            isLogged={isLoggedIn}
                             path="/lost-two-fa"
                             component={LostTwoFaMobileScreen}
                         />
@@ -578,9 +578,9 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
                         component={Lost2FAScreen}
                     />
 
-                    <PublicRoute
+                    <PrivateRoute
                         loading={userLoading}
-                        // isLogged={isLoggedIn}
+                        isLogged={isLoggedIn}
                         path="/profile/referral"
                         component={ReferralScreen}
                     />
