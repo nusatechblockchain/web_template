@@ -440,13 +440,6 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
                         </div>
                     </div>
                 </section>
-
-                {/* <Modal
-                    content={this.renderContentModal()}
-                    header={this.renderHeaderModal()}
-                    footer={this.renderFooterModal()}
-                    show={showModal}
-                /> */}
             </React.Fragment>
         );
     }
