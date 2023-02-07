@@ -653,7 +653,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
 
         const request = new FormData();
 
-        request.append('birthDate', '14/01/2000');
+        request.append('birthDate', this.state.birthDate);
         request.append('idNumber', idNumber);
         request.append('name', this.state.name);
         request.append('address', this.state.address);
