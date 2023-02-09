@@ -485,13 +485,13 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
 
     private handleChangeIssuedDate = (e: OnChangeEvent) => {
         this.setState({
-            issuedDate: formatDate(e.target.value),
+            issuedDate: e.target.value,
         });
     };
 
     private handleChangeExpiration = (e: OnChangeEvent) => {
         this.setState({
-            expireDate: formatDate(e.target.value),
+            expireDate: e.target.value,
         });
     };
 
@@ -528,7 +528,7 @@ class KycDocumentComponent extends React.Component<Props, DocumentsState> {
 
     private handleChangeBirthDate = (e: OnChangeEvent) => {
         this.setState({
-            birthDate: formatDate(e.target.value),
+            birthDate: e.target.value,
         });
     };
 
